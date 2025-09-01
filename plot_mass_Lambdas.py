@@ -407,14 +407,6 @@ def make_plot_chirp_tilde(args: argparse.Namespace,
             
     # Plot the mass-lambda contours on top
     print(f"Plotting PE posterior contours")
-    
-    print("chirp_mass_source_GW231109")
-    print(chirp_mass_source_GW231109)
-    print("lambda_tilde_GW231109")
-    print(lambda_tilde_GW231109)
-    
-    exit()
-    
     corner.hist2d(chirp_mass_source_GW231109, lambda_tilde_GW231109, fig=fig, color=PE_color, **default_corner_kwargs)
     
     if show_priors:

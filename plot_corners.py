@@ -3,6 +3,7 @@ Plot the mass-Lambdas contours from PE inference on top of mass-Lambdas EOS curv
 """
 
 import os
+import argparse
 import h5py
 import json
 import numpy as np
@@ -48,7 +49,7 @@ default_corner_kwargs = dict(bins=40,
                         save=False)
     
 def make_cornerplot(source_dir: str,
-                    keys_to_add: list[str] = ["chi_eff", "chi_p"],
+                    keys_to_add: list[str] = ["chi_eff"],
                     overwrite: bool = False):
     """
     Make a corner plot of the mass-Lambda contours from PE inference on top of mass-Lambda EOS curves.
@@ -105,11 +106,6 @@ def make_cornerplot(source_dir: str,
         priors_dict = {k: v for k, v in priors_dict.items() if k not in prior_keys_to_skip and "recalib" not in k}
         prior_keys = list(priors_dict.keys())
         print(f"Prior dict keys: {prior_keys}")
-        
-        precessing = ("a_1" in prior_keys) and ("a_2" in prior_keys) # TODO: this is maybe not the best way to check for precession
-        if precessing and "chi_p" in keys_to_add:
-            print(f"Precessing run detected, removing 'chi_p' from the user-defined keys to add.")
-            keys_to_add.remove("chi_p")
             
         if "fixed_dL" in source_dir:
             print(f"Found 'fixed' key in source_dir name. Assuming run with fixed ra and dec and removing it from the list of prior keys to plot.")
@@ -123,16 +119,28 @@ def make_cornerplot(source_dir: str,
         posterior = f["posterior"]
         posterior_samples = np.array([posterior[key][()] for key in keys_to_fetch]).T
         
-    print(f"Creating corner plot . . .")
-    corner.corner(posterior_samples,
-                labels=keys_to_fetch,
-                **default_corner_kwargs)
-    
-    print(f"Saving corner plot to {save_name}")
-    plt.savefig(save_name, bbox_inches='tight')
-    plt.close()
+    try:
+        print(f"Creating corner plot . . .")
+        corner.corner(posterior_samples,
+                    labels=keys_to_fetch,
+                    **default_corner_kwargs)
+        
+        print(f"Saving corner plot to {save_name}")
+        plt.savefig(save_name, bbox_inches='tight')
+        plt.close()
+    except Exception as e:
+        print(f"Failed to create corner plot for {source_dir} due to error: {e}")
+        for i, label in enumerate(keys_to_fetch):
+            print(f"Key {i+1}: {label}")
+        return
     
 def main():
+    
+    parser = argparse.ArgumentParser(description="Make corner plots for GW inferences.")
+    parser.add_argument("--overwrite", action="store_true",
+                        help="Overwrite existing cornerplots if they already exist.")
+    args = parser.parse_args()
+    
     # List of base dirs to loop over
     base_dir_list = ["/work/wouters/GW231109/"]
     
@@ -144,7 +152,7 @@ def main():
         for source_dir in source_dirs:
             source_dir = os.path.join(base_dir, source_dir)
             print(f"============ Processing source directory: {source_dir} ============")
-            make_cornerplot(source_dir)
+            make_cornerplot(source_dir, overwrite=args.overwrite)
             
             
             print(f"===================================================================\n\n\n\n")

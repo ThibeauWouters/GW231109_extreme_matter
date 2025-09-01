@@ -167,13 +167,13 @@ def create_markdown_table(df):
     # Reorder columns for better display, including index and full directory
     display_cols = ['index', 'waveform', 'chirp_mass_prior', 'mass_ratio_prior', 
                    'a_1_prior', 'lambda_prior', 'distance_prior', 'ra_prior', 'dec_prior', 
-                   'log_bayes_factor', 'sampling_time_hrs', 'directory', 'on_cit']
+                   'log_bayes_factor', 'sampling_time_hrs', 'directory']
     df_display = df_display[display_cols]
     
     # Rename columns for better display
     df_display.columns = ['#', 'Waveform', 'Chirp Mass Prior', 'Mass Ratio Prior',
                          'Spin Prior', 'Lambda Prior', 'Distance Prior', 'RA Prior', 'Dec Prior', 
-                         'Log Bayes Factor', 'Sampling Time (hrs)', 'Directory', 'on CIT?']
+                         'Log Bayes Factor', 'Sampling Time (hrs)', 'Directory']
     
     # Convert to markdown
     markdown_table = df_display.to_markdown(index=False, tablefmt='github')
@@ -192,8 +192,6 @@ def create_readme(df):
 ## Overview of runs
 
 Generated automatically on: {timestamp}
-
-NOTE: The runs on CIT are stored in `/home/thibeau.wouters/pe/O4c/S250818k/multibanding/`
 
 ## Run Overview Table
 
