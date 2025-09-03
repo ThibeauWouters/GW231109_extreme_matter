@@ -478,9 +478,9 @@ def main():
     args = parse_args()
     
     # List of all the jester EOS constraints to loop over
-    eos_name_list = ["all",
-                     "GW170817",
-                     "radio",
+    eos_name_list = ["GW170817",
+                    #  "all",
+                    #  "radio",
                      ]
     
     # # List of base dirs to loop over
