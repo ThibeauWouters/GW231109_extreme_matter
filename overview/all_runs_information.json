@@ -137,46 +137,6 @@
                     "unit": null,
                     "boundary": null
                 }
-            },
-            "luminosity_distance": {
-                "__prior__": true,
-                "__module__": "bilby.gw.prior",
-                "__name__": "UniformSourceFrame",
-                "kwargs": {
-                    "minimum": 1.0,
-                    "maximum": 1000.0,
-                    "cosmology": "Planck15",
-                    "name": "luminosity_distance",
-                    "latex_label": "$d_L$",
-                    "unit": "Mpc",
-                    "boundary": null
-                }
-            },
-            "azimuth": {
-                "__prior__": true,
-                "__module__": "bilby.core.prior.analytical",
-                "__name__": "Uniform",
-                "kwargs": {
-                    "minimum": 0,
-                    "maximum": 6.283185307179586,
-                    "name": null,
-                    "latex_label": "$\\epsilon$",
-                    "unit": null,
-                    "boundary": "periodic"
-                }
-            },
-            "zenith": {
-                "__prior__": true,
-                "__module__": "bilby.core.prior.analytical",
-                "__name__": "Sine",
-                "kwargs": {
-                    "minimum": 0,
-                    "maximum": 3.141592653589793,
-                    "name": null,
-                    "latex_label": "$\\kappa$",
-                    "unit": null,
-                    "boundary": null
-                }
             }
         },
         "fixed_parameters": {}
@@ -262,46 +222,6 @@
                     "maximum": 5000.0,
                     "name": "lambda_2",
                     "latex_label": "$\\Lambda_2$",
-                    "unit": null,
-                    "boundary": null
-                }
-            },
-            "luminosity_distance": {
-                "__prior__": true,
-                "__module__": "bilby.gw.prior",
-                "__name__": "UniformSourceFrame",
-                "kwargs": {
-                    "minimum": 1.0,
-                    "maximum": 1000.0,
-                    "cosmology": "Planck15",
-                    "name": "luminosity_distance",
-                    "latex_label": "$d_L$",
-                    "unit": "Mpc",
-                    "boundary": null
-                }
-            },
-            "azimuth": {
-                "__prior__": true,
-                "__module__": "bilby.core.prior.analytical",
-                "__name__": "Uniform",
-                "kwargs": {
-                    "minimum": 0,
-                    "maximum": 6.283185307179586,
-                    "name": null,
-                    "latex_label": "$\\epsilon$",
-                    "unit": null,
-                    "boundary": "periodic"
-                }
-            },
-            "zenith": {
-                "__prior__": true,
-                "__module__": "bilby.core.prior.analytical",
-                "__name__": "Sine",
-                "kwargs": {
-                    "minimum": 0,
-                    "maximum": 3.141592653589793,
-                    "name": null,
-                    "latex_label": "$\\kappa$",
                     "unit": null,
                     "boundary": null
                 }
@@ -442,46 +362,6 @@
                     "maximum": 5000.0,
                     "name": "lambda_2",
                     "latex_label": "$\\Lambda_2$",
-                    "unit": null,
-                    "boundary": null
-                }
-            },
-            "luminosity_distance": {
-                "__prior__": true,
-                "__module__": "bilby.gw.prior",
-                "__name__": "UniformSourceFrame",
-                "kwargs": {
-                    "minimum": 1.0,
-                    "maximum": 1000.0,
-                    "cosmology": "Planck15",
-                    "name": "luminosity_distance",
-                    "latex_label": "$d_L$",
-                    "unit": "Mpc",
-                    "boundary": null
-                }
-            },
-            "azimuth": {
-                "__prior__": true,
-                "__module__": "bilby.core.prior.analytical",
-                "__name__": "Uniform",
-                "kwargs": {
-                    "minimum": 0,
-                    "maximum": 6.283185307179586,
-                    "name": null,
-                    "latex_label": "$\\epsilon$",
-                    "unit": null,
-                    "boundary": "periodic"
-                }
-            },
-            "zenith": {
-                "__prior__": true,
-                "__module__": "bilby.core.prior.analytical",
-                "__name__": "Sine",
-                "kwargs": {
-                    "minimum": 0,
-                    "maximum": 3.141592653589793,
-                    "name": null,
-                    "latex_label": "$\\kappa$",
                     "unit": null,
                     "boundary": null
                 }
@@ -627,46 +507,6 @@
                     "unit": null,
                     "boundary": null
                 }
-            },
-            "luminosity_distance": {
-                "__prior__": true,
-                "__module__": "bilby.gw.prior",
-                "__name__": "UniformSourceFrame",
-                "kwargs": {
-                    "minimum": 1.0,
-                    "maximum": 1000.0,
-                    "cosmology": "Planck15",
-                    "name": "luminosity_distance",
-                    "latex_label": "$d_L$",
-                    "unit": "Mpc",
-                    "boundary": null
-                }
-            },
-            "azimuth": {
-                "__prior__": true,
-                "__module__": "bilby.core.prior.analytical",
-                "__name__": "Uniform",
-                "kwargs": {
-                    "minimum": 0,
-                    "maximum": 6.283185307179586,
-                    "name": null,
-                    "latex_label": "$\\epsilon$",
-                    "unit": null,
-                    "boundary": "periodic"
-                }
-            },
-            "zenith": {
-                "__prior__": true,
-                "__module__": "bilby.core.prior.analytical",
-                "__name__": "Sine",
-                "kwargs": {
-                    "minimum": 0,
-                    "maximum": 3.141592653589793,
-                    "name": null,
-                    "latex_label": "$\\kappa$",
-                    "unit": null,
-                    "boundary": null
-                }
             }
         },
         "fixed_parameters": {}
@@ -755,46 +595,6 @@
                     "unit": null,
                     "boundary": null
                 }
-            },
-            "luminosity_distance": {
-                "__prior__": true,
-                "__module__": "bilby.gw.prior",
-                "__name__": "UniformSourceFrame",
-                "kwargs": {
-                    "minimum": 1.0,
-                    "maximum": 1000.0,
-                    "cosmology": "Planck15",
-                    "name": "luminosity_distance",
-                    "latex_label": "$d_L$",
-                    "unit": "Mpc",
-                    "boundary": null
-                }
-            },
-            "azimuth": {
-                "__prior__": true,
-                "__module__": "bilby.core.prior.analytical",
-                "__name__": "Uniform",
-                "kwargs": {
-                    "minimum": 0,
-                    "maximum": 6.283185307179586,
-                    "name": null,
-                    "latex_label": "$\\epsilon$",
-                    "unit": null,
-                    "boundary": "periodic"
-                }
-            },
-            "zenith": {
-                "__prior__": true,
-                "__module__": "bilby.core.prior.analytical",
-                "__name__": "Sine",
-                "kwargs": {
-                    "minimum": 0,
-                    "maximum": 3.141592653589793,
-                    "name": null,
-                    "latex_label": "$\\kappa$",
-                    "unit": null,
-                    "boundary": null
-                }
             }
         },
         "fixed_parameters": {}
@@ -880,46 +680,6 @@
                     "maximum": 5000.0,
                     "name": "lambda_2",
                     "latex_label": "$\\Lambda_2$",
-                    "unit": null,
-                    "boundary": null
-                }
-            },
-            "luminosity_distance": {
-                "__prior__": true,
-                "__module__": "bilby.gw.prior",
-                "__name__": "UniformSourceFrame",
-                "kwargs": {
-                    "minimum": 1.0,
-                    "maximum": 1000.0,
-                    "cosmology": "Planck15",
-                    "name": "luminosity_distance",
-                    "latex_label": "$d_L$",
-                    "unit": "Mpc",
-                    "boundary": null
-                }
-            },
-            "azimuth": {
-                "__prior__": true,
-                "__module__": "bilby.core.prior.analytical",
-                "__name__": "Uniform",
-                "kwargs": {
-                    "minimum": 0,
-                    "maximum": 6.283185307179586,
-                    "name": null,
-                    "latex_label": "$\\epsilon$",
-                    "unit": null,
-                    "boundary": "periodic"
-                }
-            },
-            "zenith": {
-                "__prior__": true,
-                "__module__": "bilby.core.prior.analytical",
-                "__name__": "Sine",
-                "kwargs": {
-                    "minimum": 0,
-                    "maximum": 3.141592653589793,
-                    "name": null,
-                    "latex_label": "$\\kappa$",
                     "unit": null,
                     "boundary": null
                 }

@@ -16,10 +16,7 @@ DEFAULT_PRIORS_TO_KEEP_ALIGNED = ["chirp_mass",
                                   "chi_1",
                                   "chi_2",
                                   "lambda_1",
-                                  "lambda_2",
-                                  "luminosity_distance",
-                                  "azimuth", 
-                                  "zenith"
+                                  "lambda_2"
                                   ]
 
 DEFAULT_PRIORS_TO_KEEP_PRECESSING = copy.deepcopy(DEFAULT_PRIORS_TO_KEEP_ALIGNED)
@@ -104,22 +101,6 @@ def get_parameter_info(run_data, param_name, fixed_param_name=None):
     
     return "N/A"
 
-def get_sky_parameter_info(run_data, param_name, fixed_param_name):
-    """Get sky parameter info (RA/Dec) with special formatting"""
-    priors = run_data.get("priors", {})
-    fixed_params = run_data.get("fixed_parameters", {})
-    
-    # Check priors first
-    if param_name in priors:
-        return "free"
-    
-    # Check fixed parameters
-    if fixed_param_name in fixed_params:
-        value = fixed_params[fixed_param_name]
-        return f"{value:.3f}"
-    
-    return "N/A"
-
 def get_spin_parameter_info(run_data):
     """Get spin parameter info, handling both chi_1 and a_1 naming"""
     priors = run_data.get("priors", {})
@@ -166,14 +147,12 @@ def create_markdown_table(df):
     
     # Reorder columns for better display, including index and full directory
     display_cols = ['index', 'waveform', 'chirp_mass_prior', 'mass_ratio_prior', 
-                   'a_1_prior', 'lambda_prior', 'distance_prior', 'ra_prior', 'dec_prior', 
-                   'log_bayes_factor', 'sampling_time_hrs', 'directory']
+                   'a_1_prior', 'lambda_prior', 'log_bayes_factor', 'sampling_time_hrs', 'directory']
     df_display = df_display[display_cols]
     
     # Rename columns for better display
     df_display.columns = ['#', 'Waveform', 'Chirp Mass Prior', 'Mass Ratio Prior',
-                         'Spin Prior', 'Lambda Prior', 'Distance Prior', 'RA Prior', 'Dec Prior', 
-                         'Log Bayes Factor', 'Sampling Time (hrs)', 'Directory']
+                         'Spin Prior', 'Lambda Prior', 'Log Bayes Factor', 'Sampling Time (hrs)', 'Directory']
     
     # Convert to markdown
     markdown_table = df_display.to_markdown(index=False, tablefmt='github')
@@ -256,9 +235,6 @@ def make_overview_table(all_runs_information_dict: dict = None,
             'mass_ratio_prior': get_parameter_info(run_data, 'mass_ratio'),
             'a_1_prior': get_spin_parameter_info(run_data),
             'lambda_prior': get_lambda_parameter_info(run_data),
-            'distance_prior': get_parameter_info(run_data, 'luminosity_distance', 'luminosity_distance'),
-            'ra_prior': get_sky_parameter_info(run_data, 'azimuth', 'ra'),
-            'dec_prior': get_sky_parameter_info(run_data, 'zenith', 'dec'),
             'log_bayes_factor': run_data.get('log_bayes_factor', 'N/A'),
             'sampling_time_hrs': f"{sampling_time_hrs:.2f}" if sampling_time_hrs > 0 else "N/A",
             'directory': source_dir
