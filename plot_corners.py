@@ -49,7 +49,7 @@ default_corner_kwargs = dict(bins=40,
                         save=False)
     
 def make_cornerplot(source_dir: str,
-                    keys_to_add: list[str] = ["chi_eff"],
+                    keys_to_add: list[str] = ["chi_eff", "lambda_tilde"],
                     overwrite: bool = False):
     """
     Make a corner plot of the mass-Lambda contours from PE inference on top of mass-Lambda EOS curves.

@@ -1,7 +1,7 @@
 {
     "/work/wouters/GW231109/test_precessing": {
-        "sampling_time": 4315.882184,
-        "log_bayes_factor": 12.673579500156375,
+        "sampling_time": 8356.646254,
+        "log_bayes_factor": 13.712702206595655,
         "waveform_approximant": "IMRPhenomXP_NRTidalv3",
         "source_dir": "/work/wouters/GW231109/test_precessing",
         "priors": {
@@ -128,8 +128,8 @@
         "fixed_parameters": {}
     },
     "/work/wouters/GW231109/test": {
-        "sampling_time": 3224.517628,
-        "log_bayes_factor": 13.940126628720709,
+        "sampling_time": 5036.779329,
+        "log_bayes_factor": 14.772458418829306,
         "waveform_approximant": "IMRPhenomXAS_NRTidalv3",
         "source_dir": "/work/wouters/GW231109/test",
         "priors": {
@@ -196,8 +196,7 @@
                     "unit": null,
                     "boundary": null,
                     "minimum": -0.1,
-                    "maximum": 0.1,
-                    "num_interp": 100000
+                    "maximum": 0.1
                 }
             },
             "chi_2": {
@@ -236,8 +235,7 @@
                     "unit": null,
                     "boundary": null,
                     "minimum": -0.1,
-                    "maximum": 0.1,
-                    "num_interp": 100000
+                    "maximum": 0.1
                 }
             },
             "lambda_1": {
