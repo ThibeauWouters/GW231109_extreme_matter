@@ -122,12 +122,13 @@ def make_m1m2_comparison_plot(source_dirs: list[str],
     all_mass_1 = np.array(all_mass_1)
     all_mass_2 = np.array(all_mass_2)
     
-    m1_min, m1_max = np.quantile(all_mass_1, [0.01, 0.99])
-    m2_min, m2_max = np.quantile(all_mass_2, [0.01, 0.99])
+    eps = 0.001
+    m1_min, m1_max = np.quantile(all_mass_1, [eps, 1-eps])
+    m2_min, m2_max = np.quantile(all_mass_2, [eps, 1-eps])
     
     # Add small margin for better visualization
-    m1_margin = (m1_max - m1_min) * 0.05
-    m2_margin = (m2_max - m2_min) * 0.05
+    m1_margin = (m1_max - m1_min) * 0.10
+    m2_margin = (m2_max - m2_min) * 0.10
     
     m1_min -= m1_margin
     m1_max += m1_margin
