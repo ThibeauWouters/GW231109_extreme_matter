@@ -197,6 +197,30 @@ def main():
             "neural_priors_gaussian_radio_chiEFT", 
             "neural_priors_gaussian_radio_NICER"
         ],
+        "neural_priors_uniform": [
+            "test_precessing_timefix",
+            "neural_priors_uniform_radio",
+            "neural_priors_uniform_radio_chiEFT", 
+            "neural_priors_uniform_radio_NICER"
+        ],
+        "neural_priors_radio": [
+            "test_precessing_timefix",
+            "neural_priors_uniform_radio",
+            "neural_priors_gaussian_radio",
+            "neural_priors_double_gaussian_radio",
+        ],
+        "neural_priors_radio_chiEFT": [
+            "test_precessing_timefix",
+            "neural_priors_uniform_radio_chiEFT",
+            "neural_priors_gaussian_radio_chiEFT",
+            "neural_priors_double_gaussian_radio_chiEFT",
+        ],
+        "neural_priors_radio_NICER": [
+            "test_precessing_timefix",
+            "neural_priors_uniform_radio_NICER",
+            "neural_priors_gaussian_radio_NICER",
+            "neural_priors_double_gaussian_radio_NICER",
+        ],
     }
     
     # If no specific runs are hardcoded, use all available directories
