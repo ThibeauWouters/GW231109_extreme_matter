@@ -58,7 +58,7 @@ def make_m1m2_comparison_plot(source_dirs: list[str],
     - overwrite: Whether to overwrite existing plots
     """
     
-    save_name = f"./figures/m1m2/{identifier}_m1m2_comparison.pdf"
+    save_name = f"./figures/m1m2/{identifier}.pdf"
     
     # Create directory if it doesn't exist
     os.makedirs(os.path.dirname(save_name), exist_ok=True)
@@ -71,6 +71,11 @@ def make_m1m2_comparison_plot(source_dirs: list[str],
     
     legend_elements = []
     valid_runs = 0
+    
+    # Collect all mass data to determine plot limits
+    all_mass_1 = []
+    all_mass_2 = []
+    mass_data = []  # Store (mass_1, mass_2, color, label) for plotting
     
     for i, source_dir_name in enumerate(source_dirs):
         source_dir = os.path.join(base_dir, source_dir_name)
@@ -94,19 +99,15 @@ def make_m1m2_comparison_plot(source_dirs: list[str],
             # Get color for this run
             color = COLORS[i % len(COLORS)]
             
-            # Plot the 2D corner plot
-            corner.hist2d(mass_1_source, mass_2_source, 
-                         fig=fig, 
-                         color=color,
-                         **corner_kwargs)
+            # Store data for plotting
+            mass_data.append((mass_1_source, mass_2_source, color, source_dir_name))
             
-            # Add to legend
-            legend_elements.append(
-                mpatches.Patch(facecolor=color, edgecolor='k', label=source_dir_name)
-            )
+            # Collect all masses for limit calculation
+            all_mass_1.extend(mass_1_source)
+            all_mass_2.extend(mass_2_source)
             
             valid_runs += 1
-            print(f"Successfully plotted {source_dir_name}")
+            print(f"Successfully loaded data for {source_dir_name}")
             
         except Exception as e:
             print(f"Failed to process {source_dir_name}: {e}")
@@ -117,14 +118,47 @@ def make_m1m2_comparison_plot(source_dirs: list[str],
         plt.close(fig)
         return
     
+    # Calculate plot limits based on quantiles
+    all_mass_1 = np.array(all_mass_1)
+    all_mass_2 = np.array(all_mass_2)
+    
+    m1_min, m1_max = np.quantile(all_mass_1, [0.01, 0.99])
+    m2_min, m2_max = np.quantile(all_mass_2, [0.01, 0.99])
+    
+    # Add small margin for better visualization
+    m1_margin = (m1_max - m1_min) * 0.05
+    m2_margin = (m2_max - m2_min) * 0.05
+    
+    m1_min -= m1_margin
+    m1_max += m1_margin
+    m2_min -= m2_margin
+    m2_max += m2_margin
+    
+    print(f"Plot limits: m1 = [{m1_min:.3f}, {m1_max:.3f}], m2 = [{m2_min:.3f}, {m2_max:.3f}]")
+    
+    # Now plot all the data
+    for mass_1_source, mass_2_source, color, source_dir_name in mass_data:
+        # Plot the 2D corner plot
+        corner.hist2d(mass_1_source, mass_2_source, 
+                     fig=fig, 
+                     color=color,
+                     **corner_kwargs)
+        
+        # Add to legend
+        legend_elements.append(
+            mpatches.Patch(facecolor=color, edgecolor='k', label=source_dir_name)
+        )
+        
+        print(f"Successfully plotted {source_dir_name}")
+    
     # Add labels
     fs = 16
     plt.xlabel(r"$m_1^{\rm{source}}$ [M$_\odot$]", fontsize=fs)
     plt.ylabel(r"$m_2^{\rm{source}}$ [M$_\odot$]", fontsize=fs)
     
-    # Set reasonable limits (adjust as needed)
-    plt.xlim(1.0, 2.5)
-    plt.ylim(1.0, 2.5)
+    # Set limits based on data quantiles
+    plt.xlim(m1_min, m1_max)
+    plt.ylim(m2_min, m2_max)
     
     # Add title
     plt.title(f"Mass comparison: {identifier}", fontsize=fs)
