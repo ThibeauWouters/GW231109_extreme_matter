@@ -55,7 +55,7 @@ def make_m1m2_comparison_plot(source_dirs: list[str],
     - identifier: Unique identifier for the plot filename
     """
     
-    save_name = f"./figures/m1m2/{identifier}.pdf"
+    save_name = f"./m1m2_figures/{identifier}.pdf"
     
     # Create directory if it doesn't exist
     os.makedirs(os.path.dirname(save_name), exist_ok=True)
