@@ -3,7 +3,6 @@ Plot 2D corner plots comparing mass_1_source and mass_2_source from PE inference
 """
 
 import os
-import argparse
 import h5py
 import numpy as np
 import matplotlib.pyplot as plt
@@ -46,8 +45,7 @@ COLORS = ["red", "blue", "green", "orange", "purple", "brown", "pink", "gray", "
 
 def make_m1m2_comparison_plot(source_dirs: list[str], 
                              base_dir: str,
-                             identifier: str,
-                             overwrite: bool = False):
+                             identifier: str):
     """
     Create a 2D corner plot comparing mass_1_source and mass_2_source across multiple runs.
     
@@ -55,17 +53,12 @@ def make_m1m2_comparison_plot(source_dirs: list[str],
     - source_dirs: List of subdirectories containing posterior samples
     - base_dir: Base directory containing the source directories
     - identifier: Unique identifier for the plot filename
-    - overwrite: Whether to overwrite existing plots
     """
     
     save_name = f"./figures/m1m2/{identifier}.pdf"
     
     # Create directory if it doesn't exist
     os.makedirs(os.path.dirname(save_name), exist_ok=True)
-    
-    if os.path.exists(save_name) and not overwrite:
-        print(f"File {save_name} already exists, skipping...")
-        return
     
     fig = plt.figure(figsize=(12, 8))
     
@@ -175,10 +168,6 @@ def make_m1m2_comparison_plot(source_dirs: list[str],
     plt.close()
 
 def main():
-    parser = argparse.ArgumentParser(description="Make m1-m2 comparison plots for GW inferences.")
-    parser.add_argument("--overwrite", action="store_true",
-                        help="Overwrite existing plots if they already exist.")
-    args = parser.parse_args()
     
     # Base directory
     base_dir = "/work/wouters/GW231109/"
@@ -218,7 +207,7 @@ def main():
         print(f"\n============ Creating comparison plot for: {identifier} ============")
         print(f"Comparing runs: {source_dirs}")
         
-        make_m1m2_comparison_plot(source_dirs, base_dir, identifier, overwrite=args.overwrite)
+        make_m1m2_comparison_plot(source_dirs, base_dir, identifier)
         
         print(f"===================================================================\n")
 
