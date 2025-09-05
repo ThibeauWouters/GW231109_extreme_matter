@@ -1,9 +1,19 @@
 index,waveform,chirp_mass_prior,mass_ratio_prior,a_1_prior,lambda_prior,log_bayes_factor,sampling_time_hrs,directory
-1,IMRPhenomXP_NRTidalv3,"Constraint [0.800, 3.000]",NFPrior,"Uniform [0.000, 0.150]",N/A,15.878812563716163,2.42,/work/wouters/GW231109/neural_priors
-2,IMRPhenomXAS_NRTidalv3,"UniformInComponentsChirpMass [1.290, 1.320]","UniformInComponentsMassRatio [0.125, 1.000]","AlignedSpin [-0.100, 0.100]","Uniform [0, 5000]",14.772458418829306,1.40,/work/wouters/GW231109/test
-3,IMRPhenomXAS_NRTidalv3,"UniformInComponentsChirpMass [1.290, 1.320]","UniformInComponentsMassRatio [0.125, 1.000]","AlignedSpin [-0.100, 0.100]","Uniform [0, 5000]",14.772834610886388,1.26,/work/wouters/GW231109/test_fmax2kHz
-4,IMRPhenomXAS_NRTidalv3,"UniformInComponentsChirpMass [1.290, 1.320]","UniformInComponentsMassRatio [0.125, 1.000]","AlignedSpin [-0.150, 0.150]","Uniform [0, 5000]",14.820506382992635,1.43,/work/wouters/GW231109/test_high_spins
-5,IMRPhenomXP_NRTidalv3,"UniformInComponentsChirpMass [1.290, 1.320]","UniformInComponentsMassRatio [0.125, 1.000]","Uniform [0.000, 0.050]","Uniform [0, 5000]",13.712702206595655,2.32,/work/wouters/GW231109/test_precessing
-6,IMRPhenomXP_NRTidalv3,"UniformInComponentsChirpMass [1.290, 1.320]","UniformInComponentsMassRatio [0.125, 1.000]","Uniform [0.000, 0.050]","Uniform [0, 5000]",13.360387256237932,2.29,/work/wouters/GW231109/test_precessing_fmax2kHz
-7,IMRPhenomXP_NRTidalv3,"UniformInComponentsChirpMass [1.290, 1.320]","UniformInComponentsMassRatio [0.125, 1.000]","Uniform [0.000, 0.150]","Uniform [0, 5000]",15.318820404331548,2.29,/work/wouters/GW231109/test_precessing_high_spins
-8,IMRPhenomXP_NRTidalv3,"UniformInComponentsChirpMass [1.290, 1.320]","UniformInComponentsMassRatio [0.125, 1.000]","Uniform [0.000, 0.150]","Uniform [0, 5000]",14.172510171375073,2.29,/work/wouters/GW231109/test_precessing_timefix
+1,IMRPhenomXP_NRTidalv3,"UniformInComponentsChirpMass [1.290, 1.320]","UniformInComponentsMassRatio [0.125, 1.000]","Uniform [0.000, 0.150]","Uniform [0, 2000]",14.325370197560764,2.29,/work/wouters/GW231109/l1_2000_l2_4000
+2,IMRPhenomXP_NRTidalv3,"Constraint [0.800, 3.000]",NFPrior,"Uniform [0.000, 0.150]",N/A,15.878812563716163,2.42,/work/wouters/GW231109/neural_priors
+3,IMRPhenomXP_NRTidalv3,"Constraint [0.800, 3.000]",NFPrior,"Uniform [0.000, 0.150]",N/A,15.716736639977618,4.39,/work/wouters/GW231109/neural_priors_double_gaussian_radio
+4,IMRPhenomXP_NRTidalv3,"Constraint [0.800, 3.000]",NFPrior,"Uniform [0.000, 0.150]",N/A,16.079943263128513,4.51,/work/wouters/GW231109/neural_priors_double_gaussian_radio_NICER
+5,IMRPhenomXP_NRTidalv3,"Constraint [0.800, 3.000]",NFPrior,"Uniform [0.000, 0.150]",N/A,15.856748744451178,4.68,/work/wouters/GW231109/neural_priors_double_gaussian_radio_chiEFT
+6,IMRPhenomXP_NRTidalv3,"Constraint [0.800, 3.000]",NFPrior,"Uniform [0.000, 0.150]",N/A,16.197165321985153,4.33,/work/wouters/GW231109/neural_priors_gaussian_radio
+7,IMRPhenomXP_NRTidalv3,"Constraint [0.800, 3.000]",NFPrior,"Uniform [0.000, 0.150]",N/A,15.960134776051044,8.09,/work/wouters/GW231109/neural_priors_gaussian_radio_NICER
+8,IMRPhenomXP_NRTidalv3,"Constraint [0.800, 3.000]",NFPrior,"Uniform [0.000, 0.150]",N/A,16.23861412449776,4.34,/work/wouters/GW231109/neural_priors_gaussian_radio_chiEFT
+9,IMRPhenomXP_NRTidalv3,"Constraint [0.800, 3.000]",NFPrior,"Uniform [0.000, 0.150]",N/A,14.735837490516689,5.04,/work/wouters/GW231109/neural_priors_uniform_radio
+10,IMRPhenomXP_NRTidalv3,"Constraint [0.800, 3.000]",NFPrior,"Uniform [0.000, 0.150]",N/A,14.569747376209241,5.18,/work/wouters/GW231109/neural_priors_uniform_radio_NICER
+11,IMRPhenomXP_NRTidalv3,"Constraint [0.800, 3.000]",NFPrior,"Uniform [0.000, 0.150]",N/A,11.930550860028038,5.47,/work/wouters/GW231109/neural_priors_uniform_radio_chiEFT
+12,IMRPhenomXAS_NRTidalv3,"UniformInComponentsChirpMass [1.290, 1.320]","UniformInComponentsMassRatio [0.125, 1.000]","AlignedSpin [-0.100, 0.100]","Uniform [0, 5000]",14.772458418829306,1.40,/work/wouters/GW231109/test
+13,IMRPhenomXAS_NRTidalv3,"UniformInComponentsChirpMass [1.290, 1.320]","UniformInComponentsMassRatio [0.125, 1.000]","AlignedSpin [-0.100, 0.100]","Uniform [0, 5000]",14.772834610886388,1.26,/work/wouters/GW231109/test_fmax2kHz
+14,IMRPhenomXAS_NRTidalv3,"UniformInComponentsChirpMass [1.290, 1.320]","UniformInComponentsMassRatio [0.125, 1.000]","AlignedSpin [-0.150, 0.150]","Uniform [0, 5000]",14.820506382992635,1.43,/work/wouters/GW231109/test_high_spins
+15,IMRPhenomXP_NRTidalv3,"UniformInComponentsChirpMass [1.290, 1.320]","UniformInComponentsMassRatio [0.125, 1.000]","Uniform [0.000, 0.050]","Uniform [0, 5000]",13.712702206595655,2.32,/work/wouters/GW231109/test_precessing
+16,IMRPhenomXP_NRTidalv3,"UniformInComponentsChirpMass [1.290, 1.320]","UniformInComponentsMassRatio [0.125, 1.000]","Uniform [0.000, 0.050]","Uniform [0, 5000]",13.360387256237932,2.29,/work/wouters/GW231109/test_precessing_fmax2kHz
+17,IMRPhenomXP_NRTidalv3,"UniformInComponentsChirpMass [1.290, 1.320]","UniformInComponentsMassRatio [0.125, 1.000]","Uniform [0.000, 0.150]","Uniform [0, 5000]",15.318820404331548,2.29,/work/wouters/GW231109/test_precessing_high_spins
+18,IMRPhenomXP_NRTidalv3,"UniformInComponentsChirpMass [1.290, 1.320]","UniformInComponentsMassRatio [0.125, 1.000]","Uniform [0.000, 0.150]","Uniform [0, 5000]",14.172510171375073,2.29,/work/wouters/GW231109/test_precessing_timefix
