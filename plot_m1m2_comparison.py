@@ -146,20 +146,19 @@ def main():
     # Base directory
     base_dir = "/work/wouters/GW231109/"
     
-    # Example hardcoded subdirectories - modify these as needed
-    # You can add multiple comparison sets here
     comparison_sets = {
-        "high_spin_runs": [
-            "run_with_high_spin_1",
-            "run_with_high_spin_2", 
-            "run_with_high_spin_3"
+        "neural_priors_double_gaussian": [
+            "test_precessing_timefix",
+            "neural_priors_double_gaussian_radio",
+            "neural_priors_double_gaussian_radio_chiEFT", 
+            "neural_priors_double_gaussian_radio_NICER"
         ],
-        "different_priors": [
-            "run_with_prior_A",
-            "run_with_prior_B",
-            "run_with_prior_C"
-        ]
-        # Add more comparison sets as needed
+        "neural_priors_gaussian": [
+            "test_precessing_timefix",
+            "neural_priors_gaussian_radio",
+            "neural_priors_gaussian_radio_chiEFT", 
+            "neural_priors_gaussian_radio_NICER"
+        ],
     }
     
     # If no specific runs are hardcoded, use all available directories
