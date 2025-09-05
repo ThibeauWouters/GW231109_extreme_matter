@@ -67,7 +67,7 @@ def make_m1m2_comparison_plot(source_dirs: list[str],
         print(f"File {save_name} already exists, skipping...")
         return
     
-    fig = plt.figure(figsize=(8, 8))
+    fig = plt.figure(figsize=(12, 8))
     
     legend_elements = []
     valid_runs = 0
@@ -96,8 +96,11 @@ def make_m1m2_comparison_plot(source_dirs: list[str],
                 mass_1_source = posterior["mass_1_source"][()]
                 mass_2_source = posterior["mass_2_source"][()]
                 
-            # Get color for this run
-            color = COLORS[i % len(COLORS)]
+            # Get color for this run - use gray for test runs
+            if "test" in source_dir_name.lower():
+                color = "gray"
+            else:
+                color = COLORS[i % len(COLORS)]
             
             # Store data for plotting
             mass_data.append((mass_1_source, mass_2_source, color, source_dir_name))
@@ -163,9 +166,9 @@ def make_m1m2_comparison_plot(source_dirs: list[str],
     # Add title
     plt.title(f"Mass comparison: {identifier}", fontsize=fs)
     
-    # Add legend
+    # Add legend to the right of the plot
     if len(legend_elements) > 0:
-        plt.legend(handles=legend_elements, loc='upper right', frameon=True)
+        plt.legend(handles=legend_elements, bbox_to_anchor=(1.05, 1), loc='upper left', frameon=True)
     
     print(f"Saving figure to {save_name}")
     plt.savefig(save_name, bbox_inches='tight')
