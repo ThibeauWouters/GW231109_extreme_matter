@@ -208,6 +208,7 @@ def main():
             "neural_priors_uniform_radio_NICER"
         ],
         "neural_priors_radio": [
+            "test_precessing_timefix",
             "neural_priors_uniform_radio",
             "neural_priors_gaussian_radio",
             "neural_priors_double_gaussian_radio",

@@ -2,7 +2,7 @@
 
 ## Overview of runs
 
-Generated automatically on: 2025-09-05 08:45:53 CEST
+Generated automatically on: 2025-09-16 13:45:56 CEST
 
 ## Run Overview Table
 
@@ -26,3 +26,5 @@ Generated automatically on: 2025-09-05 08:45:53 CEST
 |  16 | IMRPhenomXP_NRTidalv3  | UniformInComponentsChirpMass [1.290, 1.320] | UniformInComponentsMassRatio [0.125, 1.000] | Uniform [0.000, 0.050]      | Uniform [0, 5000] |            13.3604 |                  2.29 | /work/wouters/GW231109/test_precessing_fmax2kHz                   |
 |  17 | IMRPhenomXP_NRTidalv3  | UniformInComponentsChirpMass [1.290, 1.320] | UniformInComponentsMassRatio [0.125, 1.000] | Uniform [0.000, 0.150]      | Uniform [0, 5000] |            15.3188 |                  2.29 | /work/wouters/GW231109/test_precessing_high_spins                 |
 |  18 | IMRPhenomXP_NRTidalv3  | UniformInComponentsChirpMass [1.290, 1.320] | UniformInComponentsMassRatio [0.125, 1.000] | Uniform [0.000, 0.150]      | Uniform [0, 5000] |            14.1725 |                  2.29 | /work/wouters/GW231109/test_precessing_timefix                    |
+|  19 | IMRPhenomXP_NRTidalv3  | UniformInComponentsChirpMass [1.290, 1.320] | UniformInComponentsMassRatio [0.125, 1.000] | Uniform [0.000, 0.150]      | Uniform [0, 5000] |            16.8609 |                  3.19 | /work/wouters/GW231109/test_precessing_timefix_bw                 |
+|  20 | IMRPhenomXP_NRTidalv3  | UniformInComponentsChirpMass [1.290, 1.320] | UniformInComponentsMassRatio [0.125, 1.000] | Uniform [0.000, 0.150]      | Uniform [0, 5000] |            15.3876 |                  2.44 | /work/wouters/GW231109/test_precessing_timefix_bw_fast            |
