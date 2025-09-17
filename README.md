@@ -2,7 +2,7 @@
 
 ## Overview of runs
 
-Generated automatically on: 2025-09-17 09:23:32 CEST
+Generated automatically on: 2025-09-17 11:04:47 CEST
 
 ## Run Overview Table
 
@@ -21,4 +21,6 @@ Generated automatically on: 2025-09-17 09:23:32 CEST
 |  11 | IMRPhenomXP_NRTidalv3 | Constraint [0.800, 3.000]                   | Constraint [0.125, 1.000]                   | Uniform [0.000, 0.400] | Uniform [0, 10000] |           15.7486  |                  4.22 | /work/wouters/GW231109/prod_XP_s040_l10000_gaussian        |
 |  12 | IMRPhenomXP_NRTidalv3 | Constraint [0.800, 3.000]                   | Constraint [0.125, 1.000]                   | Uniform [0.000, 0.400] | Uniform [0, 10000] |           12.0791  |                  5.08 | /work/wouters/GW231109/prod_XP_s040_l10000_uniform         |
 |  13 | IMRPhenomXP_NRTidalv3 | UniformInComponentsChirpMass [1.290, 1.320] | UniformInComponentsMassRatio [0.125, 1.000] | Uniform [0.000, 0.400] | Uniform [0, 5000]  |           15.601   |                  2.59 | /work/wouters/GW231109/prod_XP_s040_l5000_default          |
-|  14 | IMRPhenomXP_NRTidalv3 | Constraint [0.800, 3.000]                   | Constraint [0.125, 1.000]                   | Uniform [0.000, 0.400] | Uniform [0, 5000]  |           16.0109  |                  4.02 | /work/wouters/GW231109/prod_XP_s040_l5000_gaussian         |
+|  14 | IMRPhenomXP_NRTidalv3 | Constraint [0.800, 3.000]                   | Constraint [0.125, 1.000]                   | Uniform [0.000, 0.400] | Uniform [0, 5000]  |           11.9547  |                  5.21 | /work/wouters/GW231109/prod_XP_s040_l5000_double_gaussian  |
+|  15 | IMRPhenomXP_NRTidalv3 | Constraint [0.800, 3.000]                   | Constraint [0.125, 1.000]                   | Uniform [0.000, 0.400] | Uniform [0, 5000]  |           16.0109  |                  4.02 | /work/wouters/GW231109/prod_XP_s040_l5000_gaussian         |
+|  16 | IMRPhenomXP_NRTidalv3 | Constraint [0.800, 3.000]                   | Constraint [0.125, 1.000]                   | Uniform [0.000, 0.400] | Uniform [0, 5000]  |           12.6869  |                  4.72 | /work/wouters/GW231109/prod_XP_s040_l5000_uniform          |

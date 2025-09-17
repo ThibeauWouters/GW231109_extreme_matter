@@ -12,4 +12,6 @@ index,waveform,chirp_mass_prior,mass_ratio_prior,a_1_prior,lambda_prior,log_baye
 11,IMRPhenomXP_NRTidalv3,"Constraint [0.800, 3.000]","Constraint [0.125, 1.000]","Uniform [0.000, 0.400]","Uniform [0, 10000]",15.748568920773952,4.22,/work/wouters/GW231109/prod_XP_s040_l10000_gaussian
 12,IMRPhenomXP_NRTidalv3,"Constraint [0.800, 3.000]","Constraint [0.125, 1.000]","Uniform [0.000, 0.400]","Uniform [0, 10000]",12.079068768997496,5.08,/work/wouters/GW231109/prod_XP_s040_l10000_uniform
 13,IMRPhenomXP_NRTidalv3,"UniformInComponentsChirpMass [1.290, 1.320]","UniformInComponentsMassRatio [0.125, 1.000]","Uniform [0.000, 0.400]","Uniform [0, 5000]",15.600965334292754,2.59,/work/wouters/GW231109/prod_XP_s040_l5000_default
-14,IMRPhenomXP_NRTidalv3,"Constraint [0.800, 3.000]","Constraint [0.125, 1.000]","Uniform [0.000, 0.400]","Uniform [0, 5000]",16.01090482594156,4.02,/work/wouters/GW231109/prod_XP_s040_l5000_gaussian
+14,IMRPhenomXP_NRTidalv3,"Constraint [0.800, 3.000]","Constraint [0.125, 1.000]","Uniform [0.000, 0.400]","Uniform [0, 5000]",11.954742301013967,5.21,/work/wouters/GW231109/prod_XP_s040_l5000_double_gaussian
+15,IMRPhenomXP_NRTidalv3,"Constraint [0.800, 3.000]","Constraint [0.125, 1.000]","Uniform [0.000, 0.400]","Uniform [0, 5000]",16.01090482594156,4.02,/work/wouters/GW231109/prod_XP_s040_l5000_gaussian
+16,IMRPhenomXP_NRTidalv3,"Constraint [0.800, 3.000]","Constraint [0.125, 1.000]","Uniform [0.000, 0.400]","Uniform [0, 5000]",12.686946166175588,4.72,/work/wouters/GW231109/prod_XP_s040_l5000_uniform
