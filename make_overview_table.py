@@ -184,12 +184,18 @@ Generated automatically on: {timestamp}
     print(f"Created README with formatted table: {readme_path}")
         
 def get_all_runs(base_dir_list: list[str],
-                 save_JSON: bool = True):
+                 save_JSON: bool = True,
+                 only_prod: bool = True):
     all_runs_information_dict = {}
     for base_dir in base_dir_list:
         source_dirs = [d for d in os.listdir(base_dir) if os.path.isdir(os.path.join(base_dir, d)) and d not in ["outdir", "data"]]
         print(f"For base directory {base_dir}, found the source directories:")
         print(f"    {source_dirs}")
+        
+        if only_prod:
+            source_dirs = [d for d in source_dirs if "prod" in d]
+            print(f"Only source dirs with prod in them:")
+            print(f"    {source_dirs}")
         
         for source_dir in source_dirs:
             source_dir = os.path.join(base_dir, source_dir)

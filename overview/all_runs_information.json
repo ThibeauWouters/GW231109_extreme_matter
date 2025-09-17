@@ -1,9 +1,9 @@
 {
-    "/work/wouters/GW231109/neural_priors_uniform_radio_NICER": {
-        "sampling_time": 18665.995972,
-        "log_bayes_factor": 14.569747376209241,
+    "/work/wouters/GW231109/prod_XP_s040_l10000_uniform": {
+        "sampling_time": 18278.535965,
+        "log_bayes_factor": 12.079068768997496,
         "waveform_approximant": "IMRPhenomXP_NRTidalv3",
-        "source_dir": "/work/wouters/GW231109/neural_priors_uniform_radio_NICER",
+        "source_dir": "/work/wouters/GW231109/prod_XP_s040_l10000_uniform",
         "priors": {
             "a_1": {
                 "__prior__": true,
@@ -11,7 +11,7 @@
                 "__name__": "Uniform",
                 "kwargs": {
                     "minimum": 0,
-                    "maximum": 0.15,
+                    "maximum": 0.4,
                     "name": "a_1",
                     "latex_label": "$a_1$",
                     "unit": null,
@@ -24,89 +24,37 @@
                 "__name__": "Uniform",
                 "kwargs": {
                     "minimum": 0,
-                    "maximum": 0.15,
+                    "maximum": 0.4,
                     "name": "a_2",
                     "latex_label": "$a_2$",
                     "unit": null,
                     "boundary": null
                 }
             },
-            "mass_ratio": {
-                "__prior__": true,
-                "__module__": "bilby.core.prior.joint",
-                "__name__": "NFPrior",
-                "kwargs": {
-                    "dist": {
-                        "__prior__": true,
-                        "__module__": "bilby.core.prior.joint",
-                        "__name__": "NFDist",
-                        "kwargs": {
-                            "names": [
-                                "chirp_mass_source",
-                                "mass_ratio",
-                                "lambda_1",
-                                "lambda_2"
-                            ],
-                            "flow_filename": "/home/wouters/projects/eos_source_classification/eos_source_classification/NFprior/models/uniform/bns/radio_NICER/model.pt",
-                            "use_tilde": false,
-                            "use_component_masses": false
-                        }
-                    },
-                    "name": "mass_ratio",
-                    "latex_label": "$q$",
-                    "unit": null
-                }
-            },
             "lambda_1": {
                 "__prior__": true,
-                "__module__": "bilby.core.prior.joint",
-                "__name__": "NFPrior",
+                "__module__": "bilby.core.prior.analytical",
+                "__name__": "Uniform",
                 "kwargs": {
-                    "dist": {
-                        "__prior__": true,
-                        "__module__": "bilby.core.prior.joint",
-                        "__name__": "NFDist",
-                        "kwargs": {
-                            "names": [
-                                "chirp_mass_source",
-                                "mass_ratio",
-                                "lambda_1",
-                                "lambda_2"
-                            ],
-                            "flow_filename": "/home/wouters/projects/eos_source_classification/eos_source_classification/NFprior/models/uniform/bns/radio_NICER/model.pt",
-                            "use_tilde": false,
-                            "use_component_masses": false
-                        }
-                    },
+                    "minimum": 0,
+                    "maximum": 10000.0,
                     "name": "lambda_1",
                     "latex_label": "$\\Lambda_1$",
-                    "unit": null
+                    "unit": null,
+                    "boundary": null
                 }
             },
             "lambda_2": {
                 "__prior__": true,
-                "__module__": "bilby.core.prior.joint",
-                "__name__": "NFPrior",
+                "__module__": "bilby.core.prior.analytical",
+                "__name__": "Uniform",
                 "kwargs": {
-                    "dist": {
-                        "__prior__": true,
-                        "__module__": "bilby.core.prior.joint",
-                        "__name__": "NFDist",
-                        "kwargs": {
-                            "names": [
-                                "chirp_mass_source",
-                                "mass_ratio",
-                                "lambda_1",
-                                "lambda_2"
-                            ],
-                            "flow_filename": "/home/wouters/projects/eos_source_classification/eos_source_classification/NFprior/models/uniform/bns/radio_NICER/model.pt",
-                            "use_tilde": false,
-                            "use_component_masses": false
-                        }
-                    },
+                    "minimum": 0,
+                    "maximum": 10000.0,
                     "name": "lambda_2",
                     "latex_label": "$\\Lambda_2$",
-                    "unit": null
+                    "unit": null,
+                    "boundary": null
                 }
             },
             "chirp_mass": {
@@ -120,442 +68,35 @@
                     "latex_label": null,
                     "unit": null
                 }
-            }
-        },
-        "fixed_parameters": {}
-    },
-    "/work/wouters/GW231109/neural_priors_gaussian_radio_chiEFT": {
-        "sampling_time": 15622.50515,
-        "log_bayes_factor": 16.23861412449776,
-        "waveform_approximant": "IMRPhenomXP_NRTidalv3",
-        "source_dir": "/work/wouters/GW231109/neural_priors_gaussian_radio_chiEFT",
-        "priors": {
-            "a_1": {
-                "__prior__": true,
-                "__module__": "bilby.core.prior.analytical",
-                "__name__": "Uniform",
-                "kwargs": {
-                    "minimum": 0,
-                    "maximum": 0.15,
-                    "name": "a_1",
-                    "latex_label": "$a_1$",
-                    "unit": null,
-                    "boundary": null
-                }
-            },
-            "a_2": {
-                "__prior__": true,
-                "__module__": "bilby.core.prior.analytical",
-                "__name__": "Uniform",
-                "kwargs": {
-                    "minimum": 0,
-                    "maximum": 0.15,
-                    "name": "a_2",
-                    "latex_label": "$a_2$",
-                    "unit": null,
-                    "boundary": null
-                }
             },
             "mass_ratio": {
-                "__prior__": true,
-                "__module__": "bilby.core.prior.joint",
-                "__name__": "NFPrior",
-                "kwargs": {
-                    "dist": {
-                        "__prior__": true,
-                        "__module__": "bilby.core.prior.joint",
-                        "__name__": "NFDist",
-                        "kwargs": {
-                            "names": [
-                                "chirp_mass_source",
-                                "mass_ratio",
-                                "lambda_1",
-                                "lambda_2"
-                            ],
-                            "flow_filename": "/home/wouters/projects/eos_source_classification/eos_source_classification/NFprior/models/gaussian/bns/radio_chiEFT/model.pt",
-                            "use_tilde": false,
-                            "use_component_masses": false
-                        }
-                    },
-                    "name": "mass_ratio",
-                    "latex_label": "$q$",
-                    "unit": null
-                }
-            },
-            "lambda_1": {
-                "__prior__": true,
-                "__module__": "bilby.core.prior.joint",
-                "__name__": "NFPrior",
-                "kwargs": {
-                    "dist": {
-                        "__prior__": true,
-                        "__module__": "bilby.core.prior.joint",
-                        "__name__": "NFDist",
-                        "kwargs": {
-                            "names": [
-                                "chirp_mass_source",
-                                "mass_ratio",
-                                "lambda_1",
-                                "lambda_2"
-                            ],
-                            "flow_filename": "/home/wouters/projects/eos_source_classification/eos_source_classification/NFprior/models/gaussian/bns/radio_chiEFT/model.pt",
-                            "use_tilde": false,
-                            "use_component_masses": false
-                        }
-                    },
-                    "name": "lambda_1",
-                    "latex_label": "$\\Lambda_1$",
-                    "unit": null
-                }
-            },
-            "lambda_2": {
-                "__prior__": true,
-                "__module__": "bilby.core.prior.joint",
-                "__name__": "NFPrior",
-                "kwargs": {
-                    "dist": {
-                        "__prior__": true,
-                        "__module__": "bilby.core.prior.joint",
-                        "__name__": "NFDist",
-                        "kwargs": {
-                            "names": [
-                                "chirp_mass_source",
-                                "mass_ratio",
-                                "lambda_1",
-                                "lambda_2"
-                            ],
-                            "flow_filename": "/home/wouters/projects/eos_source_classification/eos_source_classification/NFprior/models/gaussian/bns/radio_chiEFT/model.pt",
-                            "use_tilde": false,
-                            "use_component_masses": false
-                        }
-                    },
-                    "name": "lambda_2",
-                    "latex_label": "$\\Lambda_2$",
-                    "unit": null
-                }
-            },
-            "chirp_mass": {
                 "__prior__": true,
                 "__module__": "bilby.core.prior.base",
                 "__name__": "Constraint",
-                "kwargs": {
-                    "minimum": 0.8,
-                    "maximum": 3.0,
-                    "name": null,
-                    "latex_label": null,
-                    "unit": null
-                }
-            }
-        },
-        "fixed_parameters": {}
-    },
-    "/work/wouters/GW231109/neural_priors_double_gaussian_radio_chiEFT": {
-        "sampling_time": 16863.797057,
-        "log_bayes_factor": 15.856748744451178,
-        "waveform_approximant": "IMRPhenomXP_NRTidalv3",
-        "source_dir": "/work/wouters/GW231109/neural_priors_double_gaussian_radio_chiEFT",
-        "priors": {
-            "a_1": {
-                "__prior__": true,
-                "__module__": "bilby.core.prior.analytical",
-                "__name__": "Uniform",
-                "kwargs": {
-                    "minimum": 0,
-                    "maximum": 0.15,
-                    "name": "a_1",
-                    "latex_label": "$a_1$",
-                    "unit": null,
-                    "boundary": null
-                }
-            },
-            "a_2": {
-                "__prior__": true,
-                "__module__": "bilby.core.prior.analytical",
-                "__name__": "Uniform",
-                "kwargs": {
-                    "minimum": 0,
-                    "maximum": 0.15,
-                    "name": "a_2",
-                    "latex_label": "$a_2$",
-                    "unit": null,
-                    "boundary": null
-                }
-            },
-            "mass_ratio": {
-                "__prior__": true,
-                "__module__": "bilby.core.prior.joint",
-                "__name__": "NFPrior",
-                "kwargs": {
-                    "dist": {
-                        "__prior__": true,
-                        "__module__": "bilby.core.prior.joint",
-                        "__name__": "NFDist",
-                        "kwargs": {
-                            "names": [
-                                "chirp_mass_source",
-                                "mass_ratio",
-                                "lambda_1",
-                                "lambda_2"
-                            ],
-                            "flow_filename": "/home/wouters/projects/eos_source_classification/eos_source_classification/NFprior/models/double_gaussian/bns/radio_chiEFT/model.pt",
-                            "use_tilde": false,
-                            "use_component_masses": false
-                        }
-                    },
-                    "name": "mass_ratio",
-                    "latex_label": "$q$",
-                    "unit": null
-                }
-            },
-            "lambda_1": {
-                "__prior__": true,
-                "__module__": "bilby.core.prior.joint",
-                "__name__": "NFPrior",
-                "kwargs": {
-                    "dist": {
-                        "__prior__": true,
-                        "__module__": "bilby.core.prior.joint",
-                        "__name__": "NFDist",
-                        "kwargs": {
-                            "names": [
-                                "chirp_mass_source",
-                                "mass_ratio",
-                                "lambda_1",
-                                "lambda_2"
-                            ],
-                            "flow_filename": "/home/wouters/projects/eos_source_classification/eos_source_classification/NFprior/models/double_gaussian/bns/radio_chiEFT/model.pt",
-                            "use_tilde": false,
-                            "use_component_masses": false
-                        }
-                    },
-                    "name": "lambda_1",
-                    "latex_label": "$\\Lambda_1$",
-                    "unit": null
-                }
-            },
-            "lambda_2": {
-                "__prior__": true,
-                "__module__": "bilby.core.prior.joint",
-                "__name__": "NFPrior",
-                "kwargs": {
-                    "dist": {
-                        "__prior__": true,
-                        "__module__": "bilby.core.prior.joint",
-                        "__name__": "NFDist",
-                        "kwargs": {
-                            "names": [
-                                "chirp_mass_source",
-                                "mass_ratio",
-                                "lambda_1",
-                                "lambda_2"
-                            ],
-                            "flow_filename": "/home/wouters/projects/eos_source_classification/eos_source_classification/NFprior/models/double_gaussian/bns/radio_chiEFT/model.pt",
-                            "use_tilde": false,
-                            "use_component_masses": false
-                        }
-                    },
-                    "name": "lambda_2",
-                    "latex_label": "$\\Lambda_2$",
-                    "unit": null
-                }
-            },
-            "chirp_mass": {
-                "__prior__": true,
-                "__module__": "bilby.core.prior.base",
-                "__name__": "Constraint",
-                "kwargs": {
-                    "minimum": 0.8,
-                    "maximum": 3.0,
-                    "name": null,
-                    "latex_label": null,
-                    "unit": null
-                }
-            }
-        },
-        "fixed_parameters": {}
-    },
-    "/work/wouters/GW231109/test_high_spins": {
-        "sampling_time": 5150.43557,
-        "log_bayes_factor": 14.820506382992635,
-        "waveform_approximant": "IMRPhenomXAS_NRTidalv3",
-        "source_dir": "/work/wouters/GW231109/test_high_spins",
-        "priors": {
-            "chirp_mass": {
-                "__prior__": true,
-                "__module__": "bilby.gw.prior",
-                "__name__": "UniformInComponentsChirpMass",
-                "kwargs": {
-                    "minimum": 1.29,
-                    "maximum": 1.32,
-                    "name": "chirp_mass",
-                    "latex_label": "$\\mathcal{M}$",
-                    "unit": "$M_{\\odot}$",
-                    "boundary": null
-                }
-            },
-            "mass_ratio": {
-                "__prior__": true,
-                "__module__": "bilby.gw.prior",
-                "__name__": "UniformInComponentsMassRatio",
                 "kwargs": {
                     "minimum": 0.125,
-                    "maximum": 1,
-                    "name": "mass_ratio",
-                    "latex_label": "$q$",
-                    "unit": null,
-                    "boundary": null,
-                    "equal_mass": false
-                }
-            },
-            "chi_1": {
-                "__prior__": true,
-                "__module__": "bilby.gw.prior",
-                "__name__": "AlignedSpin",
-                "kwargs": {
-                    "a_prior": {
-                        "__prior__": true,
-                        "__module__": "bilby.core.prior.analytical",
-                        "__name__": "Uniform",
-                        "kwargs": {
-                            "minimum": 0,
-                            "maximum": 0.15,
-                            "name": null,
-                            "latex_label": null,
-                            "unit": null,
-                            "boundary": null
-                        }
-                    },
-                    "z_prior": {
-                        "__prior__": true,
-                        "__module__": "bilby.core.prior.analytical",
-                        "__name__": "Uniform",
-                        "kwargs": {
-                            "minimum": -1,
-                            "maximum": 1,
-                            "name": null,
-                            "latex_label": null,
-                            "unit": null,
-                            "boundary": null
-                        }
-                    },
+                    "maximum": 1.0,
                     "name": null,
-                    "latex_label": "$\\chi_1$",
-                    "unit": null,
-                    "boundary": null,
-                    "minimum": -0.15,
-                    "maximum": 0.15,
-                    "num_interp": 100000
-                }
-            },
-            "chi_2": {
-                "__prior__": true,
-                "__module__": "bilby.gw.prior",
-                "__name__": "AlignedSpin",
-                "kwargs": {
-                    "a_prior": {
-                        "__prior__": true,
-                        "__module__": "bilby.core.prior.analytical",
-                        "__name__": "Uniform",
-                        "kwargs": {
-                            "minimum": 0,
-                            "maximum": 0.15,
-                            "name": null,
-                            "latex_label": null,
-                            "unit": null,
-                            "boundary": null
-                        }
-                    },
-                    "z_prior": {
-                        "__prior__": true,
-                        "__module__": "bilby.core.prior.analytical",
-                        "__name__": "Uniform",
-                        "kwargs": {
-                            "minimum": -1,
-                            "maximum": 1,
-                            "name": null,
-                            "latex_label": null,
-                            "unit": null,
-                            "boundary": null
-                        }
-                    },
-                    "name": null,
-                    "latex_label": "$\\chi_2$",
-                    "unit": null,
-                    "boundary": null,
-                    "minimum": -0.15,
-                    "maximum": 0.15,
-                    "num_interp": 100000
-                }
-            },
-            "lambda_1": {
-                "__prior__": true,
-                "__module__": "bilby.core.prior.analytical",
-                "__name__": "Uniform",
-                "kwargs": {
-                    "minimum": 0,
-                    "maximum": 5000.0,
-                    "name": "lambda_1",
-                    "latex_label": "$\\Lambda_1$",
-                    "unit": null,
-                    "boundary": null
-                }
-            },
-            "lambda_2": {
-                "__prior__": true,
-                "__module__": "bilby.core.prior.analytical",
-                "__name__": "Uniform",
-                "kwargs": {
-                    "minimum": 0,
-                    "maximum": 5000.0,
-                    "name": "lambda_2",
-                    "latex_label": "$\\Lambda_2$",
-                    "unit": null,
-                    "boundary": null
+                    "latex_label": null,
+                    "unit": null
                 }
             }
         },
         "fixed_parameters": {}
     },
-    "/work/wouters/GW231109/test_precessing_timefix": {
-        "sampling_time": 8244.415355,
-        "log_bayes_factor": 14.172510171375073,
+    "/work/wouters/GW231109/prod_XP_s005_l10000_gaussian": {
+        "sampling_time": 14977.958697,
+        "log_bayes_factor": 13.397316248358534,
         "waveform_approximant": "IMRPhenomXP_NRTidalv3",
-        "source_dir": "/work/wouters/GW231109/test_precessing_timefix",
+        "source_dir": "/work/wouters/GW231109/prod_XP_s005_l10000_gaussian",
         "priors": {
-            "chirp_mass": {
-                "__prior__": true,
-                "__module__": "bilby.gw.prior",
-                "__name__": "UniformInComponentsChirpMass",
-                "kwargs": {
-                    "minimum": 1.29,
-                    "maximum": 1.32,
-                    "name": "chirp_mass",
-                    "latex_label": "$\\mathcal{M}$",
-                    "unit": "$M_{\\odot}$",
-                    "boundary": null
-                }
-            },
-            "mass_ratio": {
-                "__prior__": true,
-                "__module__": "bilby.gw.prior",
-                "__name__": "UniformInComponentsMassRatio",
-                "kwargs": {
-                    "minimum": 0.125,
-                    "maximum": 1,
-                    "name": "mass_ratio",
-                    "latex_label": "$q$",
-                    "unit": null,
-                    "boundary": null,
-                    "equal_mass": false
-                }
-            },
             "a_1": {
                 "__prior__": true,
                 "__module__": "bilby.core.prior.analytical",
                 "__name__": "Uniform",
                 "kwargs": {
                     "minimum": 0,
-                    "maximum": 0.15,
+                    "maximum": 0.05,
                     "name": "a_1",
                     "latex_label": "$a_1$",
                     "unit": null,
@@ -568,7 +109,92 @@
                 "__name__": "Uniform",
                 "kwargs": {
                     "minimum": 0,
-                    "maximum": 0.15,
+                    "maximum": 0.05,
+                    "name": "a_2",
+                    "latex_label": "$a_2$",
+                    "unit": null,
+                    "boundary": null
+                }
+            },
+            "lambda_1": {
+                "__prior__": true,
+                "__module__": "bilby.core.prior.analytical",
+                "__name__": "Uniform",
+                "kwargs": {
+                    "minimum": 0,
+                    "maximum": 10000.0,
+                    "name": "lambda_1",
+                    "latex_label": "$\\Lambda_1$",
+                    "unit": null,
+                    "boundary": null
+                }
+            },
+            "lambda_2": {
+                "__prior__": true,
+                "__module__": "bilby.core.prior.analytical",
+                "__name__": "Uniform",
+                "kwargs": {
+                    "minimum": 0,
+                    "maximum": 10000.0,
+                    "name": "lambda_2",
+                    "latex_label": "$\\Lambda_2$",
+                    "unit": null,
+                    "boundary": null
+                }
+            },
+            "chirp_mass": {
+                "__prior__": true,
+                "__module__": "bilby.core.prior.base",
+                "__name__": "Constraint",
+                "kwargs": {
+                    "minimum": 0.8,
+                    "maximum": 3.0,
+                    "name": null,
+                    "latex_label": null,
+                    "unit": null
+                }
+            },
+            "mass_ratio": {
+                "__prior__": true,
+                "__module__": "bilby.core.prior.base",
+                "__name__": "Constraint",
+                "kwargs": {
+                    "minimum": 0.125,
+                    "maximum": 1.0,
+                    "name": null,
+                    "latex_label": null,
+                    "unit": null
+                }
+            }
+        },
+        "fixed_parameters": {}
+    },
+    "/work/wouters/GW231109/prod_XP_s005_l5000_double_gaussian": {
+        "sampling_time": 15414.765128,
+        "log_bayes_factor": 11.94105548160266,
+        "waveform_approximant": "IMRPhenomXP_NRTidalv3",
+        "source_dir": "/work/wouters/GW231109/prod_XP_s005_l5000_double_gaussian",
+        "priors": {
+            "a_1": {
+                "__prior__": true,
+                "__module__": "bilby.core.prior.analytical",
+                "__name__": "Uniform",
+                "kwargs": {
+                    "minimum": 0,
+                    "maximum": 0.05,
+                    "name": "a_1",
+                    "latex_label": "$a_1$",
+                    "unit": null,
+                    "boundary": null
+                }
+            },
+            "a_2": {
+                "__prior__": true,
+                "__module__": "bilby.core.prior.analytical",
+                "__name__": "Uniform",
+                "kwargs": {
+                    "minimum": 0,
+                    "maximum": 0.05,
                     "name": "a_2",
                     "latex_label": "$a_2$",
                     "unit": null,
@@ -600,15 +226,209 @@
                     "unit": null,
                     "boundary": null
                 }
+            },
+            "chirp_mass": {
+                "__prior__": true,
+                "__module__": "bilby.core.prior.base",
+                "__name__": "Constraint",
+                "kwargs": {
+                    "minimum": 0.8,
+                    "maximum": 3.0,
+                    "name": null,
+                    "latex_label": null,
+                    "unit": null
+                }
+            },
+            "mass_ratio": {
+                "__prior__": true,
+                "__module__": "bilby.core.prior.base",
+                "__name__": "Constraint",
+                "kwargs": {
+                    "minimum": 0.125,
+                    "maximum": 1.0,
+                    "name": null,
+                    "latex_label": null,
+                    "unit": null
+                }
             }
         },
         "fixed_parameters": {}
     },
-    "/work/wouters/GW231109/test_precessing": {
-        "sampling_time": 8356.646254,
-        "log_bayes_factor": 13.712702206595655,
+    "/work/wouters/GW231109/prod_XP_s040_l5000_gaussian": {
+        "sampling_time": 14472.821628,
+        "log_bayes_factor": 16.01090482594156,
         "waveform_approximant": "IMRPhenomXP_NRTidalv3",
-        "source_dir": "/work/wouters/GW231109/test_precessing",
+        "source_dir": "/work/wouters/GW231109/prod_XP_s040_l5000_gaussian",
+        "priors": {
+            "a_1": {
+                "__prior__": true,
+                "__module__": "bilby.core.prior.analytical",
+                "__name__": "Uniform",
+                "kwargs": {
+                    "minimum": 0,
+                    "maximum": 0.4,
+                    "name": "a_1",
+                    "latex_label": "$a_1$",
+                    "unit": null,
+                    "boundary": null
+                }
+            },
+            "a_2": {
+                "__prior__": true,
+                "__module__": "bilby.core.prior.analytical",
+                "__name__": "Uniform",
+                "kwargs": {
+                    "minimum": 0,
+                    "maximum": 0.4,
+                    "name": "a_2",
+                    "latex_label": "$a_2$",
+                    "unit": null,
+                    "boundary": null
+                }
+            },
+            "lambda_1": {
+                "__prior__": true,
+                "__module__": "bilby.core.prior.analytical",
+                "__name__": "Uniform",
+                "kwargs": {
+                    "minimum": 0,
+                    "maximum": 5000.0,
+                    "name": "lambda_1",
+                    "latex_label": "$\\Lambda_1$",
+                    "unit": null,
+                    "boundary": null
+                }
+            },
+            "lambda_2": {
+                "__prior__": true,
+                "__module__": "bilby.core.prior.analytical",
+                "__name__": "Uniform",
+                "kwargs": {
+                    "minimum": 0,
+                    "maximum": 5000.0,
+                    "name": "lambda_2",
+                    "latex_label": "$\\Lambda_2$",
+                    "unit": null,
+                    "boundary": null
+                }
+            },
+            "chirp_mass": {
+                "__prior__": true,
+                "__module__": "bilby.core.prior.base",
+                "__name__": "Constraint",
+                "kwargs": {
+                    "minimum": 0.8,
+                    "maximum": 3.0,
+                    "name": null,
+                    "latex_label": null,
+                    "unit": null
+                }
+            },
+            "mass_ratio": {
+                "__prior__": true,
+                "__module__": "bilby.core.prior.base",
+                "__name__": "Constraint",
+                "kwargs": {
+                    "minimum": 0.125,
+                    "maximum": 1.0,
+                    "name": null,
+                    "latex_label": null,
+                    "unit": null
+                }
+            }
+        },
+        "fixed_parameters": {}
+    },
+    "/work/wouters/GW231109/prod_XP_s005_l5000_uniform": {
+        "sampling_time": 17316.766081,
+        "log_bayes_factor": 10.192703877929072,
+        "waveform_approximant": "IMRPhenomXP_NRTidalv3",
+        "source_dir": "/work/wouters/GW231109/prod_XP_s005_l5000_uniform",
+        "priors": {
+            "a_1": {
+                "__prior__": true,
+                "__module__": "bilby.core.prior.analytical",
+                "__name__": "Uniform",
+                "kwargs": {
+                    "minimum": 0,
+                    "maximum": 0.05,
+                    "name": "a_1",
+                    "latex_label": "$a_1$",
+                    "unit": null,
+                    "boundary": null
+                }
+            },
+            "a_2": {
+                "__prior__": true,
+                "__module__": "bilby.core.prior.analytical",
+                "__name__": "Uniform",
+                "kwargs": {
+                    "minimum": 0,
+                    "maximum": 0.05,
+                    "name": "a_2",
+                    "latex_label": "$a_2$",
+                    "unit": null,
+                    "boundary": null
+                }
+            },
+            "lambda_1": {
+                "__prior__": true,
+                "__module__": "bilby.core.prior.analytical",
+                "__name__": "Uniform",
+                "kwargs": {
+                    "minimum": 0,
+                    "maximum": 5000.0,
+                    "name": "lambda_1",
+                    "latex_label": "$\\Lambda_1$",
+                    "unit": null,
+                    "boundary": null
+                }
+            },
+            "lambda_2": {
+                "__prior__": true,
+                "__module__": "bilby.core.prior.analytical",
+                "__name__": "Uniform",
+                "kwargs": {
+                    "minimum": 0,
+                    "maximum": 5000.0,
+                    "name": "lambda_2",
+                    "latex_label": "$\\Lambda_2$",
+                    "unit": null,
+                    "boundary": null
+                }
+            },
+            "chirp_mass": {
+                "__prior__": true,
+                "__module__": "bilby.core.prior.base",
+                "__name__": "Constraint",
+                "kwargs": {
+                    "minimum": 0.8,
+                    "maximum": 3.0,
+                    "name": null,
+                    "latex_label": null,
+                    "unit": null
+                }
+            },
+            "mass_ratio": {
+                "__prior__": true,
+                "__module__": "bilby.core.prior.base",
+                "__name__": "Constraint",
+                "kwargs": {
+                    "minimum": 0.125,
+                    "maximum": 1.0,
+                    "name": null,
+                    "latex_label": null,
+                    "unit": null
+                }
+            }
+        },
+        "fixed_parameters": {}
+    },
+    "/work/wouters/GW231109/prod_XP_s005_l5000_default": {
+        "sampling_time": 8477.064001,
+        "log_bayes_factor": 13.766463383486474,
+        "waveform_approximant": "IMRPhenomXP_NRTidalv3",
+        "source_dir": "/work/wouters/GW231109/prod_XP_s005_l5000_default",
         "priors": {
             "chirp_mass": {
                 "__prior__": true,
@@ -692,263 +512,83 @@
         },
         "fixed_parameters": {}
     },
-    "/work/wouters/GW231109/test": {
-        "sampling_time": 5036.779329,
-        "log_bayes_factor": 14.772458418829306,
-        "waveform_approximant": "IMRPhenomXAS_NRTidalv3",
-        "source_dir": "/work/wouters/GW231109/test",
+    "/work/wouters/GW231109/prod_XP_s005_l10000_uniform": {
+        "sampling_time": 16912.70367,
+        "log_bayes_factor": 10.172625083389967,
+        "waveform_approximant": "IMRPhenomXP_NRTidalv3",
+        "source_dir": "/work/wouters/GW231109/prod_XP_s005_l10000_uniform",
         "priors": {
+            "a_1": {
+                "__prior__": true,
+                "__module__": "bilby.core.prior.analytical",
+                "__name__": "Uniform",
+                "kwargs": {
+                    "minimum": 0,
+                    "maximum": 0.05,
+                    "name": "a_1",
+                    "latex_label": "$a_1$",
+                    "unit": null,
+                    "boundary": null
+                }
+            },
+            "a_2": {
+                "__prior__": true,
+                "__module__": "bilby.core.prior.analytical",
+                "__name__": "Uniform",
+                "kwargs": {
+                    "minimum": 0,
+                    "maximum": 0.05,
+                    "name": "a_2",
+                    "latex_label": "$a_2$",
+                    "unit": null,
+                    "boundary": null
+                }
+            },
+            "lambda_1": {
+                "__prior__": true,
+                "__module__": "bilby.core.prior.analytical",
+                "__name__": "Uniform",
+                "kwargs": {
+                    "minimum": 0,
+                    "maximum": 10000.0,
+                    "name": "lambda_1",
+                    "latex_label": "$\\Lambda_1$",
+                    "unit": null,
+                    "boundary": null
+                }
+            },
+            "lambda_2": {
+                "__prior__": true,
+                "__module__": "bilby.core.prior.analytical",
+                "__name__": "Uniform",
+                "kwargs": {
+                    "minimum": 0,
+                    "maximum": 10000.0,
+                    "name": "lambda_2",
+                    "latex_label": "$\\Lambda_2$",
+                    "unit": null,
+                    "boundary": null
+                }
+            },
             "chirp_mass": {
                 "__prior__": true,
-                "__module__": "bilby.gw.prior",
-                "__name__": "UniformInComponentsChirpMass",
+                "__module__": "bilby.core.prior.base",
+                "__name__": "Constraint",
                 "kwargs": {
-                    "minimum": 1.29,
-                    "maximum": 1.32,
-                    "name": "chirp_mass",
-                    "latex_label": "$\\mathcal{M}$",
-                    "unit": "$M_{\\odot}$",
-                    "boundary": null
+                    "minimum": 0.8,
+                    "maximum": 3.0,
+                    "name": null,
+                    "latex_label": null,
+                    "unit": null
                 }
             },
             "mass_ratio": {
                 "__prior__": true,
-                "__module__": "bilby.gw.prior",
-                "__name__": "UniformInComponentsMassRatio",
+                "__module__": "bilby.core.prior.base",
+                "__name__": "Constraint",
                 "kwargs": {
                     "minimum": 0.125,
-                    "maximum": 1,
-                    "name": "mass_ratio",
-                    "latex_label": "$q$",
-                    "unit": null,
-                    "boundary": null,
-                    "equal_mass": false
-                }
-            },
-            "chi_1": {
-                "__prior__": true,
-                "__module__": "bilby.gw.prior",
-                "__name__": "AlignedSpin",
-                "kwargs": {
-                    "a_prior": {
-                        "__prior__": true,
-                        "__module__": "bilby.core.prior.analytical",
-                        "__name__": "Uniform",
-                        "kwargs": {
-                            "minimum": 0,
-                            "maximum": 0.1,
-                            "name": null,
-                            "latex_label": null,
-                            "unit": null,
-                            "boundary": null
-                        }
-                    },
-                    "z_prior": {
-                        "__prior__": true,
-                        "__module__": "bilby.core.prior.analytical",
-                        "__name__": "Uniform",
-                        "kwargs": {
-                            "minimum": -1,
-                            "maximum": 1,
-                            "name": null,
-                            "latex_label": null,
-                            "unit": null,
-                            "boundary": null
-                        }
-                    },
-                    "name": null,
-                    "latex_label": "$\\chi_1$",
-                    "unit": null,
-                    "boundary": null,
-                    "minimum": -0.1,
-                    "maximum": 0.1
-                }
-            },
-            "chi_2": {
-                "__prior__": true,
-                "__module__": "bilby.gw.prior",
-                "__name__": "AlignedSpin",
-                "kwargs": {
-                    "a_prior": {
-                        "__prior__": true,
-                        "__module__": "bilby.core.prior.analytical",
-                        "__name__": "Uniform",
-                        "kwargs": {
-                            "minimum": 0,
-                            "maximum": 0.1,
-                            "name": null,
-                            "latex_label": null,
-                            "unit": null,
-                            "boundary": null
-                        }
-                    },
-                    "z_prior": {
-                        "__prior__": true,
-                        "__module__": "bilby.core.prior.analytical",
-                        "__name__": "Uniform",
-                        "kwargs": {
-                            "minimum": -1,
-                            "maximum": 1,
-                            "name": null,
-                            "latex_label": null,
-                            "unit": null,
-                            "boundary": null
-                        }
-                    },
-                    "name": null,
-                    "latex_label": "$\\chi_2$",
-                    "unit": null,
-                    "boundary": null,
-                    "minimum": -0.1,
-                    "maximum": 0.1
-                }
-            },
-            "lambda_1": {
-                "__prior__": true,
-                "__module__": "bilby.core.prior.analytical",
-                "__name__": "Uniform",
-                "kwargs": {
-                    "minimum": 0,
-                    "maximum": 5000.0,
-                    "name": "lambda_1",
-                    "latex_label": "$\\Lambda_1$",
-                    "unit": null,
-                    "boundary": null
-                }
-            },
-            "lambda_2": {
-                "__prior__": true,
-                "__module__": "bilby.core.prior.analytical",
-                "__name__": "Uniform",
-                "kwargs": {
-                    "minimum": 0,
-                    "maximum": 5000.0,
-                    "name": "lambda_2",
-                    "latex_label": "$\\Lambda_2$",
-                    "unit": null,
-                    "boundary": null
-                }
-            }
-        },
-        "fixed_parameters": {}
-    },
-    "/work/wouters/GW231109/neural_priors_double_gaussian_radio": {
-        "sampling_time": 15804.870639,
-        "log_bayes_factor": 15.716736639977618,
-        "waveform_approximant": "IMRPhenomXP_NRTidalv3",
-        "source_dir": "/work/wouters/GW231109/neural_priors_double_gaussian_radio",
-        "priors": {
-            "a_1": {
-                "__prior__": true,
-                "__module__": "bilby.core.prior.analytical",
-                "__name__": "Uniform",
-                "kwargs": {
-                    "minimum": 0,
-                    "maximum": 0.15,
-                    "name": "a_1",
-                    "latex_label": "$a_1$",
-                    "unit": null,
-                    "boundary": null
-                }
-            },
-            "a_2": {
-                "__prior__": true,
-                "__module__": "bilby.core.prior.analytical",
-                "__name__": "Uniform",
-                "kwargs": {
-                    "minimum": 0,
-                    "maximum": 0.15,
-                    "name": "a_2",
-                    "latex_label": "$a_2$",
-                    "unit": null,
-                    "boundary": null
-                }
-            },
-            "mass_ratio": {
-                "__prior__": true,
-                "__module__": "bilby.core.prior.joint",
-                "__name__": "NFPrior",
-                "kwargs": {
-                    "dist": {
-                        "__prior__": true,
-                        "__module__": "bilby.core.prior.joint",
-                        "__name__": "NFDist",
-                        "kwargs": {
-                            "names": [
-                                "chirp_mass_source",
-                                "mass_ratio",
-                                "lambda_1",
-                                "lambda_2"
-                            ],
-                            "flow_filename": "/home/wouters/projects/eos_source_classification/eos_source_classification/NFprior/models/double_gaussian/bns/radio/model.pt",
-                            "use_tilde": false,
-                            "use_component_masses": false
-                        }
-                    },
-                    "name": "mass_ratio",
-                    "latex_label": "$q$",
-                    "unit": null
-                }
-            },
-            "lambda_1": {
-                "__prior__": true,
-                "__module__": "bilby.core.prior.joint",
-                "__name__": "NFPrior",
-                "kwargs": {
-                    "dist": {
-                        "__prior__": true,
-                        "__module__": "bilby.core.prior.joint",
-                        "__name__": "NFDist",
-                        "kwargs": {
-                            "names": [
-                                "chirp_mass_source",
-                                "mass_ratio",
-                                "lambda_1",
-                                "lambda_2"
-                            ],
-                            "flow_filename": "/home/wouters/projects/eos_source_classification/eos_source_classification/NFprior/models/double_gaussian/bns/radio/model.pt",
-                            "use_tilde": false,
-                            "use_component_masses": false
-                        }
-                    },
-                    "name": "lambda_1",
-                    "latex_label": "$\\Lambda_1$",
-                    "unit": null
-                }
-            },
-            "lambda_2": {
-                "__prior__": true,
-                "__module__": "bilby.core.prior.joint",
-                "__name__": "NFPrior",
-                "kwargs": {
-                    "dist": {
-                        "__prior__": true,
-                        "__module__": "bilby.core.prior.joint",
-                        "__name__": "NFDist",
-                        "kwargs": {
-                            "names": [
-                                "chirp_mass_source",
-                                "mass_ratio",
-                                "lambda_1",
-                                "lambda_2"
-                            ],
-                            "flow_filename": "/home/wouters/projects/eos_source_classification/eos_source_classification/NFprior/models/double_gaussian/bns/radio/model.pt",
-                            "use_tilde": false,
-                            "use_component_masses": false
-                        }
-                    },
-                    "name": "lambda_2",
-                    "latex_label": "$\\Lambda_2$",
-                    "unit": null
-                }
-            },
-            "chirp_mass": {
-                "__prior__": true,
-                "__module__": "bilby.core.prior.base",
-                "__name__": "Constraint",
-                "kwargs": {
-                    "minimum": 0.8,
-                    "maximum": 3.0,
+                    "maximum": 1.0,
                     "name": null,
                     "latex_label": null,
                     "unit": null
@@ -957,653 +597,11 @@
         },
         "fixed_parameters": {}
     },
-    "/work/wouters/GW231109/neural_priors": {
-        "sampling_time": 8699.126542,
-        "log_bayes_factor": 15.878812563716163,
+    "/work/wouters/GW231109/prod_XP_s005_l10000_default": {
+        "sampling_time": 12227.975736,
+        "log_bayes_factor": 12.37072682248992,
         "waveform_approximant": "IMRPhenomXP_NRTidalv3",
-        "source_dir": "/work/wouters/GW231109/neural_priors",
-        "priors": {
-            "a_1": {
-                "__prior__": true,
-                "__module__": "bilby.core.prior.analytical",
-                "__name__": "Uniform",
-                "kwargs": {
-                    "minimum": 0,
-                    "maximum": 0.15,
-                    "name": "a_1",
-                    "latex_label": "$a_1$",
-                    "unit": null,
-                    "boundary": null
-                }
-            },
-            "a_2": {
-                "__prior__": true,
-                "__module__": "bilby.core.prior.analytical",
-                "__name__": "Uniform",
-                "kwargs": {
-                    "minimum": 0,
-                    "maximum": 0.15,
-                    "name": "a_2",
-                    "latex_label": "$a_2$",
-                    "unit": null,
-                    "boundary": null
-                }
-            },
-            "mass_ratio": {
-                "__prior__": true,
-                "__module__": "bilby.core.prior.joint",
-                "__name__": "NFPrior",
-                "kwargs": {
-                    "dist": {
-                        "__prior__": true,
-                        "__module__": "bilby.core.prior.joint",
-                        "__name__": "NFDist",
-                        "kwargs": {
-                            "names": [
-                                "chirp_mass_source",
-                                "mass_ratio",
-                                "lambda_1",
-                                "lambda_2"
-                            ],
-                            "flow_filename": "/home/wouters/projects/eos_source_classification/eos_source_classification/NFprior/models/gaussian/bns/radio/model.pt",
-                            "use_tilde": false,
-                            "use_component_masses": false
-                        }
-                    },
-                    "name": "mass_ratio",
-                    "latex_label": "$q$",
-                    "unit": null
-                }
-            },
-            "lambda_1": {
-                "__prior__": true,
-                "__module__": "bilby.core.prior.joint",
-                "__name__": "NFPrior",
-                "kwargs": {
-                    "dist": {
-                        "__prior__": true,
-                        "__module__": "bilby.core.prior.joint",
-                        "__name__": "NFDist",
-                        "kwargs": {
-                            "names": [
-                                "chirp_mass_source",
-                                "mass_ratio",
-                                "lambda_1",
-                                "lambda_2"
-                            ],
-                            "flow_filename": "/home/wouters/projects/eos_source_classification/eos_source_classification/NFprior/models/gaussian/bns/radio/model.pt",
-                            "use_tilde": false,
-                            "use_component_masses": false
-                        }
-                    },
-                    "name": "lambda_1",
-                    "latex_label": "$\\Lambda_1$",
-                    "unit": null
-                }
-            },
-            "lambda_2": {
-                "__prior__": true,
-                "__module__": "bilby.core.prior.joint",
-                "__name__": "NFPrior",
-                "kwargs": {
-                    "dist": {
-                        "__prior__": true,
-                        "__module__": "bilby.core.prior.joint",
-                        "__name__": "NFDist",
-                        "kwargs": {
-                            "names": [
-                                "chirp_mass_source",
-                                "mass_ratio",
-                                "lambda_1",
-                                "lambda_2"
-                            ],
-                            "flow_filename": "/home/wouters/projects/eos_source_classification/eos_source_classification/NFprior/models/gaussian/bns/radio/model.pt",
-                            "use_tilde": false,
-                            "use_component_masses": false
-                        }
-                    },
-                    "name": "lambda_2",
-                    "latex_label": "$\\Lambda_2$",
-                    "unit": null
-                }
-            },
-            "chirp_mass": {
-                "__prior__": true,
-                "__module__": "bilby.core.prior.base",
-                "__name__": "Constraint",
-                "kwargs": {
-                    "minimum": 0.8,
-                    "maximum": 3.0,
-                    "name": null,
-                    "latex_label": null,
-                    "unit": null
-                }
-            }
-        },
-        "fixed_parameters": {}
-    },
-    "/work/wouters/GW231109/test_fmax2kHz": {
-        "sampling_time": 4541.419603,
-        "log_bayes_factor": 14.772834610886388,
-        "waveform_approximant": "IMRPhenomXAS_NRTidalv3",
-        "source_dir": "/work/wouters/GW231109/test_fmax2kHz",
-        "priors": {
-            "chirp_mass": {
-                "__prior__": true,
-                "__module__": "bilby.gw.prior",
-                "__name__": "UniformInComponentsChirpMass",
-                "kwargs": {
-                    "minimum": 1.29,
-                    "maximum": 1.32,
-                    "name": "chirp_mass",
-                    "latex_label": "$\\mathcal{M}$",
-                    "unit": "$M_{\\odot}$",
-                    "boundary": null
-                }
-            },
-            "mass_ratio": {
-                "__prior__": true,
-                "__module__": "bilby.gw.prior",
-                "__name__": "UniformInComponentsMassRatio",
-                "kwargs": {
-                    "minimum": 0.125,
-                    "maximum": 1,
-                    "name": "mass_ratio",
-                    "latex_label": "$q$",
-                    "unit": null,
-                    "boundary": null,
-                    "equal_mass": false
-                }
-            },
-            "chi_1": {
-                "__prior__": true,
-                "__module__": "bilby.gw.prior",
-                "__name__": "AlignedSpin",
-                "kwargs": {
-                    "a_prior": {
-                        "__prior__": true,
-                        "__module__": "bilby.core.prior.analytical",
-                        "__name__": "Uniform",
-                        "kwargs": {
-                            "minimum": 0,
-                            "maximum": 0.1,
-                            "name": null,
-                            "latex_label": null,
-                            "unit": null,
-                            "boundary": null
-                        }
-                    },
-                    "z_prior": {
-                        "__prior__": true,
-                        "__module__": "bilby.core.prior.analytical",
-                        "__name__": "Uniform",
-                        "kwargs": {
-                            "minimum": -1,
-                            "maximum": 1,
-                            "name": null,
-                            "latex_label": null,
-                            "unit": null,
-                            "boundary": null
-                        }
-                    },
-                    "name": null,
-                    "latex_label": "$\\chi_1$",
-                    "unit": null,
-                    "boundary": null,
-                    "minimum": -0.1,
-                    "maximum": 0.1,
-                    "num_interp": 100000
-                }
-            },
-            "chi_2": {
-                "__prior__": true,
-                "__module__": "bilby.gw.prior",
-                "__name__": "AlignedSpin",
-                "kwargs": {
-                    "a_prior": {
-                        "__prior__": true,
-                        "__module__": "bilby.core.prior.analytical",
-                        "__name__": "Uniform",
-                        "kwargs": {
-                            "minimum": 0,
-                            "maximum": 0.1,
-                            "name": null,
-                            "latex_label": null,
-                            "unit": null,
-                            "boundary": null
-                        }
-                    },
-                    "z_prior": {
-                        "__prior__": true,
-                        "__module__": "bilby.core.prior.analytical",
-                        "__name__": "Uniform",
-                        "kwargs": {
-                            "minimum": -1,
-                            "maximum": 1,
-                            "name": null,
-                            "latex_label": null,
-                            "unit": null,
-                            "boundary": null
-                        }
-                    },
-                    "name": null,
-                    "latex_label": "$\\chi_2$",
-                    "unit": null,
-                    "boundary": null,
-                    "minimum": -0.1,
-                    "maximum": 0.1,
-                    "num_interp": 100000
-                }
-            },
-            "lambda_1": {
-                "__prior__": true,
-                "__module__": "bilby.core.prior.analytical",
-                "__name__": "Uniform",
-                "kwargs": {
-                    "minimum": 0,
-                    "maximum": 5000.0,
-                    "name": "lambda_1",
-                    "latex_label": "$\\Lambda_1$",
-                    "unit": null,
-                    "boundary": null
-                }
-            },
-            "lambda_2": {
-                "__prior__": true,
-                "__module__": "bilby.core.prior.analytical",
-                "__name__": "Uniform",
-                "kwargs": {
-                    "minimum": 0,
-                    "maximum": 5000.0,
-                    "name": "lambda_2",
-                    "latex_label": "$\\Lambda_2$",
-                    "unit": null,
-                    "boundary": null
-                }
-            }
-        },
-        "fixed_parameters": {}
-    },
-    "/work/wouters/GW231109/neural_priors_gaussian_radio_NICER": {
-        "sampling_time": 29126.826474,
-        "log_bayes_factor": 15.960134776051044,
-        "waveform_approximant": "IMRPhenomXP_NRTidalv3",
-        "source_dir": "/work/wouters/GW231109/neural_priors_gaussian_radio_NICER",
-        "priors": {
-            "a_1": {
-                "__prior__": true,
-                "__module__": "bilby.core.prior.analytical",
-                "__name__": "Uniform",
-                "kwargs": {
-                    "minimum": 0,
-                    "maximum": 0.15,
-                    "name": "a_1",
-                    "latex_label": "$a_1$",
-                    "unit": null,
-                    "boundary": null
-                }
-            },
-            "a_2": {
-                "__prior__": true,
-                "__module__": "bilby.core.prior.analytical",
-                "__name__": "Uniform",
-                "kwargs": {
-                    "minimum": 0,
-                    "maximum": 0.15,
-                    "name": "a_2",
-                    "latex_label": "$a_2$",
-                    "unit": null,
-                    "boundary": null
-                }
-            },
-            "mass_ratio": {
-                "__prior__": true,
-                "__module__": "bilby.core.prior.joint",
-                "__name__": "NFPrior",
-                "kwargs": {
-                    "dist": {
-                        "__prior__": true,
-                        "__module__": "bilby.core.prior.joint",
-                        "__name__": "NFDist",
-                        "kwargs": {
-                            "names": [
-                                "chirp_mass_source",
-                                "mass_ratio",
-                                "lambda_1",
-                                "lambda_2"
-                            ],
-                            "flow_filename": "/home/wouters/projects/eos_source_classification/eos_source_classification/NFprior/models/gaussian/bns/radio_NICER/model.pt",
-                            "use_tilde": false,
-                            "use_component_masses": false
-                        }
-                    },
-                    "name": "mass_ratio",
-                    "latex_label": "$q$",
-                    "unit": null
-                }
-            },
-            "lambda_1": {
-                "__prior__": true,
-                "__module__": "bilby.core.prior.joint",
-                "__name__": "NFPrior",
-                "kwargs": {
-                    "dist": {
-                        "__prior__": true,
-                        "__module__": "bilby.core.prior.joint",
-                        "__name__": "NFDist",
-                        "kwargs": {
-                            "names": [
-                                "chirp_mass_source",
-                                "mass_ratio",
-                                "lambda_1",
-                                "lambda_2"
-                            ],
-                            "flow_filename": "/home/wouters/projects/eos_source_classification/eos_source_classification/NFprior/models/gaussian/bns/radio_NICER/model.pt",
-                            "use_tilde": false,
-                            "use_component_masses": false
-                        }
-                    },
-                    "name": "lambda_1",
-                    "latex_label": "$\\Lambda_1$",
-                    "unit": null
-                }
-            },
-            "lambda_2": {
-                "__prior__": true,
-                "__module__": "bilby.core.prior.joint",
-                "__name__": "NFPrior",
-                "kwargs": {
-                    "dist": {
-                        "__prior__": true,
-                        "__module__": "bilby.core.prior.joint",
-                        "__name__": "NFDist",
-                        "kwargs": {
-                            "names": [
-                                "chirp_mass_source",
-                                "mass_ratio",
-                                "lambda_1",
-                                "lambda_2"
-                            ],
-                            "flow_filename": "/home/wouters/projects/eos_source_classification/eos_source_classification/NFprior/models/gaussian/bns/radio_NICER/model.pt",
-                            "use_tilde": false,
-                            "use_component_masses": false
-                        }
-                    },
-                    "name": "lambda_2",
-                    "latex_label": "$\\Lambda_2$",
-                    "unit": null
-                }
-            },
-            "chirp_mass": {
-                "__prior__": true,
-                "__module__": "bilby.core.prior.base",
-                "__name__": "Constraint",
-                "kwargs": {
-                    "minimum": 0.8,
-                    "maximum": 3.0,
-                    "name": null,
-                    "latex_label": null,
-                    "unit": null
-                }
-            }
-        },
-        "fixed_parameters": {}
-    },
-    "/work/wouters/GW231109/neural_priors_double_gaussian_radio_NICER": {
-        "sampling_time": 16230.938753,
-        "log_bayes_factor": 16.079943263128513,
-        "waveform_approximant": "IMRPhenomXP_NRTidalv3",
-        "source_dir": "/work/wouters/GW231109/neural_priors_double_gaussian_radio_NICER",
-        "priors": {
-            "a_1": {
-                "__prior__": true,
-                "__module__": "bilby.core.prior.analytical",
-                "__name__": "Uniform",
-                "kwargs": {
-                    "minimum": 0,
-                    "maximum": 0.15,
-                    "name": "a_1",
-                    "latex_label": "$a_1$",
-                    "unit": null,
-                    "boundary": null
-                }
-            },
-            "a_2": {
-                "__prior__": true,
-                "__module__": "bilby.core.prior.analytical",
-                "__name__": "Uniform",
-                "kwargs": {
-                    "minimum": 0,
-                    "maximum": 0.15,
-                    "name": "a_2",
-                    "latex_label": "$a_2$",
-                    "unit": null,
-                    "boundary": null
-                }
-            },
-            "mass_ratio": {
-                "__prior__": true,
-                "__module__": "bilby.core.prior.joint",
-                "__name__": "NFPrior",
-                "kwargs": {
-                    "dist": {
-                        "__prior__": true,
-                        "__module__": "bilby.core.prior.joint",
-                        "__name__": "NFDist",
-                        "kwargs": {
-                            "names": [
-                                "chirp_mass_source",
-                                "mass_ratio",
-                                "lambda_1",
-                                "lambda_2"
-                            ],
-                            "flow_filename": "/home/wouters/projects/eos_source_classification/eos_source_classification/NFprior/models/double_gaussian/bns/radio_NICER/model.pt",
-                            "use_tilde": false,
-                            "use_component_masses": false
-                        }
-                    },
-                    "name": "mass_ratio",
-                    "latex_label": "$q$",
-                    "unit": null
-                }
-            },
-            "lambda_1": {
-                "__prior__": true,
-                "__module__": "bilby.core.prior.joint",
-                "__name__": "NFPrior",
-                "kwargs": {
-                    "dist": {
-                        "__prior__": true,
-                        "__module__": "bilby.core.prior.joint",
-                        "__name__": "NFDist",
-                        "kwargs": {
-                            "names": [
-                                "chirp_mass_source",
-                                "mass_ratio",
-                                "lambda_1",
-                                "lambda_2"
-                            ],
-                            "flow_filename": "/home/wouters/projects/eos_source_classification/eos_source_classification/NFprior/models/double_gaussian/bns/radio_NICER/model.pt",
-                            "use_tilde": false,
-                            "use_component_masses": false
-                        }
-                    },
-                    "name": "lambda_1",
-                    "latex_label": "$\\Lambda_1$",
-                    "unit": null
-                }
-            },
-            "lambda_2": {
-                "__prior__": true,
-                "__module__": "bilby.core.prior.joint",
-                "__name__": "NFPrior",
-                "kwargs": {
-                    "dist": {
-                        "__prior__": true,
-                        "__module__": "bilby.core.prior.joint",
-                        "__name__": "NFDist",
-                        "kwargs": {
-                            "names": [
-                                "chirp_mass_source",
-                                "mass_ratio",
-                                "lambda_1",
-                                "lambda_2"
-                            ],
-                            "flow_filename": "/home/wouters/projects/eos_source_classification/eos_source_classification/NFprior/models/double_gaussian/bns/radio_NICER/model.pt",
-                            "use_tilde": false,
-                            "use_component_masses": false
-                        }
-                    },
-                    "name": "lambda_2",
-                    "latex_label": "$\\Lambda_2$",
-                    "unit": null
-                }
-            },
-            "chirp_mass": {
-                "__prior__": true,
-                "__module__": "bilby.core.prior.base",
-                "__name__": "Constraint",
-                "kwargs": {
-                    "minimum": 0.8,
-                    "maximum": 3.0,
-                    "name": null,
-                    "latex_label": null,
-                    "unit": null
-                }
-            }
-        },
-        "fixed_parameters": {}
-    },
-    "/work/wouters/GW231109/neural_priors_uniform_radio": {
-        "sampling_time": 18145.272013,
-        "log_bayes_factor": 14.735837490516689,
-        "waveform_approximant": "IMRPhenomXP_NRTidalv3",
-        "source_dir": "/work/wouters/GW231109/neural_priors_uniform_radio",
-        "priors": {
-            "a_1": {
-                "__prior__": true,
-                "__module__": "bilby.core.prior.analytical",
-                "__name__": "Uniform",
-                "kwargs": {
-                    "minimum": 0,
-                    "maximum": 0.15,
-                    "name": "a_1",
-                    "latex_label": "$a_1$",
-                    "unit": null,
-                    "boundary": null
-                }
-            },
-            "a_2": {
-                "__prior__": true,
-                "__module__": "bilby.core.prior.analytical",
-                "__name__": "Uniform",
-                "kwargs": {
-                    "minimum": 0,
-                    "maximum": 0.15,
-                    "name": "a_2",
-                    "latex_label": "$a_2$",
-                    "unit": null,
-                    "boundary": null
-                }
-            },
-            "mass_ratio": {
-                "__prior__": true,
-                "__module__": "bilby.core.prior.joint",
-                "__name__": "NFPrior",
-                "kwargs": {
-                    "dist": {
-                        "__prior__": true,
-                        "__module__": "bilby.core.prior.joint",
-                        "__name__": "NFDist",
-                        "kwargs": {
-                            "names": [
-                                "chirp_mass_source",
-                                "mass_ratio",
-                                "lambda_1",
-                                "lambda_2"
-                            ],
-                            "flow_filename": "/home/wouters/projects/eos_source_classification/eos_source_classification/NFprior/models/uniform/bns/radio/model.pt",
-                            "use_tilde": false,
-                            "use_component_masses": false
-                        }
-                    },
-                    "name": "mass_ratio",
-                    "latex_label": "$q$",
-                    "unit": null
-                }
-            },
-            "lambda_1": {
-                "__prior__": true,
-                "__module__": "bilby.core.prior.joint",
-                "__name__": "NFPrior",
-                "kwargs": {
-                    "dist": {
-                        "__prior__": true,
-                        "__module__": "bilby.core.prior.joint",
-                        "__name__": "NFDist",
-                        "kwargs": {
-                            "names": [
-                                "chirp_mass_source",
-                                "mass_ratio",
-                                "lambda_1",
-                                "lambda_2"
-                            ],
-                            "flow_filename": "/home/wouters/projects/eos_source_classification/eos_source_classification/NFprior/models/uniform/bns/radio/model.pt",
-                            "use_tilde": false,
-                            "use_component_masses": false
-                        }
-                    },
-                    "name": "lambda_1",
-                    "latex_label": "$\\Lambda_1$",
-                    "unit": null
-                }
-            },
-            "lambda_2": {
-                "__prior__": true,
-                "__module__": "bilby.core.prior.joint",
-                "__name__": "NFPrior",
-                "kwargs": {
-                    "dist": {
-                        "__prior__": true,
-                        "__module__": "bilby.core.prior.joint",
-                        "__name__": "NFDist",
-                        "kwargs": {
-                            "names": [
-                                "chirp_mass_source",
-                                "mass_ratio",
-                                "lambda_1",
-                                "lambda_2"
-                            ],
-                            "flow_filename": "/home/wouters/projects/eos_source_classification/eos_source_classification/NFprior/models/uniform/bns/radio/model.pt",
-                            "use_tilde": false,
-                            "use_component_masses": false
-                        }
-                    },
-                    "name": "lambda_2",
-                    "latex_label": "$\\Lambda_2$",
-                    "unit": null
-                }
-            },
-            "chirp_mass": {
-                "__prior__": true,
-                "__module__": "bilby.core.prior.base",
-                "__name__": "Constraint",
-                "kwargs": {
-                    "minimum": 0.8,
-                    "maximum": 3.0,
-                    "name": null,
-                    "latex_label": null,
-                    "unit": null
-                }
-            }
-        },
-        "fixed_parameters": {}
-    },
-    "/work/wouters/GW231109/test_precessing_fmax2kHz": {
-        "sampling_time": 8240.826978,
-        "log_bayes_factor": 13.360387256237932,
-        "waveform_approximant": "IMRPhenomXP_NRTidalv3",
-        "source_dir": "/work/wouters/GW231109/test_precessing_fmax2kHz",
+        "source_dir": "/work/wouters/GW231109/prod_XP_s005_l10000_default",
         "priors": {
             "chirp_mass": {
                 "__prior__": true,
@@ -1664,7 +662,7 @@
                 "__name__": "Uniform",
                 "kwargs": {
                     "minimum": 0,
-                    "maximum": 5000.0,
+                    "maximum": 10000.0,
                     "name": "lambda_1",
                     "latex_label": "$\\Lambda_1$",
                     "unit": null,
@@ -1677,7 +675,7 @@
                 "__name__": "Uniform",
                 "kwargs": {
                     "minimum": 0,
-                    "maximum": 5000.0,
+                    "maximum": 10000.0,
                     "name": "lambda_2",
                     "latex_label": "$\\Lambda_2$",
                     "unit": null,
@@ -1687,11 +685,11 @@
         },
         "fixed_parameters": {}
     },
-    "/work/wouters/GW231109/test_precessing_timefix_bw_fast": {
-        "sampling_time": 8769.198701,
-        "log_bayes_factor": 15.387559951765665,
+    "/work/wouters/GW231109/prod_XP_s040_l5000_default": {
+        "sampling_time": 9336.671468,
+        "log_bayes_factor": 15.600965334292754,
         "waveform_approximant": "IMRPhenomXP_NRTidalv3",
-        "source_dir": "/work/wouters/GW231109/test_precessing_timefix_bw_fast",
+        "source_dir": "/work/wouters/GW231109/prod_XP_s040_l5000_default",
         "priors": {
             "chirp_mass": {
                 "__prior__": true,
@@ -1726,7 +724,7 @@
                 "__name__": "Uniform",
                 "kwargs": {
                     "minimum": 0,
-                    "maximum": 0.15,
+                    "maximum": 0.4,
                     "name": "a_1",
                     "latex_label": "$a_1$",
                     "unit": null,
@@ -1739,7 +737,7 @@
                 "__name__": "Uniform",
                 "kwargs": {
                     "minimum": 0,
-                    "maximum": 0.15,
+                    "maximum": 0.4,
                     "name": "a_2",
                     "latex_label": "$a_2$",
                     "unit": null,
@@ -1775,11 +773,11 @@
         },
         "fixed_parameters": {}
     },
-    "/work/wouters/GW231109/neural_priors_gaussian_radio": {
-        "sampling_time": 15577.489227,
-        "log_bayes_factor": 16.197165321985153,
+    "/work/wouters/GW231109/prod_XP_s040_l10000_gaussian": {
+        "sampling_time": 15193.089779,
+        "log_bayes_factor": 15.748568920773952,
         "waveform_approximant": "IMRPhenomXP_NRTidalv3",
-        "source_dir": "/work/wouters/GW231109/neural_priors_gaussian_radio",
+        "source_dir": "/work/wouters/GW231109/prod_XP_s040_l10000_gaussian",
         "priors": {
             "a_1": {
                 "__prior__": true,
@@ -1787,7 +785,7 @@
                 "__name__": "Uniform",
                 "kwargs": {
                     "minimum": 0,
-                    "maximum": 0.15,
+                    "maximum": 0.4,
                     "name": "a_1",
                     "latex_label": "$a_1$",
                     "unit": null,
@@ -1800,89 +798,37 @@
                 "__name__": "Uniform",
                 "kwargs": {
                     "minimum": 0,
-                    "maximum": 0.15,
+                    "maximum": 0.4,
                     "name": "a_2",
                     "latex_label": "$a_2$",
                     "unit": null,
                     "boundary": null
                 }
             },
-            "mass_ratio": {
-                "__prior__": true,
-                "__module__": "bilby.core.prior.joint",
-                "__name__": "NFPrior",
-                "kwargs": {
-                    "dist": {
-                        "__prior__": true,
-                        "__module__": "bilby.core.prior.joint",
-                        "__name__": "NFDist",
-                        "kwargs": {
-                            "names": [
-                                "chirp_mass_source",
-                                "mass_ratio",
-                                "lambda_1",
-                                "lambda_2"
-                            ],
-                            "flow_filename": "/home/wouters/projects/eos_source_classification/eos_source_classification/NFprior/models/gaussian/bns/radio/model.pt",
-                            "use_tilde": false,
-                            "use_component_masses": false
-                        }
-                    },
-                    "name": "mass_ratio",
-                    "latex_label": "$q$",
-                    "unit": null
-                }
-            },
             "lambda_1": {
                 "__prior__": true,
-                "__module__": "bilby.core.prior.joint",
-                "__name__": "NFPrior",
+                "__module__": "bilby.core.prior.analytical",
+                "__name__": "Uniform",
                 "kwargs": {
-                    "dist": {
-                        "__prior__": true,
-                        "__module__": "bilby.core.prior.joint",
-                        "__name__": "NFDist",
-                        "kwargs": {
-                            "names": [
-                                "chirp_mass_source",
-                                "mass_ratio",
-                                "lambda_1",
-                                "lambda_2"
-                            ],
-                            "flow_filename": "/home/wouters/projects/eos_source_classification/eos_source_classification/NFprior/models/gaussian/bns/radio/model.pt",
-                            "use_tilde": false,
-                            "use_component_masses": false
-                        }
-                    },
+                    "minimum": 0,
+                    "maximum": 10000.0,
                     "name": "lambda_1",
                     "latex_label": "$\\Lambda_1$",
-                    "unit": null
+                    "unit": null,
+                    "boundary": null
                 }
             },
             "lambda_2": {
                 "__prior__": true,
-                "__module__": "bilby.core.prior.joint",
-                "__name__": "NFPrior",
+                "__module__": "bilby.core.prior.analytical",
+                "__name__": "Uniform",
                 "kwargs": {
-                    "dist": {
-                        "__prior__": true,
-                        "__module__": "bilby.core.prior.joint",
-                        "__name__": "NFDist",
-                        "kwargs": {
-                            "names": [
-                                "chirp_mass_source",
-                                "mass_ratio",
-                                "lambda_1",
-                                "lambda_2"
-                            ],
-                            "flow_filename": "/home/wouters/projects/eos_source_classification/eos_source_classification/NFprior/models/gaussian/bns/radio/model.pt",
-                            "use_tilde": false,
-                            "use_component_masses": false
-                        }
-                    },
+                    "minimum": 0,
+                    "maximum": 10000.0,
                     "name": "lambda_2",
                     "latex_label": "$\\Lambda_2$",
-                    "unit": null
+                    "unit": null,
+                    "boundary": null
                 }
             },
             "chirp_mass": {
@@ -1896,279 +842,27 @@
                     "latex_label": null,
                     "unit": null
                 }
-            }
-        },
-        "fixed_parameters": {}
-    },
-    "/work/wouters/GW231109/l1_2000_l2_4000": {
-        "sampling_time": 8229.803599,
-        "log_bayes_factor": 14.325370197560764,
-        "waveform_approximant": "IMRPhenomXP_NRTidalv3",
-        "source_dir": "/work/wouters/GW231109/l1_2000_l2_4000",
-        "priors": {
-            "chirp_mass": {
-                "__prior__": true,
-                "__module__": "bilby.gw.prior",
-                "__name__": "UniformInComponentsChirpMass",
-                "kwargs": {
-                    "minimum": 1.29,
-                    "maximum": 1.32,
-                    "name": "chirp_mass",
-                    "latex_label": "$\\mathcal{M}$",
-                    "unit": "$M_{\\odot}$",
-                    "boundary": null
-                }
             },
             "mass_ratio": {
                 "__prior__": true,
-                "__module__": "bilby.gw.prior",
-                "__name__": "UniformInComponentsMassRatio",
+                "__module__": "bilby.core.prior.base",
+                "__name__": "Constraint",
                 "kwargs": {
                     "minimum": 0.125,
-                    "maximum": 1,
-                    "name": "mass_ratio",
-                    "latex_label": "$q$",
-                    "unit": null,
-                    "boundary": null,
-                    "equal_mass": false
-                }
-            },
-            "a_1": {
-                "__prior__": true,
-                "__module__": "bilby.core.prior.analytical",
-                "__name__": "Uniform",
-                "kwargs": {
-                    "minimum": 0,
-                    "maximum": 0.15,
-                    "name": "a_1",
-                    "latex_label": "$a_1$",
-                    "unit": null,
-                    "boundary": null
-                }
-            },
-            "a_2": {
-                "__prior__": true,
-                "__module__": "bilby.core.prior.analytical",
-                "__name__": "Uniform",
-                "kwargs": {
-                    "minimum": 0,
-                    "maximum": 0.15,
-                    "name": "a_2",
-                    "latex_label": "$a_2$",
-                    "unit": null,
-                    "boundary": null
-                }
-            },
-            "lambda_1": {
-                "__prior__": true,
-                "__module__": "bilby.core.prior.analytical",
-                "__name__": "Uniform",
-                "kwargs": {
-                    "minimum": 0,
-                    "maximum": 2000.0,
-                    "name": "lambda_1",
-                    "latex_label": "$\\Lambda_1$",
-                    "unit": null,
-                    "boundary": null
-                }
-            },
-            "lambda_2": {
-                "__prior__": true,
-                "__module__": "bilby.core.prior.analytical",
-                "__name__": "Uniform",
-                "kwargs": {
-                    "minimum": 0,
-                    "maximum": 4000.0,
-                    "name": "lambda_2",
-                    "latex_label": "$\\Lambda_2$",
-                    "unit": null,
-                    "boundary": null
+                    "maximum": 1.0,
+                    "name": null,
+                    "latex_label": null,
+                    "unit": null
                 }
             }
         },
         "fixed_parameters": {}
     },
-    "/work/wouters/GW231109/test_precessing_high_spins": {
-        "sampling_time": 8243.580116,
-        "log_bayes_factor": 15.318820404331548,
+    "/work/wouters/GW231109/prod_XP_s005_l5000_gaussian": {
+        "sampling_time": 13996.743103,
+        "log_bayes_factor": 14.98282390735788,
         "waveform_approximant": "IMRPhenomXP_NRTidalv3",
-        "source_dir": "/work/wouters/GW231109/test_precessing_high_spins",
-        "priors": {
-            "chirp_mass": {
-                "__prior__": true,
-                "__module__": "bilby.gw.prior",
-                "__name__": "UniformInComponentsChirpMass",
-                "kwargs": {
-                    "minimum": 1.29,
-                    "maximum": 1.32,
-                    "name": "chirp_mass",
-                    "latex_label": "$\\mathcal{M}$",
-                    "unit": "$M_{\\odot}$",
-                    "boundary": null
-                }
-            },
-            "mass_ratio": {
-                "__prior__": true,
-                "__module__": "bilby.gw.prior",
-                "__name__": "UniformInComponentsMassRatio",
-                "kwargs": {
-                    "minimum": 0.125,
-                    "maximum": 1,
-                    "name": "mass_ratio",
-                    "latex_label": "$q$",
-                    "unit": null,
-                    "boundary": null,
-                    "equal_mass": false
-                }
-            },
-            "a_1": {
-                "__prior__": true,
-                "__module__": "bilby.core.prior.analytical",
-                "__name__": "Uniform",
-                "kwargs": {
-                    "minimum": 0,
-                    "maximum": 0.15,
-                    "name": "a_1",
-                    "latex_label": "$a_1$",
-                    "unit": null,
-                    "boundary": null
-                }
-            },
-            "a_2": {
-                "__prior__": true,
-                "__module__": "bilby.core.prior.analytical",
-                "__name__": "Uniform",
-                "kwargs": {
-                    "minimum": 0,
-                    "maximum": 0.15,
-                    "name": "a_2",
-                    "latex_label": "$a_2$",
-                    "unit": null,
-                    "boundary": null
-                }
-            },
-            "lambda_1": {
-                "__prior__": true,
-                "__module__": "bilby.core.prior.analytical",
-                "__name__": "Uniform",
-                "kwargs": {
-                    "minimum": 0,
-                    "maximum": 5000.0,
-                    "name": "lambda_1",
-                    "latex_label": "$\\Lambda_1$",
-                    "unit": null,
-                    "boundary": null
-                }
-            },
-            "lambda_2": {
-                "__prior__": true,
-                "__module__": "bilby.core.prior.analytical",
-                "__name__": "Uniform",
-                "kwargs": {
-                    "minimum": 0,
-                    "maximum": 5000.0,
-                    "name": "lambda_2",
-                    "latex_label": "$\\Lambda_2$",
-                    "unit": null,
-                    "boundary": null
-                }
-            }
-        },
-        "fixed_parameters": {}
-    },
-    "/work/wouters/GW231109/test_precessing_timefix_bw": {
-        "sampling_time": 11476.13196,
-        "log_bayes_factor": 16.86091439404116,
-        "waveform_approximant": "IMRPhenomXP_NRTidalv3",
-        "source_dir": "/work/wouters/GW231109/test_precessing_timefix_bw",
-        "priors": {
-            "chirp_mass": {
-                "__prior__": true,
-                "__module__": "bilby.gw.prior",
-                "__name__": "UniformInComponentsChirpMass",
-                "kwargs": {
-                    "minimum": 1.29,
-                    "maximum": 1.32,
-                    "name": "chirp_mass",
-                    "latex_label": "$\\mathcal{M}$",
-                    "unit": "$M_{\\odot}$",
-                    "boundary": null
-                }
-            },
-            "mass_ratio": {
-                "__prior__": true,
-                "__module__": "bilby.gw.prior",
-                "__name__": "UniformInComponentsMassRatio",
-                "kwargs": {
-                    "minimum": 0.125,
-                    "maximum": 1,
-                    "name": "mass_ratio",
-                    "latex_label": "$q$",
-                    "unit": null,
-                    "boundary": null,
-                    "equal_mass": false
-                }
-            },
-            "a_1": {
-                "__prior__": true,
-                "__module__": "bilby.core.prior.analytical",
-                "__name__": "Uniform",
-                "kwargs": {
-                    "minimum": 0,
-                    "maximum": 0.15,
-                    "name": "a_1",
-                    "latex_label": "$a_1$",
-                    "unit": null,
-                    "boundary": null
-                }
-            },
-            "a_2": {
-                "__prior__": true,
-                "__module__": "bilby.core.prior.analytical",
-                "__name__": "Uniform",
-                "kwargs": {
-                    "minimum": 0,
-                    "maximum": 0.15,
-                    "name": "a_2",
-                    "latex_label": "$a_2$",
-                    "unit": null,
-                    "boundary": null
-                }
-            },
-            "lambda_1": {
-                "__prior__": true,
-                "__module__": "bilby.core.prior.analytical",
-                "__name__": "Uniform",
-                "kwargs": {
-                    "minimum": 0,
-                    "maximum": 5000.0,
-                    "name": "lambda_1",
-                    "latex_label": "$\\Lambda_1$",
-                    "unit": null,
-                    "boundary": null
-                }
-            },
-            "lambda_2": {
-                "__prior__": true,
-                "__module__": "bilby.core.prior.analytical",
-                "__name__": "Uniform",
-                "kwargs": {
-                    "minimum": 0,
-                    "maximum": 5000.0,
-                    "name": "lambda_2",
-                    "latex_label": "$\\Lambda_2$",
-                    "unit": null,
-                    "boundary": null
-                }
-            }
-        },
-        "fixed_parameters": {}
-    },
-    "/work/wouters/GW231109/neural_priors_uniform_radio_chiEFT": {
-        "sampling_time": 19674.638959,
-        "log_bayes_factor": 11.930550860028038,
-        "waveform_approximant": "IMRPhenomXP_NRTidalv3",
-        "source_dir": "/work/wouters/GW231109/neural_priors_uniform_radio_chiEFT",
+        "source_dir": "/work/wouters/GW231109/prod_XP_s005_l5000_gaussian",
         "priors": {
             "a_1": {
                 "__prior__": true,
@@ -2176,7 +870,7 @@
                 "__name__": "Uniform",
                 "kwargs": {
                     "minimum": 0,
-                    "maximum": 0.15,
+                    "maximum": 0.05,
                     "name": "a_1",
                     "latex_label": "$a_1$",
                     "unit": null,
@@ -2189,89 +883,37 @@
                 "__name__": "Uniform",
                 "kwargs": {
                     "minimum": 0,
-                    "maximum": 0.15,
+                    "maximum": 0.05,
                     "name": "a_2",
                     "latex_label": "$a_2$",
                     "unit": null,
                     "boundary": null
                 }
             },
-            "mass_ratio": {
-                "__prior__": true,
-                "__module__": "bilby.core.prior.joint",
-                "__name__": "NFPrior",
-                "kwargs": {
-                    "dist": {
-                        "__prior__": true,
-                        "__module__": "bilby.core.prior.joint",
-                        "__name__": "NFDist",
-                        "kwargs": {
-                            "names": [
-                                "chirp_mass_source",
-                                "mass_ratio",
-                                "lambda_1",
-                                "lambda_2"
-                            ],
-                            "flow_filename": "/home/wouters/projects/eos_source_classification/eos_source_classification/NFprior/models/uniform/bns/radio_chiEFT/model.pt",
-                            "use_tilde": false,
-                            "use_component_masses": false
-                        }
-                    },
-                    "name": "mass_ratio",
-                    "latex_label": "$q$",
-                    "unit": null
-                }
-            },
             "lambda_1": {
                 "__prior__": true,
-                "__module__": "bilby.core.prior.joint",
-                "__name__": "NFPrior",
+                "__module__": "bilby.core.prior.analytical",
+                "__name__": "Uniform",
                 "kwargs": {
-                    "dist": {
-                        "__prior__": true,
-                        "__module__": "bilby.core.prior.joint",
-                        "__name__": "NFDist",
-                        "kwargs": {
-                            "names": [
-                                "chirp_mass_source",
-                                "mass_ratio",
-                                "lambda_1",
-                                "lambda_2"
-                            ],
-                            "flow_filename": "/home/wouters/projects/eos_source_classification/eos_source_classification/NFprior/models/uniform/bns/radio_chiEFT/model.pt",
-                            "use_tilde": false,
-                            "use_component_masses": false
-                        }
-                    },
+                    "minimum": 0,
+                    "maximum": 5000.0,
                     "name": "lambda_1",
                     "latex_label": "$\\Lambda_1$",
-                    "unit": null
+                    "unit": null,
+                    "boundary": null
                 }
             },
             "lambda_2": {
                 "__prior__": true,
-                "__module__": "bilby.core.prior.joint",
-                "__name__": "NFPrior",
+                "__module__": "bilby.core.prior.analytical",
+                "__name__": "Uniform",
                 "kwargs": {
-                    "dist": {
-                        "__prior__": true,
-                        "__module__": "bilby.core.prior.joint",
-                        "__name__": "NFDist",
-                        "kwargs": {
-                            "names": [
-                                "chirp_mass_source",
-                                "mass_ratio",
-                                "lambda_1",
-                                "lambda_2"
-                            ],
-                            "flow_filename": "/home/wouters/projects/eos_source_classification/eos_source_classification/NFprior/models/uniform/bns/radio_chiEFT/model.pt",
-                            "use_tilde": false,
-                            "use_component_masses": false
-                        }
-                    },
+                    "minimum": 0,
+                    "maximum": 5000.0,
                     "name": "lambda_2",
                     "latex_label": "$\\Lambda_2$",
-                    "unit": null
+                    "unit": null,
+                    "boundary": null
                 }
             },
             "chirp_mass": {
@@ -2281,6 +923,276 @@
                 "kwargs": {
                     "minimum": 0.8,
                     "maximum": 3.0,
+                    "name": null,
+                    "latex_label": null,
+                    "unit": null
+                }
+            },
+            "mass_ratio": {
+                "__prior__": true,
+                "__module__": "bilby.core.prior.base",
+                "__name__": "Constraint",
+                "kwargs": {
+                    "minimum": 0.125,
+                    "maximum": 1.0,
+                    "name": null,
+                    "latex_label": null,
+                    "unit": null
+                }
+            }
+        },
+        "fixed_parameters": {}
+    },
+    "/work/wouters/GW231109/prod_XP_s040_l10000_double_gaussian": {
+        "sampling_time": 18693.594467,
+        "log_bayes_factor": 6.003885414603462,
+        "waveform_approximant": "IMRPhenomXP_NRTidalv3",
+        "source_dir": "/work/wouters/GW231109/prod_XP_s040_l10000_double_gaussian",
+        "priors": {
+            "a_1": {
+                "__prior__": true,
+                "__module__": "bilby.core.prior.analytical",
+                "__name__": "Uniform",
+                "kwargs": {
+                    "minimum": 0,
+                    "maximum": 0.4,
+                    "name": "a_1",
+                    "latex_label": "$a_1$",
+                    "unit": null,
+                    "boundary": null
+                }
+            },
+            "a_2": {
+                "__prior__": true,
+                "__module__": "bilby.core.prior.analytical",
+                "__name__": "Uniform",
+                "kwargs": {
+                    "minimum": 0,
+                    "maximum": 0.4,
+                    "name": "a_2",
+                    "latex_label": "$a_2$",
+                    "unit": null,
+                    "boundary": null
+                }
+            },
+            "lambda_1": {
+                "__prior__": true,
+                "__module__": "bilby.core.prior.analytical",
+                "__name__": "Uniform",
+                "kwargs": {
+                    "minimum": 0,
+                    "maximum": 10000.0,
+                    "name": "lambda_1",
+                    "latex_label": "$\\Lambda_1$",
+                    "unit": null,
+                    "boundary": null
+                }
+            },
+            "lambda_2": {
+                "__prior__": true,
+                "__module__": "bilby.core.prior.analytical",
+                "__name__": "Uniform",
+                "kwargs": {
+                    "minimum": 0,
+                    "maximum": 10000.0,
+                    "name": "lambda_2",
+                    "latex_label": "$\\Lambda_2$",
+                    "unit": null,
+                    "boundary": null
+                }
+            },
+            "chirp_mass": {
+                "__prior__": true,
+                "__module__": "bilby.core.prior.base",
+                "__name__": "Constraint",
+                "kwargs": {
+                    "minimum": 0.8,
+                    "maximum": 3.0,
+                    "name": null,
+                    "latex_label": null,
+                    "unit": null
+                }
+            },
+            "mass_ratio": {
+                "__prior__": true,
+                "__module__": "bilby.core.prior.base",
+                "__name__": "Constraint",
+                "kwargs": {
+                    "minimum": 0.125,
+                    "maximum": 1.0,
+                    "name": null,
+                    "latex_label": null,
+                    "unit": null
+                }
+            }
+        },
+        "fixed_parameters": {}
+    },
+    "/work/wouters/GW231109/prod_XP_s040_l10000_default": {
+        "sampling_time": 9975.270396,
+        "log_bayes_factor": 15.605687792504524,
+        "waveform_approximant": "IMRPhenomXP_NRTidalv3",
+        "source_dir": "/work/wouters/GW231109/prod_XP_s040_l10000_default",
+        "priors": {
+            "chirp_mass": {
+                "__prior__": true,
+                "__module__": "bilby.gw.prior",
+                "__name__": "UniformInComponentsChirpMass",
+                "kwargs": {
+                    "minimum": 1.29,
+                    "maximum": 1.32,
+                    "name": "chirp_mass",
+                    "latex_label": "$\\mathcal{M}$",
+                    "unit": "$M_{\\odot}$",
+                    "boundary": null
+                }
+            },
+            "mass_ratio": {
+                "__prior__": true,
+                "__module__": "bilby.gw.prior",
+                "__name__": "UniformInComponentsMassRatio",
+                "kwargs": {
+                    "minimum": 0.125,
+                    "maximum": 1,
+                    "name": "mass_ratio",
+                    "latex_label": "$q$",
+                    "unit": null,
+                    "boundary": null,
+                    "equal_mass": false
+                }
+            },
+            "a_1": {
+                "__prior__": true,
+                "__module__": "bilby.core.prior.analytical",
+                "__name__": "Uniform",
+                "kwargs": {
+                    "minimum": 0,
+                    "maximum": 0.4,
+                    "name": "a_1",
+                    "latex_label": "$a_1$",
+                    "unit": null,
+                    "boundary": null
+                }
+            },
+            "a_2": {
+                "__prior__": true,
+                "__module__": "bilby.core.prior.analytical",
+                "__name__": "Uniform",
+                "kwargs": {
+                    "minimum": 0,
+                    "maximum": 0.4,
+                    "name": "a_2",
+                    "latex_label": "$a_2$",
+                    "unit": null,
+                    "boundary": null
+                }
+            },
+            "lambda_1": {
+                "__prior__": true,
+                "__module__": "bilby.core.prior.analytical",
+                "__name__": "Uniform",
+                "kwargs": {
+                    "minimum": 0,
+                    "maximum": 10000.0,
+                    "name": "lambda_1",
+                    "latex_label": "$\\Lambda_1$",
+                    "unit": null,
+                    "boundary": null
+                }
+            },
+            "lambda_2": {
+                "__prior__": true,
+                "__module__": "bilby.core.prior.analytical",
+                "__name__": "Uniform",
+                "kwargs": {
+                    "minimum": 0,
+                    "maximum": 10000.0,
+                    "name": "lambda_2",
+                    "latex_label": "$\\Lambda_2$",
+                    "unit": null,
+                    "boundary": null
+                }
+            }
+        },
+        "fixed_parameters": {}
+    },
+    "/work/wouters/GW231109/prod_XP_s005_l10000_double_gaussian": {
+        "sampling_time": 14137.320563,
+        "log_bayes_factor": 13.030434572223422,
+        "waveform_approximant": "IMRPhenomXP_NRTidalv3",
+        "source_dir": "/work/wouters/GW231109/prod_XP_s005_l10000_double_gaussian",
+        "priors": {
+            "a_1": {
+                "__prior__": true,
+                "__module__": "bilby.core.prior.analytical",
+                "__name__": "Uniform",
+                "kwargs": {
+                    "minimum": 0,
+                    "maximum": 0.05,
+                    "name": "a_1",
+                    "latex_label": "$a_1$",
+                    "unit": null,
+                    "boundary": null
+                }
+            },
+            "a_2": {
+                "__prior__": true,
+                "__module__": "bilby.core.prior.analytical",
+                "__name__": "Uniform",
+                "kwargs": {
+                    "minimum": 0,
+                    "maximum": 0.05,
+                    "name": "a_2",
+                    "latex_label": "$a_2$",
+                    "unit": null,
+                    "boundary": null
+                }
+            },
+            "lambda_1": {
+                "__prior__": true,
+                "__module__": "bilby.core.prior.analytical",
+                "__name__": "Uniform",
+                "kwargs": {
+                    "minimum": 0,
+                    "maximum": 10000.0,
+                    "name": "lambda_1",
+                    "latex_label": "$\\Lambda_1$",
+                    "unit": null,
+                    "boundary": null
+                }
+            },
+            "lambda_2": {
+                "__prior__": true,
+                "__module__": "bilby.core.prior.analytical",
+                "__name__": "Uniform",
+                "kwargs": {
+                    "minimum": 0,
+                    "maximum": 10000.0,
+                    "name": "lambda_2",
+                    "latex_label": "$\\Lambda_2$",
+                    "unit": null,
+                    "boundary": null
+                }
+            },
+            "chirp_mass": {
+                "__prior__": true,
+                "__module__": "bilby.core.prior.base",
+                "__name__": "Constraint",
+                "kwargs": {
+                    "minimum": 0.8,
+                    "maximum": 3.0,
+                    "name": null,
+                    "latex_label": null,
+                    "unit": null
+                }
+            },
+            "mass_ratio": {
+                "__prior__": true,
+                "__module__": "bilby.core.prior.base",
+                "__name__": "Constraint",
+                "kwargs": {
+                    "minimum": 0.125,
+                    "maximum": 1.0,
                     "name": null,
                     "latex_label": null,
                     "unit": null
