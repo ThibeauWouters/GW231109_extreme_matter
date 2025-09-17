@@ -269,7 +269,9 @@ def make_overview_table(all_runs_information_dict: dict = None,
 
     
 def main():
-    base_dir_list = ["/work/wouters/GW231109/"]
+    base_dir_list = ["/work/wouters/GW231109/",
+                     "/work/puecher/S231109/bw_runs_debug/"
+                     ]
     
     # First, get all runs and save to JSON
     all_runs_information_dict = get_all_runs(base_dir_list)

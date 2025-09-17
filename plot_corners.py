@@ -142,7 +142,9 @@ def main():
     args = parser.parse_args()
     
     # List of base dirs to loop over
-    base_dir_list = ["/work/wouters/GW231109/"]
+    base_dir_list = ["/work/wouters/GW231109/",
+                     "/work/puecher/S231109/bw_runs_debug/",
+                     ]
     
     for base_dir in base_dir_list:
         source_dirs = [d for d in os.listdir(base_dir) if os.path.isdir(os.path.join(base_dir, d)) and d not in ["outdir", "data"]]
