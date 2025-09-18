@@ -274,7 +274,7 @@ def main():
                      ]
     
     # First, get all runs and save to JSON
-    all_runs_information_dict = get_all_runs(base_dir_list)
+    all_runs_information_dict = get_all_runs(base_dir_list, only_prod=False)
     
     # Then, create the CSV overview table and README
     make_overview_table(all_runs_information_dict)
