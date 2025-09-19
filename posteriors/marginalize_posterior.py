@@ -17,6 +17,9 @@ TOP_LEVEL_DIRS = glob.glob(os.path.join(BASE_PATH, "prod_BW_*"))
 # Add Anna's 3G runs as well
 TOP_LEVEL_DIRS += ["/work/puecher/S231109/third_gen_runs/et_run/"]
 
+# Add my run for GW190425 as well
+TOP_LEVEL_DIRS += ["/work/wouters/neural_priors_paper_runs/GW190425/bns/default"]
+
 # Create output directory if it doesn't exist
 output_dir = Path("./data")
 output_dir.mkdir(exist_ok=True)
@@ -120,8 +123,11 @@ def main():
             continue
         
         # Generate output filename using the top-level directory name
-        dir_name = Path(top_level_dir).name
-        output_filename = output_dir / f"{dir_name}.npz"
+        if "GW190425" in top_level_dir:
+            output_filename = "./data/GW190425.npz"
+        else:
+            dir_name = Path(top_level_dir).name
+            output_filename = output_dir / f"{dir_name}.npz"
         
         # Save the marginalized posterior
         np.savez(output_filename,
