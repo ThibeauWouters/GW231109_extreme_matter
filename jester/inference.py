@@ -30,7 +30,7 @@ def parse_arguments():
     parser = argparse.ArgumentParser(description="Full-scale inference script with customizable options.")
     parser.add_argument("--make-cornerplot", 
                         type=bool, 
-                        default=False, 
+                        default=True, 
                         help="Whether to make the cornerplot. Turn off by default since can be expensive in memory.")
     parser.add_argument("--which-nbreak-prior", 
                         type=str, 
@@ -40,14 +40,14 @@ def parse_arguments():
                         type=bool, 
                         default=False, 
                         help="Whether to sample the GW170817 event")
-    parser.add_argument("--sample-S250818k",
+    parser.add_argument("--sample-GW231109",
                         type=bool, 
                         default=False, 
-                        help="Whether to sample the S250818k event")
-    parser.add_argument("--S250818k-NF-filepath",
+                        help="Whether to sample the GW231109 event")
+    parser.add_argument("--GW231109-NF-filepath",
                         type=str, 
-                        default="./NFs/S250818k/model.eqx", 
-                        help="The name of the NF file to load and use for S250818k -- so essentially which posterior")
+                        default="./NFs/GW231109/model.eqx", 
+                        help="The name of the NF file to load and use for GW231109 -- so essentially which posterior")
     parser.add_argument("--sample-GW170817-injection", 
                         type=bool, 
                         default=False, 
@@ -119,23 +119,23 @@ def parse_arguments():
     ### flowMC/Jim hyperparameters
     parser.add_argument("--n-loop-training", 
                         type=int, 
-                        default=20,
+                        default=60,
                         help="Number of flowMC training loops.)")
     parser.add_argument("--n-loop-production", 
                         type=int, 
-                        default=50,
+                        default=30,
                         help="Number of flowMC production loops.)")
     parser.add_argument("--eps-mass-matrix", 
                         type=float, 
-                        default=1e-4,
+                        default=3e-5,
                         help="Overall scaling factor for the step size matrix for MALA.")
     parser.add_argument("--n-local-steps", 
                         type=int, 
-                        default=2,
+                        default=50,
                         help="Number of local steps to perform.")
     parser.add_argument("--n-global-steps", 
                         type=int, 
-                        default=100,
+                        default=50,
                         help="Number of global steps to perform.")
     parser.add_argument("--n-epochs", 
                         type=int, 
@@ -236,14 +236,14 @@ def main(args):
         
         keep_names += ["mass_1_GW170817", "mass_2_GW170817"]
         
-    if args.sample_S250818k:
-        m1_S250818k_prior = UniformPrior(0.9, 1.7, parameter_names=["mass_1_S250818k"])
-        m2_S250818k_prior = UniformPrior(0.5, 1.2, parameter_names=["mass_2_S250818k"])
-
-        prior_list.append(m1_S250818k_prior)
-        prior_list.append(m2_S250818k_prior)
+    if args.sample_GW231109:
+        m1_GW231109_prior = UniformPrior(1.3, 1.9, parameter_names=["mass_1_GW231109"])
+        m2_GW231109_prior = UniformPrior(1.1, 1.5, parameter_names=["mass_2_GW231109"])
         
-        keep_names += ["mass_1_S250818k", "mass_2_S250818k"]
+        prior_list.append(m1_GW231109_prior)
+        prior_list.append(m2_GW231109_prior)
+        
+        keep_names += ["mass_1_GW231109", "mass_2_GW231109"]
         
     # TODO: add G1124251 here
     if args.sample_J0030 and args.sample_NICER_masses:
@@ -266,15 +266,14 @@ def main(args):
         if args.sample_GW170817:
             likelihoods_list_GW += [utils.GWlikelihood_with_masses("GW170817", "./NFs/GW170817/model.eqx")]
         
-        if args.sample_S250818k:
-            path = args.S250818k_NF_filepath
-            if "l10000" in path:
-                nn_depth = 6
-                nn_block_dim = 16
-            else:
-                nn_depth = 5
-                nn_block_dim = 8
-            likelihoods_list_GW += [utils.GWlikelihood_with_masses("S250818k", args.S250818k_NF_filepath, nn_depth=nn_depth, nn_block_dim=nn_block_dim)]
+        if args.sample_GW231109:
+            path = args.GW231109_NF_filepath
+            
+            # FIXME: these are hardcoded -- this should change in future editions
+            nn_depth = 6
+            nn_block_dim = 16
+            
+            likelihoods_list_GW += [utils.GWlikelihood_with_masses("GW231109", args.GW231109_NF_filepath, nn_depth=nn_depth, nn_block_dim=nn_block_dim)]
             
         # NICER
         likelihoods_list_NICER = []
@@ -356,6 +355,7 @@ def main(args):
             "n_epochs": args.n_epochs,
             "train_thinning": args.train_thinning,
             "output_thinning": args.output_thinning,
+            "local_sampler_name": "GaussianRandomWalk"
     }
     
     print("We are going to give these kwargs to Jim:")

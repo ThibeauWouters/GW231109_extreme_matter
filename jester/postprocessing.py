@@ -9,7 +9,7 @@ import arviz
 from scipy.stats import gaussian_kde
 
 np.random.seed(2)
-import joseTOV.utils as jose_utils
+import jesterTOV.utils as jose_utils
 
 mpl_params = {"axes.grid": False,
         "text.usetex" : True,
@@ -29,8 +29,8 @@ plt.rcParams.update(mpl_params)
 
 COLORS_DICT = {"prior": "gray",
                "GW170817": "orange",
-               "S250818k": "teal",
-               "S250818k_only": "red"}
+               "GW231109": "teal",
+               "GW231109_only": "red"}
 ALPHA = 0.3
 
 # Improved corner kwargs
@@ -207,24 +207,24 @@ def make_comparison_plot(include_only: bool = False):
     """Make a comparison plot between different runs.
     
     Args:
-        include_only (bool): Whether to include the S250818k_only run
+        include_only (bool): Whether to include the GW231109_only run
     """
     
     if include_only:
-        outdirs_list = ["prior", "GW170817", "S250818k_only", "S250818k"]
+        outdirs_list = ["prior", "GW170817", "GW231109_only", "GW231109"]
         filename_suffix = "_with_only"
     else:
-        outdirs_list = ["prior", "GW170817", "S250818k"]
+        outdirs_list = ["prior", "GW170817", "GW231109"]
         filename_suffix = ""
         
     outdirs_dict = {"prior": "outdir_prior", 
                     "GW170817": "outdir_GW170817", 
-                    "S250818k_only": "outdir_S250818k_only",
-                    "S250818k": "outdir_S250818k"}
+                    "GW231109_only": "outdir_GW231109_only",
+                    "GW231109": "outdir_GW231109"}
     translation_dict = {"prior": "Prior", 
                         "GW170817": "GW170817", 
-                        "S250818k_only": "S250818k",
-                        "S250818k": "GW170817+S250818k"}
+                        "GW231109_only": "GW231109",
+                        "GW231109": "GW170817+GW231109"}
     
     data_dict = {"MTOV": {},
                  "R14": {},
@@ -302,34 +302,34 @@ def make_contour_plot_radii(m_min: float = 0.6,
     Args:
         m_min (float): Minimum mass for the plot
         m_max (float): Maximum mass for the plot
-        include_only (bool): Whether to include the S250818k_only run
+        include_only (bool): Whether to include the GW231109_only run
     """
     
     if include_only:
-        outdirs_list = ["prior", "GW170817", "S250818k_only", "S250818k"]
+        outdirs_list = ["prior", "GW170817", "GW231109_only", "GW231109"]
         filename_suffix = "_with_only"
     else:
-        outdirs_list = ["prior", "GW170817", "S250818k"]
+        outdirs_list = ["prior", "GW170817", "GW231109"]
         filename_suffix = ""
         
     outdirs_dict = {"prior": "outdir_prior", 
                     "GW170817": "outdir_GW170817", 
-                    "S250818k_only": "outdir_S250818k_only",
+                    "GW231109_only": "outdir_GW231109_only",
                     }
     
     if use_l10000:
-        outdirs_dict["S250818k"] = "outdir_S250818k_l10000"
+        outdirs_dict["GW231109"] = "outdir_GW231109_l10000"
         suffix = "_l10000"
     else:
-        outdirs_dict["S250818k"] = "outdir_S250818k"
+        outdirs_dict["GW231109"] = "outdir_GW231109"
         suffix = ""
         
     filename_suffix += suffix
         
     translation_dict = {"prior": "Prior", 
                         "GW170817": "GW170817", 
-                        "S250818k_only": "S250818k",
-                        "S250818k": "GW170817+S250818k"}
+                        "GW231109_only": "GW231109",
+                        "GW231109": "GW170817+GW231109"}
     
     
     plt.figure(figsize=figsize_vertical)
@@ -400,34 +400,34 @@ def make_contour_plot_pressures(n_min: float = 0.5,
     Args:
         n_min (float): Minimum density for the plot
         n_max (float): Maximum density for the plot
-        include_only (bool): Whether to include the S250818k_only run
+        include_only (bool): Whether to include the GW231109_only run
     """
     
     if include_only:
-        outdirs_list = ["prior", "GW170817", "S250818k_only", "S250818k"]
+        outdirs_list = ["prior", "GW170817", "GW231109_only", "GW231109"]
         filename_suffix = "_with_only"
     else:
-        outdirs_list = ["prior", "GW170817", "S250818k"]
+        outdirs_list = ["prior", "GW170817", "GW231109"]
         filename_suffix = ""
         
     outdirs_dict = {"prior": "outdir_prior", 
                     "GW170817": "outdir_GW170817", 
-                    "S250818k_only": "outdir_S250818k_only",
+                    "GW231109_only": "outdir_GW231109_only",
                     }
     
     if use_l10000:
-        outdirs_dict["S250818k"] = "outdir_S250818k_l10000"
+        outdirs_dict["GW231109"] = "outdir_GW231109_l10000"
         suffix = "_l10000"
     else:
-        outdirs_dict["S250818k"] = "outdir_S250818k"
+        outdirs_dict["GW231109"] = "outdir_GW231109"
         suffix = ""
         
     filename_suffix += suffix
     
     translation_dict = {"prior": "Prior", 
                         "GW170817": "GW170817", 
-                        "S250818k_only": "S250818k",
-                        "S250818k": "GW170817+S250818k"}
+                        "GW231109_only": "GW231109",
+                        "GW231109": "GW170817+GW231109"}
     
     plt.figure(figsize=figsize_horizontal)
     for outdir in outdirs_list:
@@ -495,13 +495,13 @@ def make_contour_plot_pressures(n_min: float = 0.5,
 
 if __name__ == "__main__":
     # Generate plots without the "only" run (original behavior)
-    print("Generating plots without S250818k_only run...")
+    print("Generating plots without GW231109_only run...")
     make_contour_plot_radii(include_only=False)
     make_contour_plot_pressures(include_only=False)
     make_comparison_plot(include_only=False)
     
     # Generate plots with the "only" run (new behavior)
-    print("Generating plots with S250818k_only run...")
+    print("Generating plots with GW231109_only run...")
     make_contour_plot_radii(include_only=True)
     make_contour_plot_pressures(include_only=True)
     make_comparison_plot(include_only=True)
@@ -509,5 +509,5 @@ if __name__ == "__main__":
     # Generate master plots for all runs -- choose below which outdirs
     
     # make_masterplots("outdir_GW170817")
-    # make_masterplots("outdir_S250818k")
-    make_masterplots("outdir_S250818k_l10000")
+    # make_masterplots("outdir_GW231109")
+    make_masterplots("outdir_GW231109_l10000")
