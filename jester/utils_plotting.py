@@ -10,7 +10,7 @@ from jaxtyping import Array, Float
 from jax.scipy.stats import gaussian_kde
 import pandas as pd
 
-from joseTOV import utils
+from jesterTOV import utils
 
 mpl_params = {"axes.grid": True,
               "text.usetex" : True,

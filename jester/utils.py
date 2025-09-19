@@ -15,8 +15,8 @@ import equinox as eqx
 from flowjax.flows import block_neural_autoregressive_flow
 from flowjax.distributions import Normal, Transformed
 
-from joseTOV.eos import MetaModel_with_CSE_EOS_model, MetaModel_EOS_model, construct_family
-import joseTOV.utils as jose_utils
+from jesterTOV.eos import MetaModel_with_CSE_EOS_model, MetaModel_EOS_model, construct_family
+import jesterTOV.utils as jose_utils
 
 #################
 ### CONSTANTS ###
@@ -83,10 +83,10 @@ def merge_dicts(dict1: dict, dict2: dict):
 ### DATA ###
 ############
 
-PSR_PATHS_DICT = {"J0030": {"maryland": "/home/twouters2/projects/jax_tov_eos/paper_jose/src/paper_jose/inference/data/J0030/J0030_RM_maryland.txt",
-                            "amsterdam": "/home/twouters2/projects/jax_tov_eos/paper_jose/src/paper_jose/inference/data/J0030/ST_PST__M_R.txt"},
-                  "J0740": {"maryland": "/home/twouters2/projects/jax_tov_eos/paper_jose/src/paper_jose/inference/data/J0740/J0740_NICERXMM_full_mr.txt",
-                            "amsterdam": "/home/twouters2/projects/jax_tov_eos/paper_jose/src/paper_jose/inference/data/J0740/J0740_gamma_NxX_lp40k_se001_mrsamples_post_equal_weights.dat"}}
+PSR_PATHS_DICT = {"J0030": {"maryland": "/projects/prjs1678/paper_jose/src/paper_jose/inference/data/J0030/J0030_RM_maryland.txt",
+                            "amsterdam": "/projects/prjs1678/paper_jose/src/paper_jose/inference/data/J0030/ST_PST__M_R.txt"},
+                  "J0740": {"maryland": "/projects/prjs1678/paper_jose/src/paper_jose/inference/data/J0740/J0740_NICERXMM_full_mr.txt",
+                            "amsterdam": "/projects/prjs1678/paper_jose/src/paper_jose/inference/data/J0740/J0740_gamma_NxX_lp40k_se001_mrsamples_post_equal_weights.dat"}}
 SUPPORTED_PSR_NAMES = list(PSR_PATHS_DICT.keys()) # we do not include the most recent PSR for now
 
 
@@ -131,12 +131,15 @@ for psr in ["J0030", "J0740"]:
         data_samples_dict[psr][group] = samples
         kde_dict[psr][group] = posterior
             
-        
-prex_posterior = gaussian_kde(np.loadtxt("/home/twouters2/projects/jax_tov_eos/paper_jose/src/paper_jose/inference/data/PREX/PREX_samples.txt", skiprows = 1).T)
-crex_posterior = gaussian_kde(np.loadtxt("/home/twouters2/projects/jax_tov_eos/paper_jose/src/paper_jose/inference/data/CREX/CREX_samples.txt", skiprows = 1).T)
 
-kde_dict["PREX"] = prex_posterior
-kde_dict["CREX"] = crex_posterior
+try:        
+    prex_posterior = gaussian_kde(np.loadtxt("/projects/prjs1678/paper_jose/src/paper_jose/inference/data/PREX/PREX_samples.txt", skiprows = 1).T)
+    crex_posterior = gaussian_kde(np.loadtxt("/projects/prjs1678/paper_jose/src/paper_jose/inference/data/CREX/CREX_samples.txt", skiprows = 1).T)
+
+    kde_dict["PREX"] = prex_posterior
+    kde_dict["CREX"] = crex_posterior
+except Exception as e:
+    print("Could not load PREX/CREX data, likely because the paths are not correct. Please check.")
 
 ##################
 ### TRANSFORMS ###
@@ -569,14 +572,14 @@ class ChiEFTLikelihood(LikelihoodBase):
         self.transform = transform
         
         # Load the chi EFT data
-        low_filename = "/home/twouters2/projects/jax_tov_eos/paper_jose/src/paper_jose/inference/data/chiEFT/low.dat"
+        low_filename = "/projects/prjs1678/paper_jose/src/paper_jose/inference/data/chiEFT/low.dat"
         f = np.loadtxt(low_filename)
         n_low = jnp.array(f[:, 0]) / 0.16 # convert to nsat
         p_low = jnp.array(f[:, 1])
         # NOTE: this is not a spline but it is the best I can do -- does this matter? Need to check later on
         EFT_low = lambda x: jnp.interp(x, n_low, p_low)
         
-        high_filename = "/home/twouters2/projects/jax_tov_eos/paper_jose/src/paper_jose/inference/data/chiEFT/high.dat"
+        high_filename = "/projects/prjs1678/paper_jose/src/paper_jose/inference/data/chiEFT/high.dat"
         f = np.loadtxt(high_filename)
         n_high = jnp.array(f[:, 0]) / 0.16 # convert to nsat
         p_high = jnp.array(f[:, 1])
