@@ -105,7 +105,6 @@ def make_cornerplot(source_dir: str,
         priors_dict = json.loads(priors_str)  # string → dict
         priors_dict = {k: v for k, v in priors_dict.items() if k not in prior_keys_to_skip and "recalib" not in k}
         prior_keys = list(priors_dict.keys())
-        print(f"Prior dict keys: {prior_keys}")
             
         if "fixed_dL" in source_dir:
             print(f"Found 'fixed' key in source_dir name. Assuming run with fixed ra and dec and removing it from the list of prior keys to plot.")
@@ -114,8 +113,14 @@ def make_cornerplot(source_dir: str,
             prior_keys.remove("ra")
             prior_keys.remove("dec")
             
+        # For the quasi-universal relations runs, we need to remove lambda antisymmetric etc
+        keys_to_remove = ["lambda_symmetric", "lambda_antisymmetric", "binary_love_uniform"]
+        prior_keys = [k for k in prior_keys if k not in keys_to_remove]
+
         # Load the posterior samples of the prior dict keys, and any other keys added by user
         keys_to_fetch = prior_keys + keys_to_add
+        print(f"keys_to_fetch: {keys_to_fetch}")
+        
         posterior = f["posterior"]
         posterior_samples = np.array([posterior[key][()] for key in keys_to_fetch]).T
         
@@ -144,6 +149,7 @@ def main():
     # List of base dirs to loop over
     base_dir_list = ["/work/wouters/GW231109/",
                      "/work/puecher/S231109/bw_runs_debug/",
+                    #  "/work/puecher/S231109/third_gen_runs/"
                      ]
     
     for base_dir in base_dir_list:

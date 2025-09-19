@@ -8,10 +8,14 @@ import h5py
 import os
 from pathlib import Path
 import glob
+import json
 
 # Define the top-level directories from which to fetch posteriors
 BASE_PATH = "/work/wouters/GW231109/"
 TOP_LEVEL_DIRS = glob.glob(os.path.join(BASE_PATH, "prod_BW_*"))
+
+# Add Anna's 3G runs as well
+TOP_LEVEL_DIRS += ["/work/puecher/S231109/third_gen_runs/et_run/"]
 
 # Create output directory if it doesn't exist
 output_dir = Path("./data")
@@ -36,24 +40,25 @@ def extract_posterior_from_dir(top_level_dir):
     # Construct path to the final_result directory
     final_result_dir = top_level_path / "outdir" / "final_result"
     
-    if not final_result_dir.exists():
-        print(f"Warning: {final_result_dir} does not exist. Skipping {top_level_dir}")
-        return None
-    
-    # Find HDF5 files in the final_result directory
-    hdf5_files = list(final_result_dir.glob("*.hdf5"))
-    
-    if not hdf5_files:
-        print(f"Warning: No HDF5 files found in {final_result_dir}. Skipping {top_level_dir}")
-        return None
-    
-    if len(hdf5_files) > 1:
-        print(f"Warning: Multiple HDF5 files found in {final_result_dir}. Using the first one: {hdf5_files[0]}")
-    
-    posterior_filename = hdf5_files[0]
-    print(f"Processing: {posterior_filename}")
-    
     try:
+        if not final_result_dir.exists():
+            print(f"Warning: {final_result_dir} does not exist. Skipping {top_level_dir}")
+            raise FileNotFoundError(f"{final_result_dir} does not exist")
+        
+        # Find HDF5 files in the final_result directory
+        print(f"Trying to find HDF5 files in {final_result_dir}")
+        hdf5_files = list(final_result_dir.glob("*.hdf5"))
+        
+        if not hdf5_files:
+            print(f"Warning: No HDF5 files found in {final_result_dir}. Skipping {top_level_dir}")
+            return None
+        
+        if len(hdf5_files) > 1:
+            print(f"Warning: Multiple HDF5 files found in {final_result_dir}. Using the first one: {hdf5_files[0]}")
+        
+        posterior_filename = hdf5_files[0]
+        print(f"Processing: {posterior_filename}")
+    
         with h5py.File(posterior_filename, "r") as f:
             posterior = f["posterior"]
             
@@ -68,7 +73,38 @@ def extract_posterior_from_dir(top_level_dir):
         return posterior_data
     
     except Exception as e:
-        print(f"Error processing {posterior_filename}: {e}")
+        print(f"Did not find HDF5 files or something went wrong: {e}")
+    
+    try:
+        # Find HDF5 files in the final_result directory
+        json_outdir = final_result_dir = top_level_path / "outdir"
+        print(f"Trying to find JSON files in {json_outdir}")
+        json_files = list(json_outdir.glob("*.json"))
+    
+        if not json_files:
+            print(f"Warning: No JSON files found in {json_outdir}. Skipping {top_level_dir}")
+            return None
+        
+        if len(json_files) > 1:
+            print(f"Warning: Multiple HDF5 files found in {json_outdir}. Using the first one: {json_files[0]}")
+        
+        posterior_filename = json_files[0]
+        print(f"Processing: {posterior_filename}")
+    
+        with open(posterior_filename, "r") as f:
+            data = json.load(f)
+            posterior = data["posterior"]["content"]
+            
+            posterior_data = {
+                "mass_1_source": posterior["mass_1_source"][:],
+                "mass_2_source": posterior["mass_2_source"][:],
+                "lambda_1": posterior["lambda_1"][:],
+                "lambda_2": posterior["lambda_2"][:]
+            }
+            
+        return posterior_data
+    
+    except Exception as e:
         return None
 
 def main():

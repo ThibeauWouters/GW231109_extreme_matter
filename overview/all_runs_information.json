@@ -1,4 +1,92 @@
 {
+    "/work/wouters/GW231109/prod_BW_XP_s025_l10000_default": {
+        "sampling_time": 5441.110915,
+        "log_bayes_factor": 13.45290403990531,
+        "waveform_approximant": "IMRPhenomXP_NRTidalv3",
+        "source_dir": "/work/wouters/GW231109/prod_BW_XP_s025_l10000_default",
+        "priors": {
+            "chirp_mass": {
+                "__prior__": true,
+                "__module__": "bilby.gw.prior",
+                "__name__": "UniformInComponentsChirpMass",
+                "kwargs": {
+                    "minimum": 1.29,
+                    "maximum": 1.32,
+                    "name": "chirp_mass",
+                    "latex_label": "$\\mathcal{M}$",
+                    "unit": "$M_{\\odot}$",
+                    "boundary": null
+                }
+            },
+            "mass_ratio": {
+                "__prior__": true,
+                "__module__": "bilby.gw.prior",
+                "__name__": "UniformInComponentsMassRatio",
+                "kwargs": {
+                    "minimum": 0.125,
+                    "maximum": 1,
+                    "name": "mass_ratio",
+                    "latex_label": "$q$",
+                    "unit": null,
+                    "boundary": null,
+                    "equal_mass": false
+                }
+            },
+            "a_1": {
+                "__prior__": true,
+                "__module__": "bilby.core.prior.analytical",
+                "__name__": "Uniform",
+                "kwargs": {
+                    "minimum": 0,
+                    "maximum": 0.25,
+                    "name": "a_1",
+                    "latex_label": "$a_1$",
+                    "unit": null,
+                    "boundary": null
+                }
+            },
+            "a_2": {
+                "__prior__": true,
+                "__module__": "bilby.core.prior.analytical",
+                "__name__": "Uniform",
+                "kwargs": {
+                    "minimum": 0,
+                    "maximum": 0.25,
+                    "name": "a_2",
+                    "latex_label": "$a_2$",
+                    "unit": null,
+                    "boundary": null
+                }
+            },
+            "lambda_1": {
+                "__prior__": true,
+                "__module__": "bilby.core.prior.analytical",
+                "__name__": "Uniform",
+                "kwargs": {
+                    "minimum": 0,
+                    "maximum": 10000.0,
+                    "name": "lambda_1",
+                    "latex_label": "$\\Lambda_1$",
+                    "unit": null,
+                    "boundary": null
+                }
+            },
+            "lambda_2": {
+                "__prior__": true,
+                "__module__": "bilby.core.prior.analytical",
+                "__name__": "Uniform",
+                "kwargs": {
+                    "minimum": 0,
+                    "maximum": 10000.0,
+                    "name": "lambda_2",
+                    "latex_label": "$\\Lambda_2$",
+                    "unit": null,
+                    "boundary": null
+                }
+            }
+        },
+        "fixed_parameters": {}
+    },
     "/work/wouters/GW231109/prod_XP_s040_l5000_uniform": {
         "sampling_time": 17001.959187,
         "log_bayes_factor": 12.686946166175588,
@@ -84,6 +172,148 @@
         },
         "fixed_parameters": {}
     },
+    "/work/wouters/GW231109/prod_BW_XAS_s005_l10000_default": {
+        "sampling_time": 2390.015599,
+        "log_bayes_factor": 11.056531966120897,
+        "waveform_approximant": "IMRPhenomXAS_NRTidalv3",
+        "source_dir": "/work/wouters/GW231109/prod_BW_XAS_s005_l10000_default",
+        "priors": {
+            "chirp_mass": {
+                "__prior__": true,
+                "__module__": "bilby.gw.prior",
+                "__name__": "UniformInComponentsChirpMass",
+                "kwargs": {
+                    "minimum": 1.29,
+                    "maximum": 1.32,
+                    "name": "chirp_mass",
+                    "latex_label": "$\\mathcal{M}$",
+                    "unit": "$M_{\\odot}$",
+                    "boundary": null
+                }
+            },
+            "mass_ratio": {
+                "__prior__": true,
+                "__module__": "bilby.gw.prior",
+                "__name__": "UniformInComponentsMassRatio",
+                "kwargs": {
+                    "minimum": 0.125,
+                    "maximum": 1,
+                    "name": "mass_ratio",
+                    "latex_label": "$q$",
+                    "unit": null,
+                    "boundary": null,
+                    "equal_mass": false
+                }
+            },
+            "chi_1": {
+                "__prior__": true,
+                "__module__": "bilby.gw.prior",
+                "__name__": "AlignedSpin",
+                "kwargs": {
+                    "a_prior": {
+                        "__prior__": true,
+                        "__module__": "bilby.core.prior.analytical",
+                        "__name__": "Uniform",
+                        "kwargs": {
+                            "minimum": 0,
+                            "maximum": 0.05,
+                            "name": null,
+                            "latex_label": null,
+                            "unit": null,
+                            "boundary": null
+                        }
+                    },
+                    "z_prior": {
+                        "__prior__": true,
+                        "__module__": "bilby.core.prior.analytical",
+                        "__name__": "Uniform",
+                        "kwargs": {
+                            "minimum": -1,
+                            "maximum": 1,
+                            "name": null,
+                            "latex_label": null,
+                            "unit": null,
+                            "boundary": null
+                        }
+                    },
+                    "name": "chi_1",
+                    "latex_label": "$\\chi_1$",
+                    "unit": null,
+                    "boundary": null,
+                    "minimum": -0.05,
+                    "maximum": 0.05,
+                    "num_interp": 100000
+                }
+            },
+            "chi_2": {
+                "__prior__": true,
+                "__module__": "bilby.gw.prior",
+                "__name__": "AlignedSpin",
+                "kwargs": {
+                    "a_prior": {
+                        "__prior__": true,
+                        "__module__": "bilby.core.prior.analytical",
+                        "__name__": "Uniform",
+                        "kwargs": {
+                            "minimum": 0,
+                            "maximum": 0.05,
+                            "name": null,
+                            "latex_label": null,
+                            "unit": null,
+                            "boundary": null
+                        }
+                    },
+                    "z_prior": {
+                        "__prior__": true,
+                        "__module__": "bilby.core.prior.analytical",
+                        "__name__": "Uniform",
+                        "kwargs": {
+                            "minimum": -1,
+                            "maximum": 1,
+                            "name": null,
+                            "latex_label": null,
+                            "unit": null,
+                            "boundary": null
+                        }
+                    },
+                    "name": "chi_2",
+                    "latex_label": "$\\chi_2$",
+                    "unit": null,
+                    "boundary": null,
+                    "minimum": -0.05,
+                    "maximum": 0.05,
+                    "num_interp": 100000
+                }
+            },
+            "lambda_1": {
+                "__prior__": true,
+                "__module__": "bilby.core.prior.analytical",
+                "__name__": "Uniform",
+                "kwargs": {
+                    "minimum": 0,
+                    "maximum": 10000.0,
+                    "name": "lambda_1",
+                    "latex_label": "$\\Lambda_1$",
+                    "unit": null,
+                    "boundary": null
+                }
+            },
+            "lambda_2": {
+                "__prior__": true,
+                "__module__": "bilby.core.prior.analytical",
+                "__name__": "Uniform",
+                "kwargs": {
+                    "minimum": 0,
+                    "maximum": 10000.0,
+                    "name": "lambda_2",
+                    "latex_label": "$\\Lambda_2$",
+                    "unit": null,
+                    "boundary": null
+                }
+            }
+        },
+        "fixed_parameters": {}
+    },
     "/work/wouters/GW231109/prod_XP_s040_l10000_uniform": {
         "sampling_time": 18278.535965,
         "log_bayes_factor": 12.079068768997496,
@@ -164,6 +394,94 @@
                     "name": null,
                     "latex_label": null,
                     "unit": null
+                }
+            }
+        },
+        "fixed_parameters": {}
+    },
+    "/work/wouters/GW231109/prod_BW_XP_s025_l5000_default": {
+        "sampling_time": 4964.843585,
+        "log_bayes_factor": 13.732792044362656,
+        "waveform_approximant": "IMRPhenomXP_NRTidalv3",
+        "source_dir": "/work/wouters/GW231109/prod_BW_XP_s025_l5000_default",
+        "priors": {
+            "chirp_mass": {
+                "__prior__": true,
+                "__module__": "bilby.gw.prior",
+                "__name__": "UniformInComponentsChirpMass",
+                "kwargs": {
+                    "minimum": 1.29,
+                    "maximum": 1.32,
+                    "name": "chirp_mass",
+                    "latex_label": "$\\mathcal{M}$",
+                    "unit": "$M_{\\odot}$",
+                    "boundary": null
+                }
+            },
+            "mass_ratio": {
+                "__prior__": true,
+                "__module__": "bilby.gw.prior",
+                "__name__": "UniformInComponentsMassRatio",
+                "kwargs": {
+                    "minimum": 0.125,
+                    "maximum": 1,
+                    "name": "mass_ratio",
+                    "latex_label": "$q$",
+                    "unit": null,
+                    "boundary": null,
+                    "equal_mass": false
+                }
+            },
+            "a_1": {
+                "__prior__": true,
+                "__module__": "bilby.core.prior.analytical",
+                "__name__": "Uniform",
+                "kwargs": {
+                    "minimum": 0,
+                    "maximum": 0.25,
+                    "name": "a_1",
+                    "latex_label": "$a_1$",
+                    "unit": null,
+                    "boundary": null
+                }
+            },
+            "a_2": {
+                "__prior__": true,
+                "__module__": "bilby.core.prior.analytical",
+                "__name__": "Uniform",
+                "kwargs": {
+                    "minimum": 0,
+                    "maximum": 0.25,
+                    "name": "a_2",
+                    "latex_label": "$a_2$",
+                    "unit": null,
+                    "boundary": null
+                }
+            },
+            "lambda_1": {
+                "__prior__": true,
+                "__module__": "bilby.core.prior.analytical",
+                "__name__": "Uniform",
+                "kwargs": {
+                    "minimum": 0,
+                    "maximum": 5000.0,
+                    "name": "lambda_1",
+                    "latex_label": "$\\Lambda_1$",
+                    "unit": null,
+                    "boundary": null
+                }
+            },
+            "lambda_2": {
+                "__prior__": true,
+                "__module__": "bilby.core.prior.analytical",
+                "__name__": "Uniform",
+                "kwargs": {
+                    "minimum": 0,
+                    "maximum": 5000.0,
+                    "name": "lambda_2",
+                    "latex_label": "$\\Lambda_2$",
+                    "unit": null,
+                    "boundary": null
                 }
             }
         },
@@ -850,6 +1168,234 @@
         },
         "fixed_parameters": {}
     },
+    "/work/wouters/GW231109/prod_BW_XAS_s005_l5000_default": {
+        "sampling_time": 2411.509028,
+        "log_bayes_factor": 12.317858751335448,
+        "waveform_approximant": "IMRPhenomXAS_NRTidalv3",
+        "source_dir": "/work/wouters/GW231109/prod_BW_XAS_s005_l5000_default",
+        "priors": {
+            "chirp_mass": {
+                "__prior__": true,
+                "__module__": "bilby.gw.prior",
+                "__name__": "UniformInComponentsChirpMass",
+                "kwargs": {
+                    "minimum": 1.29,
+                    "maximum": 1.32,
+                    "name": "chirp_mass",
+                    "latex_label": "$\\mathcal{M}$",
+                    "unit": "$M_{\\odot}$",
+                    "boundary": null
+                }
+            },
+            "mass_ratio": {
+                "__prior__": true,
+                "__module__": "bilby.gw.prior",
+                "__name__": "UniformInComponentsMassRatio",
+                "kwargs": {
+                    "minimum": 0.125,
+                    "maximum": 1,
+                    "name": "mass_ratio",
+                    "latex_label": "$q$",
+                    "unit": null,
+                    "boundary": null,
+                    "equal_mass": false
+                }
+            },
+            "chi_1": {
+                "__prior__": true,
+                "__module__": "bilby.gw.prior",
+                "__name__": "AlignedSpin",
+                "kwargs": {
+                    "a_prior": {
+                        "__prior__": true,
+                        "__module__": "bilby.core.prior.analytical",
+                        "__name__": "Uniform",
+                        "kwargs": {
+                            "minimum": 0,
+                            "maximum": 0.05,
+                            "name": null,
+                            "latex_label": null,
+                            "unit": null,
+                            "boundary": null
+                        }
+                    },
+                    "z_prior": {
+                        "__prior__": true,
+                        "__module__": "bilby.core.prior.analytical",
+                        "__name__": "Uniform",
+                        "kwargs": {
+                            "minimum": -1,
+                            "maximum": 1,
+                            "name": null,
+                            "latex_label": null,
+                            "unit": null,
+                            "boundary": null
+                        }
+                    },
+                    "name": "chi_1",
+                    "latex_label": "$\\chi_1$",
+                    "unit": null,
+                    "boundary": null,
+                    "minimum": -0.05,
+                    "maximum": 0.05,
+                    "num_interp": 100000
+                }
+            },
+            "chi_2": {
+                "__prior__": true,
+                "__module__": "bilby.gw.prior",
+                "__name__": "AlignedSpin",
+                "kwargs": {
+                    "a_prior": {
+                        "__prior__": true,
+                        "__module__": "bilby.core.prior.analytical",
+                        "__name__": "Uniform",
+                        "kwargs": {
+                            "minimum": 0,
+                            "maximum": 0.05,
+                            "name": null,
+                            "latex_label": null,
+                            "unit": null,
+                            "boundary": null
+                        }
+                    },
+                    "z_prior": {
+                        "__prior__": true,
+                        "__module__": "bilby.core.prior.analytical",
+                        "__name__": "Uniform",
+                        "kwargs": {
+                            "minimum": -1,
+                            "maximum": 1,
+                            "name": null,
+                            "latex_label": null,
+                            "unit": null,
+                            "boundary": null
+                        }
+                    },
+                    "name": "chi_2",
+                    "latex_label": "$\\chi_2$",
+                    "unit": null,
+                    "boundary": null,
+                    "minimum": -0.05,
+                    "maximum": 0.05,
+                    "num_interp": 100000
+                }
+            },
+            "lambda_1": {
+                "__prior__": true,
+                "__module__": "bilby.core.prior.analytical",
+                "__name__": "Uniform",
+                "kwargs": {
+                    "minimum": 0,
+                    "maximum": 5000.0,
+                    "name": "lambda_1",
+                    "latex_label": "$\\Lambda_1$",
+                    "unit": null,
+                    "boundary": null
+                }
+            },
+            "lambda_2": {
+                "__prior__": true,
+                "__module__": "bilby.core.prior.analytical",
+                "__name__": "Uniform",
+                "kwargs": {
+                    "minimum": 0,
+                    "maximum": 5000.0,
+                    "name": "lambda_2",
+                    "latex_label": "$\\Lambda_2$",
+                    "unit": null,
+                    "boundary": null
+                }
+            }
+        },
+        "fixed_parameters": {}
+    },
+    "/work/wouters/GW231109/prod_BW_XP_s005_lquniv_default": {
+        "sampling_time": 2715.48363,
+        "log_bayes_factor": 12.953771567229811,
+        "waveform_approximant": "IMRPhenomXP_NRTidalv3",
+        "source_dir": "/work/wouters/GW231109/prod_BW_XP_s005_lquniv_default",
+        "priors": {
+            "chirp_mass": {
+                "__prior__": true,
+                "__module__": "bilby.gw.prior",
+                "__name__": "UniformInComponentsChirpMass",
+                "kwargs": {
+                    "minimum": 1.29,
+                    "maximum": 1.32,
+                    "name": "chirp_mass",
+                    "latex_label": "$\\mathcal{M}$",
+                    "unit": "$M_{\\odot}$",
+                    "boundary": null
+                }
+            },
+            "mass_ratio": {
+                "__prior__": true,
+                "__module__": "bilby.gw.prior",
+                "__name__": "UniformInComponentsMassRatio",
+                "kwargs": {
+                    "minimum": 0.125,
+                    "maximum": 1,
+                    "name": "mass_ratio",
+                    "latex_label": "$q$",
+                    "unit": null,
+                    "boundary": null,
+                    "equal_mass": false
+                }
+            },
+            "a_1": {
+                "__prior__": true,
+                "__module__": "bilby.core.prior.analytical",
+                "__name__": "Uniform",
+                "kwargs": {
+                    "minimum": 0,
+                    "maximum": 0.05,
+                    "name": "a_1",
+                    "latex_label": "$a_1$",
+                    "unit": null,
+                    "boundary": null
+                }
+            },
+            "a_2": {
+                "__prior__": true,
+                "__module__": "bilby.core.prior.analytical",
+                "__name__": "Uniform",
+                "kwargs": {
+                    "minimum": 0,
+                    "maximum": 0.05,
+                    "name": "a_2",
+                    "latex_label": "$a_2$",
+                    "unit": null,
+                    "boundary": null
+                }
+            },
+            "lambda_1": {
+                "__prior__": true,
+                "__module__": "bilby.core.prior.base",
+                "__name__": "Constraint",
+                "kwargs": {
+                    "minimum": 0,
+                    "maximum": 5000,
+                    "name": "lambda_1",
+                    "latex_label": "$\\Lambda_1$",
+                    "unit": null
+                }
+            },
+            "lambda_2": {
+                "__prior__": true,
+                "__module__": "bilby.core.prior.base",
+                "__name__": "Constraint",
+                "kwargs": {
+                    "minimum": 0,
+                    "maximum": 5000,
+                    "name": "lambda_2",
+                    "latex_label": "$\\Lambda_2$",
+                    "unit": null
+                }
+            }
+        },
+        "fixed_parameters": {}
+    },
     "/work/wouters/GW231109/neural_priors_double_gaussian_radio_chiEFT": {
         "sampling_time": 16863.797057,
         "log_bayes_factor": 15.856748744451178,
@@ -1117,6 +1663,146 @@
         },
         "fixed_parameters": {}
     },
+    "/work/wouters/GW231109/prod_BW_XAS_s040_lquniv_default": {
+        "sampling_time": 2896.433004,
+        "log_bayes_factor": 14.312416874072506,
+        "waveform_approximant": "IMRPhenomXAS_NRTidalv3",
+        "source_dir": "/work/wouters/GW231109/prod_BW_XAS_s040_lquniv_default",
+        "priors": {
+            "chirp_mass": {
+                "__prior__": true,
+                "__module__": "bilby.gw.prior",
+                "__name__": "UniformInComponentsChirpMass",
+                "kwargs": {
+                    "minimum": 1.29,
+                    "maximum": 1.32,
+                    "name": "chirp_mass",
+                    "latex_label": "$\\mathcal{M}$",
+                    "unit": "$M_{\\odot}$",
+                    "boundary": null
+                }
+            },
+            "mass_ratio": {
+                "__prior__": true,
+                "__module__": "bilby.gw.prior",
+                "__name__": "UniformInComponentsMassRatio",
+                "kwargs": {
+                    "minimum": 0.125,
+                    "maximum": 1,
+                    "name": "mass_ratio",
+                    "latex_label": "$q$",
+                    "unit": null,
+                    "boundary": null,
+                    "equal_mass": false
+                }
+            },
+            "chi_1": {
+                "__prior__": true,
+                "__module__": "bilby.gw.prior",
+                "__name__": "AlignedSpin",
+                "kwargs": {
+                    "a_prior": {
+                        "__prior__": true,
+                        "__module__": "bilby.core.prior.analytical",
+                        "__name__": "Uniform",
+                        "kwargs": {
+                            "minimum": 0,
+                            "maximum": 0.4,
+                            "name": null,
+                            "latex_label": null,
+                            "unit": null,
+                            "boundary": null
+                        }
+                    },
+                    "z_prior": {
+                        "__prior__": true,
+                        "__module__": "bilby.core.prior.analytical",
+                        "__name__": "Uniform",
+                        "kwargs": {
+                            "minimum": -1,
+                            "maximum": 1,
+                            "name": null,
+                            "latex_label": null,
+                            "unit": null,
+                            "boundary": null
+                        }
+                    },
+                    "name": "chi_1",
+                    "latex_label": "$\\chi_1$",
+                    "unit": null,
+                    "boundary": null,
+                    "minimum": -0.4,
+                    "maximum": 0.4,
+                    "num_interp": 100000
+                }
+            },
+            "chi_2": {
+                "__prior__": true,
+                "__module__": "bilby.gw.prior",
+                "__name__": "AlignedSpin",
+                "kwargs": {
+                    "a_prior": {
+                        "__prior__": true,
+                        "__module__": "bilby.core.prior.analytical",
+                        "__name__": "Uniform",
+                        "kwargs": {
+                            "minimum": 0,
+                            "maximum": 0.4,
+                            "name": null,
+                            "latex_label": null,
+                            "unit": null,
+                            "boundary": null
+                        }
+                    },
+                    "z_prior": {
+                        "__prior__": true,
+                        "__module__": "bilby.core.prior.analytical",
+                        "__name__": "Uniform",
+                        "kwargs": {
+                            "minimum": -1,
+                            "maximum": 1,
+                            "name": null,
+                            "latex_label": null,
+                            "unit": null,
+                            "boundary": null
+                        }
+                    },
+                    "name": "chi_2",
+                    "latex_label": "$\\chi_2$",
+                    "unit": null,
+                    "boundary": null,
+                    "minimum": -0.4,
+                    "maximum": 0.4,
+                    "num_interp": 100000
+                }
+            },
+            "lambda_1": {
+                "__prior__": true,
+                "__module__": "bilby.core.prior.base",
+                "__name__": "Constraint",
+                "kwargs": {
+                    "minimum": 0,
+                    "maximum": 5000,
+                    "name": "lambda_1",
+                    "latex_label": "$\\Lambda_1$",
+                    "unit": null
+                }
+            },
+            "lambda_2": {
+                "__prior__": true,
+                "__module__": "bilby.core.prior.base",
+                "__name__": "Constraint",
+                "kwargs": {
+                    "minimum": 0,
+                    "maximum": 5000,
+                    "name": "lambda_2",
+                    "latex_label": "$\\Lambda_2$",
+                    "unit": null
+                }
+            }
+        },
+        "fixed_parameters": {}
+    },
     "/work/wouters/GW231109/prod_XP_s040_l5000_gaussian": {
         "sampling_time": 14472.821628,
         "log_bayes_factor": 16.01090482594156,
@@ -1196,6 +1882,92 @@
                     "maximum": 1.0,
                     "name": null,
                     "latex_label": null,
+                    "unit": null
+                }
+            }
+        },
+        "fixed_parameters": {}
+    },
+    "/work/wouters/GW231109/prod_BW_XP_s040_lquniv_default": {
+        "sampling_time": 5624.616597,
+        "log_bayes_factor": 13.981123658546592,
+        "waveform_approximant": "IMRPhenomXP_NRTidalv3",
+        "source_dir": "/work/wouters/GW231109/prod_BW_XP_s040_lquniv_default",
+        "priors": {
+            "chirp_mass": {
+                "__prior__": true,
+                "__module__": "bilby.gw.prior",
+                "__name__": "UniformInComponentsChirpMass",
+                "kwargs": {
+                    "minimum": 1.29,
+                    "maximum": 1.32,
+                    "name": "chirp_mass",
+                    "latex_label": "$\\mathcal{M}$",
+                    "unit": "$M_{\\odot}$",
+                    "boundary": null
+                }
+            },
+            "mass_ratio": {
+                "__prior__": true,
+                "__module__": "bilby.gw.prior",
+                "__name__": "UniformInComponentsMassRatio",
+                "kwargs": {
+                    "minimum": 0.125,
+                    "maximum": 1,
+                    "name": "mass_ratio",
+                    "latex_label": "$q$",
+                    "unit": null,
+                    "boundary": null,
+                    "equal_mass": false
+                }
+            },
+            "a_1": {
+                "__prior__": true,
+                "__module__": "bilby.core.prior.analytical",
+                "__name__": "Uniform",
+                "kwargs": {
+                    "minimum": 0,
+                    "maximum": 0.4,
+                    "name": "a_1",
+                    "latex_label": "$a_1$",
+                    "unit": null,
+                    "boundary": null
+                }
+            },
+            "a_2": {
+                "__prior__": true,
+                "__module__": "bilby.core.prior.analytical",
+                "__name__": "Uniform",
+                "kwargs": {
+                    "minimum": 0,
+                    "maximum": 0.4,
+                    "name": "a_2",
+                    "latex_label": "$a_2$",
+                    "unit": null,
+                    "boundary": null
+                }
+            },
+            "lambda_1": {
+                "__prior__": true,
+                "__module__": "bilby.core.prior.base",
+                "__name__": "Constraint",
+                "kwargs": {
+                    "minimum": 0,
+                    "maximum": 5000,
+                    "name": "lambda_1",
+                    "latex_label": "$\\Lambda_1$",
+                    "unit": null
+                }
+            },
+            "lambda_2": {
+                "__prior__": true,
+                "__module__": "bilby.core.prior.base",
+                "__name__": "Constraint",
+                "kwargs": {
+                    "minimum": 0,
+                    "maximum": 5000,
+                    "name": "lambda_2",
+                    "latex_label": "$\\Lambda_2$",
                     "unit": null
                 }
             }
@@ -1460,6 +2232,146 @@
         },
         "fixed_parameters": {}
     },
+    "/work/wouters/GW231109/prod_BW_XAS_s005_lquniv_default": {
+        "sampling_time": 1660.675521,
+        "log_bayes_factor": 13.297685317576908,
+        "waveform_approximant": "IMRPhenomXAS_NRTidalv3",
+        "source_dir": "/work/wouters/GW231109/prod_BW_XAS_s005_lquniv_default",
+        "priors": {
+            "chirp_mass": {
+                "__prior__": true,
+                "__module__": "bilby.gw.prior",
+                "__name__": "UniformInComponentsChirpMass",
+                "kwargs": {
+                    "minimum": 1.29,
+                    "maximum": 1.32,
+                    "name": "chirp_mass",
+                    "latex_label": "$\\mathcal{M}$",
+                    "unit": "$M_{\\odot}$",
+                    "boundary": null
+                }
+            },
+            "mass_ratio": {
+                "__prior__": true,
+                "__module__": "bilby.gw.prior",
+                "__name__": "UniformInComponentsMassRatio",
+                "kwargs": {
+                    "minimum": 0.125,
+                    "maximum": 1,
+                    "name": "mass_ratio",
+                    "latex_label": "$q$",
+                    "unit": null,
+                    "boundary": null,
+                    "equal_mass": false
+                }
+            },
+            "chi_1": {
+                "__prior__": true,
+                "__module__": "bilby.gw.prior",
+                "__name__": "AlignedSpin",
+                "kwargs": {
+                    "a_prior": {
+                        "__prior__": true,
+                        "__module__": "bilby.core.prior.analytical",
+                        "__name__": "Uniform",
+                        "kwargs": {
+                            "minimum": 0,
+                            "maximum": 0.05,
+                            "name": null,
+                            "latex_label": null,
+                            "unit": null,
+                            "boundary": null
+                        }
+                    },
+                    "z_prior": {
+                        "__prior__": true,
+                        "__module__": "bilby.core.prior.analytical",
+                        "__name__": "Uniform",
+                        "kwargs": {
+                            "minimum": -1,
+                            "maximum": 1,
+                            "name": null,
+                            "latex_label": null,
+                            "unit": null,
+                            "boundary": null
+                        }
+                    },
+                    "name": "chi_1",
+                    "latex_label": "$\\chi_1$",
+                    "unit": null,
+                    "boundary": null,
+                    "minimum": -0.05,
+                    "maximum": 0.05,
+                    "num_interp": 100000
+                }
+            },
+            "chi_2": {
+                "__prior__": true,
+                "__module__": "bilby.gw.prior",
+                "__name__": "AlignedSpin",
+                "kwargs": {
+                    "a_prior": {
+                        "__prior__": true,
+                        "__module__": "bilby.core.prior.analytical",
+                        "__name__": "Uniform",
+                        "kwargs": {
+                            "minimum": 0,
+                            "maximum": 0.05,
+                            "name": null,
+                            "latex_label": null,
+                            "unit": null,
+                            "boundary": null
+                        }
+                    },
+                    "z_prior": {
+                        "__prior__": true,
+                        "__module__": "bilby.core.prior.analytical",
+                        "__name__": "Uniform",
+                        "kwargs": {
+                            "minimum": -1,
+                            "maximum": 1,
+                            "name": null,
+                            "latex_label": null,
+                            "unit": null,
+                            "boundary": null
+                        }
+                    },
+                    "name": "chi_2",
+                    "latex_label": "$\\chi_2$",
+                    "unit": null,
+                    "boundary": null,
+                    "minimum": -0.05,
+                    "maximum": 0.05,
+                    "num_interp": 100000
+                }
+            },
+            "lambda_1": {
+                "__prior__": true,
+                "__module__": "bilby.core.prior.base",
+                "__name__": "Constraint",
+                "kwargs": {
+                    "minimum": 0,
+                    "maximum": 5000,
+                    "name": "lambda_1",
+                    "latex_label": "$\\Lambda_1$",
+                    "unit": null
+                }
+            },
+            "lambda_2": {
+                "__prior__": true,
+                "__module__": "bilby.core.prior.base",
+                "__name__": "Constraint",
+                "kwargs": {
+                    "minimum": 0,
+                    "maximum": 5000,
+                    "name": "lambda_2",
+                    "latex_label": "$\\Lambda_2$",
+                    "unit": null
+                }
+            }
+        },
+        "fixed_parameters": {}
+    },
     "/work/wouters/GW231109/test_precessing": {
         "sampling_time": 8356.646254,
         "log_bayes_factor": 13.712702206595655,
@@ -1633,6 +2545,91 @@
         },
         "fixed_parameters": {}
     },
+    "/work/wouters/GW231109/prod_BW_XP_s025_l5000_gaussian": {
+        "sampling_time": 10749.47266,
+        "log_bayes_factor": 13.476482076421265,
+        "waveform_approximant": "IMRPhenomXP_NRTidalv3",
+        "source_dir": "/work/wouters/GW231109/prod_BW_XP_s025_l5000_gaussian",
+        "priors": {
+            "a_1": {
+                "__prior__": true,
+                "__module__": "bilby.core.prior.analytical",
+                "__name__": "Uniform",
+                "kwargs": {
+                    "minimum": 0,
+                    "maximum": 0.25,
+                    "name": "a_1",
+                    "latex_label": "$a_1$",
+                    "unit": null,
+                    "boundary": null
+                }
+            },
+            "a_2": {
+                "__prior__": true,
+                "__module__": "bilby.core.prior.analytical",
+                "__name__": "Uniform",
+                "kwargs": {
+                    "minimum": 0,
+                    "maximum": 0.25,
+                    "name": "a_2",
+                    "latex_label": "$a_2$",
+                    "unit": null,
+                    "boundary": null
+                }
+            },
+            "lambda_1": {
+                "__prior__": true,
+                "__module__": "bilby.core.prior.analytical",
+                "__name__": "Uniform",
+                "kwargs": {
+                    "minimum": 0,
+                    "maximum": 5000.0,
+                    "name": "lambda_1",
+                    "latex_label": "$\\Lambda_1$",
+                    "unit": null,
+                    "boundary": null
+                }
+            },
+            "lambda_2": {
+                "__prior__": true,
+                "__module__": "bilby.core.prior.analytical",
+                "__name__": "Uniform",
+                "kwargs": {
+                    "minimum": 0,
+                    "maximum": 5000.0,
+                    "name": "lambda_2",
+                    "latex_label": "$\\Lambda_2$",
+                    "unit": null,
+                    "boundary": null
+                }
+            },
+            "chirp_mass": {
+                "__prior__": true,
+                "__module__": "bilby.core.prior.base",
+                "__name__": "Constraint",
+                "kwargs": {
+                    "minimum": 0.8,
+                    "maximum": 3.0,
+                    "name": null,
+                    "latex_label": null,
+                    "unit": null
+                }
+            },
+            "mass_ratio": {
+                "__prior__": true,
+                "__module__": "bilby.core.prior.base",
+                "__name__": "Constraint",
+                "kwargs": {
+                    "minimum": 0.125,
+                    "maximum": 1.0,
+                    "name": null,
+                    "latex_label": null,
+                    "unit": null
+                }
+            }
+        },
+        "fixed_parameters": {}
+    },
     "/work/wouters/GW231109/test": {
         "sampling_time": 5036.779329,
         "log_bayes_factor": 14.772458418829306,
@@ -1742,6 +2739,148 @@
                     "boundary": null,
                     "minimum": -0.1,
                     "maximum": 0.1
+                }
+            },
+            "lambda_1": {
+                "__prior__": true,
+                "__module__": "bilby.core.prior.analytical",
+                "__name__": "Uniform",
+                "kwargs": {
+                    "minimum": 0,
+                    "maximum": 5000.0,
+                    "name": "lambda_1",
+                    "latex_label": "$\\Lambda_1$",
+                    "unit": null,
+                    "boundary": null
+                }
+            },
+            "lambda_2": {
+                "__prior__": true,
+                "__module__": "bilby.core.prior.analytical",
+                "__name__": "Uniform",
+                "kwargs": {
+                    "minimum": 0,
+                    "maximum": 5000.0,
+                    "name": "lambda_2",
+                    "latex_label": "$\\Lambda_2$",
+                    "unit": null,
+                    "boundary": null
+                }
+            }
+        },
+        "fixed_parameters": {}
+    },
+    "/work/wouters/GW231109/prod_BW_XAS_s025_l5000_default": {
+        "sampling_time": 2843.499785,
+        "log_bayes_factor": 14.08591174235281,
+        "waveform_approximant": "IMRPhenomXAS_NRTidalv3",
+        "source_dir": "/work/wouters/GW231109/prod_BW_XAS_s025_l5000_default",
+        "priors": {
+            "chirp_mass": {
+                "__prior__": true,
+                "__module__": "bilby.gw.prior",
+                "__name__": "UniformInComponentsChirpMass",
+                "kwargs": {
+                    "minimum": 1.29,
+                    "maximum": 1.32,
+                    "name": "chirp_mass",
+                    "latex_label": "$\\mathcal{M}$",
+                    "unit": "$M_{\\odot}$",
+                    "boundary": null
+                }
+            },
+            "mass_ratio": {
+                "__prior__": true,
+                "__module__": "bilby.gw.prior",
+                "__name__": "UniformInComponentsMassRatio",
+                "kwargs": {
+                    "minimum": 0.125,
+                    "maximum": 1,
+                    "name": "mass_ratio",
+                    "latex_label": "$q$",
+                    "unit": null,
+                    "boundary": null,
+                    "equal_mass": false
+                }
+            },
+            "chi_1": {
+                "__prior__": true,
+                "__module__": "bilby.gw.prior",
+                "__name__": "AlignedSpin",
+                "kwargs": {
+                    "a_prior": {
+                        "__prior__": true,
+                        "__module__": "bilby.core.prior.analytical",
+                        "__name__": "Uniform",
+                        "kwargs": {
+                            "minimum": 0,
+                            "maximum": 0.25,
+                            "name": null,
+                            "latex_label": null,
+                            "unit": null,
+                            "boundary": null
+                        }
+                    },
+                    "z_prior": {
+                        "__prior__": true,
+                        "__module__": "bilby.core.prior.analytical",
+                        "__name__": "Uniform",
+                        "kwargs": {
+                            "minimum": -1,
+                            "maximum": 1,
+                            "name": null,
+                            "latex_label": null,
+                            "unit": null,
+                            "boundary": null
+                        }
+                    },
+                    "name": "chi_1",
+                    "latex_label": "$\\chi_1$",
+                    "unit": null,
+                    "boundary": null,
+                    "minimum": -0.25,
+                    "maximum": 0.25,
+                    "num_interp": 100000
+                }
+            },
+            "chi_2": {
+                "__prior__": true,
+                "__module__": "bilby.gw.prior",
+                "__name__": "AlignedSpin",
+                "kwargs": {
+                    "a_prior": {
+                        "__prior__": true,
+                        "__module__": "bilby.core.prior.analytical",
+                        "__name__": "Uniform",
+                        "kwargs": {
+                            "minimum": 0,
+                            "maximum": 0.25,
+                            "name": null,
+                            "latex_label": null,
+                            "unit": null,
+                            "boundary": null
+                        }
+                    },
+                    "z_prior": {
+                        "__prior__": true,
+                        "__module__": "bilby.core.prior.analytical",
+                        "__name__": "Uniform",
+                        "kwargs": {
+                            "minimum": -1,
+                            "maximum": 1,
+                            "name": null,
+                            "latex_label": null,
+                            "unit": null,
+                            "boundary": null
+                        }
+                    },
+                    "name": "chi_2",
+                    "latex_label": "$\\chi_2$",
+                    "unit": null,
+                    "boundary": null,
+                    "minimum": -0.25,
+                    "maximum": 0.25,
+                    "num_interp": 100000
                 }
             },
             "lambda_1": {
@@ -2290,6 +3429,91 @@
         },
         "fixed_parameters": {}
     },
+    "/work/wouters/GW231109/prod_BW_XP_s025_l10000_uniform": {
+        "sampling_time": 13483.851645,
+        "log_bayes_factor": 10.548184390277083,
+        "waveform_approximant": "IMRPhenomXP_NRTidalv3",
+        "source_dir": "/work/wouters/GW231109/prod_BW_XP_s025_l10000_uniform",
+        "priors": {
+            "a_1": {
+                "__prior__": true,
+                "__module__": "bilby.core.prior.analytical",
+                "__name__": "Uniform",
+                "kwargs": {
+                    "minimum": 0,
+                    "maximum": 0.25,
+                    "name": "a_1",
+                    "latex_label": "$a_1$",
+                    "unit": null,
+                    "boundary": null
+                }
+            },
+            "a_2": {
+                "__prior__": true,
+                "__module__": "bilby.core.prior.analytical",
+                "__name__": "Uniform",
+                "kwargs": {
+                    "minimum": 0,
+                    "maximum": 0.25,
+                    "name": "a_2",
+                    "latex_label": "$a_2$",
+                    "unit": null,
+                    "boundary": null
+                }
+            },
+            "lambda_1": {
+                "__prior__": true,
+                "__module__": "bilby.core.prior.analytical",
+                "__name__": "Uniform",
+                "kwargs": {
+                    "minimum": 0,
+                    "maximum": 10000.0,
+                    "name": "lambda_1",
+                    "latex_label": "$\\Lambda_1$",
+                    "unit": null,
+                    "boundary": null
+                }
+            },
+            "lambda_2": {
+                "__prior__": true,
+                "__module__": "bilby.core.prior.analytical",
+                "__name__": "Uniform",
+                "kwargs": {
+                    "minimum": 0,
+                    "maximum": 10000.0,
+                    "name": "lambda_2",
+                    "latex_label": "$\\Lambda_2$",
+                    "unit": null,
+                    "boundary": null
+                }
+            },
+            "chirp_mass": {
+                "__prior__": true,
+                "__module__": "bilby.core.prior.base",
+                "__name__": "Constraint",
+                "kwargs": {
+                    "minimum": 0.8,
+                    "maximum": 3.0,
+                    "name": null,
+                    "latex_label": null,
+                    "unit": null
+                }
+            },
+            "mass_ratio": {
+                "__prior__": true,
+                "__module__": "bilby.core.prior.base",
+                "__name__": "Constraint",
+                "kwargs": {
+                    "minimum": 0.125,
+                    "maximum": 1.0,
+                    "name": null,
+                    "latex_label": null,
+                    "unit": null
+                }
+            }
+        },
+        "fixed_parameters": {}
+    },
     "/work/wouters/GW231109/prod_XP_s005_l5000_uniform": {
         "sampling_time": 17316.766081,
         "log_bayes_factor": 10.192703877929072,
@@ -2492,6 +3716,91 @@
                 "kwargs": {
                     "minimum": 0.8,
                     "maximum": 3.0,
+                    "name": null,
+                    "latex_label": null,
+                    "unit": null
+                }
+            }
+        },
+        "fixed_parameters": {}
+    },
+    "/work/wouters/GW231109/prod_BW_XP_s025_l10000_gaussian": {
+        "sampling_time": 10898.157103,
+        "log_bayes_factor": 13.561136543689626,
+        "waveform_approximant": "IMRPhenomXP_NRTidalv3",
+        "source_dir": "/work/wouters/GW231109/prod_BW_XP_s025_l10000_gaussian",
+        "priors": {
+            "a_1": {
+                "__prior__": true,
+                "__module__": "bilby.core.prior.analytical",
+                "__name__": "Uniform",
+                "kwargs": {
+                    "minimum": 0,
+                    "maximum": 0.25,
+                    "name": "a_1",
+                    "latex_label": "$a_1$",
+                    "unit": null,
+                    "boundary": null
+                }
+            },
+            "a_2": {
+                "__prior__": true,
+                "__module__": "bilby.core.prior.analytical",
+                "__name__": "Uniform",
+                "kwargs": {
+                    "minimum": 0,
+                    "maximum": 0.25,
+                    "name": "a_2",
+                    "latex_label": "$a_2$",
+                    "unit": null,
+                    "boundary": null
+                }
+            },
+            "lambda_1": {
+                "__prior__": true,
+                "__module__": "bilby.core.prior.analytical",
+                "__name__": "Uniform",
+                "kwargs": {
+                    "minimum": 0,
+                    "maximum": 10000.0,
+                    "name": "lambda_1",
+                    "latex_label": "$\\Lambda_1$",
+                    "unit": null,
+                    "boundary": null
+                }
+            },
+            "lambda_2": {
+                "__prior__": true,
+                "__module__": "bilby.core.prior.analytical",
+                "__name__": "Uniform",
+                "kwargs": {
+                    "minimum": 0,
+                    "maximum": 10000.0,
+                    "name": "lambda_2",
+                    "latex_label": "$\\Lambda_2$",
+                    "unit": null,
+                    "boundary": null
+                }
+            },
+            "chirp_mass": {
+                "__prior__": true,
+                "__module__": "bilby.core.prior.base",
+                "__name__": "Constraint",
+                "kwargs": {
+                    "minimum": 0.8,
+                    "maximum": 3.0,
+                    "name": null,
+                    "latex_label": null,
+                    "unit": null
+                }
+            },
+            "mass_ratio": {
+                "__prior__": true,
+                "__module__": "bilby.core.prior.base",
+                "__name__": "Constraint",
+                "kwargs": {
+                    "minimum": 0.125,
+                    "maximum": 1.0,
                     "name": null,
                     "latex_label": null,
                     "unit": null
@@ -3785,6 +5094,91 @@
         },
         "fixed_parameters": {}
     },
+    "/work/wouters/GW231109/prod_BW_XP_s025_l10000_double_gaussian": {
+        "sampling_time": 13732.001695,
+        "log_bayes_factor": 10.4692557448238,
+        "waveform_approximant": "IMRPhenomXP_NRTidalv3",
+        "source_dir": "/work/wouters/GW231109/prod_BW_XP_s025_l10000_double_gaussian",
+        "priors": {
+            "a_1": {
+                "__prior__": true,
+                "__module__": "bilby.core.prior.analytical",
+                "__name__": "Uniform",
+                "kwargs": {
+                    "minimum": 0,
+                    "maximum": 0.25,
+                    "name": "a_1",
+                    "latex_label": "$a_1$",
+                    "unit": null,
+                    "boundary": null
+                }
+            },
+            "a_2": {
+                "__prior__": true,
+                "__module__": "bilby.core.prior.analytical",
+                "__name__": "Uniform",
+                "kwargs": {
+                    "minimum": 0,
+                    "maximum": 0.25,
+                    "name": "a_2",
+                    "latex_label": "$a_2$",
+                    "unit": null,
+                    "boundary": null
+                }
+            },
+            "lambda_1": {
+                "__prior__": true,
+                "__module__": "bilby.core.prior.analytical",
+                "__name__": "Uniform",
+                "kwargs": {
+                    "minimum": 0,
+                    "maximum": 10000.0,
+                    "name": "lambda_1",
+                    "latex_label": "$\\Lambda_1$",
+                    "unit": null,
+                    "boundary": null
+                }
+            },
+            "lambda_2": {
+                "__prior__": true,
+                "__module__": "bilby.core.prior.analytical",
+                "__name__": "Uniform",
+                "kwargs": {
+                    "minimum": 0,
+                    "maximum": 10000.0,
+                    "name": "lambda_2",
+                    "latex_label": "$\\Lambda_2$",
+                    "unit": null,
+                    "boundary": null
+                }
+            },
+            "chirp_mass": {
+                "__prior__": true,
+                "__module__": "bilby.core.prior.base",
+                "__name__": "Constraint",
+                "kwargs": {
+                    "minimum": 0.8,
+                    "maximum": 3.0,
+                    "name": null,
+                    "latex_label": null,
+                    "unit": null
+                }
+            },
+            "mass_ratio": {
+                "__prior__": true,
+                "__module__": "bilby.core.prior.base",
+                "__name__": "Constraint",
+                "kwargs": {
+                    "minimum": 0.125,
+                    "maximum": 1.0,
+                    "name": null,
+                    "latex_label": null,
+                    "unit": null
+                }
+            }
+        },
+        "fixed_parameters": {}
+    },
     "/work/wouters/GW231109/prod_BW_XP_s005_l5000_uniform": {
         "sampling_time": 10705.116732,
         "log_bayes_factor": 9.265107716248261,
@@ -3958,6 +5352,148 @@
         },
         "fixed_parameters": {}
     },
+    "/work/wouters/GW231109/prod_BW_XAS_s040_l5000_default": {
+        "sampling_time": 3852.007438,
+        "log_bayes_factor": 13.594498857305702,
+        "waveform_approximant": "IMRPhenomXAS_NRTidalv3",
+        "source_dir": "/work/wouters/GW231109/prod_BW_XAS_s040_l5000_default",
+        "priors": {
+            "chirp_mass": {
+                "__prior__": true,
+                "__module__": "bilby.gw.prior",
+                "__name__": "UniformInComponentsChirpMass",
+                "kwargs": {
+                    "minimum": 1.29,
+                    "maximum": 1.32,
+                    "name": "chirp_mass",
+                    "latex_label": "$\\mathcal{M}$",
+                    "unit": "$M_{\\odot}$",
+                    "boundary": null
+                }
+            },
+            "mass_ratio": {
+                "__prior__": true,
+                "__module__": "bilby.gw.prior",
+                "__name__": "UniformInComponentsMassRatio",
+                "kwargs": {
+                    "minimum": 0.125,
+                    "maximum": 1,
+                    "name": "mass_ratio",
+                    "latex_label": "$q$",
+                    "unit": null,
+                    "boundary": null,
+                    "equal_mass": false
+                }
+            },
+            "chi_1": {
+                "__prior__": true,
+                "__module__": "bilby.gw.prior",
+                "__name__": "AlignedSpin",
+                "kwargs": {
+                    "a_prior": {
+                        "__prior__": true,
+                        "__module__": "bilby.core.prior.analytical",
+                        "__name__": "Uniform",
+                        "kwargs": {
+                            "minimum": 0,
+                            "maximum": 0.4,
+                            "name": null,
+                            "latex_label": null,
+                            "unit": null,
+                            "boundary": null
+                        }
+                    },
+                    "z_prior": {
+                        "__prior__": true,
+                        "__module__": "bilby.core.prior.analytical",
+                        "__name__": "Uniform",
+                        "kwargs": {
+                            "minimum": -1,
+                            "maximum": 1,
+                            "name": null,
+                            "latex_label": null,
+                            "unit": null,
+                            "boundary": null
+                        }
+                    },
+                    "name": "chi_1",
+                    "latex_label": "$\\chi_1$",
+                    "unit": null,
+                    "boundary": null,
+                    "minimum": -0.4,
+                    "maximum": 0.4,
+                    "num_interp": 100000
+                }
+            },
+            "chi_2": {
+                "__prior__": true,
+                "__module__": "bilby.gw.prior",
+                "__name__": "AlignedSpin",
+                "kwargs": {
+                    "a_prior": {
+                        "__prior__": true,
+                        "__module__": "bilby.core.prior.analytical",
+                        "__name__": "Uniform",
+                        "kwargs": {
+                            "minimum": 0,
+                            "maximum": 0.4,
+                            "name": null,
+                            "latex_label": null,
+                            "unit": null,
+                            "boundary": null
+                        }
+                    },
+                    "z_prior": {
+                        "__prior__": true,
+                        "__module__": "bilby.core.prior.analytical",
+                        "__name__": "Uniform",
+                        "kwargs": {
+                            "minimum": -1,
+                            "maximum": 1,
+                            "name": null,
+                            "latex_label": null,
+                            "unit": null,
+                            "boundary": null
+                        }
+                    },
+                    "name": "chi_2",
+                    "latex_label": "$\\chi_2$",
+                    "unit": null,
+                    "boundary": null,
+                    "minimum": -0.4,
+                    "maximum": 0.4,
+                    "num_interp": 100000
+                }
+            },
+            "lambda_1": {
+                "__prior__": true,
+                "__module__": "bilby.core.prior.analytical",
+                "__name__": "Uniform",
+                "kwargs": {
+                    "minimum": 0,
+                    "maximum": 5000.0,
+                    "name": "lambda_1",
+                    "latex_label": "$\\Lambda_1$",
+                    "unit": null,
+                    "boundary": null
+                }
+            },
+            "lambda_2": {
+                "__prior__": true,
+                "__module__": "bilby.core.prior.analytical",
+                "__name__": "Uniform",
+                "kwargs": {
+                    "minimum": 0,
+                    "maximum": 5000.0,
+                    "name": "lambda_2",
+                    "latex_label": "$\\Lambda_2$",
+                    "unit": null,
+                    "boundary": null
+                }
+            }
+        },
+        "fixed_parameters": {}
+    },
     "/work/wouters/GW231109/test_precessing_high_spins": {
         "sampling_time": 8243.580116,
         "log_bayes_factor": 15.318820404331548,
@@ -4098,6 +5634,91 @@
                 "kwargs": {
                     "minimum": 0,
                     "maximum": 10000.0,
+                    "name": "lambda_2",
+                    "latex_label": "$\\Lambda_2$",
+                    "unit": null,
+                    "boundary": null
+                }
+            },
+            "chirp_mass": {
+                "__prior__": true,
+                "__module__": "bilby.core.prior.base",
+                "__name__": "Constraint",
+                "kwargs": {
+                    "minimum": 0.8,
+                    "maximum": 3.0,
+                    "name": null,
+                    "latex_label": null,
+                    "unit": null
+                }
+            },
+            "mass_ratio": {
+                "__prior__": true,
+                "__module__": "bilby.core.prior.base",
+                "__name__": "Constraint",
+                "kwargs": {
+                    "minimum": 0.125,
+                    "maximum": 1.0,
+                    "name": null,
+                    "latex_label": null,
+                    "unit": null
+                }
+            }
+        },
+        "fixed_parameters": {}
+    },
+    "/work/wouters/GW231109/prod_BW_XP_s025_l5000_uniform": {
+        "sampling_time": 12246.167511,
+        "log_bayes_factor": 11.457422184825296,
+        "waveform_approximant": "IMRPhenomXP_NRTidalv3",
+        "source_dir": "/work/wouters/GW231109/prod_BW_XP_s025_l5000_uniform",
+        "priors": {
+            "a_1": {
+                "__prior__": true,
+                "__module__": "bilby.core.prior.analytical",
+                "__name__": "Uniform",
+                "kwargs": {
+                    "minimum": 0,
+                    "maximum": 0.25,
+                    "name": "a_1",
+                    "latex_label": "$a_1$",
+                    "unit": null,
+                    "boundary": null
+                }
+            },
+            "a_2": {
+                "__prior__": true,
+                "__module__": "bilby.core.prior.analytical",
+                "__name__": "Uniform",
+                "kwargs": {
+                    "minimum": 0,
+                    "maximum": 0.25,
+                    "name": "a_2",
+                    "latex_label": "$a_2$",
+                    "unit": null,
+                    "boundary": null
+                }
+            },
+            "lambda_1": {
+                "__prior__": true,
+                "__module__": "bilby.core.prior.analytical",
+                "__name__": "Uniform",
+                "kwargs": {
+                    "minimum": 0,
+                    "maximum": 5000.0,
+                    "name": "lambda_1",
+                    "latex_label": "$\\Lambda_1$",
+                    "unit": null,
+                    "boundary": null
+                }
+            },
+            "lambda_2": {
+                "__prior__": true,
+                "__module__": "bilby.core.prior.analytical",
+                "__name__": "Uniform",
+                "kwargs": {
+                    "minimum": 0,
+                    "maximum": 5000.0,
                     "name": "lambda_2",
                     "latex_label": "$\\Lambda_2$",
                     "unit": null,
@@ -4296,6 +5917,290 @@
                     "name": null,
                     "latex_label": null,
                     "unit": null
+                }
+            }
+        },
+        "fixed_parameters": {}
+    },
+    "/work/wouters/GW231109/prod_BW_XAS_s040_l10000_default": {
+        "sampling_time": 3404.900084,
+        "log_bayes_factor": 13.346723235982974,
+        "waveform_approximant": "IMRPhenomXAS_NRTidalv3",
+        "source_dir": "/work/wouters/GW231109/prod_BW_XAS_s040_l10000_default",
+        "priors": {
+            "chirp_mass": {
+                "__prior__": true,
+                "__module__": "bilby.gw.prior",
+                "__name__": "UniformInComponentsChirpMass",
+                "kwargs": {
+                    "minimum": 1.29,
+                    "maximum": 1.32,
+                    "name": "chirp_mass",
+                    "latex_label": "$\\mathcal{M}$",
+                    "unit": "$M_{\\odot}$",
+                    "boundary": null
+                }
+            },
+            "mass_ratio": {
+                "__prior__": true,
+                "__module__": "bilby.gw.prior",
+                "__name__": "UniformInComponentsMassRatio",
+                "kwargs": {
+                    "minimum": 0.125,
+                    "maximum": 1,
+                    "name": "mass_ratio",
+                    "latex_label": "$q$",
+                    "unit": null,
+                    "boundary": null,
+                    "equal_mass": false
+                }
+            },
+            "chi_1": {
+                "__prior__": true,
+                "__module__": "bilby.gw.prior",
+                "__name__": "AlignedSpin",
+                "kwargs": {
+                    "a_prior": {
+                        "__prior__": true,
+                        "__module__": "bilby.core.prior.analytical",
+                        "__name__": "Uniform",
+                        "kwargs": {
+                            "minimum": 0,
+                            "maximum": 0.4,
+                            "name": null,
+                            "latex_label": null,
+                            "unit": null,
+                            "boundary": null
+                        }
+                    },
+                    "z_prior": {
+                        "__prior__": true,
+                        "__module__": "bilby.core.prior.analytical",
+                        "__name__": "Uniform",
+                        "kwargs": {
+                            "minimum": -1,
+                            "maximum": 1,
+                            "name": null,
+                            "latex_label": null,
+                            "unit": null,
+                            "boundary": null
+                        }
+                    },
+                    "name": "chi_1",
+                    "latex_label": "$\\chi_1$",
+                    "unit": null,
+                    "boundary": null,
+                    "minimum": -0.4,
+                    "maximum": 0.4,
+                    "num_interp": 100000
+                }
+            },
+            "chi_2": {
+                "__prior__": true,
+                "__module__": "bilby.gw.prior",
+                "__name__": "AlignedSpin",
+                "kwargs": {
+                    "a_prior": {
+                        "__prior__": true,
+                        "__module__": "bilby.core.prior.analytical",
+                        "__name__": "Uniform",
+                        "kwargs": {
+                            "minimum": 0,
+                            "maximum": 0.4,
+                            "name": null,
+                            "latex_label": null,
+                            "unit": null,
+                            "boundary": null
+                        }
+                    },
+                    "z_prior": {
+                        "__prior__": true,
+                        "__module__": "bilby.core.prior.analytical",
+                        "__name__": "Uniform",
+                        "kwargs": {
+                            "minimum": -1,
+                            "maximum": 1,
+                            "name": null,
+                            "latex_label": null,
+                            "unit": null,
+                            "boundary": null
+                        }
+                    },
+                    "name": "chi_2",
+                    "latex_label": "$\\chi_2$",
+                    "unit": null,
+                    "boundary": null,
+                    "minimum": -0.4,
+                    "maximum": 0.4,
+                    "num_interp": 100000
+                }
+            },
+            "lambda_1": {
+                "__prior__": true,
+                "__module__": "bilby.core.prior.analytical",
+                "__name__": "Uniform",
+                "kwargs": {
+                    "minimum": 0,
+                    "maximum": 10000.0,
+                    "name": "lambda_1",
+                    "latex_label": "$\\Lambda_1$",
+                    "unit": null,
+                    "boundary": null
+                }
+            },
+            "lambda_2": {
+                "__prior__": true,
+                "__module__": "bilby.core.prior.analytical",
+                "__name__": "Uniform",
+                "kwargs": {
+                    "minimum": 0,
+                    "maximum": 10000.0,
+                    "name": "lambda_2",
+                    "latex_label": "$\\Lambda_2$",
+                    "unit": null,
+                    "boundary": null
+                }
+            }
+        },
+        "fixed_parameters": {}
+    },
+    "/work/wouters/GW231109/prod_BW_XAS_s025_l10000_default": {
+        "sampling_time": 2931.766535,
+        "log_bayes_factor": 13.539992403324389,
+        "waveform_approximant": "IMRPhenomXAS_NRTidalv3",
+        "source_dir": "/work/wouters/GW231109/prod_BW_XAS_s025_l10000_default",
+        "priors": {
+            "chirp_mass": {
+                "__prior__": true,
+                "__module__": "bilby.gw.prior",
+                "__name__": "UniformInComponentsChirpMass",
+                "kwargs": {
+                    "minimum": 1.29,
+                    "maximum": 1.32,
+                    "name": "chirp_mass",
+                    "latex_label": "$\\mathcal{M}$",
+                    "unit": "$M_{\\odot}$",
+                    "boundary": null
+                }
+            },
+            "mass_ratio": {
+                "__prior__": true,
+                "__module__": "bilby.gw.prior",
+                "__name__": "UniformInComponentsMassRatio",
+                "kwargs": {
+                    "minimum": 0.125,
+                    "maximum": 1,
+                    "name": "mass_ratio",
+                    "latex_label": "$q$",
+                    "unit": null,
+                    "boundary": null,
+                    "equal_mass": false
+                }
+            },
+            "chi_1": {
+                "__prior__": true,
+                "__module__": "bilby.gw.prior",
+                "__name__": "AlignedSpin",
+                "kwargs": {
+                    "a_prior": {
+                        "__prior__": true,
+                        "__module__": "bilby.core.prior.analytical",
+                        "__name__": "Uniform",
+                        "kwargs": {
+                            "minimum": 0,
+                            "maximum": 0.25,
+                            "name": null,
+                            "latex_label": null,
+                            "unit": null,
+                            "boundary": null
+                        }
+                    },
+                    "z_prior": {
+                        "__prior__": true,
+                        "__module__": "bilby.core.prior.analytical",
+                        "__name__": "Uniform",
+                        "kwargs": {
+                            "minimum": -1,
+                            "maximum": 1,
+                            "name": null,
+                            "latex_label": null,
+                            "unit": null,
+                            "boundary": null
+                        }
+                    },
+                    "name": "chi_1",
+                    "latex_label": "$\\chi_1$",
+                    "unit": null,
+                    "boundary": null,
+                    "minimum": -0.25,
+                    "maximum": 0.25,
+                    "num_interp": 100000
+                }
+            },
+            "chi_2": {
+                "__prior__": true,
+                "__module__": "bilby.gw.prior",
+                "__name__": "AlignedSpin",
+                "kwargs": {
+                    "a_prior": {
+                        "__prior__": true,
+                        "__module__": "bilby.core.prior.analytical",
+                        "__name__": "Uniform",
+                        "kwargs": {
+                            "minimum": 0,
+                            "maximum": 0.25,
+                            "name": null,
+                            "latex_label": null,
+                            "unit": null,
+                            "boundary": null
+                        }
+                    },
+                    "z_prior": {
+                        "__prior__": true,
+                        "__module__": "bilby.core.prior.analytical",
+                        "__name__": "Uniform",
+                        "kwargs": {
+                            "minimum": -1,
+                            "maximum": 1,
+                            "name": null,
+                            "latex_label": null,
+                            "unit": null,
+                            "boundary": null
+                        }
+                    },
+                    "name": "chi_2",
+                    "latex_label": "$\\chi_2$",
+                    "unit": null,
+                    "boundary": null,
+                    "minimum": -0.25,
+                    "maximum": 0.25,
+                    "num_interp": 100000
+                }
+            },
+            "lambda_1": {
+                "__prior__": true,
+                "__module__": "bilby.core.prior.analytical",
+                "__name__": "Uniform",
+                "kwargs": {
+                    "minimum": 0,
+                    "maximum": 10000.0,
+                    "name": "lambda_1",
+                    "latex_label": "$\\Lambda_1$",
+                    "unit": null,
+                    "boundary": null
+                }
+            },
+            "lambda_2": {
+                "__prior__": true,
+                "__module__": "bilby.core.prior.analytical",
+                "__name__": "Uniform",
+                "kwargs": {
+                    "minimum": 0,
+                    "maximum": 10000.0,
+                    "name": "lambda_2",
+                    "latex_label": "$\\Lambda_2$",
+                    "unit": null,
+                    "boundary": null
                 }
             }
         },
@@ -4735,6 +6640,146 @@
         },
         "fixed_parameters": {}
     },
+    "/work/wouters/GW231109/prod_BW_XAS_s025_lquniv_default": {
+        "sampling_time": 2446.521496,
+        "log_bayes_factor": 14.130997641762502,
+        "waveform_approximant": "IMRPhenomXAS_NRTidalv3",
+        "source_dir": "/work/wouters/GW231109/prod_BW_XAS_s025_lquniv_default",
+        "priors": {
+            "chirp_mass": {
+                "__prior__": true,
+                "__module__": "bilby.gw.prior",
+                "__name__": "UniformInComponentsChirpMass",
+                "kwargs": {
+                    "minimum": 1.29,
+                    "maximum": 1.32,
+                    "name": "chirp_mass",
+                    "latex_label": "$\\mathcal{M}$",
+                    "unit": "$M_{\\odot}$",
+                    "boundary": null
+                }
+            },
+            "mass_ratio": {
+                "__prior__": true,
+                "__module__": "bilby.gw.prior",
+                "__name__": "UniformInComponentsMassRatio",
+                "kwargs": {
+                    "minimum": 0.125,
+                    "maximum": 1,
+                    "name": "mass_ratio",
+                    "latex_label": "$q$",
+                    "unit": null,
+                    "boundary": null,
+                    "equal_mass": false
+                }
+            },
+            "chi_1": {
+                "__prior__": true,
+                "__module__": "bilby.gw.prior",
+                "__name__": "AlignedSpin",
+                "kwargs": {
+                    "a_prior": {
+                        "__prior__": true,
+                        "__module__": "bilby.core.prior.analytical",
+                        "__name__": "Uniform",
+                        "kwargs": {
+                            "minimum": 0,
+                            "maximum": 0.25,
+                            "name": null,
+                            "latex_label": null,
+                            "unit": null,
+                            "boundary": null
+                        }
+                    },
+                    "z_prior": {
+                        "__prior__": true,
+                        "__module__": "bilby.core.prior.analytical",
+                        "__name__": "Uniform",
+                        "kwargs": {
+                            "minimum": -1,
+                            "maximum": 1,
+                            "name": null,
+                            "latex_label": null,
+                            "unit": null,
+                            "boundary": null
+                        }
+                    },
+                    "name": "chi_1",
+                    "latex_label": "$\\chi_1$",
+                    "unit": null,
+                    "boundary": null,
+                    "minimum": -0.25,
+                    "maximum": 0.25,
+                    "num_interp": 100000
+                }
+            },
+            "chi_2": {
+                "__prior__": true,
+                "__module__": "bilby.gw.prior",
+                "__name__": "AlignedSpin",
+                "kwargs": {
+                    "a_prior": {
+                        "__prior__": true,
+                        "__module__": "bilby.core.prior.analytical",
+                        "__name__": "Uniform",
+                        "kwargs": {
+                            "minimum": 0,
+                            "maximum": 0.25,
+                            "name": null,
+                            "latex_label": null,
+                            "unit": null,
+                            "boundary": null
+                        }
+                    },
+                    "z_prior": {
+                        "__prior__": true,
+                        "__module__": "bilby.core.prior.analytical",
+                        "__name__": "Uniform",
+                        "kwargs": {
+                            "minimum": -1,
+                            "maximum": 1,
+                            "name": null,
+                            "latex_label": null,
+                            "unit": null,
+                            "boundary": null
+                        }
+                    },
+                    "name": "chi_2",
+                    "latex_label": "$\\chi_2$",
+                    "unit": null,
+                    "boundary": null,
+                    "minimum": -0.25,
+                    "maximum": 0.25,
+                    "num_interp": 100000
+                }
+            },
+            "lambda_1": {
+                "__prior__": true,
+                "__module__": "bilby.core.prior.base",
+                "__name__": "Constraint",
+                "kwargs": {
+                    "minimum": 0,
+                    "maximum": 5000,
+                    "name": "lambda_1",
+                    "latex_label": "$\\Lambda_1$",
+                    "unit": null
+                }
+            },
+            "lambda_2": {
+                "__prior__": true,
+                "__module__": "bilby.core.prior.base",
+                "__name__": "Constraint",
+                "kwargs": {
+                    "minimum": 0,
+                    "maximum": 5000,
+                    "name": "lambda_2",
+                    "latex_label": "$\\Lambda_2$",
+                    "unit": null
+                }
+            }
+        },
+        "fixed_parameters": {}
+    },
     "/work/wouters/GW231109/neural_priors_uniform_radio_chiEFT": {
         "sampling_time": 19674.638959,
         "log_bayes_factor": 11.930550860028038,
@@ -4852,6 +6897,91 @@
                 "kwargs": {
                     "minimum": 0.8,
                     "maximum": 3.0,
+                    "name": null,
+                    "latex_label": null,
+                    "unit": null
+                }
+            }
+        },
+        "fixed_parameters": {}
+    },
+    "/work/wouters/GW231109/prod_BW_XP_s025_l5000_double_gaussian": {
+        "sampling_time": 14363.638482,
+        "log_bayes_factor": 10.744781143917558,
+        "waveform_approximant": "IMRPhenomXP_NRTidalv3",
+        "source_dir": "/work/wouters/GW231109/prod_BW_XP_s025_l5000_double_gaussian",
+        "priors": {
+            "a_1": {
+                "__prior__": true,
+                "__module__": "bilby.core.prior.analytical",
+                "__name__": "Uniform",
+                "kwargs": {
+                    "minimum": 0,
+                    "maximum": 0.25,
+                    "name": "a_1",
+                    "latex_label": "$a_1$",
+                    "unit": null,
+                    "boundary": null
+                }
+            },
+            "a_2": {
+                "__prior__": true,
+                "__module__": "bilby.core.prior.analytical",
+                "__name__": "Uniform",
+                "kwargs": {
+                    "minimum": 0,
+                    "maximum": 0.25,
+                    "name": "a_2",
+                    "latex_label": "$a_2$",
+                    "unit": null,
+                    "boundary": null
+                }
+            },
+            "lambda_1": {
+                "__prior__": true,
+                "__module__": "bilby.core.prior.analytical",
+                "__name__": "Uniform",
+                "kwargs": {
+                    "minimum": 0,
+                    "maximum": 5000.0,
+                    "name": "lambda_1",
+                    "latex_label": "$\\Lambda_1$",
+                    "unit": null,
+                    "boundary": null
+                }
+            },
+            "lambda_2": {
+                "__prior__": true,
+                "__module__": "bilby.core.prior.analytical",
+                "__name__": "Uniform",
+                "kwargs": {
+                    "minimum": 0,
+                    "maximum": 5000.0,
+                    "name": "lambda_2",
+                    "latex_label": "$\\Lambda_2$",
+                    "unit": null,
+                    "boundary": null
+                }
+            },
+            "chirp_mass": {
+                "__prior__": true,
+                "__module__": "bilby.core.prior.base",
+                "__name__": "Constraint",
+                "kwargs": {
+                    "minimum": 0.8,
+                    "maximum": 3.0,
+                    "name": null,
+                    "latex_label": null,
+                    "unit": null
+                }
+            },
+            "mass_ratio": {
+                "__prior__": true,
+                "__module__": "bilby.core.prior.base",
+                "__name__": "Constraint",
+                "kwargs": {
+                    "minimum": 0.125,
+                    "maximum": 1.0,
                     "name": null,
                     "latex_label": null,
                     "unit": null
