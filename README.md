@@ -2,7 +2,7 @@
 
 ## Overview of runs
 
-Generated automatically on: 2025-09-19 09:10:30 CEST
+Generated automatically on: 2025-09-20 11:08:44 CEST
 
 ## Run Overview Table
 
