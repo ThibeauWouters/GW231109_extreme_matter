@@ -40,6 +40,10 @@ def parse_arguments():
                         type=bool, 
                         default=False, 
                         help="Whether to sample the GW170817 event")
+    parser.add_argument("--sample-GW190425", 
+                        type=bool, 
+                        default=False, 
+                        help="Whether to sample the GW190425 event")
     parser.add_argument("--sample-GW231109",
                         type=bool, 
                         default=False, 
@@ -227,15 +231,28 @@ def main(args):
     
     # First, add mass priors if toggled (GW170817 by default, for NICER we can choose)
     keep_names = ["E_sym", "L_sym"]
+    
+    # Sample GW170817 PE
     if args.sample_GW170817:
-        m1_GW170817_prior = UniformPrior(1.1, 2.0, parameter_names=["mass_1_GW170817"])
+        m1_GW170817_prior = UniformPrior(1.5, 2.1, parameter_names=["mass_1_GW170817"])
         m2_GW170817_prior = UniformPrior(1.0, 1.5, parameter_names=["mass_2_GW170817"])
 
         prior_list.append(m1_GW170817_prior)
         prior_list.append(m2_GW170817_prior)
         
         keep_names += ["mass_1_GW170817", "mass_2_GW170817"]
+    
+    # Sample GW190425 PE
+    if args.sample_GW190425:
+        m1_GW190425_prior = UniformPrior(1.1, 2.0, parameter_names=["mass_1_GW190425"])
+        m2_GW190425_prior = UniformPrior(1.2, 1.8, parameter_names=["mass_2_GW190425"])
+
+        prior_list.append(m1_GW190425_prior)
+        prior_list.append(m2_GW190425_prior)
         
+        keep_names += ["mass_1_GW190425", "mass_2_GW190425"]
+        
+    # Sample GW231109 PE
     if args.sample_GW231109:
         m1_GW231109_prior = UniformPrior(1.3, 1.9, parameter_names=["mass_1_GW231109"])
         m2_GW231109_prior = UniformPrior(1.1, 1.5, parameter_names=["mass_2_GW231109"])
@@ -264,12 +281,15 @@ def main(args):
         # GW
         likelihoods_list_GW = []
         if args.sample_GW170817:
+            # NOTE: this is a slightly older NF so the default kwargs are ok
             likelihoods_list_GW += [utils.GWlikelihood_with_masses("GW170817", "./NFs/GW170817/model.eqx")]
         
+        if args.sample_GW190425:
+            # NOTE: this is a slightly newer NF so use these updated kwargs FIXME: these are hardcoded -- this should change in future editions
+            likelihoods_list_GW += [utils.GWlikelihood_with_masses("GW190425", "./NFs/GW190425/model.eqx", nn_depth=6, nn_block_dim=16)]
+        
         if args.sample_GW231109:
-            path = args.GW231109_NF_filepath
-            
-            # FIXME: these are hardcoded -- this should change in future editions
+            # NOTE: this is a slightly newer NF so use these updated kwargs FIXME: these are hardcoded -- this should change in future editions
             nn_depth = 6
             nn_block_dim = 16
             

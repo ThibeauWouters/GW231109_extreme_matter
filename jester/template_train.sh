@@ -6,8 +6,8 @@
 #SBATCH --gpus-per-node=1
 #SBATCH --cpus-per-gpu=1
 #SBATCH --mem-per-gpu=20G
-#SBATCH --output="train.out"
-#SBATCH --job-name="NF_train"
+#SBATCH --output="train_NF.out"
+#SBATCH --job-name="train"
 
 now=$(date)
 echo "$now"
