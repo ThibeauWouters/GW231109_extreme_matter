@@ -1,116 +1,114 @@
-Fri Sep 19 08:58:09 CEST 2025
+Fri Sep 19 11:15:52 CEST 2025
 NVIDIA H100
 Warning: weights not properly specified, assuming constant weights instead.
-Could not load PREX/CREX data, likely because the paths are not correct. Please check.
 GPU found?
 [CudaDevice(id=0)]
 Using the regular nbreak prior: U[1.0, 2.0] * 0.16
 Fixed params loaded inside the MicroToMacroTransform:
     E_sat: -16.0
 Not sampling PREX or CREX data now
-Sanity checking: likelihoods_list = [<utils.GWlikelihood_with_masses object at 0x145c1beaf9d0>, <utils.RadioTimingLikelihood object at 0x14460ebac730>, <utils.RadioTimingLikelihood object at 0x14460ecd3430>, <utils.RadioTimingLikelihood object at 0x14460ee37640>]
+Sanity checking: likelihoods_list = [<utils.GWlikelihood_with_masses object at 0x148d0bb0b9d0>, <utils.RadioTimingLikelihood object at 0x1476f7fc7970>, <utils.RadioTimingLikelihood object at 0x147700c1cd00>, <utils.RadioTimingLikelihood object at 0x1476f7e4cf10>]
 len(likelihoods_list) = 4
 Fixed params loaded inside the MicroToMacroTransform:
     E_sat: -16.0
 We are going to give these kwargs to Jim:
-{'n_loop_training': 40, 'n_loop_production': 40, 'n_chains': 1000, 'n_local_steps': 2, 'n_global_steps': 100, 'n_epochs': 20, 'train_thinning': 1, 'output_thinning': 5}
+{'n_loop_training': 60, 'n_loop_production': 30, 'n_chains': 1000, 'n_local_steps': 50, 'n_global_steps': 50, 'n_epochs': 20, 'train_thinning': 1, 'output_thinning': 5, 'local_sampler_name': 'GaussianRandomWalk'}
 We are going to sample the following parameters:
 ['E_sym', 'L_sym', 'K_sym', 'Q_sym', 'Z_sym', 'K_sat', 'Q_sat', 'Z_sat', 'nbreak', 'n_CSE_0_u', 'cs2_CSE_0', 'n_CSE_1_u', 'cs2_CSE_1', 'n_CSE_2_u', 'cs2_CSE_2', 'n_CSE_3_u', 'cs2_CSE_3', 'n_CSE_4_u', 'cs2_CSE_4', 'n_CSE_5_u', 'cs2_CSE_5', 'n_CSE_6_u', 'cs2_CSE_6', 'n_CSE_7_u', 'cs2_CSE_7', 'cs2_CSE_8', 'mass_1_GW231109', 'mass_2_GW231109']
 No sample transforms provided. Using prior parameters as sampling parameters
-Jim received the local sampler name: MALA
+Jim received the local sampler name: GaussianRandomWalk
+Step size given was a matrix, converting to diagonal for GaussianRandomWalk
 ['n_dim', 'n_chains', 'n_local_steps', 'n_global_steps', 'n_loop', 'output_thinning', 'verbose']
 log_prob
 [-51.43066258 -36.42734085 -58.0091888 ]
 Sampling seed is set to: 11
-Global Tuning:   0%|          | 0/40 [00:00<?, ?it/s]Global Tuning:   2%|▎         | 1/40 [02:41<1:44:44, 161.14s/it]Global Tuning:   5%|▌         | 2/40 [03:53<1:09:06, 109.11s/it]Global Tuning:   8%|▊         | 3/40 [05:03<56:08, 91.03s/it]   Global Tuning:  10%|█         | 4/40 [06:17<50:36, 84.36s/it]Global Tuning:  12%|█▎        | 5/40 [07:25<45:45, 78.45s/it]Global Tuning:  15%|█▌        | 6/40 [08:41<43:58, 77.59s/it]Global Tuning:  18%|█▊        | 7/40 [09:52<41:33, 75.55s/it]Global Tuning:  20%|██        | 8/40 [11:03<39:32, 74.13s/it]Global Tuning:  22%|██▎       | 9/40 [12:11<37:10, 71.97s/it]Global Tuning:  25%|██▌       | 10/40 [13:21<35:46, 71.56s/it]Global Tuning:  28%|██▊       | 11/40 [14:32<34:31, 71.44s/it]Global Tuning:  30%|███       | 12/40 [15:42<33:02, 70.82s/it]Global Tuning:  32%|███▎      | 13/40 [16:51<31:40, 70.40s/it]Global Tuning:  35%|███▌      | 14/40 [18:03<30:41, 70.82s/it]Global Tuning:  38%|███▊      | 15/40 [19:13<29:25, 70.64s/it]Global Tuning:  40%|████      | 16/40 [20:23<28:12, 70.53s/it]Global Tuning:  42%|████▎     | 17/40 [21:34<27:02, 70.53s/it]Global Tuning:  45%|████▌     | 18/40 [22:43<25:41, 70.05s/it]Global Tuning:  48%|████▊     | 19/40 [23:52<24:27, 69.86s/it]Global Tuning:  50%|█████     | 20/40 [25:05<23:33, 70.68s/it]Global Tuning:  52%|█████▎    | 21/40 [26:16<22:27, 70.93s/it]Global Tuning:  55%|█████▌    | 22/40 [27:28<21:18, 71.03s/it]Global Tuning:  57%|█████▊    | 23/40 [28:37<19:58, 70.48s/it]Global Tuning:  60%|██████    | 24/40 [29:52<19:12, 72.00s/it]Global Tuning:  62%|██████▎   | 25/40 [31:02<17:47, 71.20s/it]Global Tuning:  65%|██████▌   | 26/40 [32:15<16:45, 71.81s/it]Global Tuning:  68%|██████▊   | 27/40 [33:25<15:27, 71.36s/it]Global Tuning:  70%|███████   | 28/40 [34:37<14:17, 71.49s/it]Global Tuning:  72%|███████▎  | 29/40 [35:50<13:10, 71.83s/it]Global Tuning:  75%|███████▌  | 30/40 [37:01<11:56, 71.63s/it]Global Tuning:  78%|███████▊  | 31/40 [38:15<10:50, 72.29s/it]Global Tuning:  80%|████████  | 32/40 [39:28<09:40, 72.54s/it]Global Tuning:  82%|████████▎ | 33/40 [40:40<08:26, 72.42s/it]Global Tuning:  85%|████████▌ | 34/40 [41:51<07:11, 71.92s/it]Global Tuning:  88%|████████▊ | 35/40 [43:03<05:59, 71.94s/it]Global Tuning:  90%|█████████ | 36/40 [44:16<04:49, 72.31s/it]Global Tuning:  92%|█████████▎| 37/40 [45:31<03:39, 73.11s/it]Global Tuning:  95%|█████████▌| 38/40 [46:45<02:27, 73.55s/it]Global Tuning:  98%|█████████▊| 39/40 [48:02<01:14, 74.37s/it]Global Tuning: 100%|██████████| 40/40 [49:15<00:00, 74.03s/it]Global Tuning: 100%|██████████| 40/40 [49:15<00:00, 73.89s/it]
-Compiling MALA body
-Global Sampling:   0%|          | 0/40 [00:00<?, ?it/s]Global Sampling:   2%|▎         | 1/40 [01:08<44:17, 68.13s/it]Global Sampling:   5%|▌         | 2/40 [02:21<45:04, 71.17s/it]Global Sampling:   8%|▊         | 3/40 [03:32<43:47, 71.02s/it]Global Sampling:  10%|█         | 4/40 [04:45<43:08, 71.91s/it]Global Sampling:  12%|█▎        | 5/40 [05:58<42:04, 72.12s/it]Global Sampling:  15%|█▌        | 6/40 [07:09<40:49, 72.05s/it]Global Sampling:  18%|█▊        | 7/40 [08:21<39:28, 71.77s/it]Global Sampling:  20%|██        | 8/40 [09:35<38:47, 72.74s/it]Global Sampling:  22%|██▎       | 9/40 [10:53<38:25, 74.38s/it]Global Sampling:  25%|██▌       | 10/40 [12:04<36:38, 73.28s/it]Global Sampling:  28%|██▊       | 11/40 [13:16<35:13, 72.90s/it]Global Sampling:  30%|███       | 12/40 [14:28<33:51, 72.57s/it]Global Sampling:  32%|███▎      | 13/40 [15:40<32:32, 72.32s/it]Global Sampling:  35%|███▌      | 14/40 [16:51<31:12, 72.02s/it]Global Sampling:  38%|███▊      | 15/40 [18:04<30:07, 72.30s/it]Global Sampling:  40%|████      | 16/40 [19:17<29:00, 72.53s/it]Global Sampling:  42%|████▎     | 17/40 [20:32<28:04, 73.26s/it]Global Sampling:  45%|████▌     | 18/40 [21:46<26:54, 73.39s/it]Global Sampling:  48%|████▊     | 19/40 [22:59<25:40, 73.35s/it]Global Sampling:  50%|█████     | 20/40 [24:09<24:08, 72.43s/it]Global Sampling:  52%|█████▎    | 21/40 [25:21<22:53, 72.28s/it]Global Sampling:  55%|█████▌    | 22/40 [26:35<21:50, 72.81s/it]Global Sampling:  57%|█████▊    | 23/40 [27:49<20:41, 73.03s/it]Global Sampling:  60%|██████    | 24/40 [29:00<19:19, 72.47s/it]Global Sampling:  62%|██████▎   | 25/40 [30:13<18:08, 72.57s/it]Global Sampling:  65%|██████▌   | 26/40 [31:28<17:07, 73.39s/it]Global Sampling:  68%|██████▊   | 27/40 [32:40<15:49, 73.03s/it]Global Sampling:  70%|███████   | 28/40 [33:53<14:36, 73.01s/it]Global Sampling:  72%|███████▎  | 29/40 [35:05<13:17, 72.49s/it]Global Sampling:  75%|███████▌  | 30/40 [36:20<12:14, 73.48s/it]Global Sampling:  78%|███████▊  | 31/40 [37:35<11:04, 73.83s/it]Global Sampling:  80%|████████  | 32/40 [38:45<09:41, 72.67s/it]Global Sampling:  82%|████████▎ | 33/40 [39:55<08:23, 71.90s/it]Global Sampling:  85%|████████▌ | 34/40 [41:08<07:12, 72.08s/it]Global Sampling:  88%|████████▊ | 35/40 [42:21<06:02, 72.53s/it]Global Sampling:  90%|█████████ | 36/40 [43:35<04:51, 72.87s/it]Global Sampling:  92%|█████████▎| 37/40 [44:48<03:38, 72.95s/it]Global Sampling:  95%|█████████▌| 38/40 [46:02<02:26, 73.30s/it]Global Sampling:  98%|█████████▊| 39/40 [47:13<01:12, 72.57s/it]Global Sampling: 100%|██████████| 40/40 [48:25<00:00, 72.53s/it]Global Sampling: 100%|██████████| 40/40 [48:25<00:00, 72.65s/it]
+Global Tuning:   0%|          | 0/60 [00:00<?, ?it/s]Global Tuning:   2%|▏         | 1/60 [01:38<1:36:32, 98.18s/it]Global Tuning:   3%|▎         | 2/60 [02:10<57:12, 59.18s/it]  Global Tuning:   5%|▌         | 3/60 [02:44<45:17, 47.68s/it]Global Tuning:   7%|▋         | 4/60 [03:17<39:12, 42.02s/it]Global Tuning:   8%|▊         | 5/60 [03:52<36:19, 39.63s/it]Global Tuning:  10%|█         | 6/60 [04:27<34:16, 38.08s/it]Global Tuning:  12%|█▏        | 7/60 [05:01<32:29, 36.79s/it]Global Tuning:  13%|█▎        | 8/60 [05:37<31:24, 36.24s/it]Global Tuning:  15%|█▌        | 9/60 [06:12<30:31, 35.91s/it]Global Tuning:  17%|█▋        | 10/60 [06:46<29:25, 35.30s/it]Global Tuning:  18%|█▊        | 11/60 [07:20<28:36, 35.04s/it]Global Tuning:  20%|██        | 12/60 [07:55<27:58, 34.98s/it]Global Tuning:  22%|██▏       | 13/60 [08:30<27:21, 34.92s/it]Global Tuning:  23%|██▎       | 14/60 [09:05<26:44, 34.88s/it]Global Tuning:  25%|██▌       | 15/60 [09:39<26:08, 34.86s/it]Global Tuning:  27%|██▋       | 16/60 [10:14<25:33, 34.85s/it]Global Tuning:  28%|██▊       | 17/60 [10:49<24:55, 34.79s/it]Global Tuning:  30%|███       | 18/60 [11:24<24:21, 34.80s/it]Global Tuning:  32%|███▏      | 19/60 [11:59<23:48, 34.85s/it]Global Tuning:  33%|███▎      | 20/60 [12:34<23:17, 34.93s/it]Global Tuning:  35%|███▌      | 21/60 [13:10<23:00, 35.39s/it]Global Tuning:  37%|███▋      | 22/60 [13:46<22:31, 35.56s/it]Global Tuning:  38%|███▊      | 23/60 [14:21<21:50, 35.41s/it]Global Tuning:  40%|████      | 24/60 [14:55<21:00, 35.01s/it]Global Tuning:  42%|████▏     | 25/60 [15:30<20:23, 34.95s/it]Global Tuning:  43%|████▎     | 26/60 [16:06<19:59, 35.28s/it]Global Tuning:  45%|████▌     | 27/60 [16:42<19:26, 35.36s/it]Global Tuning:  47%|████▋     | 28/60 [17:18<19:00, 35.64s/it]Global Tuning:  48%|████▊     | 29/60 [17:52<18:12, 35.25s/it]Global Tuning:  50%|█████     | 30/60 [18:27<17:32, 35.08s/it]Global Tuning:  52%|█████▏    | 31/60 [19:02<16:59, 35.15s/it]Global Tuning:  53%|█████▎    | 32/60 [19:36<16:08, 34.60s/it]Global Tuning:  55%|█████▌    | 33/60 [20:12<15:47, 35.10s/it]Global Tuning:  57%|█████▋    | 34/60 [20:46<15:08, 34.95s/it]Global Tuning:  58%|█████▊    | 35/60 [21:24<14:50, 35.61s/it]Global Tuning:  60%|██████    | 36/60 [21:58<14:09, 35.38s/it]Global Tuning:  62%|██████▏   | 37/60 [22:36<13:50, 36.10s/it]Global Tuning:  63%|██████▎   | 38/60 [23:13<13:16, 36.20s/it]Global Tuning:  65%|██████▌   | 39/60 [23:49<12:40, 36.19s/it]Global Tuning:  67%|██████▋   | 40/60 [24:24<11:58, 35.95s/it]Global Tuning:  68%|██████▊   | 41/60 [25:01<11:27, 36.18s/it]Global Tuning:  70%|███████   | 42/60 [25:37<10:50, 36.13s/it]Global Tuning:  72%|███████▏  | 43/60 [26:12<10:09, 35.88s/it]Global Tuning:  73%|███████▎  | 44/60 [26:50<09:44, 36.51s/it]Global Tuning:  75%|███████▌  | 45/60 [27:25<09:01, 36.12s/it]Global Tuning:  77%|███████▋  | 46/60 [28:02<08:29, 36.39s/it]Global Tuning:  78%|███████▊  | 47/60 [28:39<07:51, 36.30s/it]Global Tuning:  80%|████████  | 48/60 [29:13<07:09, 35.78s/it]Global Tuning:  82%|████████▏ | 49/60 [29:50<06:38, 36.18s/it]Global Tuning:  83%|████████▎ | 50/60 [30:25<05:58, 35.82s/it]Global Tuning:  85%|████████▌ | 51/60 [31:01<05:21, 35.71s/it]Global Tuning:  87%|████████▋ | 52/60 [31:36<04:45, 35.63s/it]Global Tuning:  88%|████████▊ | 53/60 [32:12<04:09, 35.62s/it]Global Tuning:  90%|█████████ | 54/60 [32:48<03:34, 35.77s/it]Global Tuning:  92%|█████████▏| 55/60 [33:23<02:57, 35.45s/it]Global Tuning:  93%|█████████▎| 56/60 [34:02<02:26, 36.55s/it]Global Tuning:  95%|█████████▌| 57/60 [34:39<01:50, 36.73s/it]Global Tuning:  97%|█████████▋| 58/60 [35:15<01:13, 36.56s/it]Global Tuning:  98%|█████████▊| 59/60 [35:51<00:36, 36.41s/it]Global Tuning: 100%|██████████| 60/60 [36:29<00:00, 36.73s/it]Global Tuning: 100%|██████████| 60/60 [36:29<00:00, 36.48s/it]
+Global Sampling:   0%|          | 0/30 [00:00<?, ?it/s]Global Sampling:   3%|▎         | 1/30 [00:34<16:35, 34.33s/it]Global Sampling:   7%|▋         | 2/30 [01:11<16:45, 35.93s/it]Global Sampling:  10%|█         | 3/30 [01:48<16:23, 36.41s/it]Global Sampling:  13%|█▎        | 4/30 [02:24<15:39, 36.14s/it]Global Sampling:  17%|█▋        | 5/30 [02:59<15:01, 36.04s/it]Global Sampling:  20%|██        | 6/30 [03:35<14:22, 35.93s/it]Global Sampling:  23%|██▎       | 7/30 [04:11<13:48, 36.00s/it]Global Sampling:  27%|██▋       | 8/30 [04:47<13:09, 35.90s/it]Global Sampling:  30%|███       | 9/30 [05:23<12:31, 35.78s/it]Global Sampling:  33%|███▎      | 10/30 [05:58<11:56, 35.83s/it]Global Sampling:  37%|███▋      | 11/30 [06:34<11:19, 35.78s/it]Global Sampling:  40%|████      | 12/30 [07:11<10:49, 36.06s/it]Global Sampling:  43%|████▎     | 13/30 [07:48<10:16, 36.27s/it]Global Sampling:  47%|████▋     | 14/30 [08:25<09:45, 36.57s/it]Global Sampling:  50%|█████     | 15/30 [09:01<09:07, 36.52s/it]Global Sampling:  53%|█████▎    | 16/30 [09:36<08:23, 36.00s/it]Global Sampling:  57%|█████▋    | 17/30 [10:11<07:44, 35.74s/it]Global Sampling:  60%|██████    | 18/30 [10:47<07:08, 35.69s/it]Global Sampling:  63%|██████▎   | 19/30 [11:23<06:34, 35.89s/it]Global Sampling:  67%|██████▋   | 20/30 [11:58<05:56, 35.68s/it]Global Sampling:  70%|███████   | 21/30 [12:34<05:21, 35.73s/it]Global Sampling:  73%|███████▎  | 22/30 [13:10<04:46, 35.77s/it]Global Sampling:  77%|███████▋  | 23/30 [13:46<04:11, 35.98s/it]Global Sampling:  80%|████████  | 24/30 [14:23<03:36, 36.10s/it]Global Sampling:  83%|████████▎ | 25/30 [14:59<03:00, 36.15s/it]Global Sampling:  87%|████████▋ | 26/30 [15:35<02:24, 36.11s/it]Global Sampling:  90%|█████████ | 27/30 [16:10<01:47, 35.86s/it]Global Sampling:  93%|█████████▎| 28/30 [16:46<01:11, 35.92s/it]Global Sampling:  97%|█████████▋| 29/30 [17:22<00:35, 35.78s/it]Global Sampling: 100%|██████████| 30/30 [17:58<00:00, 35.88s/it]Global Sampling: 100%|██████████| 30/30 [17:58<00:00, 35.95s/it]
 Training summary
 ==========
-E_sym: 36.533 +/- 4.844
-L_sym: 99.005 +/- 53.963
-K_sym: -102.206 +/- 113.860
-Q_sym: 10.581 +/- 454.511
-Z_sym: -537.417 +/- 1142.110
-K_sat: 225.117 +/- 42.602
-Q_sat: 309.053 +/- 455.540
-Z_sat: -514.599 +/- 1135.557
-nbreak: 0.249 +/- 0.045
-n_CSE_0_u: 0.490 +/- 0.288
-cs2_CSE_0: 0.594 +/- 0.234
-n_CSE_1_u: 0.489 +/- 0.289
-cs2_CSE_1: 0.523 +/- 0.283
-n_CSE_2_u: 0.479 +/- 0.288
-cs2_CSE_2: 0.498 +/- 0.285
-n_CSE_3_u: 0.477 +/- 0.286
-cs2_CSE_3: 0.491 +/- 0.285
-n_CSE_4_u: 0.493 +/- 0.287
-cs2_CSE_4: 0.492 +/- 0.285
-n_CSE_5_u: 0.469 +/- 0.288
-cs2_CSE_5: 0.506 +/- 0.285
-n_CSE_6_u: 0.495 +/- 0.287
-cs2_CSE_6: 0.504 +/- 0.286
-n_CSE_7_u: 0.482 +/- 0.288
-cs2_CSE_7: 0.489 +/- 0.284
-cs2_CSE_8: 0.508 +/- 0.286
-mass_1_GW231109: 1.554 +/- 0.079
-mass_2_GW231109: 1.352 +/- 0.065
-Log probability: -14072.121 +/- 455440.007
-Local acceptance: 0.993 +/- 0.085
-Global acceptance: 0.098 +/- 0.298
-Max loss: 46.131, Min loss: 34.085
+E_sym: 36.314 +/- 4.837
+L_sym: 99.038 +/- 53.766
+K_sym: -112.496 +/- 112.815
+Q_sym: -0.364 +/- 454.856
+Z_sym: -579.280 +/- 1135.923
+K_sat: 227.275 +/- 42.472
+Q_sat: 291.178 +/- 454.488
+Z_sat: -584.806 +/- 1137.470
+nbreak: 0.250 +/- 0.044
+n_CSE_0_u: 0.485 +/- 0.287
+cs2_CSE_0: 0.617 +/- 0.224
+n_CSE_1_u: 0.478 +/- 0.287
+cs2_CSE_1: 0.521 +/- 0.280
+n_CSE_2_u: 0.465 +/- 0.287
+cs2_CSE_2: 0.487 +/- 0.285
+n_CSE_3_u: 0.482 +/- 0.287
+cs2_CSE_3: 0.487 +/- 0.284
+n_CSE_4_u: 0.489 +/- 0.286
+cs2_CSE_4: 0.482 +/- 0.285
+n_CSE_5_u: 0.459 +/- 0.287
+cs2_CSE_5: 0.511 +/- 0.284
+n_CSE_6_u: 0.500 +/- 0.285
+cs2_CSE_6: 0.514 +/- 0.283
+n_CSE_7_u: 0.470 +/- 0.288
+cs2_CSE_7: 0.484 +/- 0.284
+cs2_CSE_8: 0.522 +/- 0.284
+mass_1_GW231109: 1.552 +/- 0.079
+mass_2_GW231109: 1.355 +/- 0.064
+Log probability: -36439.044 +/- 737010.310
+Local acceptance: 0.998 +/- 0.048
+Global acceptance: 0.095 +/- 0.293
+Max loss: 46.132, Min loss: 33.802
 Production summary
 ==========
-E_sym: 36.316 +/- 4.934
-L_sym: 97.777 +/- 52.945
-K_sym: -99.491 +/- 113.239
-Q_sym: 11.147 +/- 451.284
-Z_sym: -637.291 +/- 1149.890
-K_sat: 226.977 +/- 42.039
-Q_sat: 302.066 +/- 463.919
-Z_sat: -703.611 +/- 1157.879
-nbreak: 0.250 +/- 0.046
-n_CSE_0_u: 0.492 +/- 0.288
-cs2_CSE_0: 0.576 +/- 0.237
-n_CSE_1_u: 0.495 +/- 0.289
-cs2_CSE_1: 0.537 +/- 0.287
-n_CSE_2_u: 0.457 +/- 0.283
-cs2_CSE_2: 0.487 +/- 0.288
-n_CSE_3_u: 0.468 +/- 0.279
-cs2_CSE_3: 0.490 +/- 0.282
-n_CSE_4_u: 0.501 +/- 0.291
-cs2_CSE_4: 0.469 +/- 0.281
-n_CSE_5_u: 0.460 +/- 0.286
-cs2_CSE_5: 0.530 +/- 0.283
-n_CSE_6_u: 0.479 +/- 0.289
-cs2_CSE_6: 0.521 +/- 0.282
-n_CSE_7_u: 0.490 +/- 0.289
-cs2_CSE_7: 0.460 +/- 0.288
-cs2_CSE_8: 0.540 +/- 0.288
-mass_1_GW231109: 1.562 +/- 0.089
-mass_2_GW231109: 1.344 +/- 0.072
-Log probability: -72.010 +/- 1.575
-Local acceptance: 0.991 +/- 0.092
-Global acceptance: 0.048 +/- 0.215
-Sampling has been successful, now we will do some postprocessing. Sampling time: roughly 99 mins
+E_sym: 36.897 +/- 4.904
+L_sym: 101.671 +/- 53.195
+K_sym: -114.773 +/- 118.278
+Q_sym: -3.747 +/- 468.155
+Z_sym: -591.717 +/- 1144.696
+K_sat: 231.191 +/- 41.260
+Q_sat: 309.799 +/- 461.202
+Z_sat: -602.439 +/- 1153.392
+nbreak: 0.252 +/- 0.043
+n_CSE_0_u: 0.483 +/- 0.288
+cs2_CSE_0: 0.602 +/- 0.225
+n_CSE_1_u: 0.460 +/- 0.291
+cs2_CSE_1: 0.517 +/- 0.277
+n_CSE_2_u: 0.502 +/- 0.296
+cs2_CSE_2: 0.466 +/- 0.288
+n_CSE_3_u: 0.466 +/- 0.298
+cs2_CSE_3: 0.477 +/- 0.280
+n_CSE_4_u: 0.476 +/- 0.291
+cs2_CSE_4: 0.498 +/- 0.293
+n_CSE_5_u: 0.416 +/- 0.290
+cs2_CSE_5: 0.517 +/- 0.290
+n_CSE_6_u: 0.488 +/- 0.288
+cs2_CSE_6: 0.497 +/- 0.275
+n_CSE_7_u: 0.424 +/- 0.295
+cs2_CSE_7: 0.494 +/- 0.305
+cs2_CSE_8: 0.515 +/- 0.288
+mass_1_GW231109: 1.544 +/- 0.076
+mass_2_GW231109: 1.360 +/- 0.063
+Log probability: -72.017 +/- 1.416
+Local acceptance: 0.997 +/- 0.054
+Global acceptance: 0.028 +/- 0.165
+Sampling has been successful, now we will do some postprocessing. Sampling time: roughly 55 mins
 Saving the final results
-Number of samples generated in training: 840000
-Number of samples generated in production: 840000
-Number of samples generated: 1680000
-Time taken for TOV map: 2.581915855407715 s
+Number of samples generated in training: 1200000
+Number of samples generated in production: 600000
+Number of samples generated: 1800000
+Time taken for TOV map: 2.491617441177368 s
 DONE entire script
 
 JOB STATISTICS
 ==============
-Job ID: 14784913
+Job ID: 14787147
 Cluster: snellius
 User/Group: twouters2/twouters2
-State: RUNNING
+State: COMPLETED (exit code 0)
 Nodes: 1
 Cores per node: 16
-CPU Utilized: 00:00:00
-CPU Efficiency: 0.00% of 1-02:51:12 core-walltime
-Job Wall-clock time: 01:40:42
-Memory Utilized: 0.00 MB
-Memory Efficiency: 0.00% of 20.00 GB (20.00 GB/node)
-WARNING: Efficiency statistics can only be obtained after the job has ended as seff tool is based on the accounting database data.
+CPU Utilized: 00:57:42
+CPU Efficiency: 6.28% of 15:18:24 core-walltime
+Job Wall-clock time: 00:57:24
+Memory Utilized: 3.02 GB
+Memory Efficiency: 15.12% of 20.00 GB (20.00 GB/node)

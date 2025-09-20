@@ -30,7 +30,7 @@ def parse_arguments():
     parser = argparse.ArgumentParser(description="Full-scale inference script with customizable options.")
     parser.add_argument("--make-cornerplot", 
                         type=bool, 
-                        default=False, 
+                        default=True, 
                         help="Whether to make the cornerplot. Turn off by default since can be expensive in memory.")
     parser.add_argument("--which-nbreak-prior", 
                         type=str, 
@@ -119,23 +119,23 @@ def parse_arguments():
     ### flowMC/Jim hyperparameters
     parser.add_argument("--n-loop-training", 
                         type=int, 
-                        default=20,
+                        default=60,
                         help="Number of flowMC training loops.)")
     parser.add_argument("--n-loop-production", 
                         type=int, 
-                        default=50,
+                        default=30,
                         help="Number of flowMC production loops.)")
     parser.add_argument("--eps-mass-matrix", 
                         type=float, 
-                        default=1e-4,
+                        default=3e-5,
                         help="Overall scaling factor for the step size matrix for MALA.")
     parser.add_argument("--n-local-steps", 
                         type=int, 
-                        default=2,
+                        default=50,
                         help="Number of local steps to perform.")
     parser.add_argument("--n-global-steps", 
                         type=int, 
-                        default=100,
+                        default=50,
                         help="Number of global steps to perform.")
     parser.add_argument("--n-epochs", 
                         type=int, 
@@ -355,6 +355,7 @@ def main(args):
             "n_epochs": args.n_epochs,
             "train_thinning": args.train_thinning,
             "output_thinning": args.output_thinning,
+            "local_sampler_name": "GaussianRandomWalk"
     }
     
     print("We are going to give these kwargs to Jim:")
