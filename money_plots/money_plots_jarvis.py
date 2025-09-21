@@ -286,7 +286,7 @@ def create_comparison_cornerplot(run_keys: list[str],
                                colors: list[str],
                                ranges: dict = None,
                                zorders: list[int] = None,
-                               save_name: str = "comparison_cornerplot.pdf",
+                               save_name: str = "./figures/comparison_cornerplot.pdf",
                                overwrite: bool = False,
                                dummy_normalization_keys: list[int] = None) -> bool:
     """
@@ -663,7 +663,7 @@ def plot_injection(filepath: str,
         # Generate save name if not provided
         if save_name is None:
             basename = os.path.basename(filepath).replace('_result.json', '')
-            save_name = f"injection_plot_{basename}.pdf"
+            save_name = f"./figures/injection_plot_{basename}.pdf"
 
         if os.path.exists(save_name) and not overwrite:
             print(f"File {save_name} already exists, skipping...")
@@ -898,7 +898,7 @@ def create_injection_comparison_plot() -> bool:
                   bbox_to_anchor=(0.98, 0.98), frameon=True)
 
         # Save plot
-        save_name = "injection_comparison_cornerplot.pdf"
+        save_name = "./figures/injection_comparison_cornerplot.pdf"
         ensure_directory_exists(save_name)
         print(f"Saving injection comparison corner plot to {save_name}")
         plt.savefig(save_name, bbox_inches='tight', dpi=300)
@@ -989,7 +989,7 @@ def main():
             colors=spin_colors,
             ranges=ranges,
             zorders=spin_zorders,
-            save_name="spin_comparison_cornerplot.pdf",
+            save_name="./figures/spin_comparison_cornerplot.pdf",
             overwrite=True,
             dummy_normalization_keys=spin_dummy_keys
         )
@@ -1063,7 +1063,7 @@ def main():
             colors=prior_colors,
             ranges=ranges,
             zorders=prior_zorders,
-            save_name="prior_comparison_cornerplot.pdf",
+            save_name="./figures/prior_comparison_cornerplot.pdf",
             overwrite=True,
             dummy_normalization_keys=prior_dummy_keys
         )
@@ -1090,7 +1090,7 @@ def main():
     injection_success = plot_injection(
         filepath=injection_filepath,
         ranges=ranges,
-        save_name="injection_et_alignedspin.pdf",
+        save_name="./figures/injection_et_alignedspin.pdf",
         overwrite=True
     )
     
@@ -1118,7 +1118,7 @@ def main():
     injection_success = plot_injection(
         filepath=injection_filepath,
         ranges=ranges,
-        save_name="injection_et_ce_alignedspin.pdf",
+        save_name="./figures/injection_et_ce_alignedspin.pdf",
         overwrite=True
     )
     
