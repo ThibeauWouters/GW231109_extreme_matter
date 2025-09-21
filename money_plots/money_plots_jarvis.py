@@ -154,9 +154,9 @@ def main():
     # ====== USER CONFIGURATION ======
     # Specify the source directories to compare
     source_dirs = [
-        "/work/wouters/GW231109/run1",  # Replace with actual paths
-        "/work/wouters/GW231109/run2",
-        "/work/wouters/GW231109/run3",
+        "/work/wouters/GW231109/prod_BW_XP_s005_l5000_default/",  # Replace with actual paths
+        "/work/wouters/GW231109/prod_BW_XP_s005_lquniv_default/",
+        "/work/wouters/GW231109/prod_BW_XP_s005_l5000_double_gaussian",
     ]
 
     # Specify the parameters to include in the corner plot
@@ -185,12 +185,13 @@ def main():
 
     # Specify parameter ranges (optional)
     # Format: {parameter_name: (min_value, max_value)}
-    ranges = {
-        "chirp_mass": (1.1, 1.5),
-        "lambda_tilde": (0, 2000),
-        # "mass_ratio": (0.7, 1.0),
-        # Add more parameter ranges as needed
-    }
+    # ranges = {
+    #     "chirp_mass": (1.1, 1.5),
+    #     "lambda_tilde": (0, 2000),
+    #     # "mass_ratio": (0.7, 1.0),
+    #     # Add more parameter ranges as needed
+    # }
+    ranges = None
 
     # Output filename
     save_name = "comparison_cornerplot.pdf"
