@@ -198,8 +198,10 @@ def json_to_latex_table(json_filename: str, output_filename: str = "eos_paramete
         # Group 3: GW231109 variations
         ["outdir_GW231109", "outdir_GW231109_gaussian", "outdir_GW231109_double_gaussian",
          "outdir_GW231109_quniv", "outdir_GW231109_s025", "outdir_GW231109_s040", "outdir_GW231109_XAS"],
-        # Group 4: Combinations
-        ["outdir_GW170817_GW231109", "outdir_GW170817_GW190425", "outdir_GW170817_GW190425_GW231109"]
+        # Group 4: Two-event combinations
+        ["outdir_GW170817_GW231109", "outdir_GW170817_GW190425"],
+        # Group 5: Three-event combination
+        ["outdir_GW170817_GW190425_GW231109"]
     ]
 
     # Find entries with minimum width for each parameter
