@@ -186,165 +186,151 @@ def make_parameter_histograms(data_list: list, outdir_names: list, colors: list,
         plt.close()
         print(f"  {param_name} comparison histogram saved to {save_name}")
 
-def make_mass_radius_plot(data_list: list, outdir_names: list, colors: list, save_suffix: str = ""):
-    """Create comparison mass-radius plot with different colors for each dataset.
+def make_mass_radius_contour_plot(data_list: list, outdir_names: list, colors: list, save_suffix: str = "", m_min: float = 0.6, m_max: float = 2.5):
+    """Create comparison mass-radius contour plot with credible intervals for each dataset.
 
     Args:
         data_list: List of dictionaries containing EOS data
         outdir_names: List of directory names for labeling
         colors: List of colors to use for each dataset
         save_suffix: Optional suffix for filename
+        m_min: Minimum mass for contour plot
+        m_max: Maximum mass for contour plot
     """
-    print(f"Creating mass-radius comparison plot for {len(data_list)} datasets...")
+    print(f"Creating mass-radius contour comparison plot for {len(data_list)} datasets...")
 
     # Ensure figures directory exists
     os.makedirs("./figures", exist_ok=True)
 
-    plt.figure(figsize=(6, 12))
-    m_min, m_max = 0.75, 3.5
-    r_min, r_max = 6.0, 18.0
+    plt.figure(figsize=figsize_vertical)
 
-    # Plot each dataset with its assigned color
-    for dataset_idx, (data_dict, outdir_name, color) in enumerate(zip(data_list, outdir_names, colors)):
-        m, r, l = data_dict['masses'], data_dict['radii'], data_dict['lambdas']
-        log_prob = data_dict['log_prob']
-        nb_samples = np.shape(m)[0]
+    masses_array = np.linspace(m_min, m_max, 100)
+
+    # Plot contours for each dataset
+    for data_dict, outdir_name, color in zip(data_list, outdir_names, colors):
+        m, r = data_dict['masses'], data_dict['radii']
 
         dir_basename = os.path.basename(outdir_name.rstrip('/'))
-        print(f"  Dataset {dir_basename}: {nb_samples} samples")
+        label = LABELS_DICT.get(dir_basename, dir_basename)
+        print(f"  Processing contours for {label}")
 
-        # Normalize probabilities for alpha blending within this dataset
-        log_prob_norm = np.exp(log_prob)
-        prob_min, prob_max = np.min(log_prob_norm), np.max(log_prob_norm)
+        radii_low = np.empty_like(masses_array)
+        radii_high = np.empty_like(masses_array)
 
-        bad_counter = 0
-        for i in tqdm.tqdm(range(len(log_prob)), desc=f"Plotting {dir_basename}"):
-            # Skip invalid samples
-            if any(np.isnan(m[i])) or any(np.isnan(r[i])) or any(np.isnan(l[i])):
-                bad_counter += 1
-                continue
+        for i, mass_point in enumerate(masses_array):
+            # Find radii at this mass for all EOS samples
+            radii_at_mass = []
+            for mass_curve, radius_curve in zip(m, r):
+                if len(mass_curve) > 0 and np.min(mass_curve) <= mass_point <= np.max(mass_curve):
+                    radius_interp = np.interp(mass_point, mass_curve, radius_curve)
+                    radii_at_mass.append(radius_interp)
 
-            if any(l[i] < 0):
-                bad_counter += 1
-                continue
+            if len(radii_at_mass) > 10:  # Require at least 10 samples
+                low, med, high = report_credible_interval(np.array(radii_at_mass), hdi_prob=0.90)
+                radii_low[i] = med - low
+                radii_high[i] = med + high
+            else:
+                radii_low[i] = np.nan
+                radii_high[i] = np.nan
 
-            if any((m[i] > 1.0) * (r[i] > 20.0)):
-                bad_counter += 1
-                continue
+        # Remove NaN values
+        valid_mask = ~np.isnan(radii_low) & ~np.isnan(radii_high)
+        masses_valid = masses_array[valid_mask]
+        radii_low_valid = radii_low[valid_mask]
+        radii_high_valid = radii_high[valid_mask]
 
-            # Use probability for alpha and zorder, but fixed color per dataset
-            normalized_prob = (log_prob_norm[i] - prob_min) / (prob_max - prob_min)
-            alpha = 0.3 + 0.7 * normalized_prob  # Alpha between 0.3 and 1.0
-
-            plt.plot(r[i], m[i],
-                    color=color,
-                    alpha=alpha,
-                    rasterized=True,
-                    zorder=1e10 * dataset_idx + normalized_prob,
-                    linewidth=0.5)
-
-        print(f"    Excluded {bad_counter} invalid samples from {dir_basename}")
+        if len(masses_valid) > 0:
+            # Plot credible interval
+            plt.fill_betweenx(masses_valid, radii_low_valid, radii_high_valid,
+                            alpha=ALPHA, color=color, label=label)
+            plt.plot(radii_low_valid, masses_valid, lw=2.0, color=color)
+            plt.plot(radii_high_valid, masses_valid, lw=2.0, color=color)
 
     # Styling
     plt.xlabel(r"$R$ [km]")
     plt.ylabel(r"$M$ [$M_{\odot}$]")
-    plt.xlim(r_min, r_max)
+    plt.xlim(8.0, 16.0)
     plt.ylim(m_min, m_max)
-
-    # Add legend
-    legend_elements = []
-    for outdir_name, color in zip(outdir_names, colors):
-        dir_basename = os.path.basename(outdir_name.rstrip('/'))
-        label = LABELS_DICT.get(dir_basename, dir_basename)
-        legend_elements.append(plt.Line2D([0], [0], color=color, lw=2, label=label))
-
-    plt.legend(handles=legend_elements, loc='upper right')
+    plt.legend()
 
     # Save comparison figure
-    save_name = os.path.join("./figures", f"comparison_mass_radius_plot{save_suffix}.pdf")
+    save_name = os.path.join("./figures", f"comparison_mass_radius_contour{save_suffix}.pdf")
     plt.savefig(save_name, bbox_inches="tight")
     plt.close()
-    print(f"  Mass-radius comparison plot saved to {save_name}")
+    print(f"  Mass-radius contour plot saved to {save_name}")
 
-def make_pressure_density_plot(data_list: list, outdir_names: list, colors: list, save_suffix: str = ""):
-    """Create comparison equation of state plot (pressure vs density).
+def make_pressure_density_contour_plot(data_list: list, outdir_names: list, colors: list, save_suffix: str = "", n_min: float = 0.5, n_max: float = 6.0):
+    """Create comparison pressure-density contour plot with credible intervals for each dataset.
 
     Args:
         data_list: List of dictionaries containing EOS data
         outdir_names: List of directory names for labeling
         colors: List of colors to use for each dataset
         save_suffix: Optional suffix for filename
+        n_min: Minimum density for contour plot
+        n_max: Maximum density for contour plot
     """
-    print(f"Creating pressure-density comparison plot for {len(data_list)} datasets...")
+    print(f"Creating pressure-density contour comparison plot for {len(data_list)} datasets...")
 
     # Ensure figures directory exists
     os.makedirs("./figures", exist_ok=True)
 
-    plt.figure(figsize=(11, 6))
+    plt.figure(figsize=figsize_horizontal)
 
-    # Plot each dataset with its assigned color
-    for dataset_idx, (data_dict, outdir_name, color) in enumerate(zip(data_list, outdir_names, colors)):
-        m, r, l = data_dict['masses'], data_dict['radii'], data_dict['lambdas']
+    dens_array = np.linspace(n_min, n_max, 100)
+
+    # Plot contours for each dataset
+    for data_dict, outdir_name, color in zip(data_list, outdir_names, colors):
         n, p = data_dict['densities'], data_dict['pressures']
-        log_prob = data_dict['log_prob']
 
         dir_basename = os.path.basename(outdir_name.rstrip('/'))
-        print(f"  Dataset {dir_basename}: processing pressure-density curves")
+        label = LABELS_DICT.get(dir_basename, dir_basename)
+        print(f"  Processing contours for {label}")
 
-        # Normalize probabilities for alpha blending within this dataset
-        log_prob_norm = np.exp(log_prob)
-        prob_min, prob_max = np.min(log_prob_norm), np.max(log_prob_norm)
+        press_low = np.empty_like(dens_array)
+        press_high = np.empty_like(dens_array)
 
-        bad_counter = 0
-        for i in tqdm.tqdm(range(len(log_prob)), desc=f"Plotting {dir_basename}"):
-            # Skip invalid samples
-            if any(np.isnan(m[i])) or any(np.isnan(r[i])) or any(np.isnan(l[i])):
-                bad_counter += 1
-                continue
+        for i, dens_point in enumerate(dens_array):
+            # Find pressures at this density for all EOS samples
+            press_at_dens = []
+            for dens_curve, press_curve in zip(n, p):
+                if len(dens_curve) > 0 and np.min(dens_curve) <= dens_point <= np.max(dens_curve):
+                    press_interp = np.interp(dens_point, dens_curve, press_curve)
+                    press_at_dens.append(press_interp)
 
-            if any(l[i] < 0):
-                bad_counter += 1
-                continue
+            if len(press_at_dens) > 10:  # Require at least 10 samples
+                low, med, high = report_credible_interval(np.array(press_at_dens), hdi_prob=0.95)
+                press_low[i] = med - low
+                press_high[i] = med + high
+            else:
+                press_low[i] = np.nan
+                press_high[i] = np.nan
 
-            if any((m[i] > 1.0) * (r[i] > 20.0)):
-                bad_counter += 1
-                continue
+        # Remove NaN values
+        valid_mask = ~np.isnan(press_low) & ~np.isnan(press_high)
+        dens_valid = dens_array[valid_mask]
+        press_low_valid = press_low[valid_mask]
+        press_high_valid = press_high[valid_mask]
 
-            # Use probability for alpha and zorder, but fixed color per dataset
-            normalized_prob = (log_prob_norm[i] - prob_min) / (prob_max - prob_min)
-            alpha = 0.3 + 0.7 * normalized_prob  # Alpha between 0.3 and 1.0
-
-            # Plot pressure-density curve
-            mask = (n[i] > 0.5) * (n[i] < 6.0)
-            plt.plot(n[i][mask], p[i][mask],
-                    color=color,
-                    alpha=alpha,
-                    rasterized=True,
-                    zorder=1e10 * dataset_idx + normalized_prob,
-                    linewidth=0.5)
-
-        print(f"    Excluded {bad_counter} invalid samples from {dir_basename}")
+        if len(dens_valid) > 0:
+            # Plot credible interval
+            plt.fill_between(dens_valid, press_low_valid, press_high_valid,
+                           alpha=ALPHA, color=color, label=label)
+            plt.plot(dens_valid, press_low_valid, lw=2.0, color=color)
+            plt.plot(dens_valid, press_high_valid, lw=2.0, color=color)
 
     # Styling
     plt.xlabel(r"$n$ [$n_{\rm{sat}}$]")
     plt.ylabel(r"$p$ [MeV fm$^{-3}$]")
+    plt.xlim(n_min, n_max)
     plt.yscale('log')
-    plt.xlim(0.5, 6.0)
-
-    # Add legend
-    legend_elements = []
-    for outdir_name, color in zip(outdir_names, colors):
-        dir_basename = os.path.basename(outdir_name.rstrip('/'))
-        label = LABELS_DICT.get(dir_basename, dir_basename)
-        legend_elements.append(plt.Line2D([0], [0], color=color, lw=2, label=label))
-
-    plt.legend(handles=legend_elements, loc='upper left')
+    plt.legend()
 
     # Save comparison figure
-    save_name = os.path.join("./figures", f"comparison_pressure_density_plot{save_suffix}.pdf")
+    save_name = os.path.join("./figures", f"comparison_pressure_density_contour{save_suffix}.pdf")
     plt.savefig(save_name, bbox_inches="tight")
     plt.close()
-    print(f"  Pressure-density comparison plot saved to {save_name}")
+    print(f"  Pressure-density contour plot saved to {save_name}")
 
 def get_colors_for_directories(directories: list):
     """Get colors for directories based on COLORS_DICT mapping.
@@ -452,8 +438,8 @@ def main():
     # Create all comparison plots
     try:
         make_parameter_histograms(data_list, valid_directories, valid_colors, save_suffix)
-        make_mass_radius_plot(data_list, valid_directories, valid_colors, save_suffix)
-        make_pressure_density_plot(data_list, valid_directories, valid_colors, save_suffix)
+        make_mass_radius_contour_plot(data_list, valid_directories, valid_colors, save_suffix)
+        make_pressure_density_contour_plot(data_list, valid_directories, valid_colors, save_suffix)
         print(f"\nAll comparison plots generated successfully!")
     except Exception as e:
         print(f"Error generating comparison plots: {e}")
