@@ -16,7 +16,7 @@ import corner
 
 from utils import (
     DEFAULT_CORNER_KWARGS, GW231109_COLOR, GW190425_COLOR, PRIOR_COLOR, GW170817_COLOR,
-    ORANGE, BLUE, GREEN, identify_person_from_path, load_posterior_samples,
+    ORANGE, BLUE, GREEN, INJECTION_COLOR, identify_person_from_path, load_posterior_samples,
     load_run_metadata, load_priors_for_corner, ensure_directory_exists
 )
 
@@ -560,6 +560,7 @@ def load_injection_json(filepath: str, parameters: list[str]) -> tuple:
 
 def plot_injection(filepath: str,
                   parameters: list[str] = None,
+                  ranges: dict = None,
                   save_name: str = None,
                   overwrite: bool = False) -> bool:
     """
@@ -568,6 +569,7 @@ def plot_injection(filepath: str,
     Args:
         filepath (str): Path to JSON result file (e.g., .../outdir/*result.json)
         parameters (list[str]): Parameters to plot (default: same as comparison plots)
+        ranges (dict): Parameter ranges as {param: (min, max)} (optional)
         save_name (str): Output filename (default: auto-generated)
         overwrite (bool): Whether to overwrite existing plots
 
@@ -634,6 +636,16 @@ def plot_injection(filepath: str,
         if any(t is not None for t in truths):
             corner_kwargs["truths"] = truths
             corner_kwargs["truth_color"] = "black"
+
+        # Apply parameter ranges if provided
+        if ranges:
+            range_list = []
+            for param in parameters:
+                if param in ranges:
+                    range_list.append(ranges[param])
+                else:
+                    range_list.append(None)
+            corner_kwargs["range"] = range_list
 
         # Create parameter labels using translation dictionary
         parameter_labels = [PARAMETER_LABELS.get(param, param) for param in parameters]
@@ -721,28 +733,40 @@ def main():
     print(f"Parameters: {parameters}")
     print(f"Labels: {labels}")
 
-    # Create the comparison corner plot
-    success = create_comparison_cornerplot(
-        source_dirs=source_dirs,
-        parameters=parameters,
-        labels=labels,
-        colors=colors,
-        ranges=ranges,
-        zorders=zorders,
-        save_name=save_name,
-        overwrite=overwrite
-    )
+    # # Create the comparison corner plot
+    # success = create_comparison_cornerplot(
+    #     source_dirs=source_dirs,
+    #     parameters=parameters,
+    #     labels=labels,
+    #     colors=colors,
+    #     ranges=ranges,
+    #     zorders=zorders,
+    #     save_name=save_name,
+    #     overwrite=overwrite
+    # )
 
-    if success:
-        print(f"✓ Successfully created comparison corner plot: {save_name}")
-    else:
-        print("✗ Failed to create comparison corner plot")
+    # if success:
+    #     print(f"✓ Successfully created comparison corner plot: {save_name}")
+    # else:
+    #     print("✗ Failed to create comparison corner plot")
 
     # ====== INJECTION PLOTTING EXAMPLE ======
+
+    mc = 1.306298
+    eps_mc = 6e-6
+    ranges = {
+        "chirp_mass": (mc - eps_mc, mc + eps_mc),
+        "mass_ratio": (0.80, 1.0),
+        "chi_eff": (0.0290, 0.034),
+        "lambda_1": (0, 750),
+        "lambda_2": (0, 900),
+        "lambda_tilde": (180, 400),
+    }    
 
     injection_filepath = "/work/puecher/S231109/third_gen_runs/et_run_alignedspin/outdir/ET_gw231109_injection_alignedspin_result.json"
     injection_success = plot_injection(
         filepath=injection_filepath,
+        ranges=ranges,
         save_name="injection_et_alignedspin.pdf",
         overwrite=True
     )
