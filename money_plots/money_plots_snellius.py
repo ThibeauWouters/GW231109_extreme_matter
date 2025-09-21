@@ -1,9 +1,12 @@
 """Money plots script for jester inference results on Snellius.
 
-This script generates key figures from multiple jester inference output directories:
-- Histograms of MTOV, R14, and other EOS parameters
-- Mass-radius plots with posterior probability coloring
-- Pressure-density (EOS) plots
+This script generates comparison figures from multiple jester inference output directories:
+- Comparison histograms of MTOV, R14, and other EOS parameters overlaying all datasets
+- Mass-radius comparison plots with different colors for each dataset
+- Pressure-density (EOS) comparison plots overlaying all datasets
+
+The script creates single plots comparing all specified directories, rather than
+separate plots for each directory. All plots use the 'crest' colormap for consistency.
 
 Usage:
     Modify the main() function to specify directories and colors, then run:
@@ -92,72 +95,89 @@ def report_credible_interval(values: np.array,
         print(f"{med:.2f}-{low:.2f}+{high:.2f} (at {hdi_prob} HDI prob)")
     return low, med, high
 
-def make_parameter_histograms(data_dict: dict, outdir_name: str, color: str = 'blue', save_suffix: str = ""):
-    """Create histograms for key EOS parameters.
+def make_parameter_histograms(data_list: list, outdir_names: list, colors: list, save_suffix: str = ""):
+    """Create comparison histograms for key EOS parameters across multiple datasets.
 
     Args:
-        data_dict: Dictionary containing EOS data
-        outdir_name: Name of the source directory (for filename)
-        color: Color to use for plotting
+        data_list: List of dictionaries containing EOS data
+        outdir_names: List of directory names for labeling
+        colors: List of colors to use for each dataset
         save_suffix: Optional suffix for filename
     """
-    print(f"Creating parameter histograms for {outdir_name}...")
+    print(f"Creating parameter comparison histograms for {len(data_list)} datasets...")
 
     # Ensure figures directory exists
     os.makedirs("./figures", exist_ok=True)
 
-    m, r = data_dict['masses'], data_dict['radii']
-    n, p = data_dict['densities'], data_dict['pressures']
-
-    # Calculate derived parameters
-    MTOV_list = np.array([np.max(mass) for mass in m])
-    R14_list = np.array([np.interp(1.4, mass, radius) for mass, radius in zip(m, r)])
-    p3nsat_list = np.array([np.interp(3.0, dens, press) for dens, press in zip(n, p)])
-
-    parameters = {
-        'MTOV': {'values': MTOV_list, 'range': (1.75, 2.75), 'xlabel': r"$M_{\rm{TOV}}$ [$M_{\odot}$]"},
-        'R14': {'values': R14_list, 'range': (10.0, 16.0), 'xlabel': r"$R_{1.4}$ [km]"},
-        'p3nsat': {'values': p3nsat_list, 'range': (0.1, 200.0), 'xlabel': r"$p(3n_{\rm{sat}})$ [MeV fm$^{-3}$]"}
+    # Define parameter ranges and labels
+    parameter_configs = {
+        'MTOV': {'range': (1.75, 2.75), 'xlabel': r"$M_{\rm{TOV}}$ [$M_{\odot}$]"},
+        'R14': {'range': (10.0, 16.0), 'xlabel': r"$R_{1.4}$ [km]"},
+        'p3nsat': {'range': (0.1, 200.0), 'xlabel': r"$p(3n_{\rm{sat}})$ [MeV fm$^{-3}$]"}
     }
 
-    for param_name, param_data in parameters.items():
+    # Calculate parameters for all datasets
+    all_parameters = {}
+    for i, data_dict in enumerate(data_list):
+        m, r = data_dict['masses'], data_dict['radii']
+        n, p = data_dict['densities'], data_dict['pressures']
+
+        # Calculate derived parameters
+        MTOV_list = np.array([np.max(mass) for mass in m])
+        R14_list = np.array([np.interp(1.4, mass, radius) for mass, radius in zip(m, r)])
+        p3nsat_list = np.array([np.interp(3.0, dens, press) for dens, press in zip(n, p)])
+
+        all_parameters[i] = {
+            'MTOV': MTOV_list,
+            'R14': R14_list,
+            'p3nsat': p3nsat_list
+        }
+
+    # Create comparison plots for each parameter
+    for param_name, config in parameter_configs.items():
         plt.figure(figsize=figsize_horizontal)
 
-        # Create posterior KDE
-        kde = gaussian_kde(param_data['values'])
-        x = np.linspace(param_data['range'][0], param_data['range'][1], 1000)
-        y = kde(x)
+        for i, (data_dict, outdir_name, color) in enumerate(zip(data_list, outdir_names, colors)):
+            param_values = all_parameters[i][param_name]
 
-        plt.plot(x, y, color=color, lw=3.0, label='Posterior')
-        plt.fill_between(x, y, alpha=0.3, color=color)
+            # Create posterior KDE
+            kde = gaussian_kde(param_values)
+            x = np.linspace(config['range'][0], config['range'][1], 1000)
+            y = kde(x)
 
-        # Add credible interval information
-        low, med, high = report_credible_interval(param_data['values'])
+            # Get directory basename for label
+            dir_basename = os.path.basename(outdir_name.rstrip('/'))
 
-        plt.xlabel(param_data['xlabel'])
+            # Add credible interval to label
+            low, med, high = report_credible_interval(param_values)
+            label = f'{dir_basename}: {med:.2f} -{low:.2f} +{high:.2f}'
+
+            plt.plot(x, y, color=color, lw=3.0, label=label)
+            plt.fill_between(x, y, alpha=0.3, color=color)
+
+        plt.xlabel(config['xlabel'])
         plt.ylabel('Density')
-        plt.xlim(param_data['range'])
+        plt.xlim(config['range'])
         plt.ylim(bottom=0.0)
         plt.legend()
-        plt.title(f'{param_name}: {med:.2f} -{low:.2f} +{high:.2f}')
+        plt.title(f'{param_name} Comparison')
 
-        # Save to figures directory with directory name in filename
-        dir_basename = os.path.basename(outdir_name.rstrip('/'))
-        save_name = os.path.join("./figures", f"{dir_basename}_{param_name}_histogram{save_suffix}.pdf")
+        # Save comparison plot
+        save_name = os.path.join("./figures", f"comparison_{param_name}_histogram{save_suffix}.pdf")
         plt.savefig(save_name, bbox_inches="tight")
         plt.close()
-        print(f"  {param_name} histogram saved to {save_name}")
+        print(f"  {param_name} comparison histogram saved to {save_name}")
 
-def make_mass_radius_plot(data_dict: dict, outdir_name: str, colormap: str = 'crest', save_suffix: str = ""):
-    """Create mass-radius plot with posterior probability coloring.
+def make_mass_radius_plot(data_list: list, outdir_names: list, colors: list, save_suffix: str = ""):
+    """Create comparison mass-radius plot with different colors for each dataset.
 
     Args:
-        data_dict: Dictionary containing EOS data
-        outdir_name: Name of the source directory (for filename)
-        colormap: Seaborn colormap name to use for probability coloring
+        data_list: List of dictionaries containing EOS data
+        outdir_names: List of directory names for labeling
+        colors: List of colors to use for each dataset
         save_suffix: Optional suffix for filename
     """
-    print(f"Creating mass-radius plot for {outdir_name}...")
+    print(f"Creating mass-radius comparison plot for {len(data_list)} datasets...")
 
     # Ensure figures directory exists
     os.makedirs("./figures", exist_ok=True)
@@ -166,44 +186,46 @@ def make_mass_radius_plot(data_dict: dict, outdir_name: str, colormap: str = 'cr
     m_min, m_max = 0.75, 3.5
     r_min, r_max = 6.0, 18.0
 
-    # Plot posterior with probability coloring
-    m, r, l = data_dict['masses'], data_dict['radii'], data_dict['lambdas']
-    log_prob = data_dict['log_prob']
-    nb_samples = np.shape(m)[0]
-    print(f"  Number of samples: {nb_samples}")
+    # Plot each dataset with its assigned color
+    for dataset_idx, (data_dict, outdir_name, color) in enumerate(zip(data_list, outdir_names, colors)):
+        m, r, l = data_dict['masses'], data_dict['radii'], data_dict['lambdas']
+        log_prob = data_dict['log_prob']
+        nb_samples = np.shape(m)[0]
 
-    # Normalize probabilities for coloring
-    log_prob = np.exp(log_prob)
-    norm = plt.Normalize(vmin=np.min(log_prob), vmax=np.max(log_prob))
-    cmap = sns.color_palette(colormap, as_cmap=True)
-    sm = plt.cm.ScalarMappable(cmap=cmap, norm=norm)
+        dir_basename = os.path.basename(outdir_name.rstrip('/'))
+        print(f"  Dataset {dir_basename}: {nb_samples} samples")
 
-    bad_counter = 0
-    for i in tqdm.tqdm(range(len(log_prob))):
-        # Skip invalid samples
-        if any(np.isnan(m[i])) or any(np.isnan(r[i])) or any(np.isnan(l[i])):
-            bad_counter += 1
-            continue
+        # Normalize probabilities for alpha blending within this dataset
+        log_prob_norm = np.exp(log_prob)
+        prob_min, prob_max = np.min(log_prob_norm), np.max(log_prob_norm)
 
-        if any(l[i] < 0):
-            bad_counter += 1
-            continue
+        bad_counter = 0
+        for i in tqdm.tqdm(range(len(log_prob)), desc=f"Plotting {dir_basename}"):
+            # Skip invalid samples
+            if any(np.isnan(m[i])) or any(np.isnan(r[i])) or any(np.isnan(l[i])):
+                bad_counter += 1
+                continue
 
-        if any((m[i] > 1.0) * (r[i] > 20.0)):
-            bad_counter += 1
-            continue
+            if any(l[i] < 0):
+                bad_counter += 1
+                continue
 
-        # Get color based on probability
-        normalized_value = norm(log_prob[i])
-        color = cmap(normalized_value)
+            if any((m[i] > 1.0) * (r[i] > 20.0)):
+                bad_counter += 1
+                continue
 
-        plt.plot(r[i], m[i],
-                color=color,
-                alpha=1.0,
-                rasterized=True,
-                zorder=1e10 + normalized_value)
+            # Use probability for alpha and zorder, but fixed color per dataset
+            normalized_prob = (log_prob_norm[i] - prob_min) / (prob_max - prob_min)
+            alpha = 0.3 + 0.7 * normalized_prob  # Alpha between 0.3 and 1.0
 
-    print(f"  Excluded {bad_counter} invalid samples")
+            plt.plot(r[i], m[i],
+                    color=color,
+                    alpha=alpha,
+                    rasterized=True,
+                    zorder=1e10 * dataset_idx + normalized_prob,
+                    linewidth=0.5)
+
+        print(f"    Excluded {bad_counter} invalid samples from {dir_basename}")
 
     # Styling
     plt.xlabel(r"$R$ [km]")
@@ -211,125 +233,138 @@ def make_mass_radius_plot(data_dict: dict, outdir_name: str, colormap: str = 'cr
     plt.xlim(r_min, r_max)
     plt.ylim(m_min, m_max)
 
-    # Add colorbar
-    fig = plt.gcf()
-    sm.set_array([])
-    cbar_ax = fig.add_axes([0.15, 0.94, 0.7, 0.03])
-    cbar = plt.colorbar(sm, cax=cbar_ax, orientation='horizontal')
-    cbar.set_label("Normalized posterior probability", fontsize=16)
-    cbar.set_ticks([])
-    cbar.ax.xaxis.labelpad = 5
-    cbar.ax.tick_params(labelsize=0, length=0)
-    cbar.ax.xaxis.set_label_position('top')
+    # Add legend
+    legend_elements = []
+    for outdir_name, color in zip(outdir_names, colors):
+        dir_basename = os.path.basename(outdir_name.rstrip('/'))
+        legend_elements.append(plt.Line2D([0], [0], color=color, lw=2, label=dir_basename))
 
-    # Save figure to figures directory
-    dir_basename = os.path.basename(outdir_name.rstrip('/'))
-    save_name = os.path.join("./figures", f"{dir_basename}_mass_radius_plot{save_suffix}.pdf")
+    plt.legend(handles=legend_elements, loc='upper right')
+
+    # Save comparison figure
+    save_name = os.path.join("./figures", f"comparison_mass_radius_plot{save_suffix}.pdf")
     plt.savefig(save_name, bbox_inches="tight")
     plt.close()
-    print(f"  Mass-radius plot saved to {save_name}")
+    print(f"  Mass-radius comparison plot saved to {save_name}")
 
-def make_pressure_density_plot(data_dict: dict, outdir_name: str, colormap: str = 'crest', save_suffix: str = ""):
-    """Create equation of state plot (pressure vs density).
+def make_pressure_density_plot(data_list: list, outdir_names: list, colors: list, save_suffix: str = ""):
+    """Create comparison equation of state plot (pressure vs density).
 
     Args:
-        data_dict: Dictionary containing EOS data
-        outdir_name: Name of the source directory (for filename)
-        colormap: Seaborn colormap name to use for probability coloring
+        data_list: List of dictionaries containing EOS data
+        outdir_names: List of directory names for labeling
+        colors: List of colors to use for each dataset
         save_suffix: Optional suffix for filename
     """
-    print(f"Creating pressure-density plot for {outdir_name}...")
+    print(f"Creating pressure-density comparison plot for {len(data_list)} datasets...")
 
     # Ensure figures directory exists
     os.makedirs("./figures", exist_ok=True)
 
     plt.figure(figsize=(11, 6))
 
-    # Plot posterior with probability coloring
-    m, r, l = data_dict['masses'], data_dict['radii'], data_dict['lambdas']
-    n, p = data_dict['densities'], data_dict['pressures']
-    log_prob = data_dict['log_prob']
+    # Plot each dataset with its assigned color
+    for dataset_idx, (data_dict, outdir_name, color) in enumerate(zip(data_list, outdir_names, colors)):
+        m, r, l = data_dict['masses'], data_dict['radii'], data_dict['lambdas']
+        n, p = data_dict['densities'], data_dict['pressures']
+        log_prob = data_dict['log_prob']
 
-    # Normalize probabilities for coloring
-    log_prob = np.exp(log_prob)
-    norm = plt.Normalize(vmin=np.min(log_prob), vmax=np.max(log_prob))
-    cmap = sns.color_palette(colormap, as_cmap=True)
+        dir_basename = os.path.basename(outdir_name.rstrip('/'))
+        print(f"  Dataset {dir_basename}: processing pressure-density curves")
 
-    bad_counter = 0
-    for i in tqdm.tqdm(range(len(log_prob))):
-        # Skip invalid samples
-        if any(np.isnan(m[i])) or any(np.isnan(r[i])) or any(np.isnan(l[i])):
-            bad_counter += 1
-            continue
+        # Normalize probabilities for alpha blending within this dataset
+        log_prob_norm = np.exp(log_prob)
+        prob_min, prob_max = np.min(log_prob_norm), np.max(log_prob_norm)
 
-        if any(l[i] < 0):
-            bad_counter += 1
-            continue
+        bad_counter = 0
+        for i in tqdm.tqdm(range(len(log_prob)), desc=f"Plotting {dir_basename}"):
+            # Skip invalid samples
+            if any(np.isnan(m[i])) or any(np.isnan(r[i])) or any(np.isnan(l[i])):
+                bad_counter += 1
+                continue
 
-        if any((m[i] > 1.0) * (r[i] > 20.0)):
-            bad_counter += 1
-            continue
+            if any(l[i] < 0):
+                bad_counter += 1
+                continue
 
-        # Get color and plot
-        normalized_value = norm(log_prob[i])
-        color = cmap(normalized_value)
+            if any((m[i] > 1.0) * (r[i] > 20.0)):
+                bad_counter += 1
+                continue
 
-        mask = (n[i] > 0.5) * (n[i] < 6.0)
-        plt.plot(n[i][mask], p[i][mask],
-                color=color,
-                alpha=1.0,
-                rasterized=True,
-                zorder=1e10 + normalized_value)
+            # Use probability for alpha and zorder, but fixed color per dataset
+            normalized_prob = (log_prob_norm[i] - prob_min) / (prob_max - prob_min)
+            alpha = 0.3 + 0.7 * normalized_prob  # Alpha between 0.3 and 1.0
 
-    print(f"  Excluded {bad_counter} invalid samples")
+            # Plot pressure-density curve
+            mask = (n[i] > 0.5) * (n[i] < 6.0)
+            plt.plot(n[i][mask], p[i][mask],
+                    color=color,
+                    alpha=alpha,
+                    rasterized=True,
+                    zorder=1e10 * dataset_idx + normalized_prob,
+                    linewidth=0.5)
 
+        print(f"    Excluded {bad_counter} invalid samples from {dir_basename}")
+
+    # Styling
     plt.xlabel(r"$n$ [$n_{\rm{sat}}$]")
     plt.ylabel(r"$p$ [MeV fm$^{-3}$]")
     plt.yscale('log')
     plt.xlim(0.5, 6.0)
 
-    # Save figure to figures directory
-    dir_basename = os.path.basename(outdir_name.rstrip('/'))
-    save_name = os.path.join("./figures", f"{dir_basename}_pressure_density_plot{save_suffix}.pdf")
+    # Add legend
+    legend_elements = []
+    for outdir_name, color in zip(outdir_names, colors):
+        dir_basename = os.path.basename(outdir_name.rstrip('/'))
+        legend_elements.append(plt.Line2D([0], [0], color=color, lw=2, label=dir_basename))
+
+    plt.legend(handles=legend_elements, loc='upper left')
+
+    # Save comparison figure
+    save_name = os.path.join("./figures", f"comparison_pressure_density_plot{save_suffix}.pdf")
     plt.savefig(save_name, bbox_inches="tight")
     plt.close()
-    print(f"  Pressure-density plot saved to {save_name}")
+    print(f"  Pressure-density comparison plot saved to {save_name}")
 
-def process_directory(outdir: str, color: str = 'blue', colormap: str = 'crest', save_suffix: str = ""):
-    """Process a single output directory and generate all plots."""
-    print(f"\n{'='*60}")
-    print(f"Processing directory: {outdir}")
-    print(f"{'='*60}")
+def load_all_data(directories: list):
+    """Load EOS data from all specified directories.
 
-    # Check if directory exists
-    if not os.path.exists(outdir):
-        print(f"Warning: Directory {outdir} does not exist. Skipping...")
-        return False
+    Args:
+        directories: List of directory paths
 
-    # Load data
-    try:
-        data = load_eos_data(outdir)
-        print("Data loaded successfully!")
-    except FileNotFoundError as e:
-        print(f"Error: {e}")
-        return False
-    except Exception as e:
-        print(f"Unexpected error loading data: {e}")
-        return False
+    Returns:
+        tuple: (data_list, valid_directories) - loaded data and corresponding valid directories
+    """
+    data_list = []
+    valid_directories = []
 
-    # Create all plots
-    try:
-        make_parameter_histograms(data, outdir, color, save_suffix)
-        make_mass_radius_plot(data, outdir, colormap, save_suffix)
-        make_pressure_density_plot(data, outdir, colormap, save_suffix)
-        print(f"All plots generated successfully for {outdir}")
-        return True
-    except Exception as e:
-        print(f"Error generating plots: {e}")
-        return False
+    for outdir in directories:
+        print(f"\n{'='*60}")
+        print(f"Loading data from directory: {outdir}")
+        print(f"{'='*60}")
+
+        # Check if directory exists
+        if not os.path.exists(outdir):
+            print(f"Warning: Directory {outdir} does not exist. Skipping...")
+            continue
+
+        # Load data
+        try:
+            data = load_eos_data(outdir)
+            print("Data loaded successfully!")
+            data_list.append(data)
+            valid_directories.append(outdir)
+        except FileNotFoundError as e:
+            print(f"Error: {e}")
+            continue
+        except Exception as e:
+            print(f"Unexpected error loading data: {e}")
+            continue
+
+    return data_list, valid_directories
 
 def main():
-    """Main function with hard-coded directories and colors."""
+    """Main function - loads all data and creates comparison plots."""
 
     # =======================================================================
     # USER CONFIGURATION - MODIFY THIS SECTION
@@ -343,22 +378,13 @@ def main():
         # Add more directories as needed
     ]
 
-    # Colors for histogram plots (one per directory)
+    # Colors for comparison plots (one per directory)
     # Options: 'blue', 'red', 'green', 'orange', 'purple', 'brown', 'pink', 'gray', 'olive', 'cyan'
     colors = [
         'blue',
         'red',
         'green',
         # Add more colors as needed (should match number of directories)
-    ]
-
-    # Colormaps for mass-radius and pressure-density plots (one per directory)
-    # Options: 'crest', 'viridis', 'plasma', 'Blues', 'Reds', 'Greens', 'Oranges', 'Purples'
-    colormaps = [
-        'crest',
-        'Reds',
-        'Greens',
-        # Add more colormaps as needed (should match number of directories)
     ]
 
     # Optional suffix for all output files
@@ -370,9 +396,9 @@ def main():
 
     print("Money Plots Generator for Jester Inference Results")
     print("=" * 60)
-    print(f"Processing {len(directories)} directories...")
+    print(f"Processing {len(directories)} directories for comparison plots...")
 
-    # Ensure we have enough colors and colormaps
+    # Ensure we have enough colors
     if len(colors) < len(directories):
         print(f"Warning: Only {len(colors)} colors provided for {len(directories)} directories.")
         print("Extending with default colors...")
@@ -380,23 +406,40 @@ def main():
         while len(colors) < len(directories):
             colors.append(default_colors[len(colors) % len(default_colors)])
 
-    if len(colormaps) < len(directories):
-        print(f"Warning: Only {len(colormaps)} colormaps provided for {len(directories)} directories.")
-        print("Extending with default colormaps...")
-        default_colormaps = ['crest', 'viridis', 'plasma', 'Blues', 'Reds']
-        while len(colormaps) < len(directories):
-            colormaps.append(default_colormaps[len(colormaps) % len(default_colormaps)])
+    # Load all data
+    data_list, valid_directories = load_all_data(directories)
 
-    success_count = 0
-    for i, (outdir, color, colormap) in enumerate(zip(directories, colors, colormaps), 1):
-        print(f"\n[{i}/{len(directories)}] Using color='{color}', colormap='{colormap}'")
-        if process_directory(outdir, color, colormap, save_suffix):
-            success_count += 1
+    if len(data_list) == 0:
+        print("Error: No valid data directories found!")
+        return
+
+    # Match colors to valid directories
+    valid_colors = []
+    for valid_dir in valid_directories:
+        try:
+            idx = directories.index(valid_dir)
+            valid_colors.append(colors[idx])
+        except ValueError:
+            # This shouldn't happen, but fallback to first color
+            valid_colors.append(colors[0])
 
     print(f"\n{'='*60}")
-    print(f"Summary: Successfully processed {success_count}/{len(directories)} directories")
-    if success_count < len(directories):
-        print("Some directories failed - check output above for details")
+    print(f"Creating comparison plots for {len(data_list)} valid datasets...")
+    print(f"{'='*60}")
+
+    # Create all comparison plots
+    try:
+        make_parameter_histograms(data_list, valid_directories, valid_colors, save_suffix)
+        make_mass_radius_plot(data_list, valid_directories, valid_colors, save_suffix)
+        make_pressure_density_plot(data_list, valid_directories, valid_colors, save_suffix)
+        print(f"\nAll comparison plots generated successfully!")
+    except Exception as e:
+        print(f"Error generating comparison plots: {e}")
+        return
+
+    print(f"\n{'='*60}")
+    print(f"Summary: Successfully created comparison plots for {len(data_list)} datasets")
+    print(f"Valid datasets: {[os.path.basename(d.rstrip('/')) for d in valid_directories]}")
     print(f"{'='*60}")
     print("All figures saved to ./figures/")
     print(f"{'='*60}")
