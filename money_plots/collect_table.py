@@ -135,10 +135,12 @@ def collect_parameters_from_directories(directories: list, hdi_prob: float = 0.9
             param_results = {}
             for param_name, param_values in parameters.items():
                 low_err, med, high_err = report_credible_interval(param_values, hdi_prob=hdi_prob, verbose=True)
+                width = high_err + low_err
                 param_results[param_name] = {
                     'median': float(med),
                     'lower_error': float(low_err),
                     'upper_error': float(high_err),
+                    'width': float(width),
                     'credible_interval': f"{med:.2f}^{{+{high_err:.2f}}}_{{-{low_err:.2f}}}"
                 }
                 print(f"  {param_name}: {param_results[param_name]['credible_interval']}")
@@ -171,6 +173,8 @@ def save_results_to_json(results: dict, filename: str = "eos_parameters_table.js
 def json_to_latex_table(json_filename: str, output_filename: str = "eos_parameters_table.tex"):
     """Convert JSON results to LaTeX table format.
 
+    Formats entries with the smallest width (uncertainty) in bold for each parameter.
+
     Args:
         json_filename: Input JSON filename
         output_filename: Output LaTeX filename
@@ -179,9 +183,21 @@ def json_to_latex_table(json_filename: str, output_filename: str = "eos_paramete
     with open(json_filename, 'r') as f:
         results = json.load(f)
 
+    # Find entries with minimum width for each parameter
+    min_widths = {}
+    for param in ['MTOV', 'R14', 'p3nsat']:
+        min_width = float('inf')
+        min_dir = None
+        for dir_basename, data in results.items():
+            width = data['parameters'][param]['width']
+            if width < min_width:
+                min_width = width
+                min_dir = dir_basename
+        min_widths[param] = min_dir
+
     # Start LaTeX table
     latex_content = []
-    latex_content.append("\\begin{table}[htbp]")
+    latex_content.append("\\begin{table*}[htbp]")
     latex_content.append("\\centering")
     latex_content.append("\\caption{EOS parameter constraints with 90\\% credible intervals}")
     latex_content.append("\\label{tab:eos_parameters}")
@@ -195,10 +211,18 @@ def json_to_latex_table(json_filename: str, output_filename: str = "eos_paramete
         label = data['label']
         params = data['parameters']
 
-        # Format each parameter with credible interval
+        # Format each parameter with credible interval, bold if minimum width
         mtov = params['MTOV']['credible_interval']
         r14 = params['R14']['credible_interval']
         p3nsat = params['p3nsat']['credible_interval']
+
+        # Apply bold formatting for minimum width entries
+        if min_widths['MTOV'] == dir_basename:
+            mtov = f"\\textbf{{{mtov}}}"
+        if min_widths['R14'] == dir_basename:
+            r14 = f"\\textbf{{{r14}}}"
+        if min_widths['p3nsat'] == dir_basename:
+            p3nsat = f"\\textbf{{{p3nsat}}}"
 
         # Escape special characters for LaTeX
         label_escaped = label.replace('+', '$+$').replace('_', '\\_')
@@ -208,7 +232,7 @@ def json_to_latex_table(json_filename: str, output_filename: str = "eos_paramete
     # End table
     latex_content.append("\\bottomrule")
     latex_content.append("\\end{tabular}")
-    latex_content.append("\\end{table}")
+    latex_content.append("\\end{table*}")
 
     # Write to file
     with open(output_filename, 'w') as f:
