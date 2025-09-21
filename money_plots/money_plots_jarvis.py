@@ -377,7 +377,8 @@ def create_comparison_cornerplot(run_keys: list[str],
         # Set up corner kwargs
         corner_kwargs = DEFAULT_CORNER_KWARGS.copy()
         corner_kwargs["color"] = colors[0]
-        corner_kwargs["zorder"] = zorders[0]
+        corner_kwargs["hist_kwargs"] = {'color': colors[0], 'density': True, 'zorder': zorders[0]}
+        corner_kwargs["density"] = True  # Use density normalization for all histograms
 
         # Apply parameter ranges if provided
         if ranges:
@@ -393,9 +394,8 @@ def create_comparison_cornerplot(run_keys: list[str],
         parameter_labels = [PARAMETER_LABELS.get(param, param) for param in parameters]
 
         # Create initial plot
-        fig = corner.corner(all_samples[0],
-                           labels=parameter_labels,
-                           **corner_kwargs)
+        corner_kwargs["labels"] = parameter_labels
+        fig = corner.corner(all_samples[0], **corner_kwargs)
 
         # Overlay additional datasets
         for i in range(1, len(all_samples)):
@@ -407,9 +407,8 @@ def create_comparison_cornerplot(run_keys: list[str],
             corner_kwargs_overlay["zorder"] = zorders[i]
             corner_kwargs_overlay["fig"] = fig
 
-            corner.corner(all_samples[i],
-                         labels=parameter_labels,
-                         **corner_kwargs_overlay)
+            corner_kwargs_overlay["labels"] = parameter_labels
+            corner.corner(all_samples[i], **corner_kwargs_overlay)
 
         # Plot dummy normalization dataset last (invisible, for normalization)
         if dummy_dataset is not None:
@@ -417,12 +416,13 @@ def create_comparison_cornerplot(run_keys: list[str],
             invisible_kwargs = DEFAULT_CORNER_KWARGS.copy()
             invisible_kwargs.update({
                 'labels': parameter_labels,
-                'hist_kwargs': {'alpha': 0, 'density': True},
+                'hist_kwargs': {'alpha': 0},
                 'plot_density': False,     # Disable 2D density plots
                 'plot_contours': False,    # Disable 2D contours
                 'plot_datapoints': False,  # Disable scatter points
                 'no_fill_contours': True,  # Disable filled contours
                 'color': 'black',
+                'density': True,           # Use density normalization
                 'fig': fig
             })
 
@@ -436,9 +436,7 @@ def create_comparison_cornerplot(run_keys: list[str],
                         range_list.append(None)
                 invisible_kwargs["range"] = range_list
 
-            corner.corner(dummy_dataset,
-                         labels=parameter_labels,
-                         **invisible_kwargs)
+            corner.corner(dummy_dataset, **invisible_kwargs)
 
         # Add legend
         legend_elements = []
@@ -885,9 +883,8 @@ def create_injection_comparison_plot() -> bool:
             corner_kwargs_overlay["zorder"] = zorders[i]
             corner_kwargs_overlay["fig"] = fig
 
-            corner.corner(all_samples[i],
-                         labels=parameter_labels,
-                         **corner_kwargs_overlay)
+            corner_kwargs_overlay["labels"] = parameter_labels
+            corner.corner(all_samples[i], **corner_kwargs_overlay)
 
         # Add legend
         legend_elements = []
@@ -1036,7 +1033,7 @@ def main():
     ]
 
     # Z-orders for prior comparison (quasi-universal on top)
-    prior_zorders = [0, 2, 1]  # Default: 0, Quasi-Universal: 2 (highest), Double Gaussian: 1
+    prior_zorders = [1, 10000, 100]  # Default: 0, Quasi-Universal: 2 (highest), Double Gaussian: 1
 
     # First, load and cache all runs
     print("Loading and caching prior comparison runs...")
