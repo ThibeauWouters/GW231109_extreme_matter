@@ -218,11 +218,11 @@ def json_to_latex_table(json_filename: str, output_filename: str = "eos_paramete
 
         # Apply bold formatting for minimum width entries
         if min_widths['MTOV'] == dir_basename:
-            mtov = f"\\textbf{{{mtov}}}"
+            mtov = f"\\boldsymbol{{{mtov}}}"
         if min_widths['R14'] == dir_basename:
-            r14 = f"\\textbf{{{r14}}}"
+            r14 = f"\\boldsymbol{{{r14}}}"
         if min_widths['p3nsat'] == dir_basename:
-            p3nsat = f"\\textbf{{{p3nsat}}}"
+            p3nsat = f"\\boldsymbol{{{p3nsat}}}"
 
         # Escape special characters for LaTeX
         label_escaped = label.replace('+', '$+$').replace('_', '\\_')
