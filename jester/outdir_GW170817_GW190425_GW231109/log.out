@@ -1,0 +1,43 @@
+Sun Sep 21 22:04:13 CEST 2025
+NVIDIA H100
+Warning: weights not properly specified, assuming constant weights instead.
+GPU found?
+[CudaDevice(id=0)]
+We are using the default NEP prior, so max_L_sym = 200.0
+Using the regular nbreak prior: U[1.0, 2.0] * 0.16
+Fixed params loaded inside the MicroToMacroTransform:
+    Q_sym: 0.0
+    Z_sym: 0.0
+    E_sat: -16.0
+    Q_sat: 0.0
+    Z_sat: 0.0
+Traceback (most recent call last):
+  File "/gpfs/home6/twouters2/projects/GW231109/GW231109_extreme_matter/jester/inference.py", line 502, in <module>
+    main(args)
+  File "/gpfs/home6/twouters2/projects/GW231109/GW231109_extreme_matter/jester/inference.py", line 320, in main
+    likelihoods_list_GW += [utils.GWlikelihood_with_masses("GW231109", args.GW231109_NF_filepath, nn_depth=nn_depth, nn_block_dim=nn_block_dim)]
+  File "/gpfs/home6/twouters2/projects/GW231109/GW231109_extreme_matter/jester/utils.py", line 476, in __init__
+    loaded_model: Transformed = eqx.tree_deserialise_leaves(nf_model_filename, like=like_flow)
+  File "/home/twouters2/miniconda3/envs/jester/lib/python3.10/site-packages/equinox/_serialisation.py", line 319, in tree_deserialise_leaves
+    with _maybe_open(path_or_file, "rb") as f:
+  File "/home/twouters2/miniconda3/envs/jester/lib/python3.10/contextlib.py", line 135, in __enter__
+    return next(self.gen)
+  File "/home/twouters2/miniconda3/envs/jester/lib/python3.10/site-packages/equinox/_serialisation.py", line 156, in _maybe_open
+    file = open(_with_suffix(path_or_file), mode)
+FileNotFoundError: [Errno 2] No such file or directory: 'NFs/prod_BW_XP_s005_l5000_default.eqx'
+Generating all plots for directory: outdir_GW170817_GW190425_GW231109
+Error: EOS samples file not found: outdir_GW170817_GW190425_GW231109/eos_samples.npz
+
+JOB STATISTICS
+==============
+Job ID: 14819606
+Cluster: snellius
+User/Group: twouters2/twouters2
+State: COMPLETED (exit code 0)
+Nodes: 1
+Cores per node: 16
+CPU Utilized: 00:00:22
+CPU Efficiency: 4.91% of 00:07:28 core-walltime
+Job Wall-clock time: 00:00:28
+Memory Utilized: 2.93 MB
+Memory Efficiency: 0.01% of 20.00 GB (20.00 GB/node)

@@ -475,6 +475,106 @@ def process_given_dirs(directories, save_suffix="", legend_outside=False):
         print(f"Error generating comparison plots: {e}")
         return
 
+def plot_injection(outdir: str):
+    print(f"Plotting the GW231109 (ET) from {outdir}...")
+    
+    # First, load the true EOS
+    hauke_filename = "../figures/EOS_data/hauke_macroscopic.dat"
+    r, m, l, _ = np.loadtxt(hauke_filename, unpack=True)
+    R14_HAUKE = np.interp(1.4, m, r)
+    print(f"  Hauke EOS R14 = {R14_HAUKE:.2f} km")
+    
+    # First, load the true EOS
+    hauke_filename = "../figures/EOS_data/hauke_microscopic.dat"
+    n, _, p, _ = np.loadtxt(hauke_filename, unpack=True)
+    
+    # # Convert units
+    n = n / 0.16
+    print(np.min(n), np.max(n))
+    # n = n / jose_utils.fm_inv3_to_geometric / 0.16
+    # p = p / jose_utils.MeV_fm_inv3_to_geometric
+    # e = e / jose_utils.MeV_fm_inv3_to_geometric
+    
+    P3NSAT_HAUKE = np.interp(3, n, p)
+    print(f"  Hauke p3nsat = {P3NSAT_HAUKE:.2f}")
+    
+    # Load the data
+    data = load_eos_data(os.path.join("../jester", outdir))
+    masses, radii = data['masses'], data['radii']
+    n, p = data['densities'], data['pressures']
+    
+    # Also load the prior
+    data_prior = load_eos_data(os.path.join("../jester", "outdir"))
+    masses_prior, radii_prior = data_prior['masses'], data_prior['radii']
+    n_prior, p_prior = data_prior['densities'], data_prior['pressures']
+    
+    # Also load the radio timing
+    data_radio = load_eos_data(os.path.join("../jester", "outdir_radio"))
+    masses_radio, radii_radio = data_radio['masses'], data_radio['radii']
+    n_radio, p_radio = data_radio['densities'], data_radio['pressures']
+    
+    # Histogram of R14
+    R14_list = np.array([np.interp(1.4, mass, radius) for mass, radius in zip(masses, radii)])
+    plt.figure(figsize=figsize_horizontal)
+    kde = gaussian_kde(R14_list)
+    kde_prior = gaussian_kde(np.array([np.interp(1.4, mass, radius) for mass, radius in zip(masses_prior, radii_prior)]))
+    kde_radio = gaussian_kde(np.array([np.interp(1.4, mass, radius) for mass, radius in zip(masses_radio, radii_radio)]))
+    x = np.linspace(10.0, 16.0, 1000)
+    y = kde(x)
+    y_prior = kde_prior(x)
+    y_radio = kde_radio(x)
+    plt.plot(x, y_prior, color='darkgray', lw=3.0, label="Prior")
+    plt.fill_between(x, y_prior, alpha=0.3, color='darkgray')
+    plt.plot(x, y_radio, color='dimgray', lw=3.0, label="Radio timing")
+    plt.fill_between(x, y_radio, alpha=0.3, color='dimgray')
+    plt.plot(x, y, color=INJECTION_COLOR, lw=3.0, label="GW231109 (ET)")
+    plt.fill_between(x, y, alpha=0.3, color=INJECTION_COLOR)
+    
+    # Hauke:
+    plt.axvline(R14_HAUKE, color='black', ls='--', lw=2.0, label="Truth")
+    
+    plt.xlabel(r"$R_{1.4}$ [km]")
+    plt.ylabel('Density')
+    plt.xlim(10.0, 16.0)
+    plt.ylim(bottom=0.0)
+    plt.legend()
+    save_name = os.path.join("./figures/EOS_comparison", f"ET_injection_R14_histogram.pdf")
+    plt.savefig(save_name, bbox_inches="tight")
+    plt.close()
+    print(f"  R14 histogram saved to {save_name}")
+    
+    # Now also for p3nsat
+    p3nsat_list = np.array([np.interp(3.0, dens, press) for dens, press in zip(n, p)])
+    plt.figure(figsize=figsize_horizontal)
+    kde = gaussian_kde(p3nsat_list)
+    kde_prior = gaussian_kde(np.array([np.interp(3.0, dens, press) for dens, press in zip(n_prior, p_prior)]))
+    kde_radio = gaussian_kde(np.array([np.interp(3.0, dens, press) for dens, press in zip(n_radio, p_radio)]))
+    
+    x = np.linspace(0.1, 200.0, 1000)
+    y = kde(x)
+    y_prior = kde_prior(x)
+    y_radio = kde_radio(x)
+    plt.plot(x, y_prior, color='darkgray', lw=3.0, label="Prior")
+    plt.fill_between(x, y_prior, alpha=0.3, color='darkgray')
+    plt.plot(x, y_radio, color='dimgray', lw=3.0, label="Radio timing")
+    plt.fill_between(x, y_radio, alpha=0.3, color='dimgray')
+    plt.plot(x, y, color=INJECTION_COLOR, lw=3.0, label="GW231109 (ET)")
+    plt.fill_between(x, y, alpha=0.3, color=INJECTION_COLOR)
+    
+    # Hauke:
+    plt.axvline(P3NSAT_HAUKE, color='black', ls='--', lw=2.0, label="Truth")
+
+    plt.xlabel(r"$p(3n_{\rm{sat}})$ [MeV fm$^{-3}$]")
+    plt.ylabel('Density')
+    plt.xlim(0.1, 200.0)
+    plt.ylim(bottom=0.0)
+    plt.legend()
+    save_name = os.path.join("./figures/EOS_comparison", f"ET_injection_p3nsat_histogram.pdf")
+    plt.savefig(save_name, bbox_inches="tight")
+    plt.close()
+    print(f"  p3nsat histogram saved to {save_name}")
+    
+
 def main():
     """Main function - configures directories and calls processing."""
 
@@ -531,14 +631,14 @@ def main():
     # 3a Check GW170817 vs GW170817+GW231109
     # =======================================================================
     
-    directories = [
-        "../jester/outdir_radio",
-        "../jester/outdir_GW170817",
-        "../jester/outdir_GW170817_GW190425",
-        "../jester/outdir_GW170817_GW231109",
-    ]
-    save_suffix = ""
-    process_given_dirs(directories, save_suffix, legend_outside=True)
+    # directories = [
+    #     "../jester/outdir_radio",
+    #     "../jester/outdir_GW170817",
+    #     "../jester/outdir_GW170817_GW190425",
+    #     "../jester/outdir_GW170817_GW231109",
+    # ]
+    # save_suffix = ""
+    # process_given_dirs(directories, save_suffix, legend_outside=True)
     
     # =======================================================================
     # 4 Check GW231109 spins
@@ -568,6 +668,15 @@ def main():
     # ]
     # save_suffix = ""
     # process_given_dirs(directories, save_suffix)
+    
+
+    # =======================================================================
+    # INJECTIONS
+    # =======================================================================
+    
+    # TODO: generalize -- for now, just one injection
+
+    plot_injection(outdir="outdir_GW231109_ET_AS")
 
 
 if __name__ == "__main__":
