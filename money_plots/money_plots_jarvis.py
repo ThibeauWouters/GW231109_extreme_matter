@@ -8,7 +8,6 @@ are overlaid for direct comparison.
 import os
 import argparse
 import hashlib
-import pickle
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.patches as mpatches
@@ -92,52 +91,100 @@ def generate_cache_filename(source_dirs: list[str], parameters: list[str]) -> st
     params_part = "_".join(sorted(parameters))
 
     # Create readable cache filename
-    cache_name = f"comparison_{dirs_part}_{params_part}.pkl"
+    cache_name = f"comparison_{dirs_part}_{params_part}.npz"
 
     # Replace any problematic characters for filename
     cache_name = cache_name.replace('/', '_').replace(' ', '_')
 
     return f"./data/{cache_name}"
 
-def save_comparison_data(filename: str, data: dict) -> bool:
+def save_comparison_data(filename: str, data: dict, parameters: list[str]) -> bool:
     """
-    Save comparison data to cache file.
+    Save comparison data to cache file using np.savez with parameter names.
 
     Args:
         filename (str): Cache filename
         data (dict): Data to save
+        parameters (list[str]): Parameter names for proper column mapping
 
     Returns:
         bool: True if successful, False otherwise
     """
     try:
         ensure_directory_exists(filename)
-        with open(filename, 'wb') as f:
-            pickle.dump(data, f)
+
+        # Create a dictionary with parameter names as keys for each dataset
+        save_dict = {
+            'valid_labels': data['valid_labels'],
+            'valid_colors': data['valid_colors'],
+            'valid_zorders': data['valid_zorders'],
+            'parameters': parameters  # Save parameter order
+        }
+
+        # Save each dataset with parameter columns as separate arrays
+        for i, samples in enumerate(data['all_samples']):
+            for j, param in enumerate(parameters):
+                save_dict[f'dataset_{i}_{param}'] = samples[:, j]
+
+        np.savez(filename, **save_dict)
         print(f"Saved comparison data to cache: {filename}")
         return True
     except Exception as e:
         print(f"Failed to save cache data: {e}")
         return False
 
-def load_comparison_data(filename: str) -> dict:
+def load_comparison_data(filename: str, parameters: list[str]) -> dict:
     """
-    Load comparison data from cache file.
+    Load comparison data from cache file, reordering parameters as needed.
 
     Args:
         filename (str): Cache filename
+        parameters (list[str]): Desired parameter order
 
     Returns:
-        dict: Loaded data, or None if failed
+        dict: Loaded data with parameters in correct order, or None if failed
     """
     try:
         if not os.path.exists(filename):
             return None
 
-        with open(filename, 'rb') as f:
-            data = pickle.load(f)
+        data = np.load(filename, allow_pickle=True)
+
+        # Get cached parameter order
+        cached_parameters = data['parameters'].tolist()
+
+        # Check if we have all required parameters
+        if not all(param in cached_parameters for param in parameters):
+            print(f"Cache missing required parameters. Required: {parameters}, Cached: {cached_parameters}")
+            return None
+
+        # Determine number of datasets
+        dataset_keys = [key for key in data.keys() if key.startswith('dataset_')]
+        num_datasets = len(set(key.split('_')[1] for key in dataset_keys))
+
+        # Reconstruct samples with correct parameter order
+        all_samples = []
+        for i in range(num_datasets):
+            dataset_samples = []
+            for param in parameters:  # Use desired order
+                key = f'dataset_{i}_{param}'
+                if key in data:
+                    dataset_samples.append(data[key])
+                else:
+                    raise KeyError(f"Missing parameter {param} for dataset {i}")
+            all_samples.append(np.column_stack(dataset_samples))
+
+        result = {
+            'all_samples': all_samples,
+            'valid_labels': data['valid_labels'].tolist(),
+            'valid_colors': data['valid_colors'].tolist(),
+            'valid_zorders': data['valid_zorders'].tolist()
+        }
+
         print(f"Loaded comparison data from cache: {filename}")
-        return data
+        print(f"Reordered parameters from {cached_parameters} to {parameters}")
+        return result
+
     except Exception as e:
         print(f"Failed to load cache data: {e}")
         return None
@@ -253,7 +300,7 @@ def create_comparison_cornerplot(source_dirs: list[str],
 
         # Check if cached data exists
         cache_filename = generate_cache_filename(source_dirs, parameters)
-        cached_data = load_comparison_data(cache_filename)
+        cached_data = load_comparison_data(cache_filename, parameters)
 
         if cached_data is not None:
             print("Using cached comparison data")
@@ -279,7 +326,7 @@ def create_comparison_cornerplot(source_dirs: list[str],
                 'valid_colors': valid_colors,
                 'valid_zorders': valid_zorders
             }
-            save_comparison_data(cache_filename, cache_data)
+            save_comparison_data(cache_filename, cache_data, parameters)
 
         # Create the corner plot with the first dataset
         print("Creating corner plot...")
@@ -309,6 +356,9 @@ def create_comparison_cornerplot(source_dirs: list[str],
         # Overlay additional datasets
         for i in range(1, len(all_samples)):
             corner_kwargs_overlay = corner_kwargs.copy()
+            # Deep copy the range to avoid modification issues
+            if "range" in corner_kwargs_overlay:
+                corner_kwargs_overlay["range"] = corner_kwargs_overlay["range"].copy()
             corner_kwargs_overlay["color"] = valid_colors[i]
             corner_kwargs_overlay["fig"] = fig
 
@@ -356,9 +406,9 @@ def main():
     parameters = [
         "chirp_mass",
         "mass_ratio",
+        "chi_eff",
         "lambda_1",
         "lambda_2",
-        "chi_eff",
         "lambda_tilde"
     ]
 
@@ -385,9 +435,9 @@ def main():
     ranges = {
         "chirp_mass": (1.3056, 1.3070),
         "mass_ratio": (0.60, 1.0),
+        "chi_eff": (-0.01, 0.045),
         "lambda_1": (0, 5000),
         "lambda_2": (0, 5000),
-        "chi_eff": (-0.01, 0.045),
         "lambda_tilde": (0, 5000),
     }
 
