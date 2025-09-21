@@ -16,9 +16,10 @@ FILES=(
   # prod_BW_XAS_s005_l5000_default.npz
   # et_run.npz
   # GW190425.npz
-  prod_BW_XP_s005_lquniv_default.npz
-  prod_BW_XP_s025_lquniv_default.npz
-  prod_BW_XP_s040_lquniv_default.npz
+  # prod_BW_XP_s005_lquniv_default.npz
+  # prod_BW_XP_s025_lquniv_default.npz
+  # prod_BW_XP_s040_lquniv_default.npz
+  et_run_alignedspin.npz
 )
 
 # Loop over files and submit job for each
