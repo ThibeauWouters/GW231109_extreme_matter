@@ -26,6 +26,12 @@ import sys
 sys.path.append('../jester')
 import jesterTOV.utils as jose_utils
 
+from utils import (
+    DEFAULT_CORNER_KWARGS, GW231109_COLOR, GW190425_COLOR, PRIOR_COLOR, GW170817_COLOR,
+    ORANGE, BLUE, GREEN, INJECTION_COLOR, identify_person_from_path, load_posterior_samples,
+    load_run_metadata, load_priors_for_corner, ensure_directory_exists
+)
+
 # Matplotlib parameters
 mpl_params = {"axes.grid": False,
         "text.usetex" : True,
@@ -61,6 +67,15 @@ LABELS_DICT = {"outdir": "Prior",
                "outdir_GW231109_double_quniv": "+GW231109 (QUR)",
                "outdir_GW231109_double_quniv": "+GW231109 (QUR)",
                "outdir_ET_AS": "ET",
+               }
+
+COLORS_DICT = {"outdir": "gray",
+               "outdir_radio": "blue",
+               "outdir_GW170817": "orange",
+               "outdir_GW170817_GW231109": "red",
+               "outdir_GW231109_double_gaussian": "purple",
+               "outdir_GW231109_double_quniv": "green",
+               "outdir_ET_AS": INJECTION_COLOR
                }
 
 def load_eos_data(outdir: str):
