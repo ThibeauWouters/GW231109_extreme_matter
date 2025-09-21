@@ -52,6 +52,17 @@ ALPHA = 0.3
 figsize_vertical = (6, 8)
 figsize_horizontal = (8, 6)
 
+LABELS_DICT = {"outdir": "Prior", 
+               "outdir_radio": "Radio timing",
+               "outdir_GW170817": "+GW170817",
+               "outdir_GW170817_GW231109": "+GW170817+GW231109",
+               "outdir_GW170817_GW231109": "+GW170817+GW231109",
+               "outdir_GW231109_double_gaussian": "+GW231109 (double Gaussian)",
+               "outdir_GW231109_double_quniv": "+GW231109 (QUR)",
+               "outdir_GW231109_double_quniv": "+GW231109 (QUR)",
+               "outdir_ET_AS": "ET",
+               }
+
 def load_eos_data(outdir: str):
     """Load EOS data from the specified output directory."""
     filename = os.path.join(outdir, "eos_samples.npz")
@@ -372,9 +383,9 @@ def main():
 
     # List of directories to process (relative or absolute paths)
     directories = [
-        "outdir",
-        "outdir_radio",
-        "outdir_GW231109",
+        "../jester/outdir",
+        "../jester/outdir_radio",
+        "../jester/outdir_GW231109",
         # Add more directories as needed
     ]
 
