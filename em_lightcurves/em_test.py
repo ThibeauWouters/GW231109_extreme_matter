@@ -6,22 +6,55 @@ import lal
 from nmma.em.model import SimpleKilonovaLightCurveModel,GRBLightCurveModel, SVDLightCurveModel, KilonovaGRBLightCurveModel, GenericCombineLightCurveModel
 import os,glob, io
 
-posfile = 'GW231109_data0_1383609314-056813_analysis_H1L1_result.hdf5'
+### LOAD HAUKE's EOS
+print(f"Loading Hauke's EOS . . .")
+hauke_eos_filename = "../figures/EOS_data/hauke_macroscopic.dat"
+R_HAUKE, M_HAUKE, L_HAUKE, PC_HAUKE = np.loadtxt(hauke_eos_filename, unpack=True)
+C_HAUKE = M_HAUKE/R_HAUKE
+mtov = np.max(M_HAUKE)
+print(f'MTOV: {mtov}')
+print(f"Loading Hauke's EOS . . . DONE")
 
-conversion = MultimessengerConversionWithLambdas(binary_type='BNS', with_ejecta=True) #(eos_data_path ='/home/kingu/apuecher/S23109ci/NMMA/EOS/chiralEFT_MTOV', Neos=5000, binary_type='BNS')
+### LOAD POSTERIOR DATASET
 
-pneeded = ['mass_1_source', 'mass_2_source', 'chirp_mass_source', 'lambda_tilde', 'lambda_1', 'lambda_2', 'theta_jn']
+pneeded = ['mass_1_source',
+           'mass_2_source',
+           'chirp_mass_source',
+           'luminosity_distance',
+           'lambda_tilde',
+           'lambda_1',
+           'lambda_2',
+           'theta_jn']
 
-### MTOV hard coded from Hauke's maxl eos because I have no clue how to find it otherwise
-### maybe to be consistent we should alos generate lambdas with this eos but who knows
+posfile = '/work/wouters/GW231109/prod_BW_XP_s005_l5000_default/outdir/final_result/GW231109_data0_1383609314-056813_analysis_H1L1_result.hdf5'
+print(f"Loading posterior from {posfile} . . .")
 
-mtov = 2.427536751340168
+# Get median values of some posterior parameters
+pmed = {}
+with h5py.File(posfile, 'r') as f:
+    pos = f["posterior"]
+    for p in pneeded:
+        pmed[p] = np.quantile(pos[p], 0.5)
+
+log_lambda_1 = np.log([np.interp(_m, M_HAUKE, L_HAUKE) for _m in [pmed['mass_1_source']]])[0]
+log_lambda_2 = np.log([np.interp(_m, M_HAUKE, L_HAUKE) for _m in [pmed['mass_2_source']]])[0]
+
+print("log_lambda_1")
+print(log_lambda_1)
+
+print("log_lambda_2")
+print(log_lambda_2)
+
+print(f"Loading posterior from {posfile} . . . DONE")
+
+conversion = MultimessengerConversionWithLambdas(binary_type='BNS', with_ejecta=True) # FIXME: needed or copied over here?
+
 alpha_min, alpha_max = 1e-2, 2e-2
 log10zeta_min, log10zeta_max = -3, 0
 alpha = np.random.uniform(alpha_min, alpha_max)
 ratio_zeta = 10 ** np.random.uniform(log10zeta_min, log10zeta_max)
 
-print('alpha',alpha, 'ratio zeta', ratio_zeta)
+print('alpha', alpha, 'ratio zeta', ratio_zeta)
 
 def dynamic_mass_fitting_KrFo(
         mass_1,
@@ -77,48 +110,16 @@ def log10_disk_mass_fitting(
 
         return log10_mdisk
 
+print(f"Computing aux data for fits . . .")
 
-pmed = {}
+compactness_1 = np.interp(pmed['mass_1_source'], M_HAUKE, C_HAUKE)
+compactness_2 = np.interp(pmed['mass_2_source'], M_HAUKE, C_HAUKE)
 
-with h5py.File(posfile, 'r') as f:
+radius_1 = np.interp(pmed['mass_1_source'], M_HAUKE, R_HAUKE)
+radius_2 = np.interp(pmed['mass_2_source'], M_HAUKE, R_HAUKE)
 
-    pos = f["posterior"]
-    #print(pos.keys())
-    for p in pneeded:
+R_16 = np.interp(1.6, M_HAUKE, R_HAUKE) 
 
-        pmed[p] = np.quantile(pos[p], 0.5)
-
-log_lambda_1 = np.log(pmed['lambda_1'])
-log_lambda_2 = np.log(pmed['lambda_2'])
-
-compactness_1 = (
-    0.371 - 0.0391 * log_lambda_1 + 0.001056 * log_lambda_1 * log_lambda_1
-)
-compactness_2 = (
-    0.371 - 0.0391 * log_lambda_2 + 0.001056 * log_lambda_2 * log_lambda_2
-)
-
-radius_1 = (
-    pmed['mass_1_source'] / compactness_1 * lal.MRSUN_SI / 1e3
-        )
-radius_2 = (
-    pmed['mass_2_source'] / compactness_2 * lal.MRSUN_SI / 1e3
-        )
-
-#chirp_mass_source = component_masses_to_chirp_mass(pmed['mass_1_source'], pmed['mass_2_source'])
-#lambda_tilde = lambda_1_lambda_2_to_lambda_tilde(
-#            lambda_1, lambda_2, mass_1_source, mass_2_source
-#        )
-
-R_16= (
-    pmed['chirp_mass_source']
-            * np.power(pmed['lambda_tilde'] / 0.0042, 1.0 / 6.0)
-            * lal.MRSUN_SI
-            / 1e3
-        )
-
-
-#theta_jn = converted_parameters["theta_jn"]
 KNtheta = (
     180 / np.pi * np.minimum(pmed['theta_jn'], np.pi - pmed['theta_jn'])
             )
@@ -128,7 +129,7 @@ inclination_EM = (
 
 total_mass = pmed['mass_1_source'] + pmed['mass_2_source']
 mass_ratio = pmed['mass_2_source'] / pmed['mass_1_source']
-
+dL = pmed['luminosity_distance']
 
 mdyn_fit = dynamic_mass_fitting_KrFo(pmed['mass_1_source'], pmed['mass_2_source'], compactness_1, compactness_2)
 
@@ -138,8 +139,9 @@ log10_mdisk_fit = log10_disk_mass_fitting(
             mtov,
             R_16 * 1e3 / lal.MRSUN_SI,
         )
+print(f"Computing aux data for fits . . . DONE")
 
-
+print(f"Computing ejecta masses . . .")
 mej_dyn = mdyn_fit + alpha
 log10_mej_dyn = np.log10(mej_dyn)
 
@@ -152,55 +154,40 @@ log10_mej = np.log10(total_ejeta_mass)
 log10_mej = log10_mej
 
 print(log10_mej_dyn, log10_mej_wind)
+print(f"Computing ejecta masses . . . DONE")
 
+print(f"Loading LC model . . .")
 model_name = "Bu2019lm"
-n_coeff = 3
-# The array of times we'll use to examine each lightcurve
+n_coeff = 10
 tini, tmax, dt = 0.1, 5.0, 0.2
 tt = np.arange(tini, tmax + dt, dt)
+filts = ["sdssu","ztfg","ztfr","ztfi","ps1__z","ps1__y","2massj","2massh","2massks"]
+interpolation_type = "tensorflow"
+sample_times = np.arange(tini, tmax, dt)
 
-# The filters we'll be focusing on
-filts = ["sdssu","ztfg","ztfr","ztfi","ps1__z","ps1__y","2massj","2massh","2massks"] # We will focus on these two bands; all available: ["u","g","r","i","z","y","J","H","K"]
-#filts = ["u","g","r","i","z","y","J","H","K"]
-
-print(os.getcwd())
-dataDir = "../nmma/tests/data/bulla" ## Example absolute path: "/Users/fabioragosta/nmma/nmma/tests/data/bulla"
-ModelPath = "../svdmodels" ## Example absolute path: "/Users/fabioragosta/nmma/svdmodels"
-filenames = glob.glob("%s/*.dat" % dataDir)
-
-#data = io.read_photometry_files(filenames, filters=filts)
-# Loads the model data
-#training_data, parameters = model_parameters.Bu2019lm_sparse(data)
-
-#two differen interpolation types are possible "sklearn_gp" or "tensorflow"
-interpolation_type = "sklearn_gp"
-
-tmin=0.1
-tmax=20.0
-deltat=0.1
-sample_times = np.arange(tmin, tmax, deltat)
-
-'''
-training_model=training.SVDTrainingModel(
-    model_name,
-    copy.deepcopy(training_data),
-    parameters,
-    tt,
-    filts,
-    svd_path=ModelPath,
-    n_coeff=n_coeff,
-    interpolation_type=interpolation_type,
-    n_epochs=100
-)
-'''
 light_curve_model = SVDLightCurveModel(
         model_name,
         sample_times,
-        svd_path=ModelPath,
+        svd_path=None,
         interpolation_type=interpolation_type,
-        #model_parameters=training_model.model_parameters,
-        #filters=filts,
+        filters=filts
     )
+print(f"Loading LC model . . . DONE")
+
+parameters = {"log10_mej_dyn": log10_mej_dyn, 
+              "log10_mej_wind": log10_mej_wind, 
+              "KNphi": 30.0, # FIXME: need to change this
+              "KNtheta": KNtheta,
+              "luminosity_distance": dL,
+              }
+
+print(f"Going to try and generate LC with the following parameters")
+for key, value in parameters.items():
+    print(f"    {key}: {value}")
+lc = light_curve_model.generate_lightcurve(sample_times, parameters)
+
+print("lc")
+print(lc)
 
 '''
 tmin=0.1
