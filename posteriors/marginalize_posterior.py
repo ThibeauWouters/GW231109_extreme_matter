@@ -17,6 +17,7 @@ TOP_LEVEL_DIRS = glob.glob(os.path.join(BASE_PATH, "prod_BW_*"))
 # Add Anna's 3G runs as well
 TOP_LEVEL_DIRS += ["/work/puecher/S231109/third_gen_runs/et_run/",
                    "/work/puecher/S231109/third_gen_runs/et_run_alignedspin/",
+                   "/work/puecher/S231109/third_gen_runs/et_ce_run/",
                    "/work/puecher/S231109/third_gen_runs/et_ce_run_alignedspin/",
                    ]
 

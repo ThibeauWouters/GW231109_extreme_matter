@@ -484,10 +484,11 @@ def main():
                      ]
     
     # # List of base dirs to loop over
-    base_dir_list = ["/work/wouters/GW231109/",
-                     "/work/puecher/S231109/bw_runs_debug/",
-                    #  "/work/puecher/S231109/third_gen_runs/"
-                     ]
+    base_dir_list = [
+        # "/work/wouters/GW231109/",
+        # "/work/puecher/S231109/bw_runs_debug/",
+        "/work/puecher/S231109/third_gen_runs/"
+        ]
     
     for eos_name in eos_name_list:
         for base_dir in base_dir_list:

@@ -19,7 +19,13 @@ FILES=(
   # prod_BW_XP_s005_lquniv_default.npz
   # prod_BW_XP_s025_lquniv_default.npz
   # prod_BW_XP_s040_lquniv_default.npz
-  et_run_alignedspin.npz
+  # et_run_alignedspin.npz
+  prod_BW_XP_s005_l10000_double_gaussian.npz
+  prod_BW_XP_s005_l5000_double_gaussian.npz
+  prod_BW_XP_s025_l10000_double_gaussian.npz
+  prod_BW_XP_s025_l5000_double_gaussian.npz
+  prod_BW_XP_s040_l10000_double_gaussian.npz
+  prod_BW_XP_s040_l5000_double_gaussian.npz
 )
 
 # Loop over files and submit job for each

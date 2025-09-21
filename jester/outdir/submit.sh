@@ -22,4 +22,10 @@ conda activate /home/twouters2/miniconda3/envs/jester
 nvidia-smi --query-gpu=name --format=csv,noheader
 
 # Run the script
-python inference.py --use-zero-likelihood True
+python inference.py \
+    --outdir outdir/ \
+    --use-zero-likelihood True \
+    --n-loop-training 2 \
+    --n-loop-production 5 \
+
+python postprocessing.py outdir

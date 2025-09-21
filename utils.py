@@ -3,6 +3,7 @@ import numpy as np
 import json
 import importlib
 import h5py
+import json
 
 def fetch_posterior_filename(source_dir: str):
     """
@@ -29,8 +30,14 @@ def fetch_posterior_filename(source_dir: str):
     ]
 
     if not posterior_files:
-        print(f"WARNING: No posterior files found in {final_results_dir}.")
-        return None
+        print(f"WARNING: No HDF5 files found in {final_results_dir}. Trying to look for JSON files now")
+        final_results_dir = os.path.join(source_dir, "outdir")
+        posterior_files = [
+            f for f in os.listdir(final_results_dir)
+            if f.endswith(".json")
+        ]
+        if not posterior_files:
+            return None
 
     # Just return the first one found, there should be only one anyways
     return os.path.join(final_results_dir, posterior_files[0])
@@ -44,8 +51,9 @@ def fetch_mass_Lambdas_samples(posterior_filename: str,
         posterior_filename (str): Filename of the posterior HDF5 file from which to fetch the mass and Lambda samples.
     """
     
-    with h5py.File(posterior_filename, 'r') as f:
-        posterior = f['posterior']
+    if posterior_filename.endswith(".json"):
+        with h5py.File(posterior_filename, 'r') as f:
+            posterior = f['posterior']
         
         if chirp_tilde:
             # Fetch the chirp mass and lambda_tilde
@@ -60,6 +68,27 @@ def fetch_mass_Lambdas_samples(posterior_filename: str,
             mass_2_source = posterior['mass_2_source'][:]
             lambda_1 = posterior['lambda_1'][:]
             lambda_2 = posterior['lambda_2'][:]
+        
+            return mass_1_source, mass_2_source, lambda_1, lambda_2
+    else:
+        # Open with JSON
+        with open(posterior_filename, 'r') as f:
+            posterior = json.load(f)['posterior']['content']
+            
+        if chirp_tilde:
+            # Fetch the chirp mass and lambda_tilde
+            chirp_mass_source = posterior['chirp_mass_source']
+            mass_ratio = posterior['mass_ratio']
+            lambda_tilde = posterior['lambda_tilde']
+            delta_lambda_tilde = posterior['delta_lambda_tilde']
+            return chirp_mass_source, mass_ratio, lambda_tilde, delta_lambda_tilde
+        
+        else:
+            # Fetch the component masses and Lambdas
+            mass_1_source = posterior['mass_1_source']
+            mass_2_source = posterior['mass_2_source']
+            lambda_1 = posterior['lambda_1']
+            lambda_2 = posterior['lambda_2']
         
             return mass_1_source, mass_2_source, lambda_1, lambda_2
         

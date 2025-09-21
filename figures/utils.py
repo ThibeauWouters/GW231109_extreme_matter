@@ -3,6 +3,7 @@ import numpy as np
 import json
 import importlib
 import h5py
+import json
 
 def fetch_posterior_filename(source_dir: str):
     """
@@ -21,15 +22,25 @@ def fetch_posterior_filename(source_dir: str):
     final_results_dir = os.path.join(source_dir, "outdir/final_result")
 
     if not os.path.exists(final_results_dir):
-        return None
+        print(f"No final_result directory found in {source_dir}, checking outdir/ instead for JSON files.")
+        final_results_dir = os.path.join(source_dir, "outdir")
+        if not os.path.exists(final_results_dir):
+            print(f"This might not be a valid dir")
+            return None
+        posterior_files = [
+            f for f in os.listdir(final_results_dir)
+            if f.endswith(".json")
+        ]
+        if not posterior_files:
+            return None
 
-    posterior_files = [
-        f for f in os.listdir(final_results_dir)
-        if f.endswith(".h5") or f.endswith(".hdf5")
-    ]
+    else:
+        posterior_files = [
+            f for f in os.listdir(final_results_dir)
+            if f.endswith(".h5") or f.endswith(".hdf5")
+        ]
 
     if not posterior_files:
-        print(f"WARNING: No posterior files found in {final_results_dir}.")
         return None
 
     # Just return the first one found, there should be only one anyways
@@ -44,8 +55,9 @@ def fetch_mass_Lambdas_samples(posterior_filename: str,
         posterior_filename (str): Filename of the posterior HDF5 file from which to fetch the mass and Lambda samples.
     """
     
-    with h5py.File(posterior_filename, 'r') as f:
-        posterior = f['posterior']
+    if posterior_filename.endswith(".h5") or posterior_filename.endswith(".hdf5"):
+        with h5py.File(posterior_filename, 'r') as f:
+            posterior = f['posterior']
         
         if chirp_tilde:
             # Fetch the chirp mass and lambda_tilde
@@ -62,6 +74,27 @@ def fetch_mass_Lambdas_samples(posterior_filename: str,
             lambda_2 = posterior['lambda_2'][:]
         
             return mass_1_source, mass_2_source, lambda_1, lambda_2
+    else:
+        # Open with JSON
+        with open(posterior_filename, 'r') as f:
+            posterior = json.load(f)['posterior']['content']
+            
+        if chirp_tilde:
+            # Fetch the chirp mass and lambda_tilde
+            chirp_mass_source = posterior['chirp_mass_source']
+            mass_ratio = posterior['mass_ratio']
+            lambda_tilde = posterior['lambda_tilde']
+            delta_lambda_tilde = posterior['delta_lambda_tilde']
+            return np.array(chirp_mass_source), np.array(mass_ratio), np.array(lambda_tilde), np.array(delta_lambda_tilde)
+        
+        else:
+            # Fetch the component masses and Lambdas
+            mass_1_source = posterior['mass_1_source']
+            mass_2_source = posterior['mass_2_source']
+            lambda_1 = posterior['lambda_1']
+            lambda_2 = posterior['lambda_2']
+        
+            return np.array(mass_1_source), np.array(mass_2_source), np.array(lambda_1), np.array(lambda_2)
         
 def fetch_sampling_time(source_dir: str) -> float:
     """
