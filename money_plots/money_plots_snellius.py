@@ -171,12 +171,9 @@ def make_parameter_histograms(data_list: list, outdir_names: list, colors: list,
             x = np.linspace(config['range'][0], config['range'][1], 1000)
             y = kde(x)
 
-            # Get directory basename for label
+            # Get directory basename and map to label
             dir_basename = os.path.basename(outdir_name.rstrip('/'))
-
-            # Add credible interval to label
-            low, med, high = report_credible_interval(param_values)
-            label = f'{dir_basename}: {med:.2f} -{low:.2f} +{high:.2f}'
+            label = LABELS_DICT.get(dir_basename, dir_basename)
 
             plt.plot(x, y, color=color, lw=3.0, label=label)
             plt.fill_between(x, y, alpha=0.3, color=color)
@@ -186,7 +183,6 @@ def make_parameter_histograms(data_list: list, outdir_names: list, colors: list,
         plt.xlim(config['range'])
         plt.ylim(bottom=0.0)
         plt.legend()
-        plt.title(f'{param_name} Comparison')
 
         # Save comparison plot
         save_name = os.path.join("./figures", f"comparison_{param_name}_histogram{save_suffix}.pdf")
@@ -263,7 +259,8 @@ def make_mass_radius_plot(data_list: list, outdir_names: list, colors: list, sav
     legend_elements = []
     for outdir_name, color in zip(outdir_names, colors):
         dir_basename = os.path.basename(outdir_name.rstrip('/'))
-        legend_elements.append(plt.Line2D([0], [0], color=color, lw=2, label=dir_basename))
+        label = LABELS_DICT.get(dir_basename, dir_basename)
+        legend_elements.append(plt.Line2D([0], [0], color=color, lw=2, label=label))
 
     plt.legend(handles=legend_elements, loc='upper right')
 
@@ -342,7 +339,8 @@ def make_pressure_density_plot(data_list: list, outdir_names: list, colors: list
     legend_elements = []
     for outdir_name, color in zip(outdir_names, colors):
         dir_basename = os.path.basename(outdir_name.rstrip('/'))
-        legend_elements.append(plt.Line2D([0], [0], color=color, lw=2, label=dir_basename))
+        label = LABELS_DICT.get(dir_basename, dir_basename)
+        legend_elements.append(plt.Line2D([0], [0], color=color, lw=2, label=label))
 
     plt.legend(handles=legend_elements, loc='upper left')
 
@@ -351,6 +349,29 @@ def make_pressure_density_plot(data_list: list, outdir_names: list, colors: list
     plt.savefig(save_name, bbox_inches="tight")
     plt.close()
     print(f"  Pressure-density comparison plot saved to {save_name}")
+
+def get_colors_for_directories(directories: list):
+    """Get colors for directories based on COLORS_DICT mapping.
+
+    Args:
+        directories: List of directory paths
+
+    Returns:
+        list: Colors corresponding to each directory
+    """
+    colors = []
+    default_colors = ['blue', 'red', 'green', 'orange', 'purple', 'brown', 'pink', 'gray', 'olive', 'cyan']
+
+    for i, outdir in enumerate(directories):
+        dir_basename = os.path.basename(outdir.rstrip('/'))
+        if dir_basename in COLORS_DICT:
+            colors.append(COLORS_DICT[dir_basename])
+        else:
+            # Fallback to default colors if not in mapping
+            colors.append(default_colors[i % len(default_colors)])
+            print(f"Warning: No color mapping found for {dir_basename}, using default color {default_colors[i % len(default_colors)]}")
+
+    return colors
 
 def load_all_data(directories: list):
     """Load EOS data from all specified directories.
@@ -404,15 +425,6 @@ def main():
         # Add more directories as needed
     ]
 
-    # Colors for comparison plots (one per directory)
-    # Options: 'blue', 'red', 'green', 'orange', 'purple', 'brown', 'pink', 'gray', 'olive', 'cyan'
-    colors = [
-        'blue',
-        'red',
-        'green',
-        # Add more colors as needed (should match number of directories)
-    ]
-
     # Optional suffix for all output files
     save_suffix = ""
 
@@ -424,13 +436,8 @@ def main():
     print("=" * 60)
     print(f"Processing {len(directories)} directories for comparison plots...")
 
-    # Ensure we have enough colors
-    if len(colors) < len(directories):
-        print(f"Warning: Only {len(colors)} colors provided for {len(directories)} directories.")
-        print("Extending with default colors...")
-        default_colors = ['blue', 'red', 'green', 'orange', 'purple']
-        while len(colors) < len(directories):
-            colors.append(default_colors[len(colors) % len(default_colors)])
+    # Get colors automatically based on directory names
+    colors = get_colors_for_directories(directories)
 
     # Load all data
     data_list, valid_directories = load_all_data(directories)
@@ -439,15 +446,8 @@ def main():
         print("Error: No valid data directories found!")
         return
 
-    # Match colors to valid directories
-    valid_colors = []
-    for valid_dir in valid_directories:
-        try:
-            idx = directories.index(valid_dir)
-            valid_colors.append(colors[idx])
-        except ValueError:
-            # This shouldn't happen, but fallback to first color
-            valid_colors.append(colors[0])
+    # Get colors for valid directories only
+    valid_colors = get_colors_for_directories(valid_directories)
 
     print(f"\n{'='*60}")
     print(f"Creating comparison plots for {len(data_list)} valid datasets...")
