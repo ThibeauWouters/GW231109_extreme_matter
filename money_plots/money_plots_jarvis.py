@@ -251,12 +251,6 @@ def load_and_process_data(source_dirs: list[str],
     if not all_samples:
         return [], [], [], []
 
-    # Sort all data by z-order (lowest first, so higher z-order plots appear on top)
-    sorted_data = sorted(zip(valid_zorders, all_samples, valid_labels, valid_colors),
-                       key=lambda x: x[0])
-    valid_zorders, all_samples, valid_labels, valid_colors = zip(*sorted_data)
-    valid_zorders, all_samples, valid_labels, valid_colors = list(valid_zorders), list(all_samples), list(valid_labels), list(valid_colors)
-
     return all_samples, valid_labels, valid_colors, valid_zorders
 
 def create_comparison_cornerplot(source_dirs: list[str],
@@ -266,7 +260,8 @@ def create_comparison_cornerplot(source_dirs: list[str],
                                ranges: dict = None,
                                zorders: list[int] = None,
                                save_name: str = "comparison_cornerplot.pdf",
-                               overwrite: bool = False) -> bool:
+                               overwrite: bool = False,
+                               dummy_normalization_keys: list[int] = None) -> bool:
     """
     Create a comparison corner plot with multiple runs overlaid.
 
@@ -279,6 +274,9 @@ def create_comparison_cornerplot(source_dirs: list[str],
         zorders (list[int]): Z-order for each run (higher values appear on top, optional)
         save_name (str): Output filename
         overwrite (bool): Whether to overwrite existing plots
+        dummy_normalization_keys (list[int]): Indices of datasets to use for each parameter
+            to create a dummy normalization dataset (optional). If provided, must have same
+            length as parameters list.
 
     Returns:
         bool: True if successful, False otherwise
@@ -311,10 +309,10 @@ def create_comparison_cornerplot(source_dirs: list[str],
                 print(f"Warning: zorders length ({len(zorders)}) doesn't match source_dirs length ({len(source_dirs)})")
                 zorders = list(range(len(source_dirs)))
 
-            # Sort by z-order for proper plotting
-            sorted_data = sorted(zip(zorders, all_samples, labels, colors), key=lambda x: x[0])
-            valid_zorders, all_samples, valid_labels, valid_colors = zip(*sorted_data)
-            valid_zorders, all_samples, valid_labels, valid_colors = list(valid_zorders), list(all_samples), list(valid_labels), list(valid_colors)
+            # Keep original order, don't sort by z-order
+            valid_zorders = zorders
+            valid_labels = labels
+            valid_colors = colors
         else:
             print("Loading data from source files and caching...")
             # Load data from scratch
@@ -330,12 +328,43 @@ def create_comparison_cornerplot(source_dirs: list[str],
             cache_data = {'all_samples': all_samples}
             save_comparison_data(cache_filename, cache_data, parameters)
 
+        # Create dummy normalization dataset if requested
+        dummy_dataset = None
+        if dummy_normalization_keys is not None:
+            # Validate dummy_normalization_keys
+            n_params = len(parameters)
+            if len(dummy_normalization_keys) != n_params:
+                raise ValueError(f"dummy_normalization_keys must have length {n_params} (number of parameters), got {len(dummy_normalization_keys)}")
+
+            # Check that all keys are valid dataset indices
+            n_datasets = len(all_samples)
+            for i, key in enumerate(dummy_normalization_keys):
+                if not (0 <= key < n_datasets):
+                    raise ValueError(f"dummy_normalization_keys[{i}] = {key} is not a valid dataset index (0 to {n_datasets-1})")
+
+            # Find minimum number of samples across all datasets
+            min_samples = min(len(dataset) for dataset in all_samples)
+            print(f"Creating dummy normalization dataset using keys: {dummy_normalization_keys}")
+            print(f"Using minimum sample count: {min_samples}")
+
+            # Create dummy dataset by selecting specified dataset for each parameter
+            dummy_columns = []
+            for param_idx, dataset_idx in enumerate(dummy_normalization_keys):
+                dataset = all_samples[dataset_idx]
+                # Downsample to min_samples by taking first min_samples rows
+                downsampled_dataset = dataset[:min_samples]
+                dummy_columns.append(downsampled_dataset[:, param_idx])
+
+            dummy_dataset = np.column_stack(dummy_columns)
+            print(f"Created dummy dataset with shape: {dummy_dataset.shape}")
+
         # Create the corner plot with the first dataset
         print("Creating corner plot...")
 
         # Set up corner kwargs
         corner_kwargs = DEFAULT_CORNER_KWARGS.copy()
         corner_kwargs["color"] = valid_colors[0]
+        corner_kwargs["zorder"] = valid_zorders[0]
 
         # Apply parameter ranges if provided
         if ranges:
@@ -362,11 +391,41 @@ def create_comparison_cornerplot(source_dirs: list[str],
             if "range" in corner_kwargs_overlay:
                 corner_kwargs_overlay["range"] = corner_kwargs_overlay["range"].copy()
             corner_kwargs_overlay["color"] = valid_colors[i]
+            corner_kwargs_overlay["zorder"] = valid_zorders[i]
             corner_kwargs_overlay["fig"] = fig
 
             corner.corner(all_samples[i],
                          labels=parameter_labels,
                          **corner_kwargs_overlay)
+
+        # Plot dummy normalization dataset last (invisible, for normalization)
+        if dummy_dataset is not None:
+            print("Adding dummy normalization dataset...")
+            invisible_kwargs = DEFAULT_CORNER_KWARGS.copy()
+            invisible_kwargs.update({
+                'labels': parameter_labels,
+                'hist_kwargs': {'alpha': 0, 'density': True},
+                'plot_density': False,     # Disable 2D density plots
+                'plot_contours': False,    # Disable 2D contours
+                'plot_datapoints': False,  # Disable scatter points
+                'no_fill_contours': True,  # Disable filled contours
+                'color': 'black',
+                'fig': fig
+            })
+
+            # Apply parameter ranges if provided
+            if ranges:
+                range_list = []
+                for param in parameters:
+                    if param in ranges:
+                        range_list.append(ranges[param])
+                    else:
+                        range_list.append(None)
+                invisible_kwargs["range"] = range_list
+
+            corner.corner(dummy_dataset,
+                         labels=parameter_labels,
+                         **invisible_kwargs)
 
         # Add legend
         legend_elements = []
@@ -810,6 +869,7 @@ def create_injection_comparison_plot() -> bool:
             if "range" in corner_kwargs_overlay:
                 corner_kwargs_overlay["range"] = corner_kwargs_overlay["range"].copy()
             corner_kwargs_overlay["color"] = valid_colors[i]
+            corner_kwargs_overlay["zorder"] = valid_zorders[i]
             corner_kwargs_overlay["fig"] = fig
 
             corner.corner(all_samples[i],
@@ -855,38 +915,32 @@ def main():
         "lambda_tilde"
     ]
 
+    # ====== COMPARISON 1: SPIN PRIOR COMPARISON ======
+    print("Creating spin prior comparison corner plot...")
+
     # Parameter ranges
     ranges = {
-        "chirp_mass": (1.3056, 1.3070),
-        "mass_ratio": (0.60, 1.0),
-        "chi_eff": (-0.01, 0.045),
+        "chirp_mass": (1.3055, 1.3075),
+        "mass_ratio": (0.30, 1.0),
+        "chi_eff": (-0.05, 0.080),
         "lambda_1": (0, 5000),
         "lambda_2": (0, 5000),
         "lambda_tilde": (0, 5000),
     }
 
-    # ====== COMPARISON 1: SPIN PRIOR COMPARISON ======
-    print("Creating spin prior comparison corner plot...")
-
     # Three spin priors: chi<0.05, chi<0.025, chi<0.40
     spin_source_dirs = [
-        "/work/wouters/GW231109/prod_BW_XP_s005_l5000_default/",  # chi<0.05
-        "/work/wouters/GW231109/prod_BW_XP_s025_l5000_default/",  # chi<0.025
         "/work/wouters/GW231109/prod_BW_XP_s040_l5000_default/",  # chi<0.40
+        "/work/wouters/GW231109/prod_BW_XP_s025_l5000_default/",  # chi<0.025
+        "/work/wouters/GW231109/prod_BW_XP_s005_l5000_default/",  # chi<0.05
     ]
 
     # Labels for spin comparison
     spin_labels = [
-        r"1",
-        r"2",
-        r"3",
+        r"$\\chi \\leq 0.40$",
+        r"$\\chi \\leq 0.25$",
+        r"$\\chi \\leq 0.05$",
     ]
-    # spin_labels = [
-    #     r"$\chi \lt 0.05$",
-    #     r"$\chi \lt 0.25$",
-    #     r"$\chi \lt 0.40$",
-    # ]
-
 
     # Colors for spin comparison (same as before, no red)
     spin_colors = [
@@ -898,6 +952,9 @@ def main():
     # Z-orders for spin comparison
     spin_zorders = [2, 1, 0]
 
+    # Dummy dataset: always use chi<0.05 (dataset index 2) for all parameters
+    spin_dummy_keys = [2] * len(parameters)  # [2, 2, 2, 2, 2, 2]
+
     # Create the spin comparison corner plot
     spin_success = create_comparison_cornerplot(
         source_dirs=spin_source_dirs,
@@ -907,7 +964,8 @@ def main():
         ranges=ranges,
         zorders=spin_zorders,
         save_name="spin_comparison_cornerplot.pdf",
-        overwrite=True
+        overwrite=True,
+        dummy_normalization_keys=spin_dummy_keys
     )
 
     if spin_success:
@@ -917,6 +975,16 @@ def main():
 
     # ====== COMPARISON 2: PRIOR TYPE COMPARISON ======
     print("\nCreating prior type comparison corner plot...")
+    
+    # Parameter ranges
+    ranges = {
+        "chirp_mass": (1.3056, 1.3070),
+        "mass_ratio": (0.60, 1.0),
+        "chi_eff": (-0.01, 0.045),
+        "lambda_1": (0, 5000),
+        "lambda_2": (0, 5000),
+        "lambda_tilde": (0, 5000),
+    }
 
     # Original comparison (without the high-spin red one)
     prior_source_dirs = [
@@ -942,6 +1010,10 @@ def main():
     # Z-orders for prior comparison (quasi-universal on top)
     prior_zorders = [0, 2, 1]  # Default: 0, Quasi-Universal: 2 (highest), Double Gaussian: 1
 
+    # Dummy dataset: ["Default", "Default", "Quniv", "Quniv", "Quniv"]
+    # Default = index 0, Quasi-universal = index 1
+    prior_dummy_keys = [0, 0, 1, 1, 1, 1]  # For 6 parameters: chirp_mass, mass_ratio, chi_eff, lambda_1, lambda_2, lambda_tilde
+
     # Create the prior comparison corner plot
     prior_success = create_comparison_cornerplot(
         source_dirs=prior_source_dirs,
@@ -951,7 +1023,8 @@ def main():
         ranges=ranges,
         zorders=prior_zorders,
         save_name="prior_comparison_cornerplot.pdf",
-        overwrite=True
+        overwrite=True,
+        dummy_normalization_keys=prior_dummy_keys
     )
 
     if prior_success:
