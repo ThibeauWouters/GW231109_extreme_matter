@@ -102,10 +102,11 @@ def generate_cache_filename(source_dirs: list[str], parameters: list[str]) -> st
 def save_comparison_data(filename: str, data: dict, parameters: list[str]) -> bool:
     """
     Save comparison data to cache file using np.savez with parameter names.
+    Only caches the sample data, not plotting configuration (labels, colors, zorders).
 
     Args:
         filename (str): Cache filename
-        data (dict): Data to save
+        data (dict): Data to save (only 'all_samples' is cached)
         parameters (list[str]): Parameter names for proper column mapping
 
     Returns:
@@ -116,9 +117,6 @@ def save_comparison_data(filename: str, data: dict, parameters: list[str]) -> bo
 
         # Create a dictionary with parameter names as keys for each dataset
         save_dict = {
-            'valid_labels': data['valid_labels'],
-            'valid_colors': data['valid_colors'],
-            'valid_zorders': data['valid_zorders'],
             'parameters': parameters  # Save parameter order
         }
 
@@ -134,16 +132,17 @@ def save_comparison_data(filename: str, data: dict, parameters: list[str]) -> bo
         print(f"Failed to save cache data: {e}")
         return False
 
-def load_comparison_data(filename: str, parameters: list[str]) -> dict:
+def load_comparison_data(filename: str, parameters: list[str]) -> list:
     """
     Load comparison data from cache file, reordering parameters as needed.
+    Only returns the sample data, not plotting configuration.
 
     Args:
         filename (str): Cache filename
         parameters (list[str]): Desired parameter order
 
     Returns:
-        dict: Loaded data with parameters in correct order, or None if failed
+        list: List of sample arrays, or None if failed
     """
     try:
         if not os.path.exists(filename):
@@ -175,16 +174,9 @@ def load_comparison_data(filename: str, parameters: list[str]) -> dict:
                     raise KeyError(f"Missing parameter {param} for dataset {i}")
             all_samples.append(np.column_stack(dataset_samples))
 
-        result = {
-            'all_samples': all_samples,
-            'valid_labels': data['valid_labels'].tolist(),
-            'valid_colors': data['valid_colors'].tolist(),
-            'valid_zorders': data['valid_zorders'].tolist()
-        }
-
         print(f"Loaded comparison data from cache: {filename}")
         print(f"Reordered parameters from {cached_parameters} to {parameters}")
-        return result
+        return all_samples
 
     except Exception as e:
         print(f"Failed to load cache data: {e}")
@@ -301,14 +293,28 @@ def create_comparison_cornerplot(source_dirs: list[str],
 
         # Check if cached data exists
         cache_filename = generate_cache_filename(source_dirs, parameters)
-        cached_data = load_comparison_data(cache_filename, parameters)
+        cached_samples = load_comparison_data(cache_filename, parameters)
 
-        if cached_data is not None:
+        if cached_samples is not None:
             print("Using cached comparison data")
-            all_samples = cached_data['all_samples']
-            valid_labels = cached_data['valid_labels']
-            valid_colors = cached_data['valid_colors']
-            valid_zorders = cached_data['valid_zorders']
+            all_samples = cached_samples
+            # Always use the provided plotting configuration (labels, colors, zorders)
+            # Process them the same way as in load_and_process_data
+            if colors is None:
+                default_colors = [ORANGE, BLUE, GREEN, GW231109_COLOR, GW190425_COLOR, GW170817_COLOR, PRIOR_COLOR]
+                colors = default_colors[:len(source_dirs)]
+            if labels is None:
+                labels = [f"Run {i+1}" for i in range(len(source_dirs))]
+            if zorders is None:
+                zorders = list(range(len(source_dirs)))
+            elif len(zorders) != len(source_dirs):
+                print(f"Warning: zorders length ({len(zorders)}) doesn't match source_dirs length ({len(source_dirs)})")
+                zorders = list(range(len(source_dirs)))
+
+            # Sort by z-order for proper plotting
+            sorted_data = sorted(zip(zorders, all_samples, labels, colors), key=lambda x: x[0])
+            valid_zorders, all_samples, valid_labels, valid_colors = zip(*sorted_data)
+            valid_zorders, all_samples, valid_labels, valid_colors = list(valid_zorders), list(all_samples), list(valid_labels), list(valid_colors)
         else:
             print("Loading data from source files and caching...")
             # Load data from scratch
@@ -320,13 +326,8 @@ def create_comparison_cornerplot(source_dirs: list[str],
                 print("No valid samples loaded!")
                 return False
 
-            # Save to cache
-            cache_data = {
-                'all_samples': all_samples,
-                'valid_labels': valid_labels,
-                'valid_colors': valid_colors,
-                'valid_zorders': valid_zorders
-            }
+            # Save to cache (only the samples)
+            cache_data = {'all_samples': all_samples}
             save_comparison_data(cache_filename, cache_data, parameters)
 
         # Create the corner plot with the first dataset
@@ -876,10 +877,16 @@ def main():
 
     # Labels for spin comparison
     spin_labels = [
-        "chi<0.05",
-        "chi<0.025",
-        "chi<0.40",
+        r"1",
+        r"2",
+        r"3",
     ]
+    # spin_labels = [
+    #     r"$\chi \lt 0.05$",
+    #     r"$\chi \lt 0.25$",
+    #     r"$\chi \lt 0.40$",
+    # ]
+
 
     # Colors for spin comparison (same as before, no red)
     spin_colors = [
@@ -889,7 +896,7 @@ def main():
     ]
 
     # Z-orders for spin comparison
-    spin_zorders = [0, 1, 2]
+    spin_zorders = [2, 1, 0]
 
     # Create the spin comparison corner plot
     spin_success = create_comparison_cornerplot(
