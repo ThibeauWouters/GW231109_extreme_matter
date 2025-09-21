@@ -844,16 +844,7 @@ def main():
     Edit this function to specify the directories, parameters, and settings for your comparison.
     """
 
-    # ====== USER CONFIGURATION ======
-    # Specify the source directories to compare
-    source_dirs = [
-        "/work/wouters/GW231109/prod_BW_XP_s005_l5000_default/",  # Default, low-spin
-        "/work/wouters/GW231109/prod_BW_XP_s040_l5000_default/",  # Default, high-spin
-        "/work/wouters/GW231109/prod_BW_XP_s005_lquniv_default/",
-        "/work/wouters/GW231109/prod_BW_XP_s005_l5000_double_gaussian",
-    ]
-
-    # Specify the parameters to include in the corner plot
+    # Parameters to include in the corner plot
     parameters = [
         "chirp_mass",
         "mass_ratio",
@@ -863,28 +854,7 @@ def main():
         "lambda_tilde"
     ]
 
-    # Specify labels for each run (optional)
-    labels = [
-        "Default, low-spin",
-        "Default, high-spin",
-        "Quasi universal relations",
-        "Double Gaussian",
-    ]
-
-    # Specify colors for each run (optional)
-    colors = [
-        ORANGE,    # "#de8f07" - Default, low-spin
-        "red",     # Default, high-spin
-        BLUE,      # "#0472b1" - Quasi universal relations
-        GREEN,     # "#019e72" - Double Gaussian
-    ]
-
-    # Specify z-orders for each run (higher values appear on top)
-    # Making quasi-universal (index 2) have the highest z-order
-    zorders = [0, 1, 3, 2]  # Default low-spin: 0, Default high-spin: 1, Quasi-Universal: 3 (highest), Double Gaussian: 2
-
-    # Specify parameter ranges (optional)
-    # Format: {parameter_name: (min_value, max_value)}
+    # Parameter ranges
     ranges = {
         "chirp_mass": (1.3056, 1.3070),
         "mass_ratio": (0.60, 1.0),
@@ -894,35 +864,93 @@ def main():
         "lambda_tilde": (0, 5000),
     }
 
-    # Output filename
-    save_name = "comparison_cornerplot.pdf"
+    # ====== COMPARISON 1: SPIN PRIOR COMPARISON ======
+    print("Creating spin prior comparison corner plot...")
 
-    # Whether to overwrite existing plots
-    overwrite = True
+    # Three spin priors: chi<0.05, chi<0.025, chi<0.40
+    spin_source_dirs = [
+        "/work/wouters/GW231109/prod_BW_XP_s005_l5000_default/",  # chi<0.05
+        "/work/wouters/GW231109/prod_BW_XP_s025_l5000_default/",  # chi<0.025
+        "/work/wouters/GW231109/prod_BW_XP_s040_l5000_default/",  # chi<0.40
+    ]
 
-    # ====== END USER CONFIGURATION ======
+    # Labels for spin comparison
+    spin_labels = [
+        "chi<0.05",
+        "chi<0.025",
+        "chi<0.40",
+    ]
 
-    print("Creating comparison corner plot...")
-    print(f"Directories: {len(source_dirs)}")
-    print(f"Parameters: {parameters}")
-    print(f"Labels: {labels}")
+    # Colors for spin comparison (same as before, no red)
+    spin_colors = [
+        ORANGE,    # "#de8f07"
+        BLUE,      # "#0472b1"
+        GREEN,     # "#019e72"
+    ]
 
-    # # Create the comparison corner plot
-    # success = create_comparison_cornerplot(
-    #     source_dirs=source_dirs,
-    #     parameters=parameters,
-    #     labels=labels,
-    #     colors=colors,
-    #     ranges=ranges,
-    #     zorders=zorders,
-    #     save_name=save_name,
-    #     overwrite=overwrite
-    # )
+    # Z-orders for spin comparison
+    spin_zorders = [0, 1, 2]
 
-    # if success:
-    #     print(f"✓ Successfully created comparison corner plot: {save_name}")
-    # else:
-    #     print("✗ Failed to create comparison corner plot")
+    # Create the spin comparison corner plot
+    spin_success = create_comparison_cornerplot(
+        source_dirs=spin_source_dirs,
+        parameters=parameters,
+        labels=spin_labels,
+        colors=spin_colors,
+        ranges=ranges,
+        zorders=spin_zorders,
+        save_name="spin_comparison_cornerplot.pdf",
+        overwrite=True
+    )
+
+    if spin_success:
+        print(f"✓ Successfully created spin comparison corner plot: spin_comparison_cornerplot.pdf")
+    else:
+        print("✗ Failed to create spin comparison corner plot")
+
+    # ====== COMPARISON 2: PRIOR TYPE COMPARISON ======
+    print("\nCreating prior type comparison corner plot...")
+
+    # Original comparison (without the high-spin red one)
+    prior_source_dirs = [
+        "/work/wouters/GW231109/prod_BW_XP_s005_l5000_default/",  # Default
+        "/work/wouters/GW231109/prod_BW_XP_s005_lquniv_default/",  # Quasi universal
+        "/work/wouters/GW231109/prod_BW_XP_s005_l5000_double_gaussian",  # Double Gaussian
+    ]
+
+    # Labels for prior comparison
+    prior_labels = [
+        "Default Prior",
+        "Quasi universal relations",
+        "Double Gaussian",
+    ]
+
+    # Colors for prior comparison (same as original, no red)
+    prior_colors = [
+        ORANGE,    # "#de8f07"
+        BLUE,      # "#0472b1"
+        GREEN,     # "#019e72"
+    ]
+
+    # Z-orders for prior comparison (quasi-universal on top)
+    prior_zorders = [0, 2, 1]  # Default: 0, Quasi-Universal: 2 (highest), Double Gaussian: 1
+
+    # Create the prior comparison corner plot
+    prior_success = create_comparison_cornerplot(
+        source_dirs=prior_source_dirs,
+        parameters=parameters,
+        labels=prior_labels,
+        colors=prior_colors,
+        ranges=ranges,
+        zorders=prior_zorders,
+        save_name="prior_comparison_cornerplot.pdf",
+        overwrite=True
+    )
+
+    if prior_success:
+        print(f"✓ Successfully created prior comparison corner plot: prior_comparison_cornerplot.pdf")
+    else:
+        print("✗ Failed to create prior comparison corner plot")
 
     # ====== INJECTION PLOTTING EXAMPLE ======
 
