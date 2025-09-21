@@ -115,6 +115,43 @@ def generate_save_path(source_dir: str,
 
     return save_path
 
+def fetch_posterior_filename(source_dir: str):
+    """
+    Given a source_dir where a GW inference run was performed in /work/, return the path to the posterior HDF5 file if it exists,
+    otherwise return None.
+
+    Args:
+        source_dir (str): Directory containing the run output. NOTE: It should have
+                          outdir/final_result/ with an HDF5 posterior file.
+
+    Returns:
+        str or None: Path to the posterior file, or None if not found.
+    """
+
+    source_dir = os.path.abspath(source_dir)
+    final_results_dir = os.path.join(source_dir, "outdir/final_result")
+
+    if not os.path.exists(final_results_dir):
+        return None
+
+    posterior_files = [
+        f for f in os.listdir(final_results_dir)
+        if f.endswith(".h5") or f.endswith(".hdf5")
+    ]
+
+    if not posterior_files:
+        print(f"WARNING: No HDF5 files found in {final_results_dir}. Trying to look for JSON files now")
+        final_results_dir = os.path.join(source_dir, "outdir")
+        posterior_files = [
+            f for f in os.listdir(final_results_dir)
+            if f.endswith(".json")
+        ]
+        if not posterior_files:
+            return None
+
+    # Just return the first one found, there should be only one anyways
+    return os.path.join(final_results_dir, posterior_files[0])
+
 def load_posterior_samples(source_dir: str,
                           keys_to_fetch: list[str],
                           chirp_tilde: bool = False) -> tuple:
@@ -129,7 +166,7 @@ def load_posterior_samples(source_dir: str,
     Returns:
         tuple: Posterior samples as numpy arrays
     """
-    posterior_file = main_utils.fetch_posterior_filename(source_dir)
+    posterior_file = fetch_posterior_filename(source_dir)
     if posterior_file is None:
         raise FileNotFoundError(f"No posterior file found in {source_dir}")
 
@@ -158,7 +195,7 @@ def load_run_metadata(source_dir: str) -> dict:
     Returns:
         dict: Metadata dictionary
     """
-    posterior_file = main_utils.fetch_posterior_filename(source_dir)
+    posterior_file = fetch_posterior_filename(source_dir)
     metadata = {}
 
     if posterior_file and posterior_file.endswith(('.h5', '.hdf5')):
