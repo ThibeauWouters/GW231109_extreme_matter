@@ -7,6 +7,8 @@ are overlaid for direct comparison.
 
 import os
 import argparse
+import hashlib
+import pickle
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.patches as mpatches
@@ -18,11 +20,179 @@ from utils import (
     load_run_metadata, load_priors_for_corner, ensure_directory_exists
 )
 
+# Parameter translation dictionary for LaTeX symbols
+PARAMETER_LABELS = {
+    "chirp_mass": r"$\mathcal{M}_c$ [M$_\odot$]",
+    "mass_ratio": r"$q$",
+    "lambda_1": r"$\Lambda_1$",
+    "lambda_2": r"$\Lambda_2$",
+    "chi_eff": r"$\chi_{\rm eff}$",
+    "lambda_tilde": r"$\tilde{\Lambda}$",
+    "chi_1": r"$\chi_1$",
+    "chi_2": r"$\chi_2$",
+    "mass_1": r"$m_1$ [M$_\odot$]",
+    "mass_2": r"$m_2$ [M$_\odot$]",
+    "luminosity_distance": r"$d_L$ [Mpc]",
+    "theta_jn": r"$\theta_{JN}$",
+    "psi": r"$\psi$",
+    "phase": r"$\phi$",
+    "geocent_time": r"$t_c$",
+    "ra": r"$\alpha$",
+    "dec": r"$\delta$",
+    "a_1": r"$a_1$",
+    "a_2": r"$a_2$",
+    "tilt_1": r"$\theta_1$",
+    "tilt_2": r"$\theta_2$",
+    "phi_12": r"$\Delta\phi$",
+    "phi_jl": r"$\phi_{JL}$"
+}
+
+def generate_cache_filename(source_dirs: list[str], parameters: list[str]) -> str:
+    """
+    Generate a unique cache filename based on source directories and parameters.
+
+    Args:
+        source_dirs (list[str]): List of source directories
+        parameters (list[str]): List of parameters
+
+    Returns:
+        str: Cache filename
+    """
+    # Create a string combining directories and parameters
+    cache_key = "|".join(sorted(source_dirs)) + "|" + "|".join(sorted(parameters))
+
+    # Generate MD5 hash for a consistent filename
+    hash_obj = hashlib.md5(cache_key.encode())
+    hash_hex = hash_obj.hexdigest()
+
+    return f"./data/comparison_cache_{hash_hex}.pkl"
+
+def save_comparison_data(filename: str, data: dict) -> bool:
+    """
+    Save comparison data to cache file.
+
+    Args:
+        filename (str): Cache filename
+        data (dict): Data to save
+
+    Returns:
+        bool: True if successful, False otherwise
+    """
+    try:
+        ensure_directory_exists(filename)
+        with open(filename, 'wb') as f:
+            pickle.dump(data, f)
+        print(f"Saved comparison data to cache: {filename}")
+        return True
+    except Exception as e:
+        print(f"Failed to save cache data: {e}")
+        return False
+
+def load_comparison_data(filename: str) -> dict:
+    """
+    Load comparison data from cache file.
+
+    Args:
+        filename (str): Cache filename
+
+    Returns:
+        dict: Loaded data, or None if failed
+    """
+    try:
+        if not os.path.exists(filename):
+            return None
+
+        with open(filename, 'rb') as f:
+            data = pickle.load(f)
+        print(f"Loaded comparison data from cache: {filename}")
+        return data
+    except Exception as e:
+        print(f"Failed to load cache data: {e}")
+        return None
+
+def load_and_process_data(source_dirs: list[str],
+                         parameters: list[str],
+                         labels: list[str] = None,
+                         colors: list[str] = None,
+                         zorders: list[int] = None) -> tuple:
+    """
+    Load and process data from source directories.
+
+    Args:
+        source_dirs (list[str]): List of directories containing posterior samples
+        parameters (list[str]): Parameters to include
+        labels (list[str]): Labels for each run (optional)
+        colors (list[str]): Colors for each run (optional)
+        zorders (list[int]): Z-order for each run (optional)
+
+    Returns:
+        tuple: (all_samples, valid_labels, valid_colors, valid_zorders)
+    """
+    # Default colors if not provided
+    if colors is None:
+        default_colors = [ORANGE, BLUE, GREEN, GW231109_COLOR, GW190425_COLOR, GW170817_COLOR, PRIOR_COLOR]
+        colors = default_colors[:len(source_dirs)]
+
+    # Default labels if not provided
+    if labels is None:
+        labels = [f"Run {i+1}" for i in range(len(source_dirs))]
+
+    # Default z-orders if not provided
+    if zorders is None:
+        zorders = list(range(len(source_dirs)))  # Default: 0, 1, 2, ...
+    elif len(zorders) != len(source_dirs):
+        print(f"Warning: zorders length ({len(zorders)}) doesn't match source_dirs length ({len(source_dirs)})")
+        zorders = list(range(len(source_dirs)))
+
+    # Load all posterior samples
+    all_samples = []
+    valid_dirs = []
+    valid_labels = []
+    valid_colors = []
+    valid_zorders = []
+
+    for i, source_dir in enumerate(source_dirs):
+        try:
+            print(f"Loading samples from: {source_dir}")
+
+            # Load metadata
+            metadata = load_run_metadata(source_dir)
+            if "log_bayes_factor" in metadata:
+                print(f"  Log Bayes factor: {metadata['log_bayes_factor']}")
+            if "sampling_time_hrs" in metadata:
+                print(f"  Sampling time: {metadata['sampling_time_hrs']:.2f} hours")
+
+            # Load posterior samples
+            samples = load_posterior_samples(source_dir, parameters)
+            all_samples.append(samples)
+            valid_dirs.append(source_dir)
+            valid_labels.append(labels[i])
+            valid_colors.append(colors[i])
+            valid_zorders.append(zorders[i])
+
+            print(f"  Loaded {len(samples)} samples")
+
+        except Exception as e:
+            print(f"  Failed to load samples from {source_dir}: {e}")
+            continue
+
+    if not all_samples:
+        return [], [], [], []
+
+    # Sort all data by z-order (lowest first, so higher z-order plots appear on top)
+    sorted_data = sorted(zip(valid_zorders, all_samples, valid_labels, valid_colors),
+                       key=lambda x: x[0])
+    valid_zorders, all_samples, valid_labels, valid_colors = zip(*sorted_data)
+    valid_zorders, all_samples, valid_labels, valid_colors = list(valid_zorders), list(all_samples), list(valid_labels), list(valid_colors)
+
+    return all_samples, valid_labels, valid_colors, valid_zorders
+
 def create_comparison_cornerplot(source_dirs: list[str],
                                parameters: list[str],
                                labels: list[str] = None,
                                colors: list[str] = None,
                                ranges: dict = None,
+                               zorders: list[int] = None,
                                save_name: str = "comparison_cornerplot.pdf",
                                overwrite: bool = False) -> bool:
     """
@@ -34,6 +204,7 @@ def create_comparison_cornerplot(source_dirs: list[str],
         labels (list[str]): Labels for each run (optional)
         colors (list[str]): Colors for each run (optional)
         ranges (dict): Parameter ranges as {param: (min, max)} (optional)
+        zorders (list[int]): Z-order for each run (higher values appear on top, optional)
         save_name (str): Output filename
         overwrite (bool): Whether to overwrite existing plots
 
@@ -48,48 +219,35 @@ def create_comparison_cornerplot(source_dirs: list[str],
         print(f"Creating comparison corner plot for {len(source_dirs)} runs")
         print(f"Parameters: {parameters}")
 
-        # Default colors if not provided
-        if colors is None:
-            default_colors = [ORANGE, BLUE, GREEN, GW231109_COLOR, GW190425_COLOR, GW170817_COLOR, PRIOR_COLOR]
-            colors = default_colors[:len(source_dirs)]
+        # Check if cached data exists
+        cache_filename = generate_cache_filename(source_dirs, parameters)
+        cached_data = load_comparison_data(cache_filename)
 
-        # Default labels if not provided
-        if labels is None:
-            labels = [f"Run {i+1}" for i in range(len(source_dirs))]
+        if cached_data is not None:
+            print("Using cached comparison data")
+            all_samples = cached_data['all_samples']
+            valid_labels = cached_data['valid_labels']
+            valid_colors = cached_data['valid_colors']
+            valid_zorders = cached_data['valid_zorders']
+        else:
+            print("Loading data from source files and caching...")
+            # Load data from scratch
+            all_samples, valid_labels, valid_colors, valid_zorders = load_and_process_data(
+                source_dirs, parameters, labels, colors, zorders
+            )
 
-        # Load all posterior samples
-        all_samples = []
-        valid_dirs = []
-        valid_labels = []
-        valid_colors = []
+            if not all_samples:
+                print("No valid samples loaded!")
+                return False
 
-        for i, source_dir in enumerate(source_dirs):
-            try:
-                print(f"Loading samples from: {source_dir}")
-
-                # Load metadata
-                metadata = load_run_metadata(source_dir)
-                if "log_bayes_factor" in metadata:
-                    print(f"  Log Bayes factor: {metadata['log_bayes_factor']}")
-                if "sampling_time_hrs" in metadata:
-                    print(f"  Sampling time: {metadata['sampling_time_hrs']:.2f} hours")
-
-                # Load posterior samples
-                samples = load_posterior_samples(source_dir, parameters)
-                all_samples.append(samples)
-                valid_dirs.append(source_dir)
-                valid_labels.append(labels[i])
-                valid_colors.append(colors[i])
-
-                print(f"  Loaded {len(samples)} samples")
-
-            except Exception as e:
-                print(f"  Failed to load samples from {source_dir}: {e}")
-                continue
-
-        if not all_samples:
-            print("No valid samples loaded!")
-            return False
+            # Save to cache
+            cache_data = {
+                'all_samples': all_samples,
+                'valid_labels': valid_labels,
+                'valid_colors': valid_colors,
+                'valid_zorders': valid_zorders
+            }
+            save_comparison_data(cache_filename, cache_data)
 
         # Create the corner plot with the first dataset
         print("Creating corner plot...")
@@ -108,9 +266,12 @@ def create_comparison_cornerplot(source_dirs: list[str],
                     range_list.append(None)
             corner_kwargs["range"] = range_list
 
+        # Create parameter labels using translation dictionary
+        parameter_labels = [PARAMETER_LABELS.get(param, param) for param in parameters]
+
         # Create initial plot
         fig = corner.corner(all_samples[0],
-                           labels=parameters,
+                           labels=parameter_labels,
                            **corner_kwargs)
 
         # Overlay additional datasets
@@ -120,7 +281,7 @@ def create_comparison_cornerplot(source_dirs: list[str],
             corner_kwargs_overlay["fig"] = fig
 
             corner.corner(all_samples[i],
-                         labels=parameters,
+                         labels=parameter_labels,
                          **corner_kwargs_overlay)
 
         # Add legend
@@ -183,6 +344,10 @@ def main():
         GREEN,     # "#019e72"
     ]
 
+    # Specify z-orders for each run (higher values appear on top)
+    # Making quasi-universal (index 1) have the highest z-order
+    zorders = [0, 2, 1]  # Default Prior: 0, Quasi-Universal: 2 (highest), Double Gaussian: 1
+
     # Specify parameter ranges (optional)
     # Format: {parameter_name: (min_value, max_value)}
     # ranges = {
@@ -213,6 +378,7 @@ def main():
         labels=labels,
         colors=colors,
         ranges=ranges,
+        zorders=zorders,
         save_name=save_name,
         overwrite=overwrite
     )
