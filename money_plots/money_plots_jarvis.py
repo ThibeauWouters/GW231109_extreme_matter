@@ -775,6 +775,34 @@ def main():
         print(f"✓ Successfully created injection plot")
     else:
         print("✗ Failed to create injection plot")
+        
+    # ====== INJECTION PLOTTING -- NOW FOR SECOND RUN ======
+
+    mc = 1.306298
+    eps_mc = 6e-6
+    ranges = {
+        "chirp_mass": (mc - eps_mc, mc + eps_mc),
+        "mass_ratio": (0.80, 1.0),
+        "chi_eff": (0.0290, 0.034),
+        "lambda_1": (0, 750),
+        "lambda_2": (0, 900),
+        "lambda_tilde": (180, 400),
+    }   
+    
+    ranges = None 
+
+    injection_filepath = "/work/puecher/S231109/third_gen_runs/et_ce_run_alignedspin/outdir/ETCE_gw231109_injectionxas_result.json"
+    injection_success = plot_injection(
+        filepath=injection_filepath,
+        ranges=ranges,
+        save_name="injection_et_ce_alignedspin.pdf",
+        overwrite=True
+    )
+    
+    if injection_success:
+        print(f"✓ Successfully created injection plot")
+    else:
+        print("✗ Failed to create injection plot")
 
 if __name__ == "__main__":
     main()
