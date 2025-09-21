@@ -57,6 +57,7 @@ figsize_horizontal = (8, 6)
 LABELS_DICT = {"outdir": "Prior", 
                "outdir_radio": "Radio timing",
                "outdir_GW170817": "+GW170817",
+               "outdir_GW231109": "+GW231109",
                "outdir_GW170817_GW231109": "+GW170817+GW231109",
                "outdir_GW170817_GW231109": "+GW170817+GW231109",
                "outdir_GW231109_double_gaussian": "+GW231109 (double Gaussian)",
@@ -68,6 +69,7 @@ LABELS_DICT = {"outdir": "Prior",
 COLORS_DICT = {"outdir": "darkgray",
                "outdir_radio": "dimgray",
                "outdir_GW170817": "orange",
+               "outdir_GW231109": "green",
                "outdir_GW170817_GW231109": "red",
                "outdir_GW231109_double_gaussian": "purple",
                "outdir_GW231109_double_quniv": "green",
@@ -411,34 +413,14 @@ def load_all_data(directories: list):
 
     return data_list, valid_directories
 
-def main():
-    """Main function - loads all data and creates comparison plots."""
+import os
 
-    # =======================================================================
-    # USER CONFIGURATION - MODIFY THIS SECTION
-    # =======================================================================
-
-    # List of directories to process (relative or absolute paths)
-    directories = [
-        "../jester/outdir",
-        "../jester/outdir_radio",
-        "../jester/outdir_GW231109",
-        # Add more directories as needed
-    ]
-
-    # Optional suffix for all output files
-    save_suffix = ""
-
-    # =======================================================================
-    # END USER CONFIGURATION
-    # =======================================================================
+def process_given_dirs(directories, save_suffix=""):
+    """Process given directories and generate comparison plots."""
 
     print("Money Plots Generator for Jester Inference Results")
     print("=" * 60)
     print(f"Processing {len(directories)} directories for comparison plots...")
-
-    # Get colors automatically based on directory names
-    colors = get_colors_for_directories(directories)
 
     # Load all data
     data_list, valid_directories = load_all_data(directories)
@@ -468,13 +450,77 @@ def main():
         print(f"Error generating comparison plots: {e}")
         return
 
-    print(f"\n{'='*60}")
-    print(f"Summary: Successfully created comparison plots for {len(data_list)} datasets")
-    print(f"Valid datasets: {[os.path.basename(d.rstrip('/')) for d in valid_directories]}")
-    print(f"Filename prefix: {filename_prefix}")
-    print(f"{'='*60}")
-    print("All figures saved to ./figures/EOS_comparison/")
-    print(f"{'='*60}")
+def main():
+    """Main function - configures directories and calls processing."""
+
+    # =======================================================================
+    # 1 Check GW231109
+    # =======================================================================
+
+    directories = [
+        "../jester/outdir",
+        "../jester/outdir_radio",
+        "../jester/outdir_GW231109",
+    ]
+    save_suffix = ""
+    process_given_dirs(directories, save_suffix)
+    
+    
+    # =======================================================================
+    # 2 Check GW231109 vs GW190425
+    # =======================================================================
+    
+    
+    directories = [
+        "../jester/outdir_radio",
+        "../jester/outdir_GW231109",
+        "../jester/outdir_GW190425",
+    ]
+    save_suffix = ""
+    process_given_dirs(directories, save_suffix)
+    
+    # =======================================================================
+    # 3 Check GW170817 vs GW170817+GW190425
+    # =======================================================================
+    
+    
+    directories = [
+        "../jester/outdir_radio",
+        "../jester/outdir_GW170817",
+        "../jester/outdir_GW170817_GW231109",
+    ]
+    save_suffix = ""
+    process_given_dirs(directories, save_suffix)
+    
+    # =======================================================================
+    # 4 Check GW231109 spins
+    # =======================================================================
+    
+    # TODO: finish
+    
+    # =======================================================================
+    # 5 Check GW231109 other prior choices
+    # =======================================================================
+    
+    directories = [
+        "../jester/outdir_GW231109",
+        "../jester/outdir_GW231109_double_gaussian",
+        "../jester/outdir_GW231109_quniv",
+    ]
+    save_suffix = ""
+    process_given_dirs(directories, save_suffix)
+    
+    # =======================================================================
+    # 6 Check XP vs XAS
+    # =======================================================================
+    
+    directories = [
+        "../jester/outdir_GW231109",
+        "../jester/outdir_GW231109_XAS",
+    ]
+    save_suffix = ""
+    process_given_dirs(directories, save_suffix)
+
 
 if __name__ == "__main__":
     main()
