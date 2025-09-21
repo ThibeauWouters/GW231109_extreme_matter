@@ -42,13 +42,13 @@ default_corner_kwargs = dict(bins=40,
 
 ###### Setup
 file_paths = {
-  "Test precessing": "/work/wouters/GW231109/test_precessing_high_spins/outdir/final_result/GW231109_data0_1383609314-056813_analysis_H1L1_result.hdf5",
+  "Test": "/work/wouters/GW231109/prod_BW_XP_s005_l5000_default/outdir/final_result/GW231109_data0_1383609314-056813_analysis_H1L1_result.hdf5",
 }
-run_labels_list = ["IMRPhenomXP_NRTidalv3"]
+run_labels_list = ["flagship"]
 
 # Colors for different runs
-colors = {"Test precessing": "blue",}
-alphas = {"Test precessing": 0.3,}
+colors = {"Test": "blue"}
+alphas = {"Test": 0.3}
 ###### Setup
 
 
@@ -102,7 +102,7 @@ legend_elements = [plt.Line2D([0], [0], color=colors[run], lw=2, label=label)
                   for run, label in zip(all_data.keys(), run_labels_list)]
 fig.legend(handles=legend_elements, loc='upper right', bbox_to_anchor=(0.95, 0.975), fontsize=18)
 
-plt.savefig("./figures/combined_corner.png", bbox_inches="tight", dpi=300)
+plt.savefig("./presentation/combined_corner.png", bbox_inches="tight", dpi=300)
 plt.close()
 
 # Combined lambda_tilde plot
@@ -128,7 +128,7 @@ plt.yscale("log")
 plt.grid(True, alpha=0.3)
 plt.legend()
 plt.tight_layout()
-plt.savefig("./figures/combined_lambda_tilde.png", bbox_inches="tight", dpi=300)
+plt.savefig("./presentation/combined_lambda_tilde.png", bbox_inches="tight", dpi=300)
 plt.close()
 
 # Combined luminosity distance plot
@@ -153,5 +153,5 @@ plt.yscale("log")
 plt.grid(True, alpha=0.3)
 plt.legend()
 plt.tight_layout()
-plt.savefig("./figures/combined_luminosity_distance.png", bbox_inches="tight", dpi=300)
+plt.savefig("./presentation/combined_luminosity_distance.png", bbox_inches="tight", dpi=300)
 plt.close()
