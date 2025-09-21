@@ -30,8 +30,8 @@ LABELS_DICT = {"outdir": "Prior",
                "outdir_GW231109_gaussian": "+GW231109 (Gaussian)",
                "outdir_GW231109_double_gaussian": "+GW231109 (double Gaussian)",
                "outdir_GW231109_quniv": "+GW231109 (QUR)",
-               "outdir_GW231109_s025": "+GW231109 (s025)",
-               "outdir_GW231109_s040": "+GW231109 (s040)",
+               "outdir_GW231109_s025": "+GW231109 ($\\chi \\leq 0.25$)",
+               "outdir_GW231109_s040": "+GW231109 ($\\chi \\leq 0.4$)",
                "outdir_GW231109_XAS": "+GW231109 (XAS)",
                "outdir_GW170817_GW231109": "+GW170817+GW231109",
                "outdir_GW170817_GW190425": "+GW170817+GW190425",
@@ -254,8 +254,10 @@ def json_to_latex_table(json_filename: str, output_filename: str = "eos_paramete
 
             latex_content.append(f"{label_escaped} & ${mtov}$ & ${r14}$ & ${p3nsat}$ \\\\")
 
-        # Add spacing between groups (except after the last group)
+        # Add spacing and horizontal line between groups (except after the last group)
         if group_idx < len(group_order) - 1:
+            latex_content.append("\\addlinespace")
+            latex_content.append("\\hline")
             latex_content.append("\\addlinespace")
 
     # End table
