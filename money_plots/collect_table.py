@@ -25,12 +25,17 @@ import jesterTOV.utils as jose_utils
 LABELS_DICT = {"outdir": "Prior",
                "outdir_radio": "Radio timing",
                "outdir_GW170817": "+GW170817",
-               "outdir_GW231109": "+GW231109",
                "outdir_GW190425": "+GW190425",
-               "outdir_GW170817_GW231109": "+GW170817+GW231109",
-               "outdir_GW170817_GW190425": "+GW170817+GW190425",
+               "outdir_GW231109": "+GW231109",
+               "outdir_GW231109_gaussian": "+GW231109 (Gaussian)",
                "outdir_GW231109_double_gaussian": "+GW231109 (double Gaussian)",
                "outdir_GW231109_quniv": "+GW231109 (QUR)",
+               "outdir_GW231109_s025": "+GW231109 (s025)",
+               "outdir_GW231109_s040": "+GW231109 (s040)",
+               "outdir_GW231109_XAS": "+GW231109 (XAS)",
+               "outdir_GW170817_GW231109": "+GW170817+GW231109",
+               "outdir_GW170817_GW190425": "+GW170817+GW190425",
+               "outdir_GW170817_GW190425_GW231109": "+GW170817+GW190425+GW231109",
                "outdir_ET_AS": "ET",
                }
 
@@ -174,6 +179,7 @@ def json_to_latex_table(json_filename: str, output_filename: str = "eos_paramete
     """Convert JSON results to LaTeX table format.
 
     Formats entries with the smallest width (uncertainty) in bold for each parameter.
+    Organizes results into groups with whitespace separation.
 
     Args:
         json_filename: Input JSON filename
@@ -182,6 +188,19 @@ def json_to_latex_table(json_filename: str, output_filename: str = "eos_paramete
     # Load JSON data
     with open(json_filename, 'r') as f:
         results = json.load(f)
+
+    # Define group organization
+    group_order = [
+        # Group 1: Prior and radio timing
+        ["outdir", "outdir_radio"],
+        # Group 2: Individual GW events
+        ["outdir_GW170817", "outdir_GW190425"],
+        # Group 3: GW231109 variations
+        ["outdir_GW231109", "outdir_GW231109_gaussian", "outdir_GW231109_double_gaussian",
+         "outdir_GW231109_quniv", "outdir_GW231109_s025", "outdir_GW231109_s040", "outdir_GW231109_XAS"],
+        # Group 4: Combinations
+        ["outdir_GW170817_GW231109", "outdir_GW170817_GW190425", "outdir_GW170817_GW190425_GW231109"]
+    ]
 
     # Find entries with minimum width for each parameter
     min_widths = {}
@@ -201,33 +220,43 @@ def json_to_latex_table(json_filename: str, output_filename: str = "eos_paramete
     latex_content.append("\\centering")
     latex_content.append("\\caption{EOS parameter constraints with 90\\% credible intervals}")
     latex_content.append("\\label{tab:eos_parameters}")
-    latex_content.append("\\begin{tabular}{lccc}")
+    latex_content.append("\\renewcommand{\\arraystretch}{1.3}")
+    latex_content.append("\\begin{tabular}{l@{\\hspace{1.5cm}}c@{\\hspace{1.5cm}}c@{\\hspace{1.5cm}}c}")
     latex_content.append("\\toprule")
     latex_content.append("Dataset & $M_{\\mathrm{TOV}}$ [$M_{\\odot}$] & $R_{1.4}$ [km] & $p(3n_{\\mathrm{sat}})$ [MeV fm$^{-3}$] \\\\")
     latex_content.append("\\midrule")
 
-    # Add data rows
-    for dir_basename, data in results.items():
-        label = data['label']
-        params = data['parameters']
+    # Add data rows organized by groups
+    for group_idx, group in enumerate(group_order):
+        for item_idx, dir_basename in enumerate(group):
+            if dir_basename not in results:
+                continue  # Skip if directory wasn't processed
 
-        # Format each parameter with credible interval, bold if minimum width
-        mtov = params['MTOV']['credible_interval']
-        r14 = params['R14']['credible_interval']
-        p3nsat = params['p3nsat']['credible_interval']
+            data = results[dir_basename]
+            label = data['label']
+            params = data['parameters']
 
-        # Apply bold formatting for minimum width entries
-        if min_widths['MTOV'] == dir_basename:
-            mtov = f"\\boldsymbol{{{mtov}}}"
-        if min_widths['R14'] == dir_basename:
-            r14 = f"\\boldsymbol{{{r14}}}"
-        if min_widths['p3nsat'] == dir_basename:
-            p3nsat = f"\\boldsymbol{{{p3nsat}}}"
+            # Format each parameter with credible interval, bold if minimum width
+            mtov = params['MTOV']['credible_interval']
+            r14 = params['R14']['credible_interval']
+            p3nsat = params['p3nsat']['credible_interval']
 
-        # Escape special characters for LaTeX
-        label_escaped = label.replace('+', '$+$').replace('_', '\\_')
+            # Apply bold formatting for minimum width entries
+            if min_widths['MTOV'] == dir_basename:
+                mtov = f"\\boldsymbol{{{mtov}}}"
+            if min_widths['R14'] == dir_basename:
+                r14 = f"\\boldsymbol{{{r14}}}"
+            if min_widths['p3nsat'] == dir_basename:
+                p3nsat = f"\\boldsymbol{{{p3nsat}}}"
 
-        latex_content.append(f"{label_escaped} & ${mtov}$ & ${r14}$ & ${p3nsat}$ \\\\")
+            # Escape special characters for LaTeX
+            label_escaped = label.replace('+', '$+$').replace('_', '\\_')
+
+            latex_content.append(f"{label_escaped} & ${mtov}$ & ${r14}$ & ${p3nsat}$ \\\\")
+
+        # Add spacing between groups (except after the last group)
+        if group_idx < len(group_order) - 1:
+            latex_content.append("\\addlinespace")
 
     # End table
     latex_content.append("\\bottomrule")
@@ -247,12 +276,29 @@ def main():
     # Configure directories to process
     # =======================================================================
 
+    # Organize directories into logical groups
     directories = [
+        # Group 1: Prior and radio timing
         "../jester/outdir",
         "../jester/outdir_radio",
+
+        # Group 2: Individual GW events
         "../jester/outdir_GW170817",
+        "../jester/outdir_GW190425",
+
+        # Group 3: GW231109 variations
         "../jester/outdir_GW231109",
+        "../jester/outdir_GW231109_gaussian",
+        "../jester/outdir_GW231109_double_gaussian",
+        "../jester/outdir_GW231109_quniv",
+        "../jester/outdir_GW231109_s025",
+        "../jester/outdir_GW231109_s040",
+        "../jester/outdir_GW231109_XAS",
+
+        # Group 4: Combinations
         "../jester/outdir_GW170817_GW231109",
+        "../jester/outdir_GW170817_GW190425",
+        "../jester/outdir_GW170817_GW190425_GW231109",
     ]
 
     print("EOS Parameter Table Generator")
