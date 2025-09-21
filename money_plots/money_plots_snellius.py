@@ -117,19 +117,19 @@ def report_credible_interval(values: np.array,
         print(f"{med:.2f}-{low:.2f}+{high:.2f} (at {hdi_prob} HDI prob)")
     return low, med, high
 
-def make_parameter_histograms(data_list: list, outdir_names: list, colors: list, save_suffix: str = ""):
+def make_parameter_histograms(data_list: list, outdir_names: list, colors: list, filename_prefix: str = ""):
     """Create comparison histograms for key EOS parameters across multiple datasets.
 
     Args:
         data_list: List of dictionaries containing EOS data
         outdir_names: List of directory names for labeling
         colors: List of colors to use for each dataset
-        save_suffix: Optional suffix for filename
+        filename_prefix: Prefix for filename based on dataset labels
     """
     print(f"Creating parameter comparison histograms for {len(data_list)} datasets...")
 
     # Ensure figures directory exists
-    os.makedirs("./figures", exist_ok=True)
+    os.makedirs("./figures/EOS_comparison", exist_ok=True)
 
     # Define parameter ranges and labels
     parameter_configs = {
@@ -181,26 +181,26 @@ def make_parameter_histograms(data_list: list, outdir_names: list, colors: list,
         plt.legend()
 
         # Save comparison plot
-        save_name = os.path.join("./figures", f"comparison_{param_name}_histogram{save_suffix}.pdf")
+        save_name = os.path.join("./figures/EOS_comparison", f"{filename_prefix}_{param_name}_histogram.pdf")
         plt.savefig(save_name, bbox_inches="tight")
         plt.close()
         print(f"  {param_name} comparison histogram saved to {save_name}")
 
-def make_mass_radius_contour_plot(data_list: list, outdir_names: list, colors: list, save_suffix: str = "", m_min: float = 0.6, m_max: float = 2.5):
+def make_mass_radius_contour_plot(data_list: list, outdir_names: list, colors: list, filename_prefix: str = "", m_min: float = 0.6, m_max: float = 2.5):
     """Create comparison mass-radius contour plot with credible intervals for each dataset.
 
     Args:
         data_list: List of dictionaries containing EOS data
         outdir_names: List of directory names for labeling
         colors: List of colors to use for each dataset
-        save_suffix: Optional suffix for filename
+        filename_prefix: Prefix for filename based on dataset labels
         m_min: Minimum mass for contour plot
         m_max: Maximum mass for contour plot
     """
     print(f"Creating mass-radius contour comparison plot for {len(data_list)} datasets...")
 
     # Ensure figures directory exists
-    os.makedirs("./figures", exist_ok=True)
+    os.makedirs("./figures/EOS_comparison", exist_ok=True)
 
     plt.figure(figsize=figsize_vertical)
 
@@ -254,26 +254,26 @@ def make_mass_radius_contour_plot(data_list: list, outdir_names: list, colors: l
     plt.legend()
 
     # Save comparison figure
-    save_name = os.path.join("./figures", f"comparison_mass_radius_contour{save_suffix}.pdf")
+    save_name = os.path.join("./figures/EOS_comparison", f"{filename_prefix}_mass_radius_contour.pdf")
     plt.savefig(save_name, bbox_inches="tight")
     plt.close()
     print(f"  Mass-radius contour plot saved to {save_name}")
 
-def make_pressure_density_contour_plot(data_list: list, outdir_names: list, colors: list, save_suffix: str = "", n_min: float = 0.5, n_max: float = 6.0):
+def make_pressure_density_contour_plot(data_list: list, outdir_names: list, colors: list, filename_prefix: str = "", n_min: float = 0.5, n_max: float = 6.0):
     """Create comparison pressure-density contour plot with credible intervals for each dataset.
 
     Args:
         data_list: List of dictionaries containing EOS data
         outdir_names: List of directory names for labeling
         colors: List of colors to use for each dataset
-        save_suffix: Optional suffix for filename
+        filename_prefix: Prefix for filename based on dataset labels
         n_min: Minimum density for contour plot
         n_max: Maximum density for contour plot
     """
     print(f"Creating pressure-density contour comparison plot for {len(data_list)} datasets...")
 
     # Ensure figures directory exists
-    os.makedirs("./figures", exist_ok=True)
+    os.makedirs("./figures/EOS_comparison", exist_ok=True)
 
     plt.figure(figsize=figsize_horizontal)
 
@@ -327,10 +327,29 @@ def make_pressure_density_contour_plot(data_list: list, outdir_names: list, colo
     plt.legend()
 
     # Save comparison figure
-    save_name = os.path.join("./figures", f"comparison_pressure_density_contour{save_suffix}.pdf")
+    save_name = os.path.join("./figures/EOS_comparison", f"{filename_prefix}_pressure_density_contour.pdf")
     plt.savefig(save_name, bbox_inches="tight")
     plt.close()
     print(f"  Pressure-density contour plot saved to {save_name}")
+
+def generate_filename_prefix(outdir_names: list):
+    """Generate a unique filename prefix from dataset labels.
+
+    Args:
+        outdir_names: List of directory names
+
+    Returns:
+        str: Concatenated labels for filename (e.g., "Prior_radio_GW231109")
+    """
+    labels = []
+    for outdir_name in outdir_names:
+        dir_basename = os.path.basename(outdir_name.rstrip('/'))
+        label = LABELS_DICT.get(dir_basename, dir_basename)
+        # Clean label for filename (remove special characters)
+        clean_label = label.replace("+", "").replace(" ", "_").replace("(", "").replace(")", "")
+        labels.append(clean_label)
+
+    return "_".join(labels)
 
 def get_colors_for_directories(directories: list):
     """Get colors for directories based on COLORS_DICT mapping.
@@ -431,15 +450,19 @@ def main():
     # Get colors for valid directories only
     valid_colors = get_colors_for_directories(valid_directories)
 
+    # Generate filename prefix from dataset labels
+    filename_prefix = generate_filename_prefix(valid_directories)
+    print(f"Generated filename prefix: {filename_prefix}")
+
     print(f"\n{'='*60}")
     print(f"Creating comparison plots for {len(data_list)} valid datasets...")
     print(f"{'='*60}")
 
     # Create all comparison plots
     try:
-        make_parameter_histograms(data_list, valid_directories, valid_colors, save_suffix)
-        make_mass_radius_contour_plot(data_list, valid_directories, valid_colors, save_suffix)
-        make_pressure_density_contour_plot(data_list, valid_directories, valid_colors, save_suffix)
+        make_parameter_histograms(data_list, valid_directories, valid_colors, filename_prefix)
+        make_mass_radius_contour_plot(data_list, valid_directories, valid_colors, filename_prefix)
+        make_pressure_density_contour_plot(data_list, valid_directories, valid_colors, filename_prefix)
         print(f"\nAll comparison plots generated successfully!")
     except Exception as e:
         print(f"Error generating comparison plots: {e}")
@@ -448,8 +471,9 @@ def main():
     print(f"\n{'='*60}")
     print(f"Summary: Successfully created comparison plots for {len(data_list)} datasets")
     print(f"Valid datasets: {[os.path.basename(d.rstrip('/')) for d in valid_directories]}")
+    print(f"Filename prefix: {filename_prefix}")
     print(f"{'='*60}")
-    print("All figures saved to ./figures/")
+    print("All figures saved to ./figures/EOS_comparison/")
     print(f"{'='*60}")
 
 if __name__ == "__main__":
