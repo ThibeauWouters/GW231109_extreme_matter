@@ -67,119 +67,145 @@ PARAMETER_LABELS = {
     "phi_jl": r"$\phi_{JL}$"
 }
 
-def generate_cache_filename(source_dirs: list[str], parameters: list[str]) -> str:
+def generate_run_cache_key(source_dir: str) -> str:
     """
-    Generate a descriptive cache filename based on source directories and parameters.
+    Generate a unique cache key for a single run based on directory path.
 
     Args:
-        source_dirs (list[str]): List of source directories
+        source_dir (str): Source directory path
+
+    Returns:
+        str: Unique cache key
+    """
+    # Extract meaningful name from directory
+    dir_name = os.path.basename(source_dir.rstrip('/'))
+    # Remove common prefixes to make it cleaner
+    dir_name = dir_name.replace('prod_BW_XP_s005_', '').replace('_default', '')
+    return dir_name
+
+def generate_run_cache_filename(cache_key: str, parameters: list[str]) -> str:
+    """
+    Generate cache filename for a single run.
+
+    Args:
+        cache_key (str): Unique key for this run
         parameters (list[str]): List of parameters
 
     Returns:
         str: Cache filename
     """
-    # Extract meaningful names from directories
-    dir_names = []
-    for dir_path in source_dirs:
-        # Get the last directory name and clean it up
-        dir_name = os.path.basename(dir_path.rstrip('/'))
-        # Remove common prefixes/suffixes to make it cleaner
-        dir_name = dir_name.replace('prod_BW_XP_s005_', '').replace('_default', '')
-        dir_names.append(dir_name)
-
-    # Create descriptive name from directories and key parameters
-    dirs_part = "_vs_".join(sorted(dir_names))
     params_part = "_".join(sorted(parameters))
-
-    # Create readable cache filename
-    cache_name = f"comparison_{dirs_part}_{params_part}.npz"
-
-    # Replace any problematic characters for filename
+    cache_name = f"run_{cache_key}_{params_part}.npz"
     cache_name = cache_name.replace('/', '_').replace(' ', '_')
-
     return f"./data/{cache_name}"
 
-def save_comparison_data(filename: str, data: dict, parameters: list[str]) -> bool:
+def save_run_data(cache_key: str, samples: np.ndarray, parameters: list[str]) -> bool:
     """
-    Save comparison data to cache file using np.savez with parameter names.
-    Only caches the sample data, not plotting configuration (labels, colors, zorders).
+    Save data for a single run to cache.
 
     Args:
-        filename (str): Cache filename
-        data (dict): Data to save (only 'all_samples' is cached)
-        parameters (list[str]): Parameter names for proper column mapping
+        cache_key (str): Unique key for this run
+        samples (np.ndarray): Posterior samples array
+        parameters (list[str]): Parameter names
 
     Returns:
         bool: True if successful, False otherwise
     """
     try:
+        filename = generate_run_cache_filename(cache_key, parameters)
         ensure_directory_exists(filename)
 
-        # Create a dictionary with parameter names as keys for each dataset
-        save_dict = {
-            'parameters': parameters  # Save parameter order
-        }
-
-        # Save each dataset with parameter columns as separate arrays
-        for i, samples in enumerate(data['all_samples']):
-            for j, param in enumerate(parameters):
-                save_dict[f'dataset_{i}_{param}'] = samples[:, j]
+        save_dict = {'parameters': parameters}
+        for i, param in enumerate(parameters):
+            save_dict[param] = samples[:, i]
 
         np.savez(filename, **save_dict)
-        print(f"Saved comparison data to cache: {filename}")
+        print(f"Saved run data to cache: {cache_key} -> {filename}")
         return True
     except Exception as e:
-        print(f"Failed to save cache data: {e}")
+        print(f"Failed to save run cache data for {cache_key}: {e}")
         return False
 
-def load_comparison_data(filename: str, parameters: list[str]) -> list:
+def load_run_data(cache_key: str, parameters: list[str]) -> np.ndarray:
     """
-    Load comparison data from cache file, reordering parameters as needed.
-    Only returns the sample data, not plotting configuration.
+    Load data for a single run from cache.
 
     Args:
-        filename (str): Cache filename
+        cache_key (str): Unique key for this run
         parameters (list[str]): Desired parameter order
 
     Returns:
-        list: List of sample arrays, or None if failed
+        np.ndarray: Sample array, or None if failed
     """
     try:
+        filename = generate_run_cache_filename(cache_key, parameters)
         if not os.path.exists(filename):
             return None
 
         data = np.load(filename, allow_pickle=True)
-
-        # Get cached parameter order
         cached_parameters = data['parameters'].tolist()
 
-        # Check if we have all required parameters
         if not all(param in cached_parameters for param in parameters):
-            print(f"Cache missing required parameters. Required: {parameters}, Cached: {cached_parameters}")
+            print(f"Cache for {cache_key} missing required parameters. Required: {parameters}, Cached: {cached_parameters}")
             return None
 
-        # Determine number of datasets
-        dataset_keys = [key for key in data.keys() if key.startswith('dataset_')]
-        num_datasets = len(set(key.split('_')[1] for key in dataset_keys))
-
         # Reconstruct samples with correct parameter order
-        all_samples = []
-        for i in range(num_datasets):
-            dataset_samples = []
-            for param in parameters:  # Use desired order
-                key = f'dataset_{i}_{param}'
-                if key in data:
-                    dataset_samples.append(data[key])
-                else:
-                    raise KeyError(f"Missing parameter {param} for dataset {i}")
-            all_samples.append(np.column_stack(dataset_samples))
+        samples = []
+        for param in parameters:
+            if param in data:
+                samples.append(data[param])
+            else:
+                raise KeyError(f"Missing parameter {param} in cache for {cache_key}")
 
-        print(f"Loaded comparison data from cache: {filename}")
-        print(f"Reordered parameters from {cached_parameters} to {parameters}")
-        return all_samples
+        result = np.column_stack(samples)
+        print(f"Loaded run data from cache: {cache_key}")
+        return result
 
     except Exception as e:
-        print(f"Failed to load cache data: {e}")
+        print(f"Failed to load run cache data for {cache_key}: {e}")
+        return None
+
+def load_and_cache_run(source_dir: str, parameters: list[str]) -> str:
+    """
+    Load a single run and cache it. Returns the cache key.
+
+    Args:
+        source_dir (str): Source directory path
+        parameters (list[str]): Parameters to load
+
+    Returns:
+        str: Cache key for the run, or None if failed
+    """
+    try:
+        cache_key = generate_run_cache_key(source_dir)
+
+        # Check if already cached
+        cached_samples = load_run_data(cache_key, parameters)
+        if cached_samples is not None:
+            print(f"Run {cache_key} already cached")
+            return cache_key
+
+        print(f"Loading and caching run: {source_dir} -> {cache_key}")
+
+        # Load metadata
+        metadata = load_run_metadata(source_dir)
+        if "log_bayes_factor" in metadata:
+            print(f"  Log Bayes factor: {metadata['log_bayes_factor']}")
+        if "sampling_time_hrs" in metadata:
+            print(f"  Sampling time: {metadata['sampling_time_hrs']:.2f} hours")
+
+        # Load posterior samples
+        samples = load_posterior_samples(source_dir, parameters)
+        print(f"  Loaded {len(samples)} samples")
+
+        # Save to cache
+        if save_run_data(cache_key, samples, parameters):
+            return cache_key
+        else:
+            return None
+
+    except Exception as e:
+        print(f"Failed to load and cache run {source_dir}: {e}")
         return None
 
 def load_and_process_data(source_dirs: list[str],
@@ -226,6 +252,7 @@ def load_and_process_data(source_dirs: list[str],
     for i, source_dir in enumerate(source_dirs):
         try:
             print(f"Loading samples from: {source_dir}")
+            print(f"  Index {i}: {labels[i]} -> {colors[i]} -> z-order {zorders[i]}")
 
             # Load metadata
             metadata = load_run_metadata(source_dir)
@@ -253,10 +280,10 @@ def load_and_process_data(source_dirs: list[str],
 
     return all_samples, valid_labels, valid_colors, valid_zorders
 
-def create_comparison_cornerplot(source_dirs: list[str],
+def create_comparison_cornerplot(run_keys: list[str],
                                parameters: list[str],
-                               labels: list[str] = None,
-                               colors: list[str] = None,
+                               labels: list[str],
+                               colors: list[str],
                                ranges: dict = None,
                                zorders: list[int] = None,
                                save_name: str = "comparison_cornerplot.pdf",
@@ -266,17 +293,16 @@ def create_comparison_cornerplot(source_dirs: list[str],
     Create a comparison corner plot with multiple runs overlaid.
 
     Args:
-        source_dirs (list[str]): List of directories containing posterior samples
+        run_keys (list[str]): List of unique run keys to plot
         parameters (list[str]): Parameters to include in the corner plot
-        labels (list[str]): Labels for each run (optional)
-        colors (list[str]): Colors for each run (optional)
+        labels (list[str]): Labels for each run
+        colors (list[str]): Colors for each run
         ranges (dict): Parameter ranges as {param: (min, max)} (optional)
         zorders (list[int]): Z-order for each run (higher values appear on top, optional)
         save_name (str): Output filename
         overwrite (bool): Whether to overwrite existing plots
-        dummy_normalization_keys (list[int]): Indices of datasets to use for each parameter
-            to create a dummy normalization dataset (optional). If provided, must have same
-            length as parameters list.
+        dummy_normalization_keys (list[int]): Indices of runs to use for each parameter
+            to create a dummy normalization dataset (optional)
 
     Returns:
         bool: True if successful, False otherwise
@@ -286,47 +312,34 @@ def create_comparison_cornerplot(source_dirs: list[str],
             print(f"File {save_name} already exists, skipping...")
             return True
 
-        print(f"Creating comparison corner plot for {len(source_dirs)} runs")
+        print(f"Creating comparison corner plot for {len(run_keys)} runs")
+        print(f"Run keys: {run_keys}")
         print(f"Parameters: {parameters}")
 
-        # Check if cached data exists
-        cache_filename = generate_cache_filename(source_dirs, parameters)
-        cached_samples = load_comparison_data(cache_filename, parameters)
+        # Set default z-orders if not provided
+        if zorders is None:
+            zorders = list(range(len(run_keys)))
 
-        if cached_samples is not None:
-            print("Using cached comparison data")
-            all_samples = cached_samples
-            # Always use the provided plotting configuration (labels, colors, zorders)
-            # Process them the same way as in load_and_process_data
-            if colors is None:
-                default_colors = [ORANGE, BLUE, GREEN, GW231109_COLOR, GW190425_COLOR, GW170817_COLOR, PRIOR_COLOR]
-                colors = default_colors[:len(source_dirs)]
-            if labels is None:
-                labels = [f"Run {i+1}" for i in range(len(source_dirs))]
-            if zorders is None:
-                zorders = list(range(len(source_dirs)))
-            elif len(zorders) != len(source_dirs):
-                print(f"Warning: zorders length ({len(zorders)}) doesn't match source_dirs length ({len(source_dirs)})")
-                zorders = list(range(len(source_dirs)))
+        # Load data for each run by key
+        all_samples = []
+        for i, run_key in enumerate(run_keys):
+            print(f"Loading run: {run_key} -> {labels[i]} ({colors[i]}, z-order: {zorders[i]})")
 
-            # Keep original order, don't sort by z-order
-            valid_zorders = zorders
-            valid_labels = labels
-            valid_colors = colors
-        else:
-            print("Loading data from source files and caching...")
-            # Load data from scratch
-            all_samples, valid_labels, valid_colors, valid_zorders = load_and_process_data(
-                source_dirs, parameters, labels, colors, zorders
-            )
+            # Try to load from cache first
+            samples = load_run_data(run_key, parameters)
 
-            if not all_samples:
-                print("No valid samples loaded!")
+            if samples is None:
+                print(f"  Cache miss, need to load and cache run: {run_key}")
+                # For now, return False - we'll need to load and cache runs separately
+                print(f"  ERROR: Run {run_key} not found in cache!")
                 return False
 
-            # Save to cache (only the samples)
-            cache_data = {'all_samples': all_samples}
-            save_comparison_data(cache_filename, cache_data, parameters)
+            all_samples.append(samples)
+            print(f"  Loaded {len(samples)} samples")
+
+        if not all_samples:
+            print("No valid samples loaded!")
+            return False
 
         # Create dummy normalization dataset if requested
         dummy_dataset = None
@@ -336,24 +349,24 @@ def create_comparison_cornerplot(source_dirs: list[str],
             if len(dummy_normalization_keys) != n_params:
                 raise ValueError(f"dummy_normalization_keys must have length {n_params} (number of parameters), got {len(dummy_normalization_keys)}")
 
-            # Check that all keys are valid dataset indices
-            n_datasets = len(all_samples)
-            for i, key in enumerate(dummy_normalization_keys):
-                if not (0 <= key < n_datasets):
-                    raise ValueError(f"dummy_normalization_keys[{i}] = {key} is not a valid dataset index (0 to {n_datasets-1})")
+            # Check that all keys are valid run indices
+            n_runs = len(all_samples)
+            for i, idx in enumerate(dummy_normalization_keys):
+                if not (0 <= idx < n_runs):
+                    raise ValueError(f"dummy_normalization_keys[{i}] = {idx} is not a valid run index (0 to {n_runs-1})")
 
-            # Find minimum number of samples across all datasets
-            min_samples = min(len(dataset) for dataset in all_samples)
-            print(f"Creating dummy normalization dataset using keys: {dummy_normalization_keys}")
+            # Find minimum number of samples across all runs
+            min_samples = min(len(samples) for samples in all_samples)
+            print(f"Creating dummy normalization dataset using run indices: {dummy_normalization_keys}")
             print(f"Using minimum sample count: {min_samples}")
 
-            # Create dummy dataset by selecting specified dataset for each parameter
+            # Create dummy dataset by selecting specified run for each parameter
             dummy_columns = []
-            for param_idx, dataset_idx in enumerate(dummy_normalization_keys):
-                dataset = all_samples[dataset_idx]
+            for param_idx, run_idx in enumerate(dummy_normalization_keys):
+                samples = all_samples[run_idx]
                 # Downsample to min_samples by taking first min_samples rows
-                downsampled_dataset = dataset[:min_samples]
-                dummy_columns.append(downsampled_dataset[:, param_idx])
+                downsampled_samples = samples[:min_samples]
+                dummy_columns.append(downsampled_samples[:, param_idx])
 
             dummy_dataset = np.column_stack(dummy_columns)
             print(f"Created dummy dataset with shape: {dummy_dataset.shape}")
@@ -363,8 +376,8 @@ def create_comparison_cornerplot(source_dirs: list[str],
 
         # Set up corner kwargs
         corner_kwargs = DEFAULT_CORNER_KWARGS.copy()
-        corner_kwargs["color"] = valid_colors[0]
-        corner_kwargs["zorder"] = valid_zorders[0]
+        corner_kwargs["color"] = colors[0]
+        corner_kwargs["zorder"] = zorders[0]
 
         # Apply parameter ranges if provided
         if ranges:
@@ -390,8 +403,8 @@ def create_comparison_cornerplot(source_dirs: list[str],
             # Deep copy the range to avoid modification issues
             if "range" in corner_kwargs_overlay:
                 corner_kwargs_overlay["range"] = corner_kwargs_overlay["range"].copy()
-            corner_kwargs_overlay["color"] = valid_colors[i]
-            corner_kwargs_overlay["zorder"] = valid_zorders[i]
+            corner_kwargs_overlay["color"] = colors[i]
+            corner_kwargs_overlay["zorder"] = zorders[i]
             corner_kwargs_overlay["fig"] = fig
 
             corner.corner(all_samples[i],
@@ -429,7 +442,7 @@ def create_comparison_cornerplot(source_dirs: list[str],
 
         # Add legend
         legend_elements = []
-        for i, (label, color) in enumerate(zip(valid_labels, valid_colors)):
+        for i, (label, color) in enumerate(zip(labels, colors)):
             legend_elements.append(
                 mpatches.Patch(facecolor=color, edgecolor='k', label=label)
             )
@@ -868,8 +881,8 @@ def create_injection_comparison_plot() -> bool:
             # Deep copy the range to avoid modification issues
             if "range" in corner_kwargs_overlay:
                 corner_kwargs_overlay["range"] = corner_kwargs_overlay["range"].copy()
-            corner_kwargs_overlay["color"] = valid_colors[i]
-            corner_kwargs_overlay["zorder"] = valid_zorders[i]
+            corner_kwargs_overlay["color"] = colors[i]
+            corner_kwargs_overlay["zorder"] = zorders[i]
             corner_kwargs_overlay["fig"] = fig
 
             corner.corner(all_samples[i],
@@ -878,7 +891,7 @@ def create_injection_comparison_plot() -> bool:
 
         # Add legend
         legend_elements = []
-        for i, (label, color) in enumerate(zip(valid_labels, valid_colors)):
+        for i, (label, color) in enumerate(zip(labels, colors)):
             legend_elements.append(
                 mpatches.Patch(facecolor=color, edgecolor='k', label=label)
             )
@@ -952,21 +965,36 @@ def main():
     # Z-orders for spin comparison
     spin_zorders = [2, 1, 0]
 
-    # Dummy dataset: always use chi<0.05 (dataset index 2) for all parameters
-    spin_dummy_keys = [2] * len(parameters)  # [2, 2, 2, 2, 2, 2]
+    # First, load and cache all runs
+    print("Loading and caching spin comparison runs...")
+    spin_run_keys = []
+    for source_dir in spin_source_dirs:
+        cache_key = load_and_cache_run(source_dir, parameters)
+        if cache_key is None:
+            print(f"Failed to load run from {source_dir}")
+            continue
+        spin_run_keys.append(cache_key)
 
-    # Create the spin comparison corner plot
-    spin_success = create_comparison_cornerplot(
-        source_dirs=spin_source_dirs,
-        parameters=parameters,
-        labels=spin_labels,
-        colors=spin_colors,
-        ranges=ranges,
-        zorders=spin_zorders,
-        save_name="spin_comparison_cornerplot.pdf",
-        overwrite=True,
-        dummy_normalization_keys=spin_dummy_keys
-    )
+    if len(spin_run_keys) != len(spin_source_dirs):
+        print("Failed to load all spin comparison runs!")
+    else:
+        print(f"Successfully cached all runs with keys: {spin_run_keys}")
+
+        # Dummy dataset: always use chi<0.05 (run index 2) for all parameters
+        spin_dummy_keys = [2] * len(parameters)  # [2, 2, 2, 2, 2, 2]
+
+        # Create the spin comparison corner plot
+        spin_success = create_comparison_cornerplot(
+            run_keys=spin_run_keys,
+            parameters=parameters,
+            labels=spin_labels,
+            colors=spin_colors,
+            ranges=ranges,
+            zorders=spin_zorders,
+            save_name="spin_comparison_cornerplot.pdf",
+            overwrite=True,
+            dummy_normalization_keys=spin_dummy_keys
+        )
 
     if spin_success:
         print(f"✓ Successfully created spin comparison corner plot: spin_comparison_cornerplot.pdf")
@@ -1010,22 +1038,37 @@ def main():
     # Z-orders for prior comparison (quasi-universal on top)
     prior_zorders = [0, 2, 1]  # Default: 0, Quasi-Universal: 2 (highest), Double Gaussian: 1
 
-    # Dummy dataset: ["Default", "Default", "Quniv", "Quniv", "Quniv"]
-    # Default = index 0, Quasi-universal = index 1
-    prior_dummy_keys = [0, 0, 1, 1, 1, 1]  # For 6 parameters: chirp_mass, mass_ratio, chi_eff, lambda_1, lambda_2, lambda_tilde
+    # First, load and cache all runs
+    print("Loading and caching prior comparison runs...")
+    prior_run_keys = []
+    for source_dir in prior_source_dirs:
+        cache_key = load_and_cache_run(source_dir, parameters)
+        if cache_key is None:
+            print(f"Failed to load run from {source_dir}")
+            continue
+        prior_run_keys.append(cache_key)
 
-    # Create the prior comparison corner plot
-    prior_success = create_comparison_cornerplot(
-        source_dirs=prior_source_dirs,
-        parameters=parameters,
-        labels=prior_labels,
-        colors=prior_colors,
-        ranges=ranges,
-        zorders=prior_zorders,
-        save_name="prior_comparison_cornerplot.pdf",
-        overwrite=True,
-        dummy_normalization_keys=prior_dummy_keys
-    )
+    if len(prior_run_keys) != len(prior_source_dirs):
+        print("Failed to load all prior comparison runs!")
+    else:
+        print(f"Successfully cached all runs with keys: {prior_run_keys}")
+
+        # Dummy dataset: ["Default", "Default", "Quniv", "Quniv", "Quniv"]
+        # Default = run index 0, Quasi-universal = run index 1
+        prior_dummy_keys = [0, 0, 1, 1, 1, 1]  # For 6 parameters: chirp_mass, mass_ratio, chi_eff, lambda_1, lambda_2, lambda_tilde
+
+        # Create the prior comparison corner plot
+        prior_success = create_comparison_cornerplot(
+            run_keys=prior_run_keys,
+            parameters=parameters,
+            labels=prior_labels,
+            colors=prior_colors,
+            ranges=ranges,
+            zorders=prior_zorders,
+            save_name="prior_comparison_cornerplot.pdf",
+            overwrite=True,
+            dummy_normalization_keys=prior_dummy_keys
+        )
 
     if prior_success:
         print(f"✓ Successfully created prior comparison corner plot: prior_comparison_cornerplot.pdf")
