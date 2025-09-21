@@ -49,7 +49,7 @@ PARAMETER_LABELS = {
 
 def generate_cache_filename(source_dirs: list[str], parameters: list[str]) -> str:
     """
-    Generate a unique cache filename based on source directories and parameters.
+    Generate a descriptive cache filename based on source directories and parameters.
 
     Args:
         source_dirs (list[str]): List of source directories
@@ -58,14 +58,26 @@ def generate_cache_filename(source_dirs: list[str], parameters: list[str]) -> st
     Returns:
         str: Cache filename
     """
-    # Create a string combining directories and parameters
-    cache_key = "|".join(sorted(source_dirs)) + "|" + "|".join(sorted(parameters))
+    # Extract meaningful names from directories
+    dir_names = []
+    for dir_path in source_dirs:
+        # Get the last directory name and clean it up
+        dir_name = os.path.basename(dir_path.rstrip('/'))
+        # Remove common prefixes/suffixes to make it cleaner
+        dir_name = dir_name.replace('prod_BW_XP_s005_', '').replace('_default', '')
+        dir_names.append(dir_name)
 
-    # Generate MD5 hash for a consistent filename
-    hash_obj = hashlib.md5(cache_key.encode())
-    hash_hex = hash_obj.hexdigest()
+    # Create descriptive name from directories and key parameters
+    dirs_part = "_vs_".join(sorted(dir_names))
+    params_part = "_".join(sorted(parameters))
 
-    return f"./data/comparison_cache_{hash_hex}.pkl"
+    # Create readable cache filename
+    cache_name = f"comparison_{dirs_part}_{params_part}.pkl"
+
+    # Replace any problematic characters for filename
+    cache_name = cache_name.replace('/', '_').replace(' ', '_')
+
+    return f"./data/{cache_name}"
 
 def save_comparison_data(filename: str, data: dict) -> bool:
     """
