@@ -6,7 +6,8 @@ This script generates key figures from multiple jester inference output director
 - Pressure-density (EOS) plots
 
 Usage:
-    python money_plots_snellius.py outdir1 outdir2 outdir3 [options]
+    Modify the main() function to specify directories and colors, then run:
+    python money_plots_snellius.py
 """
 
 import numpy as np
@@ -15,7 +16,6 @@ import seaborn as sns
 import os
 import tqdm
 import arviz
-import argparse
 from scipy.stats import gaussian_kde
 import sys
 
@@ -92,12 +92,13 @@ def report_credible_interval(values: np.array,
         print(f"{med:.2f}-{low:.2f}+{high:.2f} (at {hdi_prob} HDI prob)")
     return low, med, high
 
-def make_parameter_histograms(data_dict: dict, outdir_name: str, save_suffix: str = ""):
+def make_parameter_histograms(data_dict: dict, outdir_name: str, color: str = 'blue', save_suffix: str = ""):
     """Create histograms for key EOS parameters.
 
     Args:
         data_dict: Dictionary containing EOS data
         outdir_name: Name of the source directory (for filename)
+        color: Color to use for plotting
         save_suffix: Optional suffix for filename
     """
     print(f"Creating parameter histograms for {outdir_name}...")
@@ -127,8 +128,8 @@ def make_parameter_histograms(data_dict: dict, outdir_name: str, save_suffix: st
         x = np.linspace(param_data['range'][0], param_data['range'][1], 1000)
         y = kde(x)
 
-        plt.plot(x, y, color='blue', lw=3.0, label='Posterior')
-        plt.fill_between(x, y, alpha=0.3, color='blue')
+        plt.plot(x, y, color=color, lw=3.0, label='Posterior')
+        plt.fill_between(x, y, alpha=0.3, color=color)
 
         # Add credible interval information
         low, med, high = report_credible_interval(param_data['values'])
@@ -147,12 +148,13 @@ def make_parameter_histograms(data_dict: dict, outdir_name: str, save_suffix: st
         plt.close()
         print(f"  {param_name} histogram saved to {save_name}")
 
-def make_mass_radius_plot(data_dict: dict, outdir_name: str, save_suffix: str = ""):
+def make_mass_radius_plot(data_dict: dict, outdir_name: str, colormap: str = 'crest', save_suffix: str = ""):
     """Create mass-radius plot with posterior probability coloring.
 
     Args:
         data_dict: Dictionary containing EOS data
         outdir_name: Name of the source directory (for filename)
+        colormap: Seaborn colormap name to use for probability coloring
         save_suffix: Optional suffix for filename
     """
     print(f"Creating mass-radius plot for {outdir_name}...")
@@ -173,7 +175,7 @@ def make_mass_radius_plot(data_dict: dict, outdir_name: str, save_suffix: str = 
     # Normalize probabilities for coloring
     log_prob = np.exp(log_prob)
     norm = plt.Normalize(vmin=np.min(log_prob), vmax=np.max(log_prob))
-    cmap = sns.color_palette("crest", as_cmap=True)
+    cmap = sns.color_palette(colormap, as_cmap=True)
     sm = plt.cm.ScalarMappable(cmap=cmap, norm=norm)
 
     bad_counter = 0
@@ -227,12 +229,13 @@ def make_mass_radius_plot(data_dict: dict, outdir_name: str, save_suffix: str = 
     plt.close()
     print(f"  Mass-radius plot saved to {save_name}")
 
-def make_pressure_density_plot(data_dict: dict, outdir_name: str, save_suffix: str = ""):
+def make_pressure_density_plot(data_dict: dict, outdir_name: str, colormap: str = 'crest', save_suffix: str = ""):
     """Create equation of state plot (pressure vs density).
 
     Args:
         data_dict: Dictionary containing EOS data
         outdir_name: Name of the source directory (for filename)
+        colormap: Seaborn colormap name to use for probability coloring
         save_suffix: Optional suffix for filename
     """
     print(f"Creating pressure-density plot for {outdir_name}...")
@@ -250,7 +253,7 @@ def make_pressure_density_plot(data_dict: dict, outdir_name: str, save_suffix: s
     # Normalize probabilities for coloring
     log_prob = np.exp(log_prob)
     norm = plt.Normalize(vmin=np.min(log_prob), vmax=np.max(log_prob))
-    cmap = sns.color_palette("crest", as_cmap=True)
+    cmap = sns.color_palette(colormap, as_cmap=True)
 
     bad_counter = 0
     for i in tqdm.tqdm(range(len(log_prob))):
@@ -292,7 +295,7 @@ def make_pressure_density_plot(data_dict: dict, outdir_name: str, save_suffix: s
     plt.close()
     print(f"  Pressure-density plot saved to {save_name}")
 
-def process_directory(outdir: str, save_suffix: str = ""):
+def process_directory(outdir: str, color: str = 'blue', colormap: str = 'crest', save_suffix: str = ""):
     """Process a single output directory and generate all plots."""
     print(f"\n{'='*60}")
     print(f"Processing directory: {outdir}")
@@ -316,9 +319,9 @@ def process_directory(outdir: str, save_suffix: str = ""):
 
     # Create all plots
     try:
-        make_parameter_histograms(data, outdir, save_suffix)
-        make_mass_radius_plot(data, outdir, save_suffix)
-        make_pressure_density_plot(data, outdir, save_suffix)
+        make_parameter_histograms(data, outdir, color, save_suffix)
+        make_mass_radius_plot(data, outdir, colormap, save_suffix)
+        make_pressure_density_plot(data, outdir, colormap, save_suffix)
         print(f"All plots generated successfully for {outdir}")
         return True
     except Exception as e:
@@ -326,34 +329,76 @@ def process_directory(outdir: str, save_suffix: str = ""):
         return False
 
 def main():
-    """Main function to parse arguments and generate plots."""
-    parser = argparse.ArgumentParser(
-        description='Generate money plots from jester inference results',
-        epilog='Example: python money_plots_snellius.py outdir outdir_radio outdir_GW231109'
-    )
-    parser.add_argument('outdirs', nargs='+', type=str,
-                       help='Output directories containing eos_samples.npz files')
-    parser.add_argument('--suffix', type=str, default="",
-                       help='Optional suffix for output filenames')
-    parser.add_argument('--verbose', '-v', action='store_true',
-                       help='Verbose output')
+    """Main function with hard-coded directories and colors."""
 
-    args = parser.parse_args()
+    # =======================================================================
+    # USER CONFIGURATION - MODIFY THIS SECTION
+    # =======================================================================
+
+    # List of directories to process (relative or absolute paths)
+    directories = [
+        "outdir",
+        "outdir_radio",
+        "outdir_GW231109",
+        # Add more directories as needed
+    ]
+
+    # Colors for histogram plots (one per directory)
+    # Options: 'blue', 'red', 'green', 'orange', 'purple', 'brown', 'pink', 'gray', 'olive', 'cyan'
+    colors = [
+        'blue',
+        'red',
+        'green',
+        # Add more colors as needed (should match number of directories)
+    ]
+
+    # Colormaps for mass-radius and pressure-density plots (one per directory)
+    # Options: 'crest', 'viridis', 'plasma', 'Blues', 'Reds', 'Greens', 'Oranges', 'Purples'
+    colormaps = [
+        'crest',
+        'Reds',
+        'Greens',
+        # Add more colormaps as needed (should match number of directories)
+    ]
+
+    # Optional suffix for all output files
+    save_suffix = ""
+
+    # =======================================================================
+    # END USER CONFIGURATION
+    # =======================================================================
 
     print("Money Plots Generator for Jester Inference Results")
     print("=" * 60)
-    print(f"Processing {len(args.outdirs)} directories...")
+    print(f"Processing {len(directories)} directories...")
+
+    # Ensure we have enough colors and colormaps
+    if len(colors) < len(directories):
+        print(f"Warning: Only {len(colors)} colors provided for {len(directories)} directories.")
+        print("Extending with default colors...")
+        default_colors = ['blue', 'red', 'green', 'orange', 'purple']
+        while len(colors) < len(directories):
+            colors.append(default_colors[len(colors) % len(default_colors)])
+
+    if len(colormaps) < len(directories):
+        print(f"Warning: Only {len(colormaps)} colormaps provided for {len(directories)} directories.")
+        print("Extending with default colormaps...")
+        default_colormaps = ['crest', 'viridis', 'plasma', 'Blues', 'Reds']
+        while len(colormaps) < len(directories):
+            colormaps.append(default_colormaps[len(colormaps) % len(default_colormaps)])
 
     success_count = 0
-    for i, outdir in enumerate(args.outdirs, 1):
-        print(f"\n[{i}/{len(args.outdirs)}]")
-        if process_directory(outdir, args.suffix):
+    for i, (outdir, color, colormap) in enumerate(zip(directories, colors, colormaps), 1):
+        print(f"\n[{i}/{len(directories)}] Using color='{color}', colormap='{colormap}'")
+        if process_directory(outdir, color, colormap, save_suffix):
             success_count += 1
 
     print(f"\n{'='*60}")
-    print(f"Summary: Successfully processed {success_count}/{len(args.outdirs)} directories")
-    if success_count < len(args.outdirs):
+    print(f"Summary: Successfully processed {success_count}/{len(directories)} directories")
+    if success_count < len(directories):
         print("Some directories failed - check output above for details")
+    print(f"{'='*60}")
+    print("All figures saved to ./figures/")
     print(f"{'='*60}")
 
 if __name__ == "__main__":
