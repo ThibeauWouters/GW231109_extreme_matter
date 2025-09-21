@@ -164,13 +164,24 @@ def make_mass_radius_plot(data: dict, prior_data: dict, outdir: str):
     cbar.ax.xaxis.labelpad = 5
     cbar.ax.tick_params(labelsize=0, length=0)
     cbar.ax.xaxis.set_label_position('top')
+    
+    # Add Hauke's injection
+    if ("ET" in outdir) or ("CE" in outdir):
+        # This was an injection where we used Hauke's EOS
+        data = np.loadtxt("../figures/EOS_data/hauke_macroscopic.dat")
+        data = data.T
+        r, m, l, _ = data
+        
+        plt.plot(r, m, color='black', lw=2.0, ls='--', label="Hauke's EOS")
 
     # Add legend for prior
     if prior_data is not None:
         from matplotlib.lines import Line2D
         legend_elements = [Line2D([0], [0], color=COLORS_DICT['prior'], lw=2, alpha=0.7, label='Prior')]
+        if ("ET" in outdir) or ("CE" in outdir):
+            legend_elements.append(Line2D([0], [0], color='black', lw=2, ls='--', label="Hauke's EOS"))
         plt.legend(handles=legend_elements, loc='upper right')
-
+        
     # Save figure (PDF only)
     save_name = os.path.join(outdir, "mass_radius_plot.pdf")
     plt.savefig(save_name, bbox_inches="tight")
@@ -293,6 +304,16 @@ def make_parameter_histograms(data: dict, prior_data: dict, outdir: str):
         plt.plot(x, y, color='blue', lw=3.0, label='Posterior')
         plt.fill_between(x, y, alpha=0.3, color='blue')
         
+        if ("ET" in outdir) or ("CE" in outdir):
+            if param_name == "R14":
+                # This was an injection where we used Hauke's EOS
+                data = np.loadtxt("../figures/EOS_data/hauke_macroscopic.dat")
+                data = data.T
+                r, m, l, _ = data
+                plt.axvline(np.interp(1.4, m, r), color='black', lw=2.0, ls='--', label="Hauke's EOS")
+            else:
+                continue
+            
         # Add credible interval information
         low, med, high = report_credible_interval(param_data['values'])
         
@@ -438,9 +459,9 @@ def generate_all_plots(outdir: str):
     
     # Create all plots with prior data
     make_contour_pressures_plot(data, outdir)
+    make_parameter_histograms(data, prior_data, outdir)
     make_mass_radius_plot(data, prior_data, outdir)
     make_eos_plot(data, prior_data, outdir)
-    make_parameter_histograms(data, prior_data, outdir)
     make_contour_radii_plot(data, prior_data, outdir)
     
     print(f"All plots generated and saved to {outdir}")

@@ -1,0 +1,26 @@
+Sun Sep 21 11:12:05 CEST 2025
+NVIDIA H100
+Warning: weights not properly specified, assuming constant weights instead.
+GPU found?
+[CudaDevice(id=0)]
+Using the regular nbreak prior: U[1.0, 2.0] * 0.16
+Fixed params loaded inside the MicroToMacroTransform:
+    E_sat: -16.0
+Sampling a 3G-like injection of GW231109
+Not sampling PREX or CREX data now
+Sanity checking: likelihoods_list = [<utils.GWlikelihood_with_masses object at 0x145978583790>, <utils.RadioTimingLikelihood object at 0x14436ca36c20>, <utils.RadioTimingLikelihood object at 0x14436cac68f0>, <utils.RadioTimingLikelihood object at 0x14436c94ee30>]
+len(likelihoods_list) = 4
+Fixed params loaded inside the MicroToMacroTransform:
+    E_sat: -16.0
+We are going to give these kwargs to Jim:
+{'n_loop_training': 60, 'n_loop_production': 30, 'n_chains': 1000, 'n_local_steps': 50, 'n_global_steps': 50, 'n_epochs': 20, 'train_thinning': 1, 'output_thinning': 5, 'local_sampler_name': 'GaussianRandomWalk'}
+We are going to sample the following parameters:
+['E_sym', 'L_sym', 'K_sym', 'Q_sym', 'Z_sym', 'K_sat', 'Q_sat', 'Z_sat', 'nbreak', 'n_CSE_0_u', 'cs2_CSE_0', 'n_CSE_1_u', 'cs2_CSE_1', 'n_CSE_2_u', 'cs2_CSE_2', 'n_CSE_3_u', 'cs2_CSE_3', 'n_CSE_4_u', 'cs2_CSE_4', 'n_CSE_5_u', 'cs2_CSE_5', 'n_CSE_6_u', 'cs2_CSE_6', 'n_CSE_7_u', 'cs2_CSE_7', 'cs2_CSE_8', 'mass_1_GW231109', 'mass_2_GW231109']
+No sample transforms provided. Using prior parameters as sampling parameters
+Jim received the local sampler name: GaussianRandomWalk
+Step size given was a matrix, converting to diagonal for GaussianRandomWalk
+['n_dim', 'n_chains', 'n_local_steps', 'n_global_steps', 'n_loop', 'output_thinning', 'verbose']
+log_prob
+[-134.54902026  -85.86599447 -107.62714433]
+Sampling seed is set to: 11
+Global Tuning:   0%|          | 0/60 [00:00<?, ?it/s]
