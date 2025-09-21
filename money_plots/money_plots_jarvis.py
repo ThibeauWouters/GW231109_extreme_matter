@@ -667,6 +667,177 @@ def plot_injection(filepath: str,
         print(f"Failed to create injection plot: {e}")
         return False
 
+def create_injection_comparison_plot() -> bool:
+    """
+    Create a comparison corner plot for the two injection analyses.
+
+    Returns:
+        bool: True if successful, False otherwise
+    """
+    try:
+        # Define the two injection filepaths
+        injection_filepaths = [
+            "/work/puecher/S231109/third_gen_runs/et_run_alignedspin/outdir/ET_gw231109_injection_alignedspin_result.json",
+            "/work/puecher/S231109/third_gen_runs/et_ce_run_alignedspin/outdir/ETCE_gw231109_injectionxas_result.json"
+        ]
+
+        # Parameters to plot
+        parameters = [
+            "chirp_mass",
+            "mass_ratio",
+            "chi_eff",
+            "lambda_1",
+            "lambda_2",
+            "lambda_tilde"
+        ]
+
+        # Labels for the two injections
+        labels = [
+            "ET Aligned Spin",
+            "ET-CE Aligned Spin"
+        ]
+
+        # Colors for the two injections
+        colors = [ORANGE, BLUE]
+
+        # Z-orders (ET-CE on top for better visibility)
+        zorders = [0, 1]
+
+        # Common ranges for comparison
+        mc = 1.306298
+        eps_mc = 6e-6
+        ranges = {
+            "chirp_mass": (mc - eps_mc, mc + eps_mc),
+            "mass_ratio": (0.80, 1.0),
+            "chi_eff": (0.0290, 0.034),
+            "lambda_1": (0, 750),
+            "lambda_2": (0, 900),
+            "lambda_tilde": (180, 400),
+        }
+
+        print("Creating injection comparison corner plot...")
+        print(f"Comparing {len(injection_filepaths)} injection analyses")
+        print(f"Parameters: {parameters}")
+
+        # Load data from both injection files
+        all_samples = []
+        valid_labels = []
+        valid_colors = []
+        valid_zorders = []
+        all_injection_params = []
+
+        for i, filepath in enumerate(injection_filepaths):
+            print(f"\nLoading injection data from: {filepath}")
+
+            # Check cache first
+            cache_filename = generate_injection_cache_filename(filepath, parameters)
+            posterior_samples, injection_params = load_injection_data(cache_filename, parameters)
+
+            if posterior_samples is None:
+                print("Loading data from JSON file and caching...")
+                posterior_samples, injection_params = load_injection_json(filepath, parameters)
+
+                if posterior_samples is None:
+                    print(f"Failed to load injection data from {filepath}")
+                    continue
+
+                # Save to cache
+                save_injection_data(cache_filename, posterior_samples, injection_params, parameters)
+            else:
+                print("Using cached injection data")
+
+            all_samples.append(posterior_samples)
+            valid_labels.append(labels[i])
+            valid_colors.append(colors[i])
+            valid_zorders.append(zorders[i])
+            all_injection_params.append(injection_params)
+
+            print(f"  Loaded {len(posterior_samples)} samples")
+
+        if not all_samples:
+            print("No valid injection samples loaded!")
+            return False
+
+        # Sort by z-order for proper plotting
+        sorted_data = sorted(zip(valid_zorders, all_samples, valid_labels, valid_colors, all_injection_params),
+                           key=lambda x: x[0])
+        valid_zorders, all_samples, valid_labels, valid_colors, all_injection_params = zip(*sorted_data)
+        valid_zorders, all_samples, valid_labels, valid_colors = list(valid_zorders), list(all_samples), list(valid_labels), list(valid_colors)
+        all_injection_params = list(all_injection_params)
+
+        print("\nCreating comparison corner plot...")
+
+        # Set up corner kwargs for first dataset
+        corner_kwargs = DEFAULT_CORNER_KWARGS.copy()
+        corner_kwargs["color"] = valid_colors[0]
+
+        # Apply parameter ranges
+        if ranges:
+            range_list = []
+            for param in parameters:
+                if param in ranges:
+                    range_list.append(ranges[param])
+                else:
+                    range_list.append(None)
+            corner_kwargs["range"] = range_list
+
+        # Prepare truth values from first injection (they should be the same)
+        truths = []
+        for param in parameters:
+            if all_injection_params[0].get(param) is not None:
+                truths.append(all_injection_params[0][param])
+            else:
+                truths.append(None)
+
+        # Add truths if we have injection values
+        if any(t is not None for t in truths):
+            corner_kwargs["truths"] = truths
+            corner_kwargs["truth_color"] = "black"
+
+        # Create parameter labels using translation dictionary
+        parameter_labels = [PARAMETER_LABELS.get(param, param) for param in parameters]
+
+        # Create initial plot with first dataset
+        fig = corner.corner(all_samples[0],
+                           labels=parameter_labels,
+                           **corner_kwargs)
+
+        # Overlay additional datasets
+        for i in range(1, len(all_samples)):
+            corner_kwargs_overlay = corner_kwargs.copy()
+            # Deep copy the range to avoid modification issues
+            if "range" in corner_kwargs_overlay:
+                corner_kwargs_overlay["range"] = corner_kwargs_overlay["range"].copy()
+            corner_kwargs_overlay["color"] = valid_colors[i]
+            corner_kwargs_overlay["fig"] = fig
+
+            corner.corner(all_samples[i],
+                         labels=parameter_labels,
+                         **corner_kwargs_overlay)
+
+        # Add legend
+        legend_elements = []
+        for i, (label, color) in enumerate(zip(valid_labels, valid_colors)):
+            legend_elements.append(
+                mpatches.Patch(facecolor=color, edgecolor='k', label=label)
+            )
+
+        fig.legend(handles=legend_elements, loc='upper right',
+                  bbox_to_anchor=(0.98, 0.98), frameon=True)
+
+        # Save plot
+        save_name = "injection_comparison_cornerplot.pdf"
+        ensure_directory_exists(save_name)
+        print(f"Saving injection comparison corner plot to {save_name}")
+        plt.savefig(save_name, bbox_inches='tight', dpi=300)
+        plt.close()
+
+        return True
+
+    except Exception as e:
+        print(f"Failed to create injection comparison corner plot: {e}")
+        return False
+
 def main():
     """
     Main function for creating comparison corner plots.
@@ -676,7 +847,8 @@ def main():
     # ====== USER CONFIGURATION ======
     # Specify the source directories to compare
     source_dirs = [
-        "/work/wouters/GW231109/prod_BW_XP_s005_l5000_default/",  # Replace with actual paths
+        "/work/wouters/GW231109/prod_BW_XP_s005_l5000_default/",  # Default, low-spin
+        "/work/wouters/GW231109/prod_BW_XP_s040_l5000_default/",  # Default, high-spin
         "/work/wouters/GW231109/prod_BW_XP_s005_lquniv_default/",
         "/work/wouters/GW231109/prod_BW_XP_s005_l5000_double_gaussian",
     ]
@@ -693,21 +865,23 @@ def main():
 
     # Specify labels for each run (optional)
     labels = [
-        "Default Prior",
+        "Default, low-spin",
+        "Default, high-spin",
         "Quasi universal relations",
         "Double Gaussian",
     ]
 
     # Specify colors for each run (optional)
     colors = [
-        ORANGE,    # "#de8f07"
-        BLUE,      # "#0472b1"
-        GREEN,     # "#019e72"
+        ORANGE,    # "#de8f07" - Default, low-spin
+        "red",     # Default, high-spin
+        BLUE,      # "#0472b1" - Quasi universal relations
+        GREEN,     # "#019e72" - Double Gaussian
     ]
 
     # Specify z-orders for each run (higher values appear on top)
-    # Making quasi-universal (index 1) have the highest z-order
-    zorders = [0, 2, 1]  # Default Prior: 0, Quasi-Universal: 2 (highest), Double Gaussian: 1
+    # Making quasi-universal (index 2) have the highest z-order
+    zorders = [0, 1, 3, 2]  # Default low-spin: 0, Default high-spin: 1, Quasi-Universal: 3 (highest), Double Gaussian: 2
 
     # Specify parameter ranges (optional)
     # Format: {parameter_name: (min_value, max_value)}
@@ -803,6 +977,17 @@ def main():
         print(f"✓ Successfully created injection plot")
     else:
         print("✗ Failed to create injection plot")
+
+    # ====== INJECTION COMPARISON PLOT ======
+
+    print("\n" + "="*50)
+    print("Creating injection comparison plot...")
+    comparison_success = create_injection_comparison_plot()
+
+    if comparison_success:
+        print(f"✓ Successfully created injection comparison plot")
+    else:
+        print("✗ Failed to create injection comparison plot")
 
 if __name__ == "__main__":
     main()
