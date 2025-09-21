@@ -8,6 +8,7 @@ are overlaid for direct comparison.
 import os
 import argparse
 import hashlib
+import json
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.patches as mpatches
@@ -388,6 +389,272 @@ def create_comparison_cornerplot(source_dirs: list[str],
         print(f"Failed to create comparison corner plot: {e}")
         return False
 
+def generate_injection_cache_filename(filepath: str, parameters: list[str]) -> str:
+    """
+    Generate a cache filename for injection data based on filepath and parameters.
+
+    Args:
+        filepath (str): Path to the JSON result file
+        parameters (list[str]): List of parameters
+
+    Returns:
+        str: Cache filename
+    """
+    import hashlib
+
+    # Create a hash from the filepath for unique identification
+    filepath_hash = hashlib.md5(filepath.encode()).hexdigest()[:8]
+
+    # Extract meaningful name from filepath
+    filename = os.path.basename(filepath).replace('_result.json', '')
+
+    # Create descriptive name
+    params_part = "_".join(sorted(parameters))
+    cache_name = f"injection_{filename}_{filepath_hash}_{params_part}.npz"
+
+    return f"./data/{cache_name}"
+
+def save_injection_data(filename: str, posterior_samples: np.ndarray,
+                       injection_params: dict, parameters: list[str]) -> bool:
+    """
+    Save injection data to cache file.
+
+    Args:
+        filename (str): Cache filename
+        posterior_samples (np.ndarray): Posterior samples array
+        injection_params (dict): Injection parameter values
+        parameters (list[str]): Parameter names for proper column mapping
+
+    Returns:
+        bool: True if successful, False otherwise
+    """
+    try:
+        ensure_directory_exists(filename)
+
+        # Create save dictionary
+        save_dict = {
+            'parameters': parameters,
+            'injection_params': injection_params
+        }
+
+        # Save posterior samples with parameter names
+        for i, param in enumerate(parameters):
+            save_dict[f'posterior_{param}'] = posterior_samples[:, i]
+
+        np.savez(filename, **save_dict)
+        print(f"Saved injection data to cache: {filename}")
+        return True
+    except Exception as e:
+        print(f"Failed to save injection cache data: {e}")
+        return False
+
+def load_injection_data(filename: str, parameters: list[str]) -> tuple:
+    """
+    Load injection data from cache file.
+
+    Args:
+        filename (str): Cache filename
+        parameters (list[str]): Desired parameter order
+
+    Returns:
+        tuple: (posterior_samples, injection_params) or (None, None) if failed
+    """
+    try:
+        if not os.path.exists(filename):
+            return None, None
+
+        data = np.load(filename, allow_pickle=True)
+
+        # Get cached parameter order
+        cached_parameters = data['parameters'].tolist()
+
+        # Check if we have all required parameters
+        if not all(param in cached_parameters for param in parameters):
+            print(f"Cache missing required parameters. Required: {parameters}, Cached: {cached_parameters}")
+            return None, None
+
+        # Reconstruct posterior samples with correct parameter order
+        posterior_samples = []
+        for param in parameters:
+            key = f'posterior_{param}'
+            if key in data:
+                posterior_samples.append(data[key])
+            else:
+                raise KeyError(f"Missing parameter {param} in cache")
+
+        posterior_samples = np.column_stack(posterior_samples)
+
+        # Load injection parameters
+        injection_params = data['injection_params'].item()
+
+        print(f"Loaded injection data from cache: {filename}")
+        return posterior_samples, injection_params
+
+    except Exception as e:
+        print(f"Failed to load injection cache data: {e}")
+        return None, None
+
+def load_injection_json(filepath: str, parameters: list[str]) -> tuple:
+    """
+    Load injection data from JSON file.
+
+    Args:
+        filepath (str): Path to JSON result file
+        parameters (list[str]): Parameters to extract
+
+    Returns:
+        tuple: (posterior_samples, injection_params) or (None, None) if failed
+    """
+    try:
+        with open(filepath, 'r') as f:
+            data = json.load(f)
+
+        # Load posterior samples
+        if 'posterior' not in data or 'content' not in data['posterior']:
+            raise ValueError("JSON file does not contain expected posterior structure")
+
+        posterior = data['posterior']['content']
+        samples = []
+        for param in parameters:
+            if param not in posterior:
+                raise ValueError(f"Parameter {param} not found in posterior")
+            samples.append(np.array(posterior[param]))
+
+        posterior_samples = np.column_stack(samples)
+
+        # Find injection parameters - prioritize injection_parameters location
+        injection_params = {}
+
+        # Check injection_parameters first (user confirmed this is the location)
+        if 'injection_parameters' in data and isinstance(data['injection_parameters'], dict):
+            injection_source = data['injection_parameters']
+            print(f"Found injection_parameters with keys: {list(injection_source.keys())}")
+        else:
+            # Fallback to other locations if needed
+            injection_sources = [
+                data.get('meta_data', {}).get('injection_parameters', {}),
+                data.get('meta_data', {}).get('injection', {}),
+                data.get('injection', {}),
+                data.get('truth', {})
+            ]
+            injection_source = {}
+            for source in injection_sources:
+                if isinstance(source, dict) and source:
+                    injection_source = source
+                    break
+
+        # Extract injection values for our parameters
+        for param in parameters:
+            if param in injection_source:
+                injection_params[param] = injection_source[param]
+                print(f"Found injection value for {param}: {injection_source[param]}")
+            else:
+                print(f"Warning: Could not find injection value for parameter {param}")
+                injection_params[param] = None
+
+        return posterior_samples, injection_params
+
+    except Exception as e:
+        print(f"Failed to load injection JSON: {e}")
+        return None, None
+
+def plot_injection(filepath: str,
+                  parameters: list[str] = None,
+                  save_name: str = None,
+                  overwrite: bool = False) -> bool:
+    """
+    Create corner plot for injection analysis with truth values shown in black.
+
+    Args:
+        filepath (str): Path to JSON result file (e.g., .../outdir/*result.json)
+        parameters (list[str]): Parameters to plot (default: same as comparison plots)
+        save_name (str): Output filename (default: auto-generated)
+        overwrite (bool): Whether to overwrite existing plots
+
+    Returns:
+        bool: True if successful, False otherwise
+    """
+    try:
+        # Use default parameters if not provided
+        if parameters is None:
+            parameters = [
+                "chirp_mass",
+                "mass_ratio",
+                "chi_eff",
+                "lambda_1",
+                "lambda_2",
+                "lambda_tilde"
+            ]
+
+        # Generate save name if not provided
+        if save_name is None:
+            basename = os.path.basename(filepath).replace('_result.json', '')
+            save_name = f"injection_plot_{basename}.pdf"
+
+        if os.path.exists(save_name) and not overwrite:
+            print(f"File {save_name} already exists, skipping...")
+            return True
+
+        print(f"Creating injection plot for: {filepath}")
+        print(f"Parameters: {parameters}")
+
+        # Check cache first
+        cache_filename = generate_injection_cache_filename(filepath, parameters)
+        posterior_samples, injection_params = load_injection_data(cache_filename, parameters)
+
+        if posterior_samples is None:
+            print("Loading data from JSON file and caching...")
+            posterior_samples, injection_params = load_injection_json(filepath, parameters)
+
+            if posterior_samples is None:
+                print("Failed to load injection data!")
+                return False
+
+            # Save to cache
+            save_injection_data(cache_filename, posterior_samples, injection_params, parameters)
+        else:
+            print("Using cached injection data")
+
+        # Create the corner plot
+        print("Creating injection corner plot...")
+
+        # Set up corner kwargs
+        corner_kwargs = DEFAULT_CORNER_KWARGS.copy()
+        corner_kwargs["color"] = BLUE
+
+        # Prepare truth values (injection parameters) in the correct order
+        truths = []
+        for param in parameters:
+            if injection_params.get(param) is not None:
+                truths.append(injection_params[param])
+            else:
+                truths.append(None)  # corner will skip None values
+
+        # Only add truths if we have at least some injection values
+        if any(t is not None for t in truths):
+            corner_kwargs["truths"] = truths
+            corner_kwargs["truth_color"] = "black"
+
+        # Create parameter labels using translation dictionary
+        parameter_labels = [PARAMETER_LABELS.get(param, param) for param in parameters]
+
+        # Create corner plot
+        fig = corner.corner(posterior_samples,
+                           labels=parameter_labels,
+                           **corner_kwargs)
+
+        # Save plot
+        ensure_directory_exists(save_name)
+        print(f"Saving injection plot to {save_name}")
+        plt.savefig(save_name, bbox_inches='tight', dpi=300)
+        plt.close()
+
+        return True
+
+    except Exception as e:
+        print(f"Failed to create injection plot: {e}")
+        return False
+
 def main():
     """
     Main function for creating comparison corner plots.
@@ -470,6 +737,22 @@ def main():
         print(f"✓ Successfully created comparison corner plot: {save_name}")
     else:
         print("✗ Failed to create comparison corner plot")
+
+    # ====== INJECTION PLOTTING EXAMPLE ======
+    # Uncomment the lines below to create injection plots
+    # Example usage for third generation runs:
+
+    # injection_filepath = "/work/puecher/S231109/third_gen_runs/et_run_alignedspin/outdir/ET_gw231109_injection_alignedspin_result.json"
+    # injection_success = plot_injection(
+    #     filepath=injection_filepath,
+    #     save_name="injection_et_alignedspin.pdf",
+    #     overwrite=True
+    # )
+    #
+    # if injection_success:
+    #     print(f"✓ Successfully created injection plot")
+    # else:
+    #     print("✗ Failed to create injection plot")
 
 if __name__ == "__main__":
     main()
