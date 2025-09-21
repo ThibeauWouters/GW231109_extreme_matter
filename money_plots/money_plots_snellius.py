@@ -26,11 +26,7 @@ import sys
 sys.path.append('../jester')
 import jesterTOV.utils as jose_utils
 
-from utils import (
-    DEFAULT_CORNER_KWARGS, GW231109_COLOR, GW190425_COLOR, PRIOR_COLOR, GW170817_COLOR,
-    ORANGE, BLUE, GREEN, INJECTION_COLOR, identify_person_from_path, load_posterior_samples,
-    load_run_metadata, load_priors_for_corner, ensure_directory_exists
-)
+INJECTION_COLOR = "#cb78bd" # avoid importing since bilby not on Snellius
 
 # Matplotlib parameters
 mpl_params = {"axes.grid": False,
@@ -69,8 +65,8 @@ LABELS_DICT = {"outdir": "Prior",
                "outdir_ET_AS": "ET",
                }
 
-COLORS_DICT = {"outdir": "gray",
-               "outdir_radio": "blue",
+COLORS_DICT = {"outdir": "darkgray",
+               "outdir_radio": "dimgray",
                "outdir_GW170817": "orange",
                "outdir_GW170817_GW231109": "red",
                "outdir_GW231109_double_gaussian": "purple",
