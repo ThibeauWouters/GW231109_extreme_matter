@@ -58,8 +58,9 @@ LABELS_DICT = {"outdir": "Prior",
                "outdir_radio": "Radio timing",
                "outdir_GW170817": "+GW170817",
                "outdir_GW231109": "+GW231109",
+               "outdir_GW190425": "+GW190425",
                "outdir_GW170817_GW231109": "+GW170817+GW231109",
-               "outdir_GW170817_GW231109": "+GW170817+GW231109",
+               "outdir_GW170817_GW190425": "+GW170817+GW190425",
                "outdir_GW231109_double_gaussian": "+GW231109 (double Gaussian)",
                "outdir_GW231109_quniv": "+GW231109 (QUR)",
                "outdir_ET_AS": "ET",
@@ -69,7 +70,8 @@ COLORS_DICT = {"outdir": "darkgray",
                "outdir_radio": "dimgray",
                "outdir_GW170817": "orange",
                "outdir_GW231109": "green",
-               "outdir_GW170817_GW231109": "red",
+               "outdir_GW170817_GW231109": "purple",
+               "outdir_GW170817_GW190425": "green",
                "outdir_GW231109_double_gaussian": "purple",
                "outdir_GW231109_quniv": "red",
                "outdir_ET_AS": INJECTION_COLOR
@@ -118,7 +120,11 @@ def report_credible_interval(values: np.array,
         print(f"{med:.2f}-{low:.2f}+{high:.2f} (at {hdi_prob} HDI prob)")
     return low, med, high
 
-def make_parameter_histograms(data_list: list, outdir_names: list, colors: list, filename_prefix: str = ""):
+def make_parameter_histograms(data_list: list,
+                              outdir_names: list,
+                              colors: list,
+                              filename_prefix: str = "",
+                              legend_outside: bool = False):
     """Create comparison histograms for key EOS parameters across multiple datasets.
 
     Args:
@@ -179,7 +185,11 @@ def make_parameter_histograms(data_list: list, outdir_names: list, colors: list,
         plt.ylabel('Density')
         plt.xlim(config['range'])
         plt.ylim(bottom=0.0)
-        plt.legend()
+        if legend_outside:
+            print(f"Putting the legend outside the plot.")
+            plt.legend(bbox_to_anchor=(1.05, 1), loc='upper left')
+        else:
+            plt.legend()
 
         # Save comparison plot
         save_name = os.path.join("./figures/EOS_comparison", f"{filename_prefix}_{param_name}_histogram.pdf")
@@ -187,7 +197,13 @@ def make_parameter_histograms(data_list: list, outdir_names: list, colors: list,
         plt.close()
         print(f"  {param_name} comparison histogram saved to {save_name}")
 
-def make_mass_radius_contour_plot(data_list: list, outdir_names: list, colors: list, filename_prefix: str = "", m_min: float = 0.6, m_max: float = 2.5):
+def make_mass_radius_contour_plot(data_list: list,
+                                  outdir_names: list,
+                                  colors: list,
+                                  filename_prefix: str = "",
+                                  m_min: float = 0.6,
+                                  m_max: float = 2.5,
+                                  legend_outside: bool = False):
     """Create comparison mass-radius contour plot with credible intervals for each dataset.
 
     Args:
@@ -252,7 +268,11 @@ def make_mass_radius_contour_plot(data_list: list, outdir_names: list, colors: l
     plt.ylabel(r"$M$ [$M_{\odot}$]")
     plt.xlim(8.0, 16.0)
     plt.ylim(m_min, m_max)
-    plt.legend()
+    if legend_outside:
+        print(f"Putting the legend outside the plot.")
+        plt.legend(bbox_to_anchor=(1.05, 1), loc='upper left')
+    else:
+        plt.legend()
 
     # Save comparison figure
     save_name = os.path.join("./figures/EOS_comparison", f"{filename_prefix}_mass_radius_contour.pdf")
@@ -260,7 +280,13 @@ def make_mass_radius_contour_plot(data_list: list, outdir_names: list, colors: l
     plt.close()
     print(f"  Mass-radius contour plot saved to {save_name}")
 
-def make_pressure_density_contour_plot(data_list: list, outdir_names: list, colors: list, filename_prefix: str = "", n_min: float = 0.5, n_max: float = 6.0):
+def make_pressure_density_contour_plot(data_list: list,
+                                       outdir_names: list,
+                                       colors: list,
+                                       filename_prefix: str = "",
+                                       n_min: float = 0.5,
+                                       n_max: float = 6.0,
+                                       legend_outside: bool = False):
     """Create comparison pressure-density contour plot with credible intervals for each dataset.
 
     Args:
@@ -325,7 +351,12 @@ def make_pressure_density_contour_plot(data_list: list, outdir_names: list, colo
     plt.ylabel(r"$p$ [MeV fm$^{-3}$]")
     plt.xlim(n_min, n_max)
     plt.yscale('log')
-    plt.legend()
+    
+    if legend_outside:
+            print(f"Putting the legend outside the plot.")
+            plt.legend(bbox_to_anchor=(1.05, 1), loc='upper left')
+    else:
+        plt.legend()
 
     # Save comparison figure
     save_name = os.path.join("./figures/EOS_comparison", f"{filename_prefix}_pressure_density_contour.pdf")
@@ -388,10 +419,6 @@ def load_all_data(directories: list):
     valid_directories = []
 
     for outdir in directories:
-        print(f"\n{'='*60}")
-        print(f"Loading data from directory: {outdir}")
-        print(f"{'='*60}")
-
         # Check if directory exists
         if not os.path.exists(outdir):
             print(f"Warning: Directory {outdir} does not exist. Skipping...")
@@ -400,7 +427,6 @@ def load_all_data(directories: list):
         # Load data
         try:
             data = load_eos_data(outdir)
-            print("Data loaded successfully!")
             data_list.append(data)
             valid_directories.append(outdir)
         except FileNotFoundError as e:
@@ -414,7 +440,7 @@ def load_all_data(directories: list):
 
 import os
 
-def process_given_dirs(directories, save_suffix=""):
+def process_given_dirs(directories, save_suffix="", legend_outside=False):
     """Process given directories and generate comparison plots."""
 
     print("Money Plots Generator for Jester Inference Results")
@@ -441,9 +467,9 @@ def process_given_dirs(directories, save_suffix=""):
 
     # Create all comparison plots
     try:
-        make_parameter_histograms(data_list, valid_directories, valid_colors, filename_prefix)
-        make_mass_radius_contour_plot(data_list, valid_directories, valid_colors, filename_prefix)
-        make_pressure_density_contour_plot(data_list, valid_directories, valid_colors, filename_prefix)
+        make_parameter_histograms(data_list, valid_directories, valid_colors, filename_prefix, legend_outside=legend_outside)
+        make_mass_radius_contour_plot(data_list, valid_directories, valid_colors, filename_prefix, legend_outside=legend_outside)
+        make_pressure_density_contour_plot(data_list, valid_directories, valid_colors, filename_prefix, legend_outside=legend_outside)
         print(f"\nAll comparison plots generated successfully!")
     except Exception as e:
         print(f"Error generating comparison plots: {e}")
@@ -452,57 +478,67 @@ def process_given_dirs(directories, save_suffix=""):
 def main():
     """Main function - configures directories and calls processing."""
 
-    # =======================================================================
-    # 1 Check GW231109
-    # =======================================================================
+    # # =======================================================================
+    # # 1 Check GW231109
+    # # =======================================================================
 
-    directories = [
-        "../jester/outdir",
-        "../jester/outdir_radio",
-        "../jester/outdir_GW231109",
-    ]
-    save_suffix = ""
-    process_given_dirs(directories, save_suffix)
+    # directories = [
+    #     "../jester/outdir",
+    #     "../jester/outdir_radio",
+    #     "../jester/outdir_GW231109",
+    # ]
+    # save_suffix = ""
+    # process_given_dirs(directories, save_suffix)
     
     
-    # =======================================================================
-    # 2 Check GW231109 vs GW190425
-    # =======================================================================
+    # # =======================================================================
+    # # 2 Check GW231109 vs GW190425
+    # # =======================================================================
     
+    # directories = [
+    #     "../jester/outdir_radio",
+    #     "../jester/outdir_GW231109",
+    #     "../jester/outdir_GW190425",
+    # ]
+    # save_suffix = ""
+    # process_given_dirs(directories, save_suffix)
     
-    directories = [
-        "../jester/outdir_radio",
-        "../jester/outdir_GW231109",
-        "../jester/outdir_GW190425",
-    ]
-    save_suffix = ""
-    process_given_dirs(directories, save_suffix)
+    # # =======================================================================
+    # # 3a Check GW170817 vs GW170817+GW190425
+    # # =======================================================================
     
-    # =======================================================================
-    # 3a Check GW170817 vs GW170817+GW190425
-    # =======================================================================
+    # directories = [
+    #     "../jester/outdir_radio",
+    #     "../jester/outdir_GW170817",
+    #     "../jester/outdir_GW170817_GW190425",
+    # ]
+    # save_suffix = ""
+    # process_given_dirs(directories, save_suffix)
     
+    # # =======================================================================
+    # # 3a Check GW170817 vs GW170817+GW231109
+    # # =======================================================================
     
-    directories = [
-        "../jester/outdir_radio",
-        "../jester/outdir_GW170817",
-        "../jester/outdir_GW170817_GW190425",
-    ]
-    save_suffix = ""
-    process_given_dirs(directories, save_suffix)
+    # directories = [
+    #     "../jester/outdir_radio",
+    #     "../jester/outdir_GW170817",
+    #     "../jester/outdir_GW170817_GW231109",
+    # ]
+    # save_suffix = ""
+    # process_given_dirs(directories, save_suffix)
     
     # =======================================================================
     # 3a Check GW170817 vs GW170817+GW231109
     # =======================================================================
     
-    
     directories = [
         "../jester/outdir_radio",
         "../jester/outdir_GW170817",
+        "../jester/outdir_GW170817_GW190425",
         "../jester/outdir_GW170817_GW231109",
     ]
     save_suffix = ""
-    process_given_dirs(directories, save_suffix)
+    process_given_dirs(directories, save_suffix, legend_outside=True)
     
     # =======================================================================
     # 4 Check GW231109 spins
@@ -510,28 +546,28 @@ def main():
     
     # TODO: finish
     
-    # =======================================================================
-    # 5 Check GW231109 other prior choices
-    # =======================================================================
+    # # =======================================================================
+    # # 5 Check GW231109 other prior choices
+    # # =======================================================================
     
-    directories = [
-        "../jester/outdir_GW231109",
-        "../jester/outdir_GW231109_double_gaussian",
-        "../jester/outdir_GW231109_quniv",
-    ]
-    save_suffix = ""
-    process_given_dirs(directories, save_suffix)
+    # directories = [
+    #     "../jester/outdir_GW231109",
+    #     "../jester/outdir_GW231109_double_gaussian",
+    #     "../jester/outdir_GW231109_quniv",
+    # ]
+    # save_suffix = ""
+    # process_given_dirs(directories, save_suffix)
     
-    # =======================================================================
-    # 6 Check XP vs XAS
-    # =======================================================================
+    # # =======================================================================
+    # # 6 Check XP vs XAS
+    # # =======================================================================
     
-    directories = [
-        "../jester/outdir_GW231109",
-        "../jester/outdir_GW231109_XAS",
-    ]
-    save_suffix = ""
-    process_given_dirs(directories, save_suffix)
+    # directories = [
+    #     "../jester/outdir_GW231109",
+    #     "../jester/outdir_GW231109_XAS",
+    # ]
+    # save_suffix = ""
+    # process_given_dirs(directories, save_suffix)
 
 
 if __name__ == "__main__":
