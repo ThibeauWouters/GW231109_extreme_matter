@@ -61,8 +61,7 @@ LABELS_DICT = {"outdir": "Prior",
                "outdir_GW170817_GW231109": "+GW170817+GW231109",
                "outdir_GW170817_GW231109": "+GW170817+GW231109",
                "outdir_GW231109_double_gaussian": "+GW231109 (double Gaussian)",
-               "outdir_GW231109_double_quniv": "+GW231109 (QUR)",
-               "outdir_GW231109_double_quniv": "+GW231109 (QUR)",
+               "outdir_GW231109_quniv": "+GW231109 (QUR)",
                "outdir_ET_AS": "ET",
                }
 
@@ -72,7 +71,7 @@ COLORS_DICT = {"outdir": "darkgray",
                "outdir_GW231109": "green",
                "outdir_GW170817_GW231109": "red",
                "outdir_GW231109_double_gaussian": "purple",
-               "outdir_GW231109_double_quniv": "green",
+               "outdir_GW231109_quniv": "red",
                "outdir_ET_AS": INJECTION_COLOR
                }
 
@@ -480,7 +479,20 @@ def main():
     process_given_dirs(directories, save_suffix)
     
     # =======================================================================
-    # 3 Check GW170817 vs GW170817+GW190425
+    # 3a Check GW170817 vs GW170817+GW190425
+    # =======================================================================
+    
+    
+    directories = [
+        "../jester/outdir_radio",
+        "../jester/outdir_GW170817",
+        "../jester/outdir_GW170817_GW190425",
+    ]
+    save_suffix = ""
+    process_given_dirs(directories, save_suffix)
+    
+    # =======================================================================
+    # 3a Check GW170817 vs GW170817+GW231109
     # =======================================================================
     
     
