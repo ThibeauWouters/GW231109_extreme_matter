@@ -20,6 +20,26 @@ from utils import (
     load_run_metadata, load_priors_for_corner, ensure_directory_exists
 )
 
+
+# If running on Mac, so we can use TeX (not on Jarvis), change some rc params
+cwd = os.getcwd()
+if "Woute029" in cwd:
+    print(f"Updating plotting parameters for TeX")
+    fs = 18
+    ticks_fs = 16
+    legend_fs = 40
+    rc_params = {"axes.grid": False,
+            "text.usetex" : True,
+            "font.family" : "serif",
+            "font.serif" : ["Computer Modern Serif"],
+            "xtick.labelsize": ticks_fs,
+            "ytick.labelsize": ticks_fs,
+            "axes.labelsize": ticks_fs,
+            "legend.fontsize": legend_fs,
+            "legend.title_fontsize": legend_fs,
+            "figure.titlesize": fs}
+    plt.rcParams.update(rc_params)
+
 # Parameter translation dictionary for LaTeX symbols
 PARAMETER_LABELS = {
     "chirp_mass": r"$\mathcal{M}_c$ [M$_\odot$]",
@@ -345,7 +365,7 @@ def main():
     # Specify labels for each run (optional)
     labels = [
         "Default Prior",
-        "Quasi-Universal",
+        "Quasi universal relations",
         "Double Gaussian",
     ]
 
@@ -362,13 +382,14 @@ def main():
 
     # Specify parameter ranges (optional)
     # Format: {parameter_name: (min_value, max_value)}
-    # ranges = {
-    #     "chirp_mass": (1.1, 1.5),
-    #     "lambda_tilde": (0, 2000),
-    #     # "mass_ratio": (0.7, 1.0),
-    #     # Add more parameter ranges as needed
-    # }
-    ranges = None
+    ranges = {
+        "chirp_mass": (1.3056, 1.3070),
+        "mass_ratio": (0.60, 1.0),
+        "lambda_1": (0, 5000),
+        "lambda_2": (0, 5000),
+        "chi_eff": (-0.01, 0.045),
+        "lambda_tilde": (0, 5000),
+    }
 
     # Output filename
     save_name = "comparison_cornerplot.pdf"

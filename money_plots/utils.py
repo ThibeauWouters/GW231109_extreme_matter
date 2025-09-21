@@ -45,8 +45,9 @@ DEFAULT_CORNER_KWARGS = dict(
     bins=40,
     smooth=1.,
     show_titles=False,
-    label_kwargs=dict(fontsize=16),
+    label_kwargs=dict(fontsize=26),
     title_kwargs=dict(fontsize=16),
+    labelpad=0.175,
     color="blue",
     plot_density=True,
     plot_datapoints=False,
@@ -62,6 +63,7 @@ GW231109_COLOR = "red"
 GW190425_COLOR = "purple"
 PRIOR_COLOR = "gray"
 GW170817_COLOR = "orange"
+INJECTION_COLOR = "#cb78bd"
 
 # Standard comparison colors
 ORANGE = "#de8f07"
