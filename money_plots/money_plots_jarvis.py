@@ -620,7 +620,7 @@ def plot_injection(filepath: str,
 
         # Set up corner kwargs
         corner_kwargs = DEFAULT_CORNER_KWARGS.copy()
-        corner_kwargs["color"] = BLUE
+        corner_kwargs["color"] = INJECTION_COLOR
 
         # Prepare truth values (injection parameters) in the correct order
         truths = []
@@ -739,20 +739,18 @@ def main():
         print("✗ Failed to create comparison corner plot")
 
     # ====== INJECTION PLOTTING EXAMPLE ======
-    # Uncomment the lines below to create injection plots
-    # Example usage for third generation runs:
 
-    # injection_filepath = "/work/puecher/S231109/third_gen_runs/et_run_alignedspin/outdir/ET_gw231109_injection_alignedspin_result.json"
-    # injection_success = plot_injection(
-    #     filepath=injection_filepath,
-    #     save_name="injection_et_alignedspin.pdf",
-    #     overwrite=True
-    # )
-    #
-    # if injection_success:
-    #     print(f"✓ Successfully created injection plot")
-    # else:
-    #     print("✗ Failed to create injection plot")
+    injection_filepath = "/work/puecher/S231109/third_gen_runs/et_run_alignedspin/outdir/ET_gw231109_injection_alignedspin_result.json"
+    injection_success = plot_injection(
+        filepath=injection_filepath,
+        save_name="injection_et_alignedspin.pdf",
+        overwrite=True
+    )
+    
+    if injection_success:
+        print(f"✓ Successfully created injection plot")
+    else:
+        print("✗ Failed to create injection plot")
 
 if __name__ == "__main__":
     main()
