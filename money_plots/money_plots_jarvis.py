@@ -286,7 +286,7 @@ def create_comparison_cornerplot(run_keys: list[str],
                                colors: list[str],
                                ranges: dict = None,
                                zorders: list[int] = None,
-                               save_name: str = "comparison_cornerplot.pdf",
+                               save_name: str = "./figures/GW_PE/comparison_cornerplot.pdf",
                                overwrite: bool = False,
                                dummy_normalization_keys: list[int] = None) -> bool:
     """
@@ -377,8 +377,8 @@ def create_comparison_cornerplot(run_keys: list[str],
         # Set up corner kwargs
         corner_kwargs = DEFAULT_CORNER_KWARGS.copy()
         corner_kwargs["color"] = colors[0]
-        corner_kwargs["hist_kwargs"] = {'color': colors[0], 'density': True, 'zorder': zorders[0]}
         corner_kwargs["density"] = True  # Use density normalization for all histograms
+        corner_kwargs["hist_kwargs"] = {"density": True}  # Add transparency for better overlay
 
         # Apply parameter ranges if provided
         if ranges:
@@ -404,7 +404,8 @@ def create_comparison_cornerplot(run_keys: list[str],
             if "range" in corner_kwargs_overlay:
                 corner_kwargs_overlay["range"] = corner_kwargs_overlay["range"].copy()
             corner_kwargs_overlay["color"] = colors[i]
-            corner_kwargs_overlay["zorder"] = zorders[i]
+            corner_kwargs_overlay["hist_kwargs"] = {"color": colors[i], "density": True}
+            corner_kwargs_overlay["density"] = True  # Use density normalization for all histograms
             corner_kwargs_overlay["fig"] = fig
 
             corner_kwargs_overlay["labels"] = parameter_labels
@@ -416,7 +417,7 @@ def create_comparison_cornerplot(run_keys: list[str],
             invisible_kwargs = DEFAULT_CORNER_KWARGS.copy()
             invisible_kwargs.update({
                 'labels': parameter_labels,
-                'hist_kwargs': {'alpha': 0},
+                'hist_kwargs': {'alpha': 0, "density": True},  # Invisible histograms
                 'plot_density': False,     # Disable 2D density plots
                 'plot_contours': False,    # Disable 2D contours
                 'plot_datapoints': False,  # Disable scatter points
@@ -662,7 +663,7 @@ def plot_injection(filepath: str,
         # Generate save name if not provided
         if save_name is None:
             basename = os.path.basename(filepath).replace('_result.json', '')
-            save_name = f"injection_plot_{basename}.pdf"
+            save_name = f"./figures/GW_PE/injection_plot_{basename}.pdf"
 
         if os.path.exists(save_name) and not overwrite:
             print(f"File {save_name} already exists, skipping...")
@@ -880,7 +881,7 @@ def create_injection_comparison_plot() -> bool:
             if "range" in corner_kwargs_overlay:
                 corner_kwargs_overlay["range"] = corner_kwargs_overlay["range"].copy()
             corner_kwargs_overlay["color"] = colors[i]
-            corner_kwargs_overlay["zorder"] = zorders[i]
+            corner_kwargs_overlay["density"] = True  # Use density normalization for all histograms
             corner_kwargs_overlay["fig"] = fig
 
             corner_kwargs_overlay["labels"] = parameter_labels
@@ -897,7 +898,7 @@ def create_injection_comparison_plot() -> bool:
                   bbox_to_anchor=(0.98, 0.98), frameon=True)
 
         # Save plot
-        save_name = "injection_comparison_cornerplot.pdf"
+        save_name = "./figures/GW_PE/injection_comparison_cornerplot.pdf"
         ensure_directory_exists(save_name)
         print(f"Saving injection comparison corner plot to {save_name}")
         plt.savefig(save_name, bbox_inches='tight', dpi=300)
@@ -932,7 +933,7 @@ def main():
     ranges = {
         "chirp_mass": (1.3055, 1.3075),
         "mass_ratio": (0.30, 1.0),
-        "chi_eff": (-0.05, 0.080),
+        "chi_eff": (-0.05, 0.10),
         "lambda_1": (0, 5000),
         "lambda_2": (0, 5000),
         "lambda_tilde": (0, 5000),
@@ -947,9 +948,9 @@ def main():
 
     # Labels for spin comparison
     spin_labels = [
-        r"$\\chi \\leq 0.40$",
-        r"$\\chi \\leq 0.25$",
-        r"$\\chi \\leq 0.05$",
+        r"$\chi \leq 0.40$",
+        r"$\chi \leq 0.25$",
+        r"$\chi \leq 0.05$",
     ]
 
     # Colors for spin comparison (same as before, no red)
@@ -960,7 +961,7 @@ def main():
     ]
 
     # Z-orders for spin comparison
-    spin_zorders = [2, 1, 0]
+    spin_zorders = [0, 1, 2]
 
     # First, load and cache all runs
     print("Loading and caching spin comparison runs...")
@@ -988,7 +989,7 @@ def main():
             colors=spin_colors,
             ranges=ranges,
             zorders=spin_zorders,
-            save_name="spin_comparison_cornerplot.pdf",
+            save_name="./figures/GW_PE/spin_comparison_cornerplot.pdf",
             overwrite=True,
             dummy_normalization_keys=spin_dummy_keys
         )
@@ -1014,26 +1015,26 @@ def main():
     # Original comparison (without the high-spin red one)
     prior_source_dirs = [
         "/work/wouters/GW231109/prod_BW_XP_s005_l5000_default/",  # Default
-        "/work/wouters/GW231109/prod_BW_XP_s005_lquniv_default/",  # Quasi universal
         "/work/wouters/GW231109/prod_BW_XP_s005_l5000_double_gaussian",  # Double Gaussian
+        "/work/wouters/GW231109/prod_BW_XP_s005_lquniv_default/",  # Quasi universal
     ]
 
     # Labels for prior comparison
     prior_labels = [
         "Default Prior",
-        "Quasi universal relations",
         "Double Gaussian",
+        "Quasi universal relations",
     ]
 
     # Colors for prior comparison (same as original, no red)
     prior_colors = [
         ORANGE,    # "#de8f07"
-        BLUE,      # "#0472b1"
         GREEN,     # "#019e72"
+        BLUE,      # "#0472b1"
     ]
 
     # Z-orders for prior comparison (quasi-universal on top)
-    prior_zorders = [1, 10000, 100]  # Default: 0, Quasi-Universal: 2 (highest), Double Gaussian: 1
+    prior_zorders = [1, 100, 1000]  # Default: 0, Quasi-Universal: 2 (highest), Double Gaussian: 1
 
     # First, load and cache all runs
     print("Loading and caching prior comparison runs...")
@@ -1052,7 +1053,7 @@ def main():
 
         # Dummy dataset: ["Default", "Default", "Quniv", "Quniv", "Quniv"]
         # Default = run index 0, Quasi-universal = run index 1
-        prior_dummy_keys = [0, 0, 1, 1, 1, 1]  # For 6 parameters: chirp_mass, mass_ratio, chi_eff, lambda_1, lambda_2, lambda_tilde
+        prior_dummy_keys = [0, 0, 2, 2, 2, 2]  # For 6 parameters: chirp_mass, mass_ratio, chi_eff, lambda_1, lambda_2, lambda_tilde
 
         # Create the prior comparison corner plot
         prior_success = create_comparison_cornerplot(
@@ -1062,7 +1063,7 @@ def main():
             colors=prior_colors,
             ranges=ranges,
             zorders=prior_zorders,
-            save_name="prior_comparison_cornerplot.pdf",
+            save_name="./figures/GW_PE/prior_comparison_cornerplot.pdf",
             overwrite=True,
             dummy_normalization_keys=prior_dummy_keys
         )
@@ -1089,7 +1090,7 @@ def main():
     injection_success = plot_injection(
         filepath=injection_filepath,
         ranges=ranges,
-        save_name="injection_et_alignedspin.pdf",
+        save_name="./figures/GW_PE/injection_et_alignedspin.pdf",
         overwrite=True
     )
     
@@ -1117,7 +1118,7 @@ def main():
     injection_success = plot_injection(
         filepath=injection_filepath,
         ranges=ranges,
-        save_name="injection_et_ce_alignedspin.pdf",
+        save_name="./figures/GW_PE/injection_et_ce_alignedspin.pdf",
         overwrite=True
     )
     
