@@ -145,8 +145,8 @@ for run_label, filepath in file_paths.items():
     else:
         samples, lambda_tilde_posterior_samples, luminosity_distance = load_json(filepath)
         
-    # posterior_kde = reflected_kde(lambda_tilde_posterior_samples)
-    posterior_kde = gaussian_kde(lambda_tilde_posterior_samples)
+    posterior_kde = reflected_kde(lambda_tilde_posterior_samples)
+    # posterior_kde = gaussian_kde(lambda_tilde_posterior_samples)
     x = np.linspace(0.0, 10_000.0, 1000)
     posterior_kde_values = posterior_kde(x)
     prior_kde_values = prior_kde(x)
