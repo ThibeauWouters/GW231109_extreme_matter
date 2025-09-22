@@ -281,7 +281,8 @@ def make_plot_chirp_tilde(args: argparse.Namespace,
                           eos_name: str,
                           source_dir: str,
                           show_priors: bool = True,
-                          plot_GW170817_PE: bool = True):
+                          plot_GW170817_PE: bool = True,
+                          plot_star: bool = True):
     """
     Main function to plot the mass-Lambda contours, with the component masses and Lambdas.
     
@@ -427,6 +428,10 @@ def make_plot_chirp_tilde(args: argparse.Namespace,
     plt.xlim(1.1, 1.5)
     plt.ylim(top=lambda_tilde_max)
     
+    if plot_star:
+        plt.scatter(1.2594733022418796, 324.07852958713227, color='black', marker='*', zorder=100000, s=200, label='Truth')
+        
+    
     # Use the run name from the source_dir for the plot title
     run_name = source_dir.split("/")[-1]
     plt.title(f"PE = {run_name}", fontsize=fs)
@@ -492,7 +497,10 @@ def main():
     
     for eos_name in eos_name_list:
         for base_dir in base_dir_list:
+            
             source_dirs = [d for d in os.listdir(base_dir) if os.path.isdir(os.path.join(base_dir, d)) and d not in ["outdir", "data"]]
+            source_dirs = [d for d in source_dirs if "et" in d and "alignedspin" in d]
+            
             print(f"For base directory {base_dir}, found the source directories:")
             print(f"    {source_dirs}")
             
