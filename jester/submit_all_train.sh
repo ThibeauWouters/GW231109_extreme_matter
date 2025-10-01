@@ -5,12 +5,7 @@ DATA_DIR="../posteriors/data/"
 
 # List of input files (just paste your filenames here)
 FILES=(
-  prod_BW_XP_s025_l5000_default.npz
-  prod_BW_XP_s025_l10000_default.npz
-  prod_BW_XP_s025_lquniv_default.npz
-  prod_BW_XP_s040_l5000_default.npz
-  prod_BW_XP_s040_l10000_default.npz
-  prod_BW_XP_s040_lquniv_default.npz
+  prod_BW_XP_s005_l5000_double_gaussian.npz
 )
 
 # Loop over files and submit job for each

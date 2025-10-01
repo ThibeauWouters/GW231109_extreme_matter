@@ -343,7 +343,7 @@ def main(args):
         likelihoods_list_radio = []
         if args.sample_radio:
             likelihoods_list_radio += [utils.RadioTimingLikelihood("J1614", 1.94, 0.06)]
-            likelihoods_list_radio += [utils.RadioTimingLikelihood("J0348", 2.01, 0.08)]
+            # likelihoods_list_radio += [utils.RadioTimingLikelihood("J0348", 2.01, 0.08)]
             if not args.sample_J0740:
                 likelihoods_list_radio += [utils.RadioTimingLikelihood("J0740", 2.08, 0.14)]
             else:

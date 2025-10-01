@@ -32,6 +32,11 @@ def parse_arguments():
                         type=bool, 
                         default=True, 
                         help="Whether to make the cornerplot. Turn off by default since can be expensive in memory.")
+    parser.add_argument("--which-NEP-prior", 
+                        type=str, 
+                        default="default",
+                        choices=["default", "small"],
+                        help="Which NEP prior to sample from. If `small` then we do not include 3rd and 4th order and use a smaller range for L_sym.")
     parser.add_argument("--which-nbreak-prior", 
                         type=str, 
                         default="normal", 
@@ -170,22 +175,36 @@ def main(args):
     Z_sat_prior = UniformPrior(-2500.0, 1500.0, parameter_names=["Z_sat"])
 
     E_sym_prior = UniformPrior(28.0, 45.0, parameter_names=["E_sym"])
-    L_sym_prior = UniformPrior(10.0, 200.0, parameter_names=["L_sym"])
+    if args.which_NEP_prior == "small":
+        max_L_sym = 100.0
+    else:
+        max_L_sym = 200.0
+    print(f"We are using the {args.which_NEP_prior} NEP prior, so max_L_sym = {max_L_sym}")
+    L_sym_prior = UniformPrior(10.0, max_L_sym, parameter_names=["L_sym"])
     K_sym_prior = UniformPrior(-300.0, 100.0, parameter_names=["K_sym"])
     Q_sym_prior = UniformPrior(-800.0, 800.0, parameter_names=["Q_sym"])
     Z_sym_prior = UniformPrior(-2500.0, 1500.0, parameter_names=["Z_sym"])
 
-    prior_list = [
-        E_sym_prior,
-        L_sym_prior, 
-        K_sym_prior,
-        Q_sym_prior,
-        Z_sym_prior,
+    if args.which_NEP_prior == "small":
+        prior_list = [
+            E_sym_prior,
+            L_sym_prior, 
+            K_sym_prior,
+            Q_sym_prior,
+            Z_sym_prior,
 
-        K_sat_prior,
-        Q_sat_prior,
-        Z_sat_prior,
-    ]
+            K_sat_prior,
+            Q_sat_prior,
+            Z_sat_prior,
+        ]
+    else:
+        prior_list = [
+            E_sym_prior,
+            L_sym_prior, 
+            K_sym_prior,
+
+            K_sat_prior,
+        ]
 
     ### CSE priors
     if NB_CSE > 0:
@@ -324,7 +343,7 @@ def main(args):
         likelihoods_list_radio = []
         if args.sample_radio:
             likelihoods_list_radio += [utils.RadioTimingLikelihood("J1614", 1.94, 0.06)]
-            likelihoods_list_radio += [utils.RadioTimingLikelihood("J0348", 2.01, 0.08)]
+            # likelihoods_list_radio += [utils.RadioTimingLikelihood("J0348", 2.01, 0.08)]
             if not args.sample_J0740:
                 likelihoods_list_radio += [utils.RadioTimingLikelihood("J0740", 2.08, 0.14)]
             else:

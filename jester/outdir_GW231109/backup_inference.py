@@ -32,6 +32,11 @@ def parse_arguments():
                         type=bool, 
                         default=True, 
                         help="Whether to make the cornerplot. Turn off by default since can be expensive in memory.")
+    parser.add_argument("--which-NEP-prior", 
+                        type=str, 
+                        default="default",
+                        choices=["default", "small"],
+                        help="Which NEP prior to sample from. If `small` then we do not include 3rd and 4th order and use a smaller range for L_sym.")
     parser.add_argument("--which-nbreak-prior", 
                         type=str, 
                         default="normal", 
@@ -40,6 +45,10 @@ def parse_arguments():
                         type=bool, 
                         default=False, 
                         help="Whether to sample the GW170817 event")
+    parser.add_argument("--sample-GW190425", 
+                        type=bool, 
+                        default=False, 
+                        help="Whether to sample the GW190425 event")
     parser.add_argument("--sample-GW231109",
                         type=bool, 
                         default=False, 
@@ -166,22 +175,36 @@ def main(args):
     Z_sat_prior = UniformPrior(-2500.0, 1500.0, parameter_names=["Z_sat"])
 
     E_sym_prior = UniformPrior(28.0, 45.0, parameter_names=["E_sym"])
-    L_sym_prior = UniformPrior(10.0, 200.0, parameter_names=["L_sym"])
+    if args.which_NEP_prior == "small":
+        max_L_sym = 100.0
+    else:
+        max_L_sym = 200.0
+    print(f"We are using the {args.which_NEP_prior} NEP prior, so max_L_sym = {max_L_sym}")
+    L_sym_prior = UniformPrior(10.0, max_L_sym, parameter_names=["L_sym"])
     K_sym_prior = UniformPrior(-300.0, 100.0, parameter_names=["K_sym"])
     Q_sym_prior = UniformPrior(-800.0, 800.0, parameter_names=["Q_sym"])
     Z_sym_prior = UniformPrior(-2500.0, 1500.0, parameter_names=["Z_sym"])
 
-    prior_list = [
-        E_sym_prior,
-        L_sym_prior, 
-        K_sym_prior,
-        Q_sym_prior,
-        Z_sym_prior,
+    if args.which_NEP_prior == "small":
+        prior_list = [
+            E_sym_prior,
+            L_sym_prior, 
+            K_sym_prior,
+            Q_sym_prior,
+            Z_sym_prior,
 
-        K_sat_prior,
-        Q_sat_prior,
-        Z_sat_prior,
-    ]
+            K_sat_prior,
+            Q_sat_prior,
+            Z_sat_prior,
+        ]
+    else:
+        prior_list = [
+            E_sym_prior,
+            L_sym_prior, 
+            K_sym_prior,
+
+            K_sat_prior,
+        ]
 
     ### CSE priors
     if NB_CSE > 0:
@@ -227,18 +250,36 @@ def main(args):
     
     # First, add mass priors if toggled (GW170817 by default, for NICER we can choose)
     keep_names = ["E_sym", "L_sym"]
+    
+    # Sample GW170817 PE
     if args.sample_GW170817:
-        m1_GW170817_prior = UniformPrior(1.1, 2.0, parameter_names=["mass_1_GW170817"])
+        m1_GW170817_prior = UniformPrior(1.5, 2.1, parameter_names=["mass_1_GW170817"])
         m2_GW170817_prior = UniformPrior(1.0, 1.5, parameter_names=["mass_2_GW170817"])
 
         prior_list.append(m1_GW170817_prior)
         prior_list.append(m2_GW170817_prior)
         
         keep_names += ["mass_1_GW170817", "mass_2_GW170817"]
+    
+    # Sample GW190425 PE
+    if args.sample_GW190425:
+        m1_GW190425_prior = UniformPrior(1.1, 2.0, parameter_names=["mass_1_GW190425"])
+        m2_GW190425_prior = UniformPrior(1.2, 1.8, parameter_names=["mass_2_GW190425"])
+
+        prior_list.append(m1_GW190425_prior)
+        prior_list.append(m2_GW190425_prior)
         
+        keep_names += ["mass_1_GW190425", "mass_2_GW190425"]
+        
+    # Sample GW231109 PE
     if args.sample_GW231109:
-        m1_GW231109_prior = UniformPrior(1.3, 1.9, parameter_names=["mass_1_GW231109"])
-        m2_GW231109_prior = UniformPrior(1.1, 1.5, parameter_names=["mass_2_GW231109"])
+        if ("et" in args.GW231109_NF_filepath.lower()) or ("ce" in args.GW231109_NF_filepath.lower()):
+            print("Sampling a 3G-like injection of GW231109")
+            m1_GW231109_prior = UniformPrior(1.4, 1.65, parameter_names=["mass_1_GW231109"])
+            m2_GW231109_prior = UniformPrior(1.3, 1.50, parameter_names=["mass_2_GW231109"])
+        else:
+            m1_GW231109_prior = UniformPrior(1.3, 1.9, parameter_names=["mass_1_GW231109"])
+            m2_GW231109_prior = UniformPrior(1.1, 1.5, parameter_names=["mass_2_GW231109"])
         
         prior_list.append(m1_GW231109_prior)
         prior_list.append(m2_GW231109_prior)
@@ -264,12 +305,15 @@ def main(args):
         # GW
         likelihoods_list_GW = []
         if args.sample_GW170817:
+            # NOTE: this is a slightly older NF so the default kwargs are ok
             likelihoods_list_GW += [utils.GWlikelihood_with_masses("GW170817", "./NFs/GW170817/model.eqx")]
         
+        if args.sample_GW190425:
+            # NOTE: this is a slightly newer NF so use these updated kwargs FIXME: these are hardcoded -- this should change in future editions
+            likelihoods_list_GW += [utils.GWlikelihood_with_masses("GW190425", "./NFs/GW190425/model.eqx", nn_depth=6, nn_block_dim=16)]
+        
         if args.sample_GW231109:
-            path = args.GW231109_NF_filepath
-            
-            # FIXME: these are hardcoded -- this should change in future editions
+            # NOTE: this is a slightly newer NF so use these updated kwargs FIXME: these are hardcoded -- this should change in future editions
             nn_depth = 6
             nn_block_dim = 16
             
@@ -299,7 +343,7 @@ def main(args):
         likelihoods_list_radio = []
         if args.sample_radio:
             likelihoods_list_radio += [utils.RadioTimingLikelihood("J1614", 1.94, 0.06)]
-            likelihoods_list_radio += [utils.RadioTimingLikelihood("J0348", 2.01, 0.08)]
+            # likelihoods_list_radio += [utils.RadioTimingLikelihood("J0348", 2.01, 0.08)]
             if not args.sample_J0740:
                 likelihoods_list_radio += [utils.RadioTimingLikelihood("J0740", 2.08, 0.14)]
             else:
