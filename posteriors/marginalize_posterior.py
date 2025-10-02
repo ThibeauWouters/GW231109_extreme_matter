@@ -24,7 +24,7 @@ TOP_LEVEL_DIRS = []
 #                    ]
 
 # Add Anna's EOS sampling runs as well
-TOP_LEVEL_DIRS += ["/work/puecher/S231109/eos_sampling/rerun_prod_BW_XP_s005_leos_default/",
+TOP_LEVEL_DIRS += ["/work/puecher/S231109/eos_sampling/prod_BW_XP_s005_leos_default/",
                    "/work/puecher/S231109/eos_sampling/prod_BW_XP_s040_leos_default/",
                    ]
 
