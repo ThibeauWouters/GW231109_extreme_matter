@@ -62,6 +62,7 @@ LABELS_DICT = {"outdir": "Prior",
                "outdir_GW190425": "+GW190425",
                "outdir_GW170817_GW231109": "+GW170817+GW231109",
                "outdir_GW170817_GW190425": "+GW170817+GW190425",
+               "outdir_GW170817_GW190425_GW231109": "+GW170817+GW190425+GW231109",
                "outdir_GW231109_double_gaussian": "+GW231109 (double Gaussian)",
                "outdir_GW231109_quniv": "+GW231109 (QUR)",
                "outdir_GW231109_s025": r"+GW231109 $\chi \leq 0.25$",
@@ -76,6 +77,7 @@ COLORS_DICT = {"outdir": "darkgray",
                "outdir_GW231109_XAS": "red",
                "outdir_GW170817_GW231109": "purple",
                "outdir_GW170817_GW190425": "green",
+               "outdir_GW170817_GW190425_GW231109": "purple",
                "outdir_GW231109_double_gaussian": "purple",
                "outdir_GW231109_quniv": "red",
                "outdir_GW231109_s025": "purple",
@@ -545,7 +547,10 @@ def plot_injection(outdir: str):
     plt.xlim(10.0, 16.0)
     plt.ylim(bottom=0.0)
     plt.legend()
-    save_name = os.path.join("./figures/EOS_comparison", f"ET_injection_R14_histogram.pdf")
+    if "CE" in outdir:
+        save_name = os.path.join("./figures/EOS_comparison", f"ET_CE_injection_R14_histogram.pdf")
+    else:
+        save_name = os.path.join("./figures/EOS_comparison", f"ET_injection_R14_histogram.pdf")
     plt.savefig(save_name, bbox_inches="tight")
     plt.close()
     print(f"  R14 histogram saved to {save_name}")
@@ -576,7 +581,10 @@ def plot_injection(outdir: str):
     plt.xlim(0.1, 200.0)
     plt.ylim(bottom=0.0)
     plt.legend()
-    save_name = os.path.join("./figures/EOS_comparison", f"ET_injection_p3nsat_histogram.pdf")
+    if "CE" in outdir:
+        save_name = os.path.join("./figures/EOS_comparison", f"ET_CE_injection_p3nsat_histogram.pdf")
+    else:
+        save_name = os.path.join("./figures/EOS_comparison", f"ET_injection_p3nsat_histogram.pdf")
     plt.savefig(save_name, bbox_inches="tight")
     plt.close()
     print(f"  p3nsat histogram saved to {save_name}")
@@ -684,24 +692,37 @@ def main():
     # save_suffix = ""
     # process_given_dirs(directories, save_suffix)
     
+    # # =======================================================================
+    # # 6 Check XP vs XAS
+    # # =======================================================================
+    
+    # directories = [
+    #     "../jester/outdir_GW231109",
+    #     "../jester/outdir_GW231109_XAS",
+    # ]
+    # save_suffix = ""
+    # process_given_dirs(directories, save_suffix)
+    
     # =======================================================================
-    # 6 Check XP vs XAS
+    # 7 Check XP vs XAS
     # =======================================================================
     
     directories = [
-        "../jester/outdir_GW231109",
-        "../jester/outdir_GW231109_XAS",
+        "../jester/outdir_GW170817",
+        "../jester/outdir_GW170817_GW190425",
+        "../jester/outdir_GW170817_GW190425_GW231109",
     ]
     save_suffix = ""
     process_given_dirs(directories, save_suffix)
     
 
-    # # =======================================================================
-    # # INJECTIONS
-    # # =======================================================================
+    # =======================================================================
+    # INJECTIONS
+    # =======================================================================
     
-    # # TODO: generalize -- for now, just one injection
-    # plot_injection(outdir="outdir_GW231109_ET_AS")
+    # TODO: generalize -- for now, just one injection
+    plot_injection(outdir="outdir_GW231109_ET_AS")
+    plot_injection(outdir="outdir_GW231109_ET_CE")
 
 
 if __name__ == "__main__":
