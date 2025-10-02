@@ -68,16 +68,9 @@ def extract_posterior_from_dir(top_level_dir):
     
         with h5py.File(posterior_filename, "r") as f:
             posterior = f["posterior"]
+            posterior_dict = {key: posterior[key][:] for key in posterior.keys()}
             
-            # Extract the required parameters
-            posterior_data = {
-                "mass_1_source": posterior["mass_1_source"][:],
-                "mass_2_source": posterior["mass_2_source"][:],
-                "lambda_1": posterior["lambda_1"][:],
-                "lambda_2": posterior["lambda_2"][:]
-            }
-            
-        return posterior_data
+        return posterior_dict
     
     except Exception as e:
         print(f"Did not find HDF5 files or something went wrong: {e}")
@@ -117,6 +110,20 @@ def extract_posterior_from_dir(top_level_dir):
 def main():
     """Main function to process all directories and save posterior samples."""
     
+    keys_to_fetch = ["mass_1_source",
+                     "mass_2_source",
+                     "lambda_1",
+                     "lambda_2",
+                     "lambda_tilde",
+                     "delta_lambda_tilde",
+                     "total_mass",
+                     "chirp_mass",
+                     "mass_ratio",
+                     "luminosity_distance",
+                     "chi_eff",
+                     "chi_p",
+                     ]
+    
     for top_level_dir in TOP_LEVEL_DIRS:
         print(f"\n--- Processing directory: {top_level_dir} ---")
         
@@ -133,12 +140,16 @@ def main():
             dir_name = Path(top_level_dir).name
             output_filename = output_dir / f"{dir_name}.npz"
         
+        params_dict = {}
+        for key in keys_to_fetch:
+            if key in posterior_data:
+                params_dict[key] = posterior_data[key]
+            else:
+                print(list(posterior_data.keys()))
+                raise ValueError(f"Key {key} not found in posterior data from {top_level_dir}")
+        
         # Save the marginalized posterior
-        np.savez(output_filename,
-                 mass_1_source=posterior_data["mass_1_source"],
-                 mass_2_source=posterior_data["mass_2_source"],
-                 lambda_1=posterior_data["lambda_1"],
-                 lambda_2=posterior_data["lambda_2"])
+        np.savez(output_filename, **params_dict)
         
         print(f"Saved posterior samples to: {output_filename}")
         print(f"Number of samples: {len(posterior_data['mass_1_source'])}")
