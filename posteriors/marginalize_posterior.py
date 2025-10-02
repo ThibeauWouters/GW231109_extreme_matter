@@ -70,8 +70,12 @@ def extract_posterior_from_dir(top_level_dir):
         hdf5_files = list(final_result_dir.glob("*.hdf5"))
         
         if not hdf5_files:
-            print(f"Warning: No HDF5 files found in {final_result_dir}. Skipping {top_level_dir}")
-            return None
+            print(f"Warning: No HDF5 files found in {final_result_dir}. Checking `result` instead of `final_result`")
+            final_result_dir = top_level_path / "outdir" / "result"
+            hdf5_files = list(final_result_dir.glob("*.hdf5"))
+            if not hdf5_files:
+                print(f"Warning: No HDF5 files found in {final_result_dir}. Skipping {top_level_dir}")
+                return None
         
         if len(hdf5_files) > 1:
             print(f"Warning: Multiple HDF5 files found in {final_result_dir}. Using the first one: {hdf5_files[0]}")
