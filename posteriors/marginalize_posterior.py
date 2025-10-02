@@ -10,19 +10,29 @@ from pathlib import Path
 import glob
 import json
 
-# Define the top-level directories from which to fetch posteriors
-BASE_PATH = "/work/wouters/GW231109/"
-TOP_LEVEL_DIRS = glob.glob(os.path.join(BASE_PATH, "prod_BW_*"))
+# Define the top-level directories from which to fetch posteriors -- essentially in this dirs there should be outdir/final_result/ or outdir/*.json for me to find the posterior samples
+TOP_LEVEL_DIRS = []
 
-# Add Anna's 3G runs as well
-TOP_LEVEL_DIRS += ["/work/puecher/S231109/third_gen_runs/et_run/",
-                   "/work/puecher/S231109/third_gen_runs/et_run_alignedspin/",
-                   "/work/puecher/S231109/third_gen_runs/et_ce_run/",
-                   "/work/puecher/S231109/third_gen_runs/et_ce_run_alignedspin/",
+# # Add all the runs that I did
+# TOP_LEVEL_DIRS += glob.glob(os.path.join("/work/wouters/GW231109/", "prod_BW_*"))
+
+# # Add Anna's 3G runs as well
+# TOP_LEVEL_DIRS += ["/work/puecher/S231109/third_gen_runs/et_run/",
+#                    "/work/puecher/S231109/third_gen_runs/et_run_alignedspin/",
+#                    "/work/puecher/S231109/third_gen_runs/et_ce_run/",
+#                    "/work/puecher/S231109/third_gen_runs/et_ce_run_alignedspin/",
+#                    ]
+
+# Add Anna's EOS sampling runs as well
+TOP_LEVEL_DIRS += ["/work/puecher/S231109/eos_sampling/rerun_prod_BW_XP_s005_leos_default/",
+                   "/work/puecher/S231109/eos_sampling/prod_BW_XP_s040_leos_default/",
                    ]
 
-# Add my run for GW190425 as well
-TOP_LEVEL_DIRS += ["/work/wouters/neural_priors_paper_runs/GW190425/bns/default"]
+# # Add my run for GW190425 as well
+# TOP_LEVEL_DIRS += ["/work/wouters/neural_priors_paper_runs/GW190425/bns/default"]
+
+# # Add my run for GW230529 as well
+# TOP_LEVEL_DIRS += ["/work/wouters/neural_priors_paper_runs/GW230529/nsbh/default"]
 
 # Create output directory if it doesn't exist
 output_dir = Path("./data")
@@ -130,6 +140,8 @@ def main():
         # Generate output filename using the top-level directory name
         if "GW190425" in top_level_dir:
             output_filename = "./data/GW190425.npz"
+        if "GW230529" in top_level_dir:
+            output_filename = "./data/GW230529.npz"
         else:
             dir_name = Path(top_level_dir).name
             output_filename = output_dir / f"{dir_name}.npz"
