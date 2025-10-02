@@ -94,13 +94,7 @@ def extract_posterior_from_dir(top_level_dir):
         with open(posterior_filename, "r") as f:
             data = json.load(f)
             posterior = data["posterior"]["content"]
-            
-            posterior_data = {
-                "mass_1_source": posterior["mass_1_source"][:],
-                "mass_2_source": posterior["mass_2_source"][:],
-                "lambda_1": posterior["lambda_1"][:],
-                "lambda_2": posterior["lambda_2"][:]
-            }
+            posterior_data = {key: np.array(posterior[key]) for key in posterior.keys()}
             
         return posterior_data
     
@@ -146,7 +140,8 @@ def main():
                 params_dict[key] = posterior_data[key]
             else:
                 print(list(posterior_data.keys()))
-                raise ValueError(f"Key {key} not found in posterior data from {top_level_dir}")
+                print(f"Key {key} not found in posterior data from {top_level_dir}. Continuing")
+                continue
         
         # Save the marginalized posterior
         np.savez(output_filename, **params_dict)
