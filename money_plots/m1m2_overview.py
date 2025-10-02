@@ -56,15 +56,15 @@ EVENTS = {
         'color': '#fab6c7',  # Light red/pink
         'label': 'GW170817'
     },
-    'GW190425': {
-        'file': '../posteriors/data/GW190425.npz',
-        'color': '#c6dd81',  # Blue
-        'label': 'GW190425'
-    },
     'GW231109': {
         'file': '../posteriors/data/prod_BW_XP_s005_l5000_default.npz',
         'color': 'orange',  # Teal
         'label': 'GW231109'
+    },
+    'GW190425': {
+        'file': '../posteriors/data/GW190425.npz',
+        'color': '#c6dd81',  # Blue
+        'label': 'GW190425'
     },
     'GW230529': {
         'file': '../posteriors/data/GW230529.npz',
