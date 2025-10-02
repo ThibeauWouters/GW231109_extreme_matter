@@ -28,6 +28,9 @@ TOP_LEVEL_DIRS += ["/work/puecher/S231109/eos_sampling/rerun_prod_BW_XP_s005_leo
                    "/work/puecher/S231109/eos_sampling/prod_BW_XP_s040_leos_default/",
                    ]
 
+# Add my run for GW170817 as well
+TOP_LEVEL_DIRS += ["/work/wouters/neural_priors_paper_runs/GW170817/bns/default"]
+
 # # Add my run for GW190425 as well
 # TOP_LEVEL_DIRS += ["/work/wouters/neural_priors_paper_runs/GW190425/bns/default"]
 
@@ -138,9 +141,14 @@ def main():
             continue
         
         # Generate output filename using the top-level directory name
-        if "GW190425" in top_level_dir:
+        if "GW170817" in top_level_dir:
+            print(f"GW170817 found in path, setting output filename accordingly")
+            output_filename = "./data/GW170817.npz"
+        elif "GW190425" in top_level_dir:
+            print(f"GW190425 found in path, setting output filename accordingly")
             output_filename = "./data/GW190425.npz"
-        if "GW230529" in top_level_dir:
+        elif "GW230529" in top_level_dir:
+            print(f"GW230529 found in path, setting output filename accordingly")
             output_filename = "./data/GW230529.npz"
         else:
             dir_name = Path(top_level_dir).name
