@@ -671,7 +671,20 @@ def plot_full_injection():
     plt.fill_between(x, y_et_ce, alpha=0.3, color=ET_CE_COLOR)
 
     # Truth line
-    plt.axvline(R14_HAUKE, color='black', ls='--', lw=2.0, label="Truth")
+    plt.axvline(R14_HAUKE, color='black', ls='--', lw=2.0, label=f"Truth ({R14_HAUKE:.2f} km)")
+
+    # Compute 90% credible intervals
+    low_et, high_et = arviz.hdi(R14_et, hdi_prob=0.90)
+    med_et = np.median(R14_et)
+    low_et_ce, high_et_ce = arviz.hdi(R14_et_ce, hdi_prob=0.90)
+    med_et_ce = np.median(R14_et_ce)
+
+    # Add credible intervals as text in top-right corner
+    textstr = f"ET: ${med_et:.2f}^{{+{high_et - med_et:.2f}}}_{{-{med_et - low_et:.2f}}}$ km\n"
+    textstr += f"ET+CE: ${med_et_ce:.2f}^{{+{high_et_ce - med_et_ce:.2f}}}_{{-{med_et_ce - low_et_ce:.2f}}}$ km"
+    plt.text(0.97, 0.97, textstr, transform=plt.gca().transAxes,
+             verticalalignment='top', horizontalalignment='right',
+             bbox=dict(boxstyle='round', facecolor='white', alpha=0.8))
 
     plt.xlabel(r"$R_{1.4}$ [km]")
     plt.ylabel('Density')
@@ -683,6 +696,8 @@ def plot_full_injection():
     plt.savefig(save_name, bbox_inches="tight")
     plt.close()
     print(f"  R14 histogram saved to {save_name}")
+    print(f"    ET R14: {med_et:.2f} +{high_et - med_et:.2f} -{med_et - low_et:.2f} km (90% HDI)")
+    print(f"    ET+CE R14: {med_et_ce:.2f} +{high_et_ce - med_et_ce:.2f} -{med_et_ce - low_et_ce:.2f} km (90% HDI)")
 
     # =========================================================================
     # p3nsat histogram
@@ -714,7 +729,20 @@ def plot_full_injection():
     plt.fill_between(x, y_et_ce, alpha=0.3, color=ET_CE_COLOR)
 
     # Truth line
-    plt.axvline(P3NSAT_HAUKE, color='black', ls='--', lw=2.0, label="Truth")
+    plt.axvline(P3NSAT_HAUKE, color='black', ls='--', lw=2.0, label=f"Truth ({P3NSAT_HAUKE:.1f} MeV fm$^{{-3}}$)")
+
+    # Compute 90% credible intervals
+    low_et, high_et = arviz.hdi(p3nsat_et, hdi_prob=0.90)
+    med_et = np.median(p3nsat_et)
+    low_et_ce, high_et_ce = arviz.hdi(p3nsat_et_ce, hdi_prob=0.90)
+    med_et_ce = np.median(p3nsat_et_ce)
+
+    # Add credible intervals as text in top-right corner
+    textstr = f"ET: ${med_et:.1f}^{{+{high_et - med_et:.1f}}}_{{-{med_et - low_et:.1f}}}$ MeV fm$^{{-3}}$\n"
+    textstr += f"ET+CE: ${med_et_ce:.1f}^{{+{high_et_ce - med_et_ce:.1f}}}_{{-{med_et_ce - low_et_ce:.1f}}}$ MeV fm$^{{-3}}$"
+    plt.text(0.97, 0.97, textstr, transform=plt.gca().transAxes,
+             verticalalignment='top', horizontalalignment='right',
+             bbox=dict(boxstyle='round', facecolor='white', alpha=0.8))
 
     plt.xlabel(r"$p(3n_{\rm{sat}})$ [MeV fm$^{-3}$]")
     plt.ylabel('Density')
@@ -726,6 +754,8 @@ def plot_full_injection():
     plt.savefig(save_name, bbox_inches="tight")
     plt.close()
     print(f"  p3nsat histogram saved to {save_name}")
+    print(f"    ET p3nsat: {med_et:.1f} +{high_et - med_et:.1f} -{med_et - low_et:.1f} MeV fm^-3 (90% HDI)")
+    print(f"    ET+CE p3nsat: {med_et_ce:.1f} +{high_et_ce - med_et_ce:.1f} -{med_et_ce - low_et_ce:.1f} MeV fm^-3 (90% HDI)")
     
 
 def main():
