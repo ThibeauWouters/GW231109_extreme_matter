@@ -151,7 +151,8 @@ def create_comparison_cornerplot(
     save_name: str = "./figures/GW_PE/comparison_cornerplot.pdf",
     overwrite: bool = False,
     dummy_normalization_indices: list[int] = None,
-    truths: list[float] = None
+    truths: list[float] = None,
+    reverse_legend: bool = True
 ) -> bool:
     """
     Create a comparison corner plot with multiple datasets overlaid.
@@ -168,6 +169,7 @@ def create_comparison_cornerplot(
         dummy_normalization_indices (list[int]): Indices of datasets to use for each parameter
             to create a dummy normalization dataset (optional)
         truths (list[float]): True values for each parameter to plot as reference lines (optional)
+        reverse_legend (bool): Whether to reverse legend order (default True shows highest z-order first)
 
     Returns:
         bool: True if successful, False otherwise
@@ -331,15 +333,16 @@ def create_comparison_cornerplot(
 
             corner.corner(dummy_dataset, **invisible_kwargs)
 
-        # Add legend (reverse order so highest z-order appears first)
+        # Add legend
         legend_elements = []
         for i, (label, color) in enumerate(zip(labels, colors)):
             legend_elements.append(
                 mpatches.Patch(facecolor=color, edgecolor='k', label=label)
             )
 
-        # Reverse to show highest z-order (on top) at top of legend
-        legend_elements = legend_elements[::-1]
+        # Reverse to show highest z-order (on top) at top of legend if requested
+        if reverse_legend:
+            legend_elements = legend_elements[::-1]
 
         fig.legend(handles=legend_elements, loc='upper right',
                   bbox_to_anchor=(0.98, 0.98), frameon=True)
@@ -578,7 +581,8 @@ def main():
         save_name="./figures/GW_PE/comparison_ET_vs_ET_CE.pdf",
         overwrite=True,
         dummy_normalization_indices=dummy_indices_3,
-        truths=truths_3
+        truths=truths_3,
+        reverse_legend=False
     )
 
     if success_3:
