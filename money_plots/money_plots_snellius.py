@@ -638,8 +638,8 @@ def plot_full_injection():
     n_radio, p_radio = data_radio['densities'], data_radio['pressures']
 
     # Define colors for ET and ET+CE
-    ET_COLOR = "purple"
-    ET_CE_COLOR = "orange"
+    ET_COLOR = "#de8f05"
+    ET_CE_COLOR = "#d45d01"
 
     # =========================================================================
     # R14 histogram
@@ -663,8 +663,8 @@ def plot_full_injection():
 
     plt.plot(x, y_prior, color='darkgray', lw=3.0, label="Prior")
     plt.fill_between(x, y_prior, alpha=0.3, color='darkgray')
-    plt.plot(x, y_radio, color='dimgray', lw=3.0, label="Radio timing")
-    plt.fill_between(x, y_radio, alpha=0.3, color='dimgray')
+    # plt.plot(x, y_radio, color='dimgray', lw=3.0, label="Radio timing")
+    # plt.fill_between(x, y_radio, alpha=0.3, color='dimgray')
     plt.plot(x, y_et, color=ET_COLOR, lw=3.0, label="GW231109 (ET)")
     plt.fill_between(x, y_et, alpha=0.3, color=ET_COLOR)
     plt.plot(x, y_et_ce, color=ET_CE_COLOR, lw=3.0, label="GW231109 (ET+CE)")
@@ -675,7 +675,7 @@ def plot_full_injection():
 
     plt.xlabel(r"$R_{1.4}$ [km]")
     plt.ylabel('Density')
-    plt.xlim(10.0, 16.0)
+    plt.xlim(11.0, 15.0)
     plt.ylim(bottom=0.0)
     plt.legend()
 
@@ -845,23 +845,23 @@ def main():
     # 7 Increasing constraints with more and more GW BNS
     # =======================================================================
 
-    directories = [
-        "../jester/outdir",
-        "../jester/outdir_GW170817",
-        "../jester/outdir_GW170817_GW190425",
-        "../jester/outdir_GW170817_GW190425_GW231109",
-    ]
-    save_suffix = ""
-    process_given_dirs(directories, save_suffix, filename_prefix="all_bns")
+    # directories = [
+    #     "../jester/outdir",
+    #     "../jester/outdir_GW170817",
+    #     "../jester/outdir_GW170817_GW190425",
+    #     "../jester/outdir_GW170817_GW190425_GW231109",
+    # ]
+    # save_suffix = ""
+    # process_given_dirs(directories, save_suffix, filename_prefix="all_bns")
     
 
     # =======================================================================
     # INJECTIONS
     # =======================================================================
 
-    # Individual injection plots
-    plot_injection(outdir="outdir_GW231109_ET_AS")
-    plot_injection(outdir="outdir_GW231109_ET_CE")
+    # # Individual injection plots
+    # plot_injection(outdir="outdir_GW231109_ET_AS")
+    # plot_injection(outdir="outdir_GW231109_ET_CE")
 
     # Combined ET and ET+CE plot
     plot_full_injection()
