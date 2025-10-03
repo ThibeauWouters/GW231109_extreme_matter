@@ -665,9 +665,9 @@ def plot_full_injection():
     plt.fill_between(x, y_prior, alpha=0.3, color='darkgray')
     # plt.plot(x, y_radio, color='dimgray', lw=3.0, label="Radio timing")
     # plt.fill_between(x, y_radio, alpha=0.3, color='dimgray')
-    plt.plot(x, y_et, color=ET_COLOR, lw=3.0, label="GW231109 (ET)")
+    plt.plot(x, y_et, color=ET_COLOR, lw=3.0, label="ET")
     plt.fill_between(x, y_et, alpha=0.3, color=ET_COLOR)
-    plt.plot(x, y_et_ce, color=ET_CE_COLOR, lw=3.0, label="GW231109 (ET+CE)")
+    plt.plot(x, y_et_ce, color=ET_CE_COLOR, lw=3.0, label="ET+CE")
     plt.fill_between(x, y_et_ce, alpha=0.3, color=ET_CE_COLOR)
 
     # Truth line
