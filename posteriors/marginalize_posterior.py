@@ -9,6 +9,10 @@ import os
 from pathlib import Path
 import glob
 import json
+import scipy
+import tqdm
+from bilby.core.prior import Interped
+from bilby.gw.conversion import lambda_1_lambda_2_to_lambda_tilde, lambda_1_lambda_2_to_delta_lambda_tilde
 
 # Define the top-level directories from which to fetch posteriors -- essentially in this dirs there should be outdir/final_result/ or outdir/*.json for me to find the posterior samples
 TOP_LEVEL_DIRS = []
@@ -117,6 +121,48 @@ def extract_posterior_from_dir(top_level_dir):
     
     except Exception as e:
         return None
+    
+def infer_lambdas_from_eos_sampling(posterior_data: dict):
+    """
+    Re-compute the Lambdas from the EOS for the EOS sampling runs.
+    
+
+    Args:
+        posterior_data (dict): Dictionary storing the initial posterior data.
+    """
+    
+    # Get the source-frame components masses on which to interpolate later on
+    m1 = posterior_data["mass_1_source"]
+    m2 = posterior_data["mass_1_source"]
+    
+    # Get new, empty lambda_1,2 arrays
+    lambda_1 = np.zeros_like(m1)
+    lambda_2 = np.zeros_like(m2)
+    lambda_tilde = np.zeros_like(m1)
+    delta_lambda_tilde = np.zeros_like(m1)
+    
+    for jj in tqdm.tqdm(range(0, len(m1))):
+        # Fetch the EOS index of this sample, and grab the mass-Lambdas curve
+        EOSID = posterior_data["EOS"][jj].astype(int) + 1
+        eosfile = '/work/puecher/S231109/eos_sampling/MRL_sorted/{}.dat'.format(EOSID)
+        _, mass, lam = np.loadtxt(eosfile, usecols = [0,1,2]).T
+        lam1 = np.interp(m1[jj], mass, lam, left=0, right=0)
+        lam2 = np.interp(m2[jj], mass, lam, left=0, right=0)
+        lamT = lambda_1_lambda_2_to_lambda_tilde(lam1, lam2, m1[jj], m2[jj])
+        dlamT = lambda_1_lambda_2_to_delta_lambda_tilde(lam1, lam2, m1[jj], m2[jj])
+        
+        lambda_1[jj] = lam1
+        lambda_2[jj] = lam2
+        lambda_tilde[jj] = lamT
+        delta_lambda_tilde[jj] = dlamT
+        
+    # We are done, so save as new arrays
+    posterior_data["lambda_1"] = lambda_1
+    posterior_data["lambda_2"] = lambda_2
+    posterior_data["lambda_tilde"] = lambda_tilde
+    posterior_data["delta_lambda_tilde"] = delta_lambda_tilde
+    
+    return posterior_data
 
 def main():
     """Main function to process all directories and save posterior samples."""
@@ -140,6 +186,11 @@ def main():
         
         # Extract posterior data
         posterior_data = extract_posterior_from_dir(top_level_dir)
+        
+        # In case this was one of Anna's EOS sampling runs, then Lambdas are not stored correctly and we have to do something else
+        if "eos_sampling" in top_level_dir:
+            print(f"NOTE: This was an EOS sampling run, so we will re-compute the Lambdas from the EOS")
+            posterior_data = infer_lambdas_from_eos_sampling(posterior_data)
         
         if posterior_data is None:
             continue
@@ -166,7 +217,7 @@ def main():
                 print(list(posterior_data.keys()))
                 print(f"Key {key} not found in posterior data from {top_level_dir}. Continuing")
                 continue
-        
+            
         # Save the marginalized posterior
         np.savez(output_filename, **params_dict)
         
