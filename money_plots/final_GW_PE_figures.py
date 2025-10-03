@@ -16,7 +16,7 @@ cwd = os.getcwd()
 if "Woute029" in cwd:
     print(f"Updating plotting parameters for TeX")
     fs = 18
-    ticks_fs = 16
+    ticks_fs = 20
     label_fs = 22  # Bigger labels
     legend_fs = 22  # Smaller legend
     labelpad = 15  # Bigger labelpad
@@ -73,6 +73,8 @@ DEFAULT_CORNER_KWARGS = {
     "title_fmt": ".3f",
     "levels": [0.5, 0.9],  # 50% and 90% credible regions
     "labelpad": 0.05,
+    "max_n_ticks": 3,
+    "min_n_ticks": 2,
 }
 
 # Default colors
@@ -85,7 +87,7 @@ RED = "#cc3311"
 DEFAULT_RANGES = {
     "chirp_mass": (1.3055, 1.3080),
     "mass_ratio": (0.3, 1.0),
-    "chi_eff": (-0.02, 0.1),
+    "chi_eff": (-0.02, 0.15),
     "lambda_1": (0, 5000),
     "lambda_2": (0, 5000),
     "lambda_tilde": (0, 5000),
