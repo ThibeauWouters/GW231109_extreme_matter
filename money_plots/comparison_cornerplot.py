@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Final GW PE figures script for GW231109 extreme matter investigations.
+Modular comparison cornerplot script for GW231109 extreme matter investigations.
 Creates comparison corner plots from .npz posterior files with customizable datasets,
 parameters, colors, and ranges.
 """
@@ -76,14 +76,6 @@ ORANGE = "#de8f07"
 BLUE = "#0472b1"
 GREEN = "#019e72"
 RED = "#cc3311"
-
-# Default parameter ranges for plots
-DEFAULT_RANGES = {
-    "chirp_mass": (1.3055, 1.3080),
-    "mass_ratio": (0.3, 1.0),
-    "chi_eff": (-0.02, 0.1),
-    "lambda_tilde": (0, 5000),
-}
 
 
 def ensure_directory_exists(filepath: str):
@@ -198,14 +190,6 @@ def create_comparison_cornerplot(
             print("No valid samples loaded!")
             return False
 
-        # Sort all datasets by z-order for proper plotting (lower z-order first)
-        sorted_data = sorted(zip(zorders, all_samples, labels, colors), key=lambda x: x[0])
-        zorders_sorted, all_samples, labels, colors = zip(*sorted_data)
-        zorders = list(zorders_sorted)
-        all_samples = list(all_samples)
-        labels = list(labels)
-        colors = list(colors)
-
         # Create dummy normalization dataset if requested
         dummy_dataset = None
         if dummy_normalization_indices is not None:
@@ -306,15 +290,12 @@ def create_comparison_cornerplot(
 
             corner.corner(dummy_dataset, **invisible_kwargs)
 
-        # Add legend (reverse order so highest z-order appears first)
+        # Add legend
         legend_elements = []
         for i, (label, color) in enumerate(zip(labels, colors)):
             legend_elements.append(
                 mpatches.Patch(facecolor=color, edgecolor='k', label=label)
             )
-
-        # Reverse to show highest z-order (on top) at top of legend
-        legend_elements = legend_elements[::-1]
 
         fig.legend(handles=legend_elements, loc='upper right',
                   bbox_to_anchor=(0.98, 0.98), frameon=True)
@@ -342,132 +323,119 @@ def main():
     # Base path for data
     base_path = "../posteriors/data/"
 
+    # Parameters to include in the corner plot
+    parameters = [
+        "chirp_mass",
+        "mass_ratio",
+        "chi_eff",
+        "lambda_1",
+        "lambda_2",
+        "lambda_tilde"
+    ]
+
     # ====== COMPARISON 1: l5000 with different spin priors ======
     print("=" * 60)
     print("COMPARISON 1: l5000 with different spin priors")
     print("=" * 60)
 
-    # Parameters to include in comparison 1
-    parameters_1 = [
-        "chirp_mass",
-        "mass_ratio",
-        "chi_eff",
-        "lambda_tilde"
-    ]
-
     filepaths_1 = [
-        os.path.join(base_path, "prod_BW_XP_s040_l5000_default.npz"),
         os.path.join(base_path, "prod_BW_XP_s005_l5000_default.npz"),
+        os.path.join(base_path, "prod_BW_XP_s040_l5000_default.npz"),
     ]
 
     labels_1 = [
-        r"$\chi \leq 0.40$",
         r"$\chi \leq 0.05$",
+        r"$\chi \leq 0.40$",
     ]
 
-    colors_1 = [BLUE, ORANGE]
+    colors_1 = [ORANGE, BLUE]
 
-    zorders_1 = [0, 1]  # Low spin prior (chi<0.05) on top
+    ranges_1 = {
+        "chirp_mass": (1.3055, 1.3075),
+        "mass_ratio": (0.30, 1.0),
+        "chi_eff": (-0.05, 0.10),
+        "lambda_1": (0, 5000),
+        "lambda_2": (0, 5000),
+        "lambda_tilde": (0, 5000),
+    }
 
-    # Use default ranges
-    ranges_1 = {param: DEFAULT_RANGES[param] for param in parameters_1}
-
-    # Use chi<0.05 dataset (index 1) for normalization on all parameters
-    dummy_indices_1 = [1] * len(parameters_1)
+    # Use chi<0.05 dataset (index 0) for normalization on all parameters
+    dummy_indices_1 = [0] * len(parameters)
 
     success_1 = create_comparison_cornerplot(
         filepaths=filepaths_1,
-        parameters=parameters_1,
+        parameters=parameters,
         labels=labels_1,
         colors=colors_1,
         ranges=ranges_1,
-        zorders=zorders_1,
         save_name="./figures/GW_PE/comparison_l5000_spin.pdf",
         overwrite=True,
         dummy_normalization_indices=dummy_indices_1
     )
 
     if success_1:
-        print(" Successfully created comparison 1: comparison_l5000_spin.pdf")
+        print("✓ Successfully created comparison 1: comparison_l5000_spin.pdf")
     else:
-        print(" Failed to create comparison 1")
+        print("✗ Failed to create comparison 1")
 
     # ====== COMPARISON 2: leos with different spin priors ======
     print("\n" + "=" * 60)
     print("COMPARISON 2: leos with different spin priors")
     print("=" * 60)
 
-    # Parameters to include in comparison 2
-    parameters_2 = [
-        "chirp_mass",
-        "mass_ratio",
-        "chi_eff",
-        "lambda_tilde"
-    ]
-
     filepaths_2 = [
-        os.path.join(base_path, "prod_BW_XP_s040_leos_default.npz"),
         os.path.join(base_path, "prod_BW_XP_s005_leos_default.npz"),
+        os.path.join(base_path, "prod_BW_XP_s040_leos_default.npz"),
     ]
 
     labels_2 = [
-        r"$\chi \leq 0.40$",
-        r"$\chi \leq 0.05$",
+        r"$\chi \leq 0.05$ (EOS prior)",
+        r"$\chi \leq 0.40$ (EOS prior)",
     ]
 
-    colors_2 = [RED, GREEN]
+    colors_2 = [GREEN, RED]
 
-    zorders_2 = [0, 1]  # Low spin prior (chi<0.05) on top
+    ranges_2 = {
+        "chirp_mass": (1.3055, 1.3075),
+        "mass_ratio": (0.30, 1.0),
+        "chi_eff": (-0.05, 0.10),
+        "lambda_1": (0, 5000),
+        "lambda_2": (0, 5000),
+        "lambda_tilde": (0, 5000),
+    }
 
-    # Use default ranges but override lambda_tilde for EOS plot
-    ranges_2 = {param: DEFAULT_RANGES[param] for param in parameters_2}
-    ranges_2["lambda_tilde"] = (0, 1000)  # Tighter range for EOS plot
-
-    # Print lambda_tilde statistics for EOS runs
-    print("\nLambda_tilde statistics for EOS runs:")
-    for i, (filepath, label) in enumerate(zip(filepaths_2, labels_2)):
-        data = np.load(filepath)
-        lambda_tilde = data['lambda_tilde']
-        print(f"  {label}:")
-        print(f"    Mean: {np.mean(lambda_tilde):.2f}")
-        print(f"    Median: {np.median(lambda_tilde):.2f}")
-        print(f"    Std: {np.std(lambda_tilde):.2f}")
-        print(f"    5th-95th percentile: {np.percentile(lambda_tilde, 5):.2f} - {np.percentile(lambda_tilde, 95):.2f}")
-        print(f"    Min-Max: {np.min(lambda_tilde):.2f} - {np.max(lambda_tilde):.2f}")
-
-    # Use chi<0.05 EOS dataset (index 1) for normalization on all parameters
-    dummy_indices_2 = [1] * len(parameters_2)
+    # Use chi<0.05 EOS dataset (index 0) for normalization on all parameters
+    dummy_indices_2 = [0] * len(parameters)
 
     success_2 = create_comparison_cornerplot(
         filepaths=filepaths_2,
-        parameters=parameters_2,
+        parameters=parameters,
         labels=labels_2,
         colors=colors_2,
         ranges=ranges_2,
-        zorders=zorders_2,
         save_name="./figures/GW_PE/comparison_leos_spin.pdf",
         overwrite=True,
         dummy_normalization_indices=dummy_indices_2
     )
 
     if success_2:
-        print(" Successfully created comparison 2: comparison_leos_spin.pdf")
+        print("✓ Successfully created comparison 2: comparison_leos_spin.pdf")
     else:
-        print(" Failed to create comparison 2")
+        print("✗ Failed to create comparison 2")
 
     # Summary
     print("\n" + "=" * 60)
     print("SUMMARY")
     print("=" * 60)
     if success_1:
-        print(" Comparison 1 (l5000 spin): comparison_l5000_spin.pdf")
+        print("✓ Comparison 1 (l5000 spin): comparison_l5000_spin.pdf")
     else:
-        print(" Comparison 1 (l5000 spin): FAILED")
+        print("✗ Comparison 1 (l5000 spin): FAILED")
 
     if success_2:
-        print(" Comparison 2 (leos spin): comparison_leos_spin.pdf")
+        print("✓ Comparison 2 (leos spin): comparison_leos_spin.pdf")
     else:
-        print(" Comparison 2 (leos spin): FAILED")
+        print("✗ Comparison 2 (leos spin): FAILED")
 
 
 if __name__ == "__main__":
