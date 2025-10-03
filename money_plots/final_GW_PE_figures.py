@@ -12,8 +12,7 @@ import matplotlib.patches as mpatches
 import corner
 
 # If running on Mac, so we can use TeX (not on Jarvis), change some rc params
-cwd = os.getcwd()
-if "Woute029" in cwd:
+if "Woute029" in os.getcwd():
     print(f"Updating plotting parameters for TeX")
     fs = 18
     ticks_fs = 20
