@@ -29,13 +29,17 @@ MASS_2_RANGE = (1.0, 2.5) # Secondary mass range
 
 # User-configurable plot limits
 MARGINAL_PLOT_MIN = 0.01  # Minimum value for 1D marginal plots, this is a small positive number for visibility and clipping
+Q_LABEL_FONTSIZE = 16  # Font size for q-value labels on mass ratio lines
+
+# EOS sampling configuration
+USE_EOS_SAMPLING = False  # If True, use EOS sampling data for GW231109
 
 # If running on Mac, so we can use TeX (not on Jarvis), change some rc params
 cwd = os.getcwd()
 if "Woute029" in cwd:
     print(f"Updating plotting parameters for TeX")
-    fs = 18
-    ticks_fs = 16
+    fs = 20
+    ticks_fs = 20
     legend_fs = 16
     rc_params = {"axes.grid": False,
             "text.usetex" : True,
@@ -57,13 +61,13 @@ EVENTS = {
         'label': 'GW170817'
     },
     'GW231109': {
-        'file': '../posteriors/data/prod_BW_XP_s005_l5000_default.npz',
-        'color': 'orange',  # Teal
+        'file': '../posteriors/data/prod_BW_XP_s005_leos_default.npz' if USE_EOS_SAMPLING else '../posteriors/data/prod_BW_XP_s005_l5000_default.npz',
+        'color': 'orange',  # Orange
         'label': 'GW231109'
     },
     'GW190425': {
         'file': '../posteriors/data/GW190425.npz',
-        'color': '#c6dd81',  # Blue
+        'color': '#c6dd81',  # Green
         'label': 'GW190425'
     },
     'GW230529': {
@@ -188,22 +192,31 @@ def plot_equal_mass_ratio_lines(ax, mass_1_range: tuple, mass_2_range: tuple):
                 offset_y = offset_distance * np.cos(angle_rad)
 
                 ax.text(label_x + offset_x, label_y + offset_y, label_text,
-                       fontsize=14, color='gray', alpha=0.9,
+                       fontsize=Q_LABEL_FONTSIZE, color='gray', alpha=0.9,
                        rotation=angle_deg,
                        rotation_mode='anchor',
                        ha='center', va='bottom')
 
-def create_m1m2_overview_plot(save_name: str = "./figures/GW_PE/m1m2_overview.pdf") -> bool:
+def create_m1m2_overview_plot(save_name: str = None) -> bool:
     """
     Create the main mass_1 vs mass_2 overview plot.
 
     Args:
-        save_name (str): Output filename
+        save_name (str): Output filename (optional, will be auto-generated if None)
 
     Returns:
         bool: True if successful, False otherwise
     """
+    # Generate save name if not provided
+    if save_name is None:
+        base_name = "m1m2_overview"
+        if USE_EOS_SAMPLING:
+            base_name += "_eos_sampling"
+        save_name = f"./figures/GW_PE/{base_name}.pdf"
+
     print("Creating mass_1 vs mass_2 overview plot...")
+    print(f"EOS sampling mode: {USE_EOS_SAMPLING}")
+    print(f"Output file: {save_name}")
 
     # Load data for all events
     event_data = {}
@@ -256,17 +269,17 @@ def create_m1m2_overview_plot(save_name: str = "./figures/GW_PE/m1m2_overview.pd
 
         # Create 2D histogram/contours
         corner.hist2d(m1_filtered, m2_filtered,
-                        bins=30,
-                        range=[MASS_1_RANGE, MASS_2_RANGE],
-                        ax=ax_main,
-                        color=data['color'],
-                        plot_datapoints=True,
-                        plot_density=False,
-                        plot_contours=False,
-                        no_fill_contours=True,
-                        smooth=1.0,
-                        # levels=[0.5, 0.9],  # 50% and 90% credible regions
-                        )
+                      ax=ax_main,
+                      color=data['color'],
+                      levels=[0.5, 0.9],  # 50% and 90% credible regions
+                      plot_datapoints=False,
+                      plot_density=False,
+                      plot_contours=False,
+                      no_fill_contours=True,
+                      fill_contours=True,
+                      smooth=0.4,
+                    #   no_fill_contours=False,
+                      )
 
         # Create 1D marginal KDEs
         print(f"Creating 1D marginals for {event_name}...")
