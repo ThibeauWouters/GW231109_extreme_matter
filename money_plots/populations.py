@@ -37,12 +37,11 @@ M2_XLIM = (1.1, 1.8)
 
 # Sample sizes (increase these for smoother KDEs)
 PRIOR_SAMPLE_SIZE = 500_000   # Number of initial samples to draw from priors
-OUTPUT_SAMPLE_SIZE = 100_000  # Number of output samples after m1 >= m2 constraint
+OUTPUT_SAMPLE_SIZE = 200_000  # Number of output samples after m1 >= m2 constraint
 
 # KDE parameters
-KDE_NBINS = 10_000             # Number of points for KDE evaluation (higher = smoother)
-KDE_METHOD = 'Transform'       # 'Reflection' or 'Transform' (Transform supports smooth parameter)
-KDE_SMOOTH = 3.0               # Smoothing factor (higher = smoother, typically 0.5-2.0)
+KDE_NBINS = 1_000             # Number of points for KDE evaluation (higher = smoother curves)
+KDE_SMOOTH = 2.0              # Smoothing factor (None = auto, or set to float like 1.5 for more smoothing)
 
 # Output configuration
 OUTPUT_PATH = './figures/populations/populations_component_masses_comparison.pdf'
@@ -73,27 +72,17 @@ if "Woute029" in os.getcwd():
 def compute_kde(data, Nbins, xMin, xMax, bounded=False, method=None, smooth=None):
     """Compute KDE of `data` normalised across interval [`xMin`, `xMax`]
     using Nbins bins.
-    If `bounded` is true, use a bounded KDE method with bounds `xMin`, `xMax`.
     """
     xPoints = np.linspace(xMin, xMax, Nbins)
-    if bounded:
-        if method != None:
-            kernel = bounded_1d_kde(data, xlow=xMin, xhigh=xMax, method=method)
-        else:
-            kernel = bounded_1d_kde(data, xlow=xMin, xhigh=xMax)
 
-        # Manually apply smoothing using set_bandwidth (smooth parameter doesn't work)
-        if smooth is not None and smooth != 1.0:
-            kernel.set_bandwidth(kernel.factor * smooth)
+    # Use simple gaussian KDE
+    kernel = scipy.stats.gaussian_kde(data)
 
-        return kernel(xPoints)
-    else:
-        print('gaussian kde')
-        # Apply bandwidth adjustment for unbounded KDE
-        kernel = scipy.stats.gaussian_kde(data)
-        if smooth is not None:
-            kernel.set_bandwidth(kernel.factor * smooth)
-        return kernel.evaluate(xPoints) / kernel.integrate_box_1d(xMin, xMax)
+    # Apply bandwidth adjustment if requested
+    if smooth is not None:
+        kernel.set_bandwidth(kernel.factor * smooth)
+
+    return kernel.evaluate(xPoints)
 
 def create_prior_samps(priorpts_m1,priorpts_m2,nsamp):
     
@@ -252,7 +241,7 @@ def load_posterior_data(data_dir='../posteriors/data/', run_names=None, nsamp=OU
     return posterior_data
 
 
-def compute_kdes_batch(data_dict, Nbins=KDE_NBINS, bounded=True, method=KDE_METHOD, smooth=KDE_SMOOTH):
+def compute_kdes_batch(data_dict, Nbins=KDE_NBINS, smooth=KDE_SMOOTH):
     """
     Compute KDEs for multiple datasets.
 
@@ -262,10 +251,6 @@ def compute_kdes_batch(data_dict, Nbins=KDE_NBINS, bounded=True, method=KDE_METH
         Dictionary with dataset names as keys and data arrays as values
     Nbins : int
         Number of bins for KDE
-    bounded : bool
-        Whether to use bounded KDE
-    method : str
-        KDE method to use
     smooth : float
         Smoothing factor for KDE
 
@@ -279,9 +264,7 @@ def compute_kdes_batch(data_dict, Nbins=KDE_NBINS, bounded=True, method=KDE_METH
     for name, data in data_dict.items():
         xMin, xMax = min(data), max(data)
 
-        # Use consistent method for all distributions
-        kde = compute_kde(data, Nbins=Nbins, xMin=xMin, xMax=xMax,
-                         bounded=bounded, method=method, smooth=smooth)
+        kde = compute_kde(data, Nbins=Nbins, xMin=xMin, xMax=xMax, smooth=smooth)
 
         kde_dict[name] = {
             'kde': kde,
@@ -394,11 +377,7 @@ def main():
     for name in ['double_gaussian', 'gaussian', 'uniform', 'default']:
         if name in m1_posterior_kdes:
             kde_data = m1_posterior_kdes[name]
-            # Plot with markers to see evaluation points
-            config = posterior_config[name].copy()
-            config['marker'] = 'o'
-            config['markersize'] = 3
-            ax[0].plot(kde_data['x'], kde_data['kde'], **config)
+            ax[0].plot(kde_data['x'], kde_data['kde'], **posterior_config[name])
             ax[0].fill_between(kde_data['x'], kde_data['kde'],
                               color=colors[name], alpha=0.3)
 
@@ -418,11 +397,7 @@ def main():
     for name in ['double_gaussian', 'gaussian', 'uniform', 'default']:
         if name in m2_posterior_kdes:
             kde_data = m2_posterior_kdes[name]
-            # Plot with markers to see evaluation points
-            config = posterior_config[name].copy()
-            config['marker'] = 'o'
-            config['markersize'] = 3
-            ax[1].plot(kde_data['x'], kde_data['kde'], **config)
+            ax[1].plot(kde_data['x'], kde_data['kde'], **posterior_config[name])
             ax[1].fill_between(kde_data['x'], kde_data['kde'],
                               color=colors[name], alpha=0.3)
 
@@ -449,7 +424,7 @@ def main():
     # Add single legend spanning both plots
     fig.legend(handles=all_handles,
               loc='upper center', bbox_to_anchor=(0.5, 1.0), ncols=6,
-              frameon=True, fontsize=10)
+              frameon=True, fontsize=14, columnspacing=1.0)
 
     plt.subplots_adjust(left=None, bottom=None, right=None, top=None, wspace=0.05, hspace=None)
     plt.savefig(OUTPUT_PATH, dpi=DPI, bbox_inches='tight')
