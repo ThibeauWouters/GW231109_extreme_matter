@@ -680,11 +680,14 @@ def plot_full_injection():
     med_et_ce = np.median(R14_et_ce)
 
     # Add credible intervals as text in top-right corner
-    textstr = f"ET: ${med_et:.2f}^{{+{high_et - med_et:.2f}}}_{{-{med_et - low_et:.2f}}}$ km\n"
-    textstr += f"ET+CE: ${med_et_ce:.2f}^{{+{high_et_ce - med_et_ce:.2f}}}_{{-{med_et_ce - low_et_ce:.2f}}}$ km"
-    plt.text(0.97, 0.97, textstr, transform=plt.gca().transAxes,
+    textstr_et = f"${med_et:.2f}^{{+{high_et - med_et:.2f}}}_{{-{med_et - low_et:.2f}}}$"
+    textstr_et_ce = f"${med_et_ce:.2f}^{{+{high_et_ce - med_et_ce:.2f}}}_{{-{med_et_ce - low_et_ce:.2f}}}$"
+    plt.text(0.97, 0.97, textstr_et, transform=plt.gca().transAxes,
              verticalalignment='top', horizontalalignment='right',
-             bbox=dict(boxstyle='round', facecolor='white', alpha=0.8))
+             color=ET_COLOR, fontsize=16)
+    plt.text(0.97, 0.92, textstr_et_ce, transform=plt.gca().transAxes,
+             verticalalignment='top', horizontalalignment='right',
+             color=ET_CE_COLOR, fontsize=16)
 
     plt.xlabel(r"$R_{1.4}$ [km]")
     plt.ylabel('Density')
@@ -738,11 +741,14 @@ def plot_full_injection():
     med_et_ce = np.median(p3nsat_et_ce)
 
     # Add credible intervals as text in top-right corner
-    textstr = f"ET: ${med_et:.1f}^{{+{high_et - med_et:.1f}}}_{{-{med_et - low_et:.1f}}}$ MeV fm$^{{-3}}$\n"
-    textstr += f"ET+CE: ${med_et_ce:.1f}^{{+{high_et_ce - med_et_ce:.1f}}}_{{-{med_et_ce - low_et_ce:.1f}}}$ MeV fm$^{{-3}}$"
-    plt.text(0.97, 0.97, textstr, transform=plt.gca().transAxes,
+    textstr_et = f"${med_et:.1f}^{{+{high_et - med_et:.1f}}}_{{-{med_et - low_et:.1f}}}$"
+    textstr_et_ce = f"${med_et_ce:.1f}^{{+{high_et_ce - med_et_ce:.1f}}}_{{-{med_et_ce - low_et_ce:.1f}}}$"
+    plt.text(0.97, 0.97, textstr_et, transform=plt.gca().transAxes,
              verticalalignment='top', horizontalalignment='right',
-             bbox=dict(boxstyle='round', facecolor='white', alpha=0.8))
+             color=ET_COLOR, fontsize=16)
+    plt.text(0.97, 0.92, textstr_et_ce, transform=plt.gca().transAxes,
+             verticalalignment='top', horizontalalignment='right',
+             color=ET_CE_COLOR, fontsize=16)
 
     plt.xlabel(r"$p(3n_{\rm{sat}})$ [MeV fm$^{-3}$]")
     plt.ylabel('Density')
