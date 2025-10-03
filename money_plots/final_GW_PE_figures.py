@@ -17,18 +17,21 @@ if "Woute029" in cwd:
     print(f"Updating plotting parameters for TeX")
     fs = 18
     ticks_fs = 16
-    legend_fs = 40
+    label_fs = 22  # Bigger labels
+    legend_fs = 22  # Smaller legend
+    labelpad = 15  # Bigger labelpad
     rc_params = {"axes.grid": False,
             "text.usetex" : True,
             "font.family" : "serif",
             "font.serif" : ["Computer Modern Serif"],
             "xtick.labelsize": ticks_fs,
             "ytick.labelsize": ticks_fs,
-            "axes.labelsize": ticks_fs,
+            "axes.labelsize": label_fs,
             "legend.fontsize": legend_fs,
             "legend.title_fontsize": legend_fs,
             "figure.titlesize": fs}
     plt.rcParams.update(rc_params)
+    
 
 # Parameter translation dictionary for LaTeX symbols
 PARAMETER_LABELS = {
@@ -69,6 +72,7 @@ DEFAULT_CORNER_KWARGS = {
     "show_titles": False,
     "title_fmt": ".3f",
     "levels": [0.5, 0.9],  # 50% and 90% credible regions
+    "labelpad": 0.05,
 }
 
 # Default colors
@@ -355,8 +359,7 @@ def main():
         "chirp_mass",
         "mass_ratio",
         "chi_eff",
-        "lambda_tilde",
-        "luminosity_distance"
+        "lambda_tilde"
     ]
 
     filepaths_1 = [
@@ -365,8 +368,8 @@ def main():
     ]
 
     labels_1 = [
-        r"$\chi \leq 0.40$",
-        r"$\chi \leq 0.05$",
+        r"$|\chi_i| \leq 0.40$",
+        r"$|\chi_i| \leq 0.05$",
     ]
 
     colors_1 = [BLUE, ORANGE]
@@ -406,8 +409,7 @@ def main():
         "chirp_mass",
         "mass_ratio",
         "chi_eff",
-        "lambda_tilde",
-        "luminosity_distance"
+        "lambda_tilde"
     ]
 
     filepaths_2 = [
@@ -416,8 +418,8 @@ def main():
     ]
 
     labels_2 = [
-        r"$\chi \leq 0.40$",
-        r"$\chi \leq 0.05$",
+        r"$|\chi_i| \leq 0.40$",
+        r"$|\chi_i| \leq 0.05$",
     ]
 
     colors_2 = [RED, GREEN]
@@ -452,8 +454,9 @@ def main():
         print(f"      Mean: {np.mean(lambda_tilde):.2f}, Median: {np.median(lambda_tilde):.2f}, Std: {np.std(lambda_tilde):.2f}")
         print(f"      5th-95th percentile: {np.percentile(lambda_tilde, 5):.2f} - {np.percentile(lambda_tilde, 95):.2f}")
 
-    # Use chi<0.05 EOS dataset (index 1) for normalization on all parameters
-    dummy_indices_2 = [1] * len(parameters_2)
+    # Use chi<0.05 EOS dataset (index 1) for most parameters, but chi<0.40 (index 0) for lambda_tilde
+    # Parameters order: chirp_mass, mass_ratio, chi_eff, lambda_tilde
+    dummy_indices_2 = [1, 1, 1, 0]  # Use high spin (chi<0.40) for lambda_tilde normalization
 
     success_2 = create_comparison_cornerplot(
         filepaths=filepaths_2,
