@@ -718,6 +718,7 @@ def main():
     # =======================================================================
 
     directories = [
+        "../jester/outdir",
         "../jester/outdir_GW170817",
         "../jester/outdir_GW170817_GW190425",
         "../jester/outdir_GW170817_GW190425_GW231109",
