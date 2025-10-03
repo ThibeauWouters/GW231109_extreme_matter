@@ -82,7 +82,10 @@ DEFAULT_RANGES = {
     "chirp_mass": (1.3055, 1.3080),
     "mass_ratio": (0.3, 1.0),
     "chi_eff": (-0.02, 0.1),
+    "lambda_1": (0, 5000),
+    "lambda_2": (0, 5000),
     "lambda_tilde": (0, 5000),
+    "luminosity_distance": (100, 300),
 }
 
 
@@ -352,7 +355,8 @@ def main():
         "chirp_mass",
         "mass_ratio",
         "chi_eff",
-        "lambda_tilde"
+        "lambda_tilde",
+        "luminosity_distance"
     ]
 
     filepaths_1 = [
@@ -402,7 +406,8 @@ def main():
         "chirp_mass",
         "mass_ratio",
         "chi_eff",
-        "lambda_tilde"
+        "lambda_tilde",
+        "luminosity_distance"
     ]
 
     filepaths_2 = [
@@ -423,17 +428,29 @@ def main():
     ranges_2 = {param: DEFAULT_RANGES[param] for param in parameters_2}
     ranges_2["lambda_tilde"] = (0, 1000)  # Tighter range for EOS plot
 
-    # Print lambda_tilde statistics for EOS runs
-    print("\nLambda_tilde statistics for EOS runs:")
+    # Print Lambda statistics for EOS runs
+    print("\nLambda parameter statistics for EOS runs:")
     for i, (filepath, label) in enumerate(zip(filepaths_2, labels_2)):
         data = np.load(filepath)
+        print(f"\n  {label}:")
+
+        # Lambda_1
+        lambda_1 = data['lambda_1']
+        print(f"    Lambda_1:")
+        print(f"      Mean: {np.mean(lambda_1):.2f}, Median: {np.median(lambda_1):.2f}, Std: {np.std(lambda_1):.2f}")
+        print(f"      5th-95th percentile: {np.percentile(lambda_1, 5):.2f} - {np.percentile(lambda_1, 95):.2f}")
+
+        # Lambda_2
+        lambda_2 = data['lambda_2']
+        print(f"    Lambda_2:")
+        print(f"      Mean: {np.mean(lambda_2):.2f}, Median: {np.median(lambda_2):.2f}, Std: {np.std(lambda_2):.2f}")
+        print(f"      5th-95th percentile: {np.percentile(lambda_2, 5):.2f} - {np.percentile(lambda_2, 95):.2f}")
+
+        # Lambda_tilde
         lambda_tilde = data['lambda_tilde']
-        print(f"  {label}:")
-        print(f"    Mean: {np.mean(lambda_tilde):.2f}")
-        print(f"    Median: {np.median(lambda_tilde):.2f}")
-        print(f"    Std: {np.std(lambda_tilde):.2f}")
-        print(f"    5th-95th percentile: {np.percentile(lambda_tilde, 5):.2f} - {np.percentile(lambda_tilde, 95):.2f}")
-        print(f"    Min-Max: {np.min(lambda_tilde):.2f} - {np.max(lambda_tilde):.2f}")
+        print(f"    Lambda_tilde:")
+        print(f"      Mean: {np.mean(lambda_tilde):.2f}, Median: {np.median(lambda_tilde):.2f}, Std: {np.std(lambda_tilde):.2f}")
+        print(f"      5th-95th percentile: {np.percentile(lambda_tilde, 5):.2f} - {np.percentile(lambda_tilde, 95):.2f}")
 
     # Use chi<0.05 EOS dataset (index 1) for normalization on all parameters
     dummy_indices_2 = [1] * len(parameters_2)
