@@ -682,12 +682,16 @@ def plot_full_injection():
     # Add credible intervals as text in top-right corner
     textstr_et = f"${med_et:.2f}^{{+{high_et - med_et:.2f}}}_{{-{med_et - low_et:.2f}}}$"
     textstr_et_ce = f"${med_et_ce:.2f}^{{+{high_et_ce - med_et_ce:.2f}}}_{{-{med_et_ce - low_et_ce:.2f}}}$"
-    plt.text(0.97, 0.97, textstr_et, transform=plt.gca().transAxes,
+    x = 0.95
+    y = 0.95
+    dy = 0.15
+    fs = 24
+    plt.text(x, y, textstr_et, transform=plt.gca().transAxes,
              verticalalignment='top', horizontalalignment='right',
-             color=ET_COLOR, fontsize=16)
-    plt.text(0.97, 0.92, textstr_et_ce, transform=plt.gca().transAxes,
+             color=ET_COLOR, fontsize=fs)
+    plt.text(x, y-dy, textstr_et_ce, transform=plt.gca().transAxes,
              verticalalignment='top', horizontalalignment='right',
-             color=ET_CE_COLOR, fontsize=16)
+             color=ET_CE_COLOR, fontsize=fs)
 
     plt.xlabel(r"$R_{1.4}$ [km]")
     plt.ylabel('Density')
