@@ -497,42 +497,42 @@ def process_given_dirs(directories, save_suffix="", legend_outside=False, filena
 
 def plot_injection(outdir: str):
     print(f"Plotting the GW231109 (ET) from {outdir}...")
-    
+
     # First, load the true EOS
     hauke_filename = "../figures/EOS_data/hauke_macroscopic.dat"
     r, m, l, _ = np.loadtxt(hauke_filename, unpack=True)
     R14_HAUKE = np.interp(1.4, m, r)
     print(f"  Hauke EOS R14 = {R14_HAUKE:.2f} km")
-    
+
     # First, load the true EOS
     hauke_filename = "../figures/EOS_data/hauke_microscopic.dat"
     n, _, p, _ = np.loadtxt(hauke_filename, unpack=True)
-    
+
     # # Convert units
     n = n / 0.16
     print(np.min(n), np.max(n))
     # n = n / jose_utils.fm_inv3_to_geometric / 0.16
     # p = p / jose_utils.MeV_fm_inv3_to_geometric
     # e = e / jose_utils.MeV_fm_inv3_to_geometric
-    
+
     P3NSAT_HAUKE = np.interp(3, n, p)
     print(f"  Hauke p3nsat = {P3NSAT_HAUKE:.2f}")
-    
+
     # Load the data
     data = load_eos_data(os.path.join("../jester", outdir))
     masses, radii = data['masses'], data['radii']
     n, p = data['densities'], data['pressures']
-    
+
     # Also load the prior
     data_prior = load_eos_data(os.path.join("../jester", "outdir"))
     masses_prior, radii_prior = data_prior['masses'], data_prior['radii']
     n_prior, p_prior = data_prior['densities'], data_prior['pressures']
-    
+
     # Also load the radio timing
     data_radio = load_eos_data(os.path.join("../jester", "outdir_radio"))
     masses_radio, radii_radio = data_radio['masses'], data_radio['radii']
     n_radio, p_radio = data_radio['densities'], data_radio['pressures']
-    
+
     # Histogram of R14
     R14_list = np.array([np.interp(1.4, mass, radius) for mass, radius in zip(masses, radii)])
     plt.figure(figsize=figsize_horizontal)
@@ -549,10 +549,10 @@ def plot_injection(outdir: str):
     plt.fill_between(x, y_radio, alpha=0.3, color='dimgray')
     plt.plot(x, y, color=INJECTION_COLOR, lw=3.0, label="GW231109 (ET)")
     plt.fill_between(x, y, alpha=0.3, color=INJECTION_COLOR)
-    
+
     # Hauke:
     plt.axvline(R14_HAUKE, color='black', ls='--', lw=2.0, label="Truth")
-    
+
     plt.xlabel(r"$R_{1.4}$ [km]")
     plt.ylabel('Density')
     plt.xlim(10.0, 16.0)
@@ -565,14 +565,14 @@ def plot_injection(outdir: str):
     plt.savefig(save_name, bbox_inches="tight")
     plt.close()
     print(f"  R14 histogram saved to {save_name}")
-    
+
     # Now also for p3nsat
     p3nsat_list = np.array([np.interp(3.0, dens, press) for dens, press in zip(n, p)])
     plt.figure(figsize=figsize_horizontal)
     kde = gaussian_kde(p3nsat_list)
     kde_prior = gaussian_kde(np.array([np.interp(3.0, dens, press) for dens, press in zip(n_prior, p_prior)]))
     kde_radio = gaussian_kde(np.array([np.interp(3.0, dens, press) for dens, press in zip(n_radio, p_radio)]))
-    
+
     x = np.linspace(0.1, 200.0, 1000)
     y = kde(x)
     y_prior = kde_prior(x)
@@ -583,7 +583,7 @@ def plot_injection(outdir: str):
     plt.fill_between(x, y_radio, alpha=0.3, color='dimgray')
     plt.plot(x, y, color=INJECTION_COLOR, lw=3.0, label="GW231109 (ET)")
     plt.fill_between(x, y, alpha=0.3, color=INJECTION_COLOR)
-    
+
     # Hauke:
     plt.axvline(P3NSAT_HAUKE, color='black', ls='--', lw=2.0, label="Truth")
 
@@ -596,6 +596,133 @@ def plot_injection(outdir: str):
         save_name = os.path.join("./figures/EOS_comparison", f"ET_CE_injection_p3nsat_histogram.pdf")
     else:
         save_name = os.path.join("./figures/EOS_comparison", f"ET_injection_p3nsat_histogram.pdf")
+    plt.savefig(save_name, bbox_inches="tight")
+    plt.close()
+    print(f"  p3nsat histogram saved to {save_name}")
+
+def plot_full_injection():
+    """Plot both ET and ET+CE injection results together."""
+    print("Plotting combined ET and ET+CE injection results...")
+
+    # Load the true EOS (macroscopic)
+    hauke_filename = "../figures/EOS_data/hauke_macroscopic.dat"
+    r, m, l, _ = np.loadtxt(hauke_filename, unpack=True)
+    R14_HAUKE = np.interp(1.4, m, r)
+    print(f"  Hauke EOS R14 = {R14_HAUKE:.2f} km")
+
+    # Load the true EOS (microscopic)
+    hauke_filename = "../figures/EOS_data/hauke_microscopic.dat"
+    n_hauke, _, p_hauke, _ = np.loadtxt(hauke_filename, unpack=True)
+    n_hauke = n_hauke / 0.16
+    P3NSAT_HAUKE = np.interp(3, n_hauke, p_hauke)
+    print(f"  Hauke p3nsat = {P3NSAT_HAUKE:.2f}")
+
+    # Load ET data
+    data_et = load_eos_data(os.path.join("../jester", "outdir_GW231109_ET_AS"))
+    masses_et, radii_et = data_et['masses'], data_et['radii']
+    n_et, p_et = data_et['densities'], data_et['pressures']
+
+    # Load ET+CE data
+    data_et_ce = load_eos_data(os.path.join("../jester", "outdir_GW231109_ET_CE"))
+    masses_et_ce, radii_et_ce = data_et_ce['masses'], data_et_ce['radii']
+    n_et_ce, p_et_ce = data_et_ce['densities'], data_et_ce['pressures']
+
+    # Load the prior
+    data_prior = load_eos_data(os.path.join("../jester", "outdir"))
+    masses_prior, radii_prior = data_prior['masses'], data_prior['radii']
+    n_prior, p_prior = data_prior['densities'], data_prior['pressures']
+
+    # Load the radio timing
+    data_radio = load_eos_data(os.path.join("../jester", "outdir_radio"))
+    masses_radio, radii_radio = data_radio['masses'], data_radio['radii']
+    n_radio, p_radio = data_radio['densities'], data_radio['pressures']
+
+    # Define colors for ET and ET+CE
+    ET_COLOR = "purple"
+    ET_CE_COLOR = "orange"
+
+    # =========================================================================
+    # R14 histogram
+    # =========================================================================
+    R14_et = np.array([np.interp(1.4, mass, radius) for mass, radius in zip(masses_et, radii_et)])
+    R14_et_ce = np.array([np.interp(1.4, mass, radius) for mass, radius in zip(masses_et_ce, radii_et_ce)])
+    R14_prior = np.array([np.interp(1.4, mass, radius) for mass, radius in zip(masses_prior, radii_prior)])
+    R14_radio = np.array([np.interp(1.4, mass, radius) for mass, radius in zip(masses_radio, radii_radio)])
+
+    plt.figure(figsize=figsize_horizontal)
+    kde_et = gaussian_kde(R14_et)
+    kde_et_ce = gaussian_kde(R14_et_ce)
+    kde_prior = gaussian_kde(R14_prior)
+    kde_radio = gaussian_kde(R14_radio)
+
+    x = np.linspace(10.0, 16.0, 1000)
+    y_et = kde_et(x)
+    y_et_ce = kde_et_ce(x)
+    y_prior = kde_prior(x)
+    y_radio = kde_radio(x)
+
+    plt.plot(x, y_prior, color='darkgray', lw=3.0, label="Prior")
+    plt.fill_between(x, y_prior, alpha=0.3, color='darkgray')
+    plt.plot(x, y_radio, color='dimgray', lw=3.0, label="Radio timing")
+    plt.fill_between(x, y_radio, alpha=0.3, color='dimgray')
+    plt.plot(x, y_et, color=ET_COLOR, lw=3.0, label="GW231109 (ET)")
+    plt.fill_between(x, y_et, alpha=0.3, color=ET_COLOR)
+    plt.plot(x, y_et_ce, color=ET_CE_COLOR, lw=3.0, label="GW231109 (ET+CE)")
+    plt.fill_between(x, y_et_ce, alpha=0.3, color=ET_CE_COLOR)
+
+    # Truth line
+    plt.axvline(R14_HAUKE, color='black', ls='--', lw=2.0, label="Truth")
+
+    plt.xlabel(r"$R_{1.4}$ [km]")
+    plt.ylabel('Density')
+    plt.xlim(10.0, 16.0)
+    plt.ylim(bottom=0.0)
+    plt.legend()
+
+    save_name = os.path.join("./figures/EOS_comparison", "ET_full_injection_R14_histogram.pdf")
+    plt.savefig(save_name, bbox_inches="tight")
+    plt.close()
+    print(f"  R14 histogram saved to {save_name}")
+
+    # =========================================================================
+    # p3nsat histogram
+    # =========================================================================
+    p3nsat_et = np.array([np.interp(3.0, dens, press) for dens, press in zip(n_et, p_et)])
+    p3nsat_et_ce = np.array([np.interp(3.0, dens, press) for dens, press in zip(n_et_ce, p_et_ce)])
+    p3nsat_prior = np.array([np.interp(3.0, dens, press) for dens, press in zip(n_prior, p_prior)])
+    p3nsat_radio = np.array([np.interp(3.0, dens, press) for dens, press in zip(n_radio, p_radio)])
+
+    plt.figure(figsize=figsize_horizontal)
+    kde_et = gaussian_kde(p3nsat_et)
+    kde_et_ce = gaussian_kde(p3nsat_et_ce)
+    kde_prior = gaussian_kde(p3nsat_prior)
+    kde_radio = gaussian_kde(p3nsat_radio)
+
+    x = np.linspace(0.1, 200.0, 1000)
+    y_et = kde_et(x)
+    y_et_ce = kde_et_ce(x)
+    y_prior = kde_prior(x)
+    y_radio = kde_radio(x)
+
+    plt.plot(x, y_prior, color='darkgray', lw=3.0, label="Prior")
+    plt.fill_between(x, y_prior, alpha=0.3, color='darkgray')
+    plt.plot(x, y_radio, color='dimgray', lw=3.0, label="Radio timing")
+    plt.fill_between(x, y_radio, alpha=0.3, color='dimgray')
+    plt.plot(x, y_et, color=ET_COLOR, lw=3.0, label="GW231109 (ET)")
+    plt.fill_between(x, y_et, alpha=0.3, color=ET_COLOR)
+    plt.plot(x, y_et_ce, color=ET_CE_COLOR, lw=3.0, label="GW231109 (ET+CE)")
+    plt.fill_between(x, y_et_ce, alpha=0.3, color=ET_CE_COLOR)
+
+    # Truth line
+    plt.axvline(P3NSAT_HAUKE, color='black', ls='--', lw=2.0, label="Truth")
+
+    plt.xlabel(r"$p(3n_{\rm{sat}})$ [MeV fm$^{-3}$]")
+    plt.ylabel('Density')
+    plt.xlim(0.1, 200.0)
+    plt.ylim(bottom=0.0)
+    plt.legend()
+
+    save_name = os.path.join("./figures/EOS_comparison", "ET_full_injection_p3nsat_histogram.pdf")
     plt.savefig(save_name, bbox_inches="tight")
     plt.close()
     print(f"  p3nsat histogram saved to {save_name}")
@@ -731,10 +858,13 @@ def main():
     # =======================================================================
     # INJECTIONS
     # =======================================================================
-    
-    # TODO: generalize -- for now, just one injection
+
+    # Individual injection plots
     plot_injection(outdir="outdir_GW231109_ET_AS")
     plot_injection(outdir="outdir_GW231109_ET_CE")
+
+    # Combined ET and ET+CE plot
+    plot_full_injection()
 
 
 if __name__ == "__main__":
