@@ -54,15 +54,15 @@ ALPHA = 0.3
 figsize_vertical = (6, 8)
 figsize_horizontal = (8, 6)
 
-LABELS_DICT = {"outdir": "Prior", 
+LABELS_DICT = {"outdir": "Prior",
                "outdir_radio": "Radio timing",
                "outdir_GW170817": "+GW170817",
                "outdir_GW231109": "+GW231109",
                "outdir_GW231109_XAS": r"+GW231109 (\texttt{XAS})",
                "outdir_GW190425": "+GW190425",
-               "outdir_GW170817_GW231109": "+GW170817+GW231109",
-               "outdir_GW170817_GW190425": "+GW170817+GW190425",
-               "outdir_GW170817_GW190425_GW231109": "+GW170817+GW190425+GW231109",
+               "outdir_GW170817_GW231109": "+GW170817\n+GW231109",
+               "outdir_GW170817_GW190425": "+GW170817\n+GW190425",
+               "outdir_GW170817_GW190425_GW231109": "+GW170817\n+GW190425\n+GW231109",
                "outdir_GW231109_double_gaussian": "+GW231109 (double Gaussian)",
                "outdir_GW231109_quniv": "+GW231109 (QUR)",
                "outdir_GW231109_s025": r"+GW231109 $\chi \leq 0.25$",
