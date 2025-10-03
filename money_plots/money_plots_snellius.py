@@ -72,12 +72,12 @@ LABELS_DICT = {"outdir": "Prior",
 
 COLORS_DICT = {"outdir": "darkgray",
                "outdir_radio": "dimgray",
-               "outdir_GW170817": "orange",
+               "outdir_GW170817": "blue",
                "outdir_GW231109": "green",
                "outdir_GW231109_XAS": "red",
                "outdir_GW170817_GW231109": "purple",
-               "outdir_GW170817_GW190425": "green",
-               "outdir_GW170817_GW190425_GW231109": "purple",
+               "outdir_GW170817_GW190425": "purple",
+               "outdir_GW170817_GW190425_GW231109": "orange",
                "outdir_GW231109_double_gaussian": "purple",
                "outdir_GW231109_quniv": "red",
                "outdir_GW231109_s025": "purple",
@@ -190,7 +190,7 @@ def make_parameter_histograms(data_list: list,
             plt.fill_between(x, y, alpha=0.3, color=color)
 
         plt.xlabel(config['xlabel'])
-        plt.ylabel('Density')
+        plt.ylabel('Probability density')
         plt.xlim(config['range'])
         plt.ylim(bottom=0.0)
         if legend_outside:
@@ -704,7 +704,7 @@ def main():
     # process_given_dirs(directories, save_suffix)
     
     # =======================================================================
-    # 7 Check XP vs XAS
+    # 7 Increasing constraints with more and more GW BNS
     # =======================================================================
     
     directories = [
