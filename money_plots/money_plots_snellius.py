@@ -53,6 +53,7 @@ COLORS_DICT = {"prior": "gray",
 ALPHA = 0.3
 figsize_vertical = (6, 8)
 figsize_horizontal = (8, 6)
+figsize_histograms = (6, 8)
 
 LABELS_DICT = {"outdir": "Prior",
                "outdir_radio": "Radio timing",
@@ -172,7 +173,7 @@ def make_parameter_histograms(data_list: list,
 
     # Create comparison plots for each parameter
     for param_name, config in parameter_configs.items():
-        plt.figure(figsize=figsize_horizontal)
+        plt.figure(figsize=figsize_histograms)
 
         for i, (data_dict, outdir_name, color) in enumerate(zip(data_list, outdir_names, colors)):
             param_values = all_parameters[i][param_name]
