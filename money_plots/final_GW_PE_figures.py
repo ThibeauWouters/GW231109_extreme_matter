@@ -150,7 +150,8 @@ def create_comparison_cornerplot(
     zorders: list[int] = None,
     save_name: str = "./figures/GW_PE/comparison_cornerplot.pdf",
     overwrite: bool = False,
-    dummy_normalization_indices: list[int] = None
+    dummy_normalization_indices: list[int] = None,
+    truths: list[float] = None
 ) -> bool:
     """
     Create a comparison corner plot with multiple datasets overlaid.
@@ -166,6 +167,7 @@ def create_comparison_cornerplot(
         overwrite (bool): Whether to overwrite existing plots
         dummy_normalization_indices (list[int]): Indices of datasets to use for each parameter
             to create a dummy normalization dataset (optional)
+        truths (list[float]): True values for each parameter to plot as reference lines (optional)
 
     Returns:
         bool: True if successful, False otherwise
@@ -269,6 +271,11 @@ def create_comparison_cornerplot(
         # Create parameter labels using translation dictionary
         parameter_labels = [PARAMETER_LABELS.get(param, param) for param in parameters]
 
+        # Add truths if provided
+        if truths is not None:
+            corner_kwargs["truths"] = truths
+            corner_kwargs["truth_color"] = "black"
+
         # Create initial plot
         corner_kwargs["labels"] = parameter_labels
         fig = corner.corner(all_samples[0], **corner_kwargs)
@@ -284,6 +291,10 @@ def create_comparison_cornerplot(
             corner_kwargs_overlay["density"] = True
             corner_kwargs_overlay["fig"] = fig
             corner_kwargs_overlay["labels"] = parameter_labels
+            # Keep truths in overlay plots
+            if truths is not None:
+                corner_kwargs_overlay["truths"] = truths
+                corner_kwargs_overlay["truth_color"] = "black"
 
             corner.corner(all_samples[i], **corner_kwargs_overlay)
 
@@ -312,6 +323,11 @@ def create_comparison_cornerplot(
                     else:
                         range_list.append(None)
                 invisible_kwargs["range"] = range_list
+
+            # Keep truths in dummy plot
+            if truths is not None:
+                invisible_kwargs["truths"] = truths
+                invisible_kwargs["truth_color"] = "black"
 
             corner.corner(dummy_dataset, **invisible_kwargs)
 
@@ -490,6 +506,91 @@ def main():
         print(" Comparison 2 (leos spin): comparison_leos_spin.pdf")
     else:
         print(" Comparison 2 (leos spin): FAILED")
+    # ====== COMPARISON 3: ET vs ET+CE ======
+    print("\n" + "=" * 60)
+    print("COMPARISON 3: ET vs ET+CE")
+    print("=" * 60)
+
+    # Parameters to include in comparison 3
+    parameters_3 = [
+        "chirp_mass",
+        "mass_ratio",
+        "chi_eff",
+        "lambda_tilde"
+    ]
+
+    filepaths_3 = [
+        os.path.join(base_path, "et_run_alignedspin.npz"),
+        os.path.join(base_path, "et_ce_run_alignedspin.npz"),
+    ]
+
+    labels_3 = [
+        "ET",
+        "ET+CE",
+    ]
+
+    # Colors from money_plots_snellius.py
+    ET_COLOR = "#de8f05"
+    ET_CE_COLOR = "#d45d01"
+    colors_3 = [ET_COLOR, ET_CE_COLOR]
+
+    zorders_3 = [0, 1]  # ET+CE on top
+
+    # Use ET+CE dataset (index 1) for normalization on all parameters
+    dummy_indices_3 = [1] * len(parameters_3)
+
+    # Load injection values for truths
+    injection_file = "./data/injection_ETCE_gw231109_injectionxas_a3eaf212_chi_eff_chirp_mass_lambda_1_lambda_2_lambda_tilde_mass_ratio.npz"
+    injection_data = np.load(injection_file, allow_pickle=True)
+    injection_params = injection_data['injection_params'].item()
+
+    # Extract truths in the same order as parameters_3
+    truths_3 = [injection_params[param] for param in parameters_3]
+    print(f"Injection values: {dict(zip(parameters_3, truths_3))}")
+
+    # Load data to compute chirp_mass quantiles
+    print("\nComputing ranges for ET vs ET+CE comparison...")
+    all_chirp_mass = []
+    for filepath in filepaths_3:
+        data = np.load(filepath)
+        all_chirp_mass.append(data['chirp_mass'])
+    all_chirp_mass = np.concatenate(all_chirp_mass)
+    chirp_mass_min = np.quantile(all_chirp_mass, 0.001)
+    chirp_mass_max = np.quantile(all_chirp_mass, 0.99)
+    print(f"  Chirp mass range (0.01-0.99 quantiles): ({chirp_mass_min:.6f}, {chirp_mass_max:.6f})")
+
+    # Set custom ranges
+    ranges_3 = {
+        "chirp_mass": (chirp_mass_min, chirp_mass_max),
+        "mass_ratio": (0.82, 1.0),
+        "chi_eff": (0.029, 0.035),
+        "lambda_tilde": (220, 400)
+    }
+    print(f"  Final ranges: {ranges_3}")
+
+    success_3 = create_comparison_cornerplot(
+        filepaths=filepaths_3,
+        parameters=parameters_3,
+        labels=labels_3,
+        colors=colors_3,
+        ranges=ranges_3,
+        zorders=zorders_3,
+        save_name="./figures/GW_PE/comparison_ET_vs_ET_CE.pdf",
+        overwrite=True,
+        dummy_normalization_indices=dummy_indices_3,
+        truths=truths_3
+    )
+
+    if success_3:
+        print(" Successfully created comparison 3: comparison_ET_vs_ET_CE.pdf")
+    else:
+        print(" Failed to create comparison 3")
+
+    # Update summary
+    if success_3:
+        print(" Comparison 3 (ET vs ET+CE): comparison_ET_vs_ET_CE.pdf")
+    else:
+        print(" Comparison 3 (ET vs ET+CE): FAILED")
 
 
 if __name__ == "__main__":
