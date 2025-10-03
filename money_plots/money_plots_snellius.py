@@ -449,8 +449,15 @@ def load_all_data(directories: list):
 
 import os
 
-def process_given_dirs(directories, save_suffix="", legend_outside=False):
-    """Process given directories and generate comparison plots."""
+def process_given_dirs(directories, save_suffix="", legend_outside=False, filename_prefix=None):
+    """Process given directories and generate comparison plots.
+
+    Args:
+        directories: List of directories to process
+        save_suffix: Suffix for saved files (deprecated, kept for compatibility)
+        legend_outside: Whether to place legend outside the plot
+        filename_prefix: Custom prefix for saved files. If None, auto-generate from directory labels.
+    """
 
     print("Money Plots Generator for Jester Inference Results")
     print("=" * 60)
@@ -466,9 +473,12 @@ def process_given_dirs(directories, save_suffix="", legend_outside=False):
     # Get colors for valid directories only
     valid_colors = get_colors_for_directories(valid_directories)
 
-    # Generate filename prefix from dataset labels
-    filename_prefix = generate_filename_prefix(valid_directories)
-    print(f"Generated filename prefix: {filename_prefix}")
+    # Generate filename prefix from dataset labels if not provided
+    if filename_prefix is None:
+        filename_prefix = generate_filename_prefix(valid_directories)
+        print(f"Generated filename prefix: {filename_prefix}")
+    else:
+        print(f"Using custom filename prefix: {filename_prefix}")
 
     print(f"\n{'='*60}")
     print(f"Creating comparison plots for {len(data_list)} valid datasets...")
@@ -706,14 +716,14 @@ def main():
     # =======================================================================
     # 7 Increasing constraints with more and more GW BNS
     # =======================================================================
-    
+
     directories = [
         "../jester/outdir_GW170817",
         "../jester/outdir_GW170817_GW190425",
         "../jester/outdir_GW170817_GW190425_GW231109",
     ]
     save_suffix = ""
-    process_given_dirs(directories, save_suffix)
+    process_given_dirs(directories, save_suffix, filename_prefix="all_bns")
     
 
     # =======================================================================
