@@ -133,7 +133,7 @@ def infer_lambdas_from_eos_sampling(posterior_data: dict):
     
     # Get the source-frame components masses on which to interpolate later on
     m1 = posterior_data["mass_1_source"]
-    m2 = posterior_data["mass_1_source"]
+    m2 = posterior_data["mass_2_source"]
     
     # Get new, empty lambda_1,2 arrays
     lambda_1 = np.zeros_like(m1)

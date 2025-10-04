@@ -91,6 +91,8 @@ DEFAULT_RANGES = {
     "lambda_2": (0, 5000),
     "lambda_tilde": (0, 5000),
     "luminosity_distance": (100, 300),
+    "mass_1_source": (1.0, 3.0),
+    "mass_2_source": (1.0, 3.0),
 }
 
 
@@ -495,19 +497,62 @@ def main():
     else:
         print(" Failed to create comparison 2")
 
+    # ====== COMPARISON 2 DEBUG: leos with additional parameters ======
+    print("\n" + "=" * 60)
+    print("COMPARISON 2 DEBUG: leos with additional parameters")
+    print("=" * 60)
+
+    # Parameters to include in comparison 2 debug (extended version)
+    parameters_2_debug = [
+        "chirp_mass",
+        "mass_ratio",
+        "chi_eff",
+        "lambda_tilde",
+        "mass_1_source",
+        "mass_2_source",
+        "lambda_1",
+        "lambda_2"
+    ]
+
+    # Use same filepaths and labels as comparison 2
+    filepaths_2_debug = filepaths_2
+    labels_2_debug = labels_2
+    colors_2_debug = colors_2
+    zorders_2_debug = zorders_2
+
+    # Use default ranges but override lambda parameters
+    ranges_2_debug = {param: DEFAULT_RANGES.get(param) for param in parameters_2_debug}
+    ranges_2_debug["lambda_tilde"] = (0, 1000)  # Same as comparison 2
+    ranges_2_debug["lambda_1"] = (0, 500)
+    ranges_2_debug["lambda_2"] = (0, 1000)
+
+    # Use chi<0.05 EOS dataset (index 1) for most parameters, but chi<0.40 (index 0) for lambda parameters
+    # Parameters order: chirp_mass, mass_ratio, chi_eff, lambda_tilde, mass_1_source, mass_2_source, lambda_1, lambda_2
+    dummy_indices_2_debug = [1, 1, 1, 0, 1, 1, 0, 0]  # Use high spin for lambda params
+
+    success_2_debug = create_comparison_cornerplot(
+        filepaths=filepaths_2_debug,
+        parameters=parameters_2_debug,
+        labels=labels_2_debug,
+        colors=colors_2_debug,
+        ranges=ranges_2_debug,
+        zorders=zorders_2_debug,
+        save_name="./figures/GW_PE/comparison_leos_spin_debug.pdf",
+        overwrite=True,
+        dummy_normalization_indices=dummy_indices_2_debug
+    )
+
+    if success_2_debug:
+        print("✓ Successfully created comparison 2 debug: comparison_leos_spin_debug.pdf")
+    else:
+        print("✗ Failed to create comparison 2 debug")
+
+
     # Summary
     print("\n" + "=" * 60)
     print("SUMMARY")
     print("=" * 60)
-    if success_1:
-        print(" Comparison 1 (l5000 spin): comparison_l5000_spin.pdf")
-    else:
-        print(" Comparison 1 (l5000 spin): FAILED")
 
-    if success_2:
-        print(" Comparison 2 (leos spin): comparison_leos_spin.pdf")
-    else:
-        print(" Comparison 2 (leos spin): FAILED")
     # ====== COMPARISON 3: ET vs ET+CE ======
     print("\n" + "=" * 60)
     print("COMPARISON 3: ET vs ET+CE")
