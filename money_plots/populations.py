@@ -27,17 +27,13 @@ np.random.seed(42)
 # Configuration - Adjust these parameters as needed
 # =============================================================================
 
-# # Plot range configuration (set to None for automatic range based on data)
-# M1_XLIM = None # full range
-# M2_XLIM = None # full range
-
-# Alternatively, uncomment these to zoom in on posteriors:
+# Ranges used for the plotting (zoom in on the posterior to make it a bit nicer)
 M1_XLIM = (1.2, 1.8)
 M2_XLIM = (1.1, 1.8)
 
 # Sample sizes (increase these for smoother KDEs)
-PRIOR_SAMPLE_SIZE = 500_000   # Number of initial samples to draw from priors
-OUTPUT_SAMPLE_SIZE = 200_000  # Number of output samples after m1 >= m2 constraint
+PRIOR_SAMPLE_SIZE = 50_000   # Number of initial samples to draw from priors
+OUTPUT_SAMPLE_SIZE = 10_000  # Number of output samples after m1 >= m2 constraint
 
 # KDE parameters
 KDE_NBINS = 1_000             # Number of points for KDE evaluation (higher = smoother curves)
@@ -84,17 +80,26 @@ def compute_kde(data, Nbins, xMin, xMax, bounded=False, method=None, smooth=None
 
     return kernel.evaluate(xPoints)
 
-def create_prior_samps(priorpts_m1,priorpts_m2,nsamp):
+def create_prior_samps(priorpts_m1: np.array, priorpts_m2: np.array, nsamp: int):
+    """
+    Create prior samples ensuring m1 >= m2 and desired number of samples.
+
+    Args:
+        priorpts_m1 (np.array): Original m1 prior points
+        priorpts_m2 (np.array): Original m2 prior points
+        nsamp (in): Number of output samples to draw.
+
+    Returns:
+        m1_samps, m2_samps (np.array, np.array): Component mass samples with m1 >= m2
+    """
     
     m1_draws = np.random.choice(priorpts_m1, nsamp, replace=True)
-
     m2_draws = np.random.choice(priorpts_m2, nsamp, replace=True)
 
     m1_samps = []
     m2_samps = []
 
     for jj in range(0,len(m1_draws)):
-    
         if m1_draws[jj] >= m2_draws[jj]:
             m1_samps.append(m1_draws[jj])
             m2_samps.append(m2_draws[jj])
@@ -104,7 +109,7 @@ def create_prior_samps(priorpts_m1,priorpts_m2,nsamp):
     
     return np.array(m1_samps), np.array(m2_samps)
 
-def compute_js(p1, p2, eps=1e-15):
+def compute_js(p1, p2):
     """Compute Jensen-Shannon divergence between two distributions."""
     p1 = p1 / p1.sum()
     p2 = p2 / p2.sum()
@@ -117,6 +122,94 @@ def compute_js(p1, p2, eps=1e-15):
     return np.array([jsd, jsd_spy*jsd_spy])
 
 
+def generate_jsd_latex_table(m1_jsds, m2_jsds, output_file='./JSD_tabular.tex'):
+    """
+    Generate a LaTeX table of Jensen-Shannon divergences.
+
+    Parameters
+    ----------
+    m1_jsds : dict of dict
+        m1_jsds[posterior_name][prior_name] = (entropy_jsd, scipy_jsd) for m1
+    m2_jsds : dict of dict
+        m2_jsds[posterior_name][prior_name] = (entropy_jsd, scipy_jsd) for m2
+    output_file : str
+        Path to output LaTeX file
+    """
+    dist_labels = {
+        'default': 'Default',
+        'double_gaussian': 'Double Gaussian',
+        'gaussian': 'Gaussian',
+        'uniform': 'Uniform'
+    }
+
+    dist_order = ['default', 'double_gaussian', 'gaussian', 'uniform']
+
+    # Start building the table
+    lines = []
+    # Tabular spec: c column for multirow label, l for row labels, then data columns
+    lines.append(r'\begin{tabular}{c @{}l@{} cccc c||c cccc}')
+    lines.append(r'\hline\hline')
+    lines.append(r' & & \multicolumn{4}{c}{$m_1$ prior} & & & \multicolumn{4}{c}{$m_2$ prior} \\')
+    lines.append(r'\hline')
+
+    # Column headers
+    header = r' &'  # Empty cells for multirow column and row label column
+    for name in dist_order:
+        header += f' & {dist_labels[name]}'
+    header += ' & &'  # separator columns
+    for name in dist_order:
+        header += f' & {dist_labels[name]}'
+    lines.append(header + r' \\')
+    lines.append(r'\hline\hline')
+
+    # Data rows
+    for idx, post_name in enumerate(dist_order):
+        # First column: vertical "Posterior" label on first row, empty otherwise
+        if idx == 0:
+            row = r'\multirow{4}{*}{\rotatebox[origin=c]{90}{\parbox[c][8mm][c]{2cm}{\centering \textsc{Posterior}}}}'
+        else:
+            row = ''
+
+        # Row label
+        row += r' & \multicolumn{1}{|l}{' + dist_labels[post_name] + r'}'
+
+        # Find minimum JSD for m1 and m2 in this row
+        m1_vals = {prior_name: m1_jsds[post_name][prior_name][1] for prior_name in dist_order}
+        m2_vals = {prior_name: m2_jsds[post_name][prior_name][1] for prior_name in dist_order}
+
+        min_m1_prior = min(m1_vals, key=m1_vals.get)
+        min_m2_prior = min(m2_vals, key=m2_vals.get)
+
+        # m1 JSDs (using scipy version)
+        for prior_name in dist_order:
+            jsd_val = m1_jsds[post_name][prior_name][1]  # scipy JSD
+            if prior_name == min_m1_prior:
+                row += f' & \\textbf{{{jsd_val:.2f}}}'
+            else:
+                row += f' & {jsd_val:.2f}'
+
+        row += ' & &'  # separator columns
+
+        # m2 JSDs (using scipy version)
+        for prior_name in dist_order:
+            jsd_val = m2_jsds[post_name][prior_name][1]  # scipy JSD
+            if prior_name == min_m2_prior:
+                row += f' & \\textbf{{{jsd_val:.2f}}}'
+            else:
+                row += f' & {jsd_val:.2f}'
+
+        lines.append(row + r' \\')
+
+    lines.append(r'\hline')
+    lines.append(r'\end{tabular}')
+
+    # Write to file
+    with open(output_file, 'w') as f:
+        f.write('\n'.join(lines))
+
+    print(f"  LaTeX table saved to: {output_file}")
+
+
 def generate_prior_samples(prior_config, nsamp=OUTPUT_SAMPLE_SIZE, prior_pts_size=PRIOR_SAMPLE_SIZE):
     """
     Generate prior samples for a given configuration.
@@ -125,7 +218,7 @@ def generate_prior_samples(prior_config, nsamp=OUTPUT_SAMPLE_SIZE, prior_pts_siz
     ----------
     prior_config : dict
         Configuration dictionary with keys:
-        - 'type': 'uniform', 'gaussian', 'double_gaussian', 'default', or 'mchirp_uniform'
+        - 'type': 'uniform', 'gaussian', 'double_gaussian', or 'default'
         - other keys depend on the type
     nsamp : int
         Number of output samples
@@ -158,34 +251,28 @@ def generate_prior_samples(prior_config, nsamp=OUTPUT_SAMPLE_SIZE, prior_pts_siz
         m2_pts = np.array(m2_prior.sample(prior_pts_size))
 
     elif prior_type == 'default':
+        
+        # Taken from our bilby config files
         prior_chirp_mass = bilby.gw.prior.UniformInComponentsChirpMass(
             name='chirp_mass', minimum=1.29, maximum=1.32)
         prior_mass_ratio = bilby.gw.prior.UniformInComponentsMassRatio(
             name='mass_ratio', minimum=0.125, maximum=1)
+        luminosity_distance = bilby.gw.prior.UniformSourceFrame(
+            name='luminosity_distance', minimum=1.0, maximum=1000.0, unit='Mpc')
 
         mchirp_samps_det = np.array(prior_chirp_mass.sample(prior_pts_size))
         q_samps = np.array(prior_mass_ratio.sample(prior_pts_size))
-
-        distL = 171.27056031500612
-        z = luminosity_distance_to_redshift(distL, cosmology=Planck18)
+        
+        # This can be a a bit slow so print status to check on that
+        print(f"Sampling {prior_pts_size} points from luminosity distance prior...")
+        distL = np.array(luminosity_distance.sample(prior_pts_size))
+        z = luminosity_distance_to_redshift(distL)
+        print(f"Sampling {prior_pts_size} points from luminosity distance prior... DONE")
+        
         mchirp_samps = mchirp_samps_det / (1. + z)
-
         m1_pts, m2_pts = bilby.gw.conversion.chirp_mass_and_mass_ratio_to_component_masses(
             mchirp_samps, q_samps)
 
-    elif prior_type == 'mchirp_uniform':
-        prior_chirp_mass = bilby.gw.prior.Uniform(name='chirp_mass', minimum=1.29, maximum=1.32)
-        prior_mass_ratio = bilby.gw.prior.Uniform(name='mass_ratio', minimum=0.125, maximum=1)
-
-        mchirp_samps_det = np.array(prior_chirp_mass.sample(prior_pts_size))
-        q_samps = np.array(prior_mass_ratio.sample(prior_pts_size))
-
-        distL = 171.27056031500612
-        z = luminosity_distance_to_redshift(distL, cosmology=Planck18)
-        mchirp_samps = mchirp_samps_det / (1. + z)
-
-        m1_pts, m2_pts = bilby.gw.conversion.chirp_mass_and_mass_ratio_to_component_masses(
-            mchirp_samps, q_samps)
     else:
         raise ValueError(f"Unknown prior type: {prior_type}")
 
@@ -213,7 +300,7 @@ def load_posterior_data(data_dir='../posteriors/data/', run_names=None, nsamp=OU
     data_dir = Path(data_dir)
 
     if run_names is None:
-        # Default runs matching the original script
+        # Default run names
         run_names = [
             'prod_BW_XP_s005_l5000_double_gaussian',
             'prod_BW_XP_s005_l5000_gaussian',
@@ -241,7 +328,7 @@ def load_posterior_data(data_dir='../posteriors/data/', run_names=None, nsamp=OU
     return posterior_data
 
 
-def compute_kdes_batch(data_dict, Nbins=KDE_NBINS, smooth=KDE_SMOOTH):
+def compute_kdes_batch(data_dict, Nbins=KDE_NBINS, smooth=KDE_SMOOTH, prior_domains=None):
     """
     Compute KDEs for multiple datasets.
 
@@ -253,6 +340,9 @@ def compute_kdes_batch(data_dict, Nbins=KDE_NBINS, smooth=KDE_SMOOTH):
         Number of bins for KDE
     smooth : float
         Smoothing factor for KDE
+    prior_domains : dict or None
+        Dictionary mapping names to (xMin, xMax) tuples for theoretical prior domains
+        If None, uses min/max of data
 
     Returns
     -------
@@ -262,18 +352,61 @@ def compute_kdes_batch(data_dict, Nbins=KDE_NBINS, smooth=KDE_SMOOTH):
     kde_dict = {}
 
     for name, data in data_dict.items():
-        xMin, xMax = min(data), max(data)
+        # Use theoretical domain if provided, otherwise use data range
+        if prior_domains is not None and name in prior_domains:
+            xMin, xMax = prior_domains[name]
+        else:
+            xMin, xMax = min(data), max(data)
+
+        # Store the raw KDE object for later evaluation
+        kernel = scipy.stats.gaussian_kde(data)
+        if smooth is not None:
+            kernel.set_bandwidth(kernel.factor * smooth)
 
         kde = compute_kde(data, Nbins=Nbins, xMin=xMin, xMax=xMax, smooth=smooth)
 
         kde_dict[name] = {
-            'kde': kde,
+            'kde': kde,        # Store the evaluated KDE values, i.e. y(x)
+            'kernel': kernel,  # Store the kernel object (i.e. the KDE object)
+            'data': data,      # Store original data
             'xMin': xMin,
             'xMax': xMax,
             'x': np.linspace(xMin, xMax, Nbins)
         }
 
     return kde_dict
+
+
+def compute_js_on_common_grid(kde_dict1, kde_dict2, Nbins=KDE_NBINS):
+    """
+    Compute JSD between two KDEs evaluated on a common grid.
+
+    Parameters
+    ----------
+    kde_dict1 : dict
+        Dictionary containing 'kernel', 'xMin', 'xMax' from compute_kdes_batch
+    kde_dict2 : dict
+        Dictionary containing 'kernel', 'xMin', 'xMax' from compute_kdes_batch
+    Nbins : int
+        Number of bins for evaluation
+
+    Returns
+    -------
+    array
+        [entropy_jsd, scipy_jsd^2]
+    """
+    # Determine common grid spanning both distributions
+    xMin = min(kde_dict1['xMin'], kde_dict2['xMin'])
+    xMax = max(kde_dict1['xMax'], kde_dict2['xMax'])
+
+    x_common = np.linspace(xMin, xMax, Nbins)
+    print(f"JSD is going to be computed on grid from {xMin:.3f} to {xMax:.3f}")
+
+    # Evaluate both kernels on common grid
+    p1 = kde_dict1['kernel'].evaluate(x_common)
+    p2 = kde_dict2['kernel'].evaluate(x_common)
+
+    return compute_js(p1, p2)
     
 
 def main():
@@ -289,7 +422,6 @@ def main():
         'gaussian': {'type': 'gaussian'},
         'double_gaussian': {'type': 'double_gaussian'},
         'default': {'type': 'default'},
-        'mchirp_uniform': {'type': 'mchirp_uniform'}
     }
 
     prior_samples = {}
@@ -318,16 +450,25 @@ def main():
     # =============================================================================
     print("\nComputing KDEs for prior samples...")
 
-    # Compute KDEs for priors
+    # Define theoretical prior domains for proper JSD computation
+    # Using wide range that encompasses all prior types
+    prior_domains = {
+        'uniform': (1.0, 3.0),
+        'gaussian': (1.0, 1.7),
+        'double_gaussian': (1.0, 2.5),
+        'default': (1.0, 3.0),
+    }
+
+    # Compute KDEs for priors with theoretical domains
     m1_prior_data = {name: data['m1'] for name, data in prior_samples.items()}
     m2_prior_data = {name: data['m2'] for name, data in prior_samples.items()}
 
-    m1_prior_kdes = compute_kdes_batch(m1_prior_data)
-    m2_prior_kdes = compute_kdes_batch(m2_prior_data)
+    m1_prior_kdes = compute_kdes_batch(m1_prior_data, prior_domains=prior_domains)
+    m2_prior_kdes = compute_kdes_batch(m2_prior_data, prior_domains=prior_domains)
 
     print("Computing KDEs for posterior samples...")
 
-    # Compute KDEs for posteriors
+    # Compute KDEs for posteriors (use data range, not theoretical prior domain)
     m1_posterior_data = {}
     m2_posterior_data = {}
     for prior_name, post_name in posterior_mapping.items():
@@ -440,25 +581,55 @@ def main():
     dist_labels = ['Double Gaussian', 'Gaussian', 'Uniform', 'Default']
     dist_names = ['double_gaussian', 'gaussian', 'uniform', 'default']
 
+    # Store JSD values for LaTeX table generation - full matrix
+    m1_jsds = {}
+    m2_jsds = {}
+
     print('\n======== mass 1 JSD ========')
-    for jj, name in enumerate(dist_names):
-        if name in m1_prior_kdes and name in m1_posterior_kdes:
-            prior_kde = m1_prior_kdes[name]['kde']
-            post_kde = m1_posterior_kdes[name]['kde']
-            jsd_val = compute_js(post_kde, prior_kde)
-            print(f"{dist_labels[jj]:20s} === JSD entropy: {jsd_val[0]:.6f}  JSD scipy: {jsd_val[1]:.6f}")
+    # Compute JSD for each posterior against all priors
+    for post_idx, post_name in enumerate(dist_names):
+        m1_jsds[post_name] = {}
+
+        print(f"\n{dist_labels[post_idx]} posterior vs:")
+        for prior_idx, prior_name in enumerate(dist_names):
+            if prior_name not in m1_prior_kdes:
+                continue
+
+            jsd_val = compute_js_on_common_grid(
+                m1_posterior_kdes[post_name],
+                m1_prior_kdes[prior_name]
+            )
+            m1_jsds[post_name][prior_name] = jsd_val
+            print(f"  {dist_labels[prior_idx]:20s} === JSD entropy: {jsd_val[0]:.6f}  JSD scipy: {jsd_val[1]:.6f}")
 
     print('\n======== mass 2 JSD ========')
-    for jj, name in enumerate(dist_names):
-        if name in m2_prior_kdes and name in m2_posterior_kdes:
-            prior_kde = m2_prior_kdes[name]['kde']
-            post_kde = m2_posterior_kdes[name]['kde']
-            jsd_val = compute_js(post_kde, prior_kde)
-            print(f"{dist_labels[jj]:20s} === JSD entropy: {jsd_val[0]:.6f}  JSD scipy: {jsd_val[1]:.6f}")
+    # Compute JSD for each posterior against all priors
+    for post_idx, post_name in enumerate(dist_names):
+        if post_name not in m2_posterior_kdes:
+            continue
+
+        m2_jsds[post_name] = {}
+
+        print(f"\n{dist_labels[post_idx]} posterior vs:")
+        for prior_idx, prior_name in enumerate(dist_names):
+            if prior_name not in m2_prior_kdes:
+                continue
+
+            jsd_val = compute_js_on_common_grid(
+                m2_posterior_kdes[post_name],
+                m2_prior_kdes[prior_name]
+            )
+            m2_jsds[post_name][prior_name] = jsd_val
+            print(f"  {dist_labels[prior_idx]:20s} === JSD entropy: {jsd_val[0]:.6f}  JSD scipy: {jsd_val[1]:.6f}")
+
+    # =============================================================================
+    # Generate LaTeX table
+    # =============================================================================
+    print("\nGenerating LaTeX table...")
+    generate_jsd_latex_table(m1_jsds, m2_jsds, output_file='./JSD_tabular.tex')
 
     print("\nDone!")
 
 
 if __name__ == "__main__":
     main()
-
