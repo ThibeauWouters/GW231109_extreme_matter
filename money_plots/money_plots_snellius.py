@@ -53,7 +53,7 @@ COLORS_DICT = {"prior": "gray",
 ALPHA = 0.3
 figsize_vertical = (6, 8)
 figsize_horizontal = (8, 6)
-figsize_histograms = (6, 8)
+figsize_histograms = (6, 6)
 
 LABELS_DICT = {"outdir": "Prior",
                "outdir_radio": "Radio timing",
@@ -74,10 +74,11 @@ LABELS_DICT = {"outdir": "Prior",
 COLORS_DICT = {"outdir": "darkgray",
                "outdir_radio": "dimgray",
                "outdir_GW170817": "blue",
-               "outdir_GW231109": "green",
+               "outdir_GW190425": "#c7de81",
+               "outdir_GW231109": "orange",
                "outdir_GW231109_XAS": "red",
-               "outdir_GW170817_GW231109": "purple",
-               "outdir_GW170817_GW190425": "purple",
+               "outdir_GW170817_GW231109": "orange",
+               "outdir_GW170817_GW190425": "#c7de81",
                "outdir_GW170817_GW190425_GW231109": "orange",
                "outdir_GW231109_double_gaussian": "purple",
                "outdir_GW231109_quniv": "red",
@@ -784,17 +785,17 @@ def main():
     # process_given_dirs(directories, save_suffix)
     
     
-    # # =======================================================================
-    # # 2 Check GW231109 vs GW190425
-    # # =======================================================================
+    # =======================================================================
+    # 2 Check GW231109 vs GW190425
+    # =======================================================================
     
-    # directories = [
-    #     "../jester/outdir_radio",
-    #     "../jester/outdir_GW231109",
-    #     "../jester/outdir_GW190425",
-    # ]
-    # save_suffix = ""
-    # process_given_dirs(directories, save_suffix)
+    directories = [
+        "../jester/outdir_radio",
+        "../jester/outdir_GW190425",
+        "../jester/outdir_GW231109",
+    ]
+    save_suffix = ""
+    process_given_dirs(directories, save_suffix, filename_prefix="GW190425_vs_GW231109")
     
     # # =======================================================================
     # # 3a Check GW170817 vs GW170817+GW190425
@@ -820,18 +821,17 @@ def main():
     # save_suffix = ""
     # process_given_dirs(directories, save_suffix)
     
-    # # =======================================================================
-    # # 3b Check GW170817+GW190425 vs GW170817+GW231109
-    # # =======================================================================
+    # =======================================================================
+    # 3b Check GW170817+GW190425 vs GW170817+GW231109
+    # =======================================================================
     
-    # directories = [
-    #     "../jester/outdir_radio",
-    #     "../jester/outdir_GW170817",
-    #     "../jester/outdir_GW170817_GW190425",
-    #     "../jester/outdir_GW170817_GW231109",
-    # ]
-    # save_suffix = ""
-    # process_given_dirs(directories, save_suffix, legend_outside=True)
+    directories = [
+        "../jester/outdir_radio",
+        "../jester/outdir_GW170817_GW190425",
+        "../jester/outdir_GW170817_GW231109",
+    ]
+    save_suffix = ""
+    process_given_dirs(directories, save_suffix, legend_outside=False, filename_prefix="GW190425_vs_GW231109_with_GW170817")
     
     # # =======================================================================
     # # 3c Check GW170817+GW190425 vs GW170817+GW231109 without GW170817
@@ -885,14 +885,14 @@ def main():
     # 7 Increasing constraints with more and more GW BNS
     # =======================================================================
 
-    # directories = [
-    #     "../jester/outdir",
-    #     "../jester/outdir_GW170817",
-    #     "../jester/outdir_GW170817_GW190425",
-    #     "../jester/outdir_GW170817_GW190425_GW231109",
-    # ]
-    # save_suffix = ""
-    # process_given_dirs(directories, save_suffix, filename_prefix="all_bns")
+    directories = [
+        "../jester/outdir",
+        "../jester/outdir_GW170817",
+        "../jester/outdir_GW170817_GW190425",
+        "../jester/outdir_GW170817_GW190425_GW231109",
+    ]
+    save_suffix = ""
+    process_given_dirs(directories, save_suffix, filename_prefix="all_bns")
     
 
     # =======================================================================
@@ -903,8 +903,8 @@ def main():
     # plot_injection(outdir="outdir_GW231109_ET_AS")
     # plot_injection(outdir="outdir_GW231109_ET_CE")
 
-    # Combined ET and ET+CE plot
-    plot_full_injection()
+    # # Combined ET and ET+CE plot
+    # plot_full_injection()
 
 
 if __name__ == "__main__":
