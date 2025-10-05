@@ -78,31 +78,31 @@ def plot_mtov_cdf(cdf_func: interp1d, save_name: str = None) -> bool:
     cdf_eval = cdf_func(mass_range)
 
     # Create figure
-    fig, ax = plt.subplots(figsize=(8, 6))
+    fig, ax = plt.subplots(figsize=MTOV_CDF_FIGSIZE)
 
     # Plot CDF
-    ax.plot(mass_range, cdf_eval, linewidth=2.5, color='navy', label='MTOV CDF')
-    ax.fill_between(mass_range, cdf_eval, alpha=0.3, color='navy')
+    ax.plot(mass_range, cdf_eval, linewidth=MTOV_CDF_LINEWIDTH, color=MTOV_CDF_COLOR, label='MTOV CDF')
+    ax.fill_between(mass_range, cdf_eval, alpha=MTOV_CDF_ALPHA, color=MTOV_CDF_COLOR)
 
     # Add reference lines
     ax.axhline(0.5, color='gray', linestyle='--', linewidth=1, alpha=0.5, label='Median')
     ax.axhline(0.9, color='gray', linestyle=':', linewidth=1, alpha=0.5, label='90% credible')
 
     # Format plot
-    ax.set_xlabel(r'Mass [M$_\odot$]', fontsize=16)
-    ax.set_ylabel('Cumulative Probability', fontsize=16)
-    ax.set_title(r'Maximum Neutron Star Mass ($M_{\rm TOV}$) Distribution', fontsize=18)
+    ax.set_xlabel(r'Mass [M$_\odot$]', fontsize=MTOV_CDF_AXIS_FONTSIZE)
+    ax.set_ylabel('Cumulative Probability', fontsize=MTOV_CDF_AXIS_FONTSIZE)
+    ax.set_title(r'Maximum Neutron Star Mass ($M_{\rm TOV}$) Distribution', fontsize=MTOV_CDF_TITLE_FONTSIZE)
     ax.set_xlim(1.0, 3.0)
     ax.set_ylim(0, 1)
     ax.grid(True, alpha=0.3)
-    ax.legend(fontsize=14)
+    ax.legend(fontsize=MTOV_CDF_ANNOTATION_FONTSIZE)
 
     # Add annotation
     median_mass = mass_range[np.argmin(np.abs(cdf_eval - 0.5))]
     ax.annotate(f'Median: {median_mass:.2f} M$_\\odot$',
                 xy=(median_mass, 0.5), xytext=(median_mass + 0.3, 0.3),
                 arrowprops=dict(arrowstyle='->', color='gray', alpha=0.7),
-                fontsize=14, color='gray')
+                fontsize=MTOV_CDF_ANNOTATION_FONTSIZE, color='gray')
 
     # Save plot
     ensure_directory_exists(save_name)
@@ -113,18 +113,59 @@ def plot_mtov_cdf(cdf_func: interp1d, save_name: str = None) -> bool:
     return True
 
 # User-configurable mass ranges (in solar masses)
-MASS_1_RANGE = (1.1, 5) # Primary mass range
+MASS_1_RANGE = (1.175, 5) # Primary mass range
 MASS_2_RANGE = (1.0, 2.5) # Secondary mass range
 
 # User-configurable plot limits
 MARGINAL_PLOT_MIN = 0.01  # Minimum value for 1D marginal plots, this is a small positive number for visibility and clipping
-Q_LABEL_FONTSIZE = 16  # Font size for q-value labels on mass ratio lines
 
 # EOS sampling configuration
 USE_EOS_SAMPLING = False  # If True, use EOS sampling data for GW231109
 
 # MTOV gradient configuration
 PLOT_MTOV_GRADIENT = True  # If True, add gray gradient background showing NS-to-BH transition
+
+# ============================================================================
+# PLOTTING HYPERPARAMETERS - Centralized configuration for all plot styling
+# ============================================================================
+
+# Main m1m2 overview plot
+MAIN_FIGSIZE = (10, 10)  # Figure size for main overview plot
+MAIN_AXIS_LABEL_FONTSIZE = 20  # Font size for m1, m2 axis labels
+MAIN_TICK_LABEL_FONTSIZE = 20  # Font size for tick labels on main m1-m2 plot
+MARGINAL_AXIS_LABEL_FONTSIZE = 14  # Font size for marginal density axis labels
+MARGINAL_TICK_LABEL_FONTSIZE = 12  # Font size for tick labels on marginal density plots
+
+# MTOV gradient background
+MTOV_GRADIENT_COLOR = 'gray'  # Base color for MTOV gradient
+MTOV_GRADIENT_ALPHA = 0.4  # Global alpha multiplier for gradient
+MTOV_GRADIENT_RESOLUTION = 500  # Grid resolution for gradient
+
+# Mass ratio lines (q = m2/m1)
+Q_LINE_COLOR = 'dimgray'  # Color for constant mass ratio lines
+Q_LINE_STYLE = '--'  # Line style for mass ratio lines
+Q_LINE_WIDTH = 1.5  # Line width for mass ratio lines
+Q_LINE_ALPHA = 0.6  # Alpha transparency for mass ratio lines
+Q_LABEL_COLOR = 'black'  # Color for q-value labels
+Q_LABEL_FONTSIZE = 16  # Font size for q-value labels on mass ratio lines
+Q_LABEL_ALPHA = 0.9  # Alpha transparency for q-value labels
+
+# Marginal KDE plots
+MARGINAL_KDE_LINEWIDTH = 2  # Line width for 1D marginal KDE curves
+MARGINAL_KDE_ALPHA = 0.3  # Alpha for filled areas under KDE curves
+
+# Contour plots
+CONTOUR_LEVELS = [0.5, 0.9]  # Credible region levels (50% and 90%)
+CONTOUR_SMOOTH = 0.4  # Smoothing parameter for 2D contours
+
+# MTOV CDF plot
+MTOV_CDF_FIGSIZE = (8, 6)  # Figure size for MTOV CDF plot
+MTOV_CDF_LINEWIDTH = 2.5  # Line width for CDF curve
+MTOV_CDF_COLOR = 'navy'  # Color for CDF curve
+MTOV_CDF_ALPHA = 0.3  # Alpha for filled area under CDF
+MTOV_CDF_TITLE_FONTSIZE = 18  # Font size for plot title
+MTOV_CDF_AXIS_FONTSIZE = 16  # Font size for axis labels
+MTOV_CDF_ANNOTATION_FONTSIZE = 14  # Font size for annotations
 
 # If running on Mac, so we can use TeX (not on Jarvis), change some rc params
 cwd = os.getcwd()
@@ -235,7 +276,8 @@ def plot_equal_mass_ratio_lines(ax, mass_1_range: tuple, mass_2_range: tuple):
 
         if np.any(valid_mask):
             ax.plot(m1_line[valid_mask], m2_line[valid_mask],
-                   color='gray', linestyle='--', alpha=0.5, linewidth=1, zorder=5)
+                   color=Q_LINE_COLOR, linestyle=Q_LINE_STYLE, alpha=Q_LINE_ALPHA,
+                   linewidth=Q_LINE_WIDTH, zorder=5)
 
             # Add rotated label along the line
             if np.any(valid_mask):
@@ -284,7 +326,7 @@ def plot_equal_mass_ratio_lines(ax, mass_1_range: tuple, mass_2_range: tuple):
                 offset_y = offset_distance * np.cos(angle_rad)
 
                 ax.text(label_x + offset_x, label_y + offset_y, label_text,
-                       fontsize=Q_LABEL_FONTSIZE, color='gray', alpha=0.9,
+                       fontsize=Q_LABEL_FONTSIZE, color=Q_LABEL_COLOR, alpha=Q_LABEL_ALPHA,
                        rotation=angle_deg,
                        rotation_mode='anchor',
                        ha='center', va='bottom', zorder=5)
@@ -337,7 +379,7 @@ def create_m1m2_overview_plot(save_name: str = None) -> bool:
     print(f"\nSuccessfully loaded data for {len(event_data)} events")
 
     # Create figure with specific layout
-    fig = plt.figure(figsize=(10, 10))
+    fig = plt.figure(figsize=MAIN_FIGSIZE)
 
     # Define grid layout: main plot with marginal histograms
     gs = fig.add_gridspec(3, 3,
@@ -352,31 +394,9 @@ def create_m1m2_overview_plot(save_name: str = None) -> bool:
     ax_top = fig.add_subplot(gs[0, 1], sharex=ax_main)
     ax_right = fig.add_subplot(gs[1, 2], sharey=ax_main)
 
-    # Add MTOV gradient background (if enabled)
-    if PLOT_MTOV_GRADIENT and mtov_cdf is not None:
-        # Create mesh grid for the gradient
-        m1_grid = np.linspace(MASS_1_RANGE[0], MASS_1_RANGE[1], 500)
-        m2_grid = np.linspace(MASS_2_RANGE[0], MASS_2_RANGE[1], 500)
-        M1, M2 = np.meshgrid(m1_grid, m2_grid)
-
-        # Evaluate CDF at each m1 position (use m1 since it's the primary mass)
-        # CDF = probability that MTOV < m1
-        # Low masses (< MTOV): CDF ≈ 0 → more gray (clearly NS region)
-        # High masses (> MTOV): CDF ≈ 1 → more white (likely BH region)
-        # So we want: gray at low masses, white at high masses
-        # Use reversed gray colormap: low values (CDF=0) → dark, high values (CDF=1) → light
-        alpha_grid = mtov_cdf(M1)
-
-        # Create gray background with varying intensity based on MTOV CDF
-        # Use reversed gray cmap so that high CDF (likely BH) = white, low CDF (clearly NS) = gray
-        ax_main.imshow(alpha_grid,
-                       extent=[MASS_1_RANGE[0], MASS_1_RANGE[1], MASS_2_RANGE[0], MASS_2_RANGE[1]],
-                       origin='lower',
-                       aspect='auto',
-                       cmap='gray_r',  # Reversed: dark at low values, light at high values
-                       alpha=0.4,  # Global alpha multiplier to keep it subtle
-                       vmin=0, vmax=1,
-                       zorder=-100)  # Very low zorder to stay behind everything
+    # Track maximum KDE values for setting gradient heights
+    max_kde_m1 = 0
+    max_kde_m2 = 0
 
     # Plot 2D contours for each event
     for event_name, data in event_data.items():
@@ -399,36 +419,90 @@ def create_m1m2_overview_plot(save_name: str = None) -> bool:
         corner.hist2d(m1_filtered, m2_filtered,
                       ax=ax_main,
                       color=data['color'],
-                      levels=[0.5, 0.9],  # 50% and 90% credible regions
+                      levels=CONTOUR_LEVELS,
                       plot_datapoints=True,
                       plot_density=False,
                       plot_contours=False,
                       no_fill_contours=True,
                       fill_contours=True,
-                      )
+                      smooth=CONTOUR_SMOOTH)
 
         # Create 1D marginal KDEs
         print(f"Creating 1D marginals for {event_name}...")
 
         # Top panel (mass_1 marginal)
         x_m1, kde_m1 = create_kde_1d(m1_filtered, MASS_1_RANGE)
-        ax_top.plot(x_m1, kde_m1, color=data['color'], linewidth=2,
+        ax_top.plot(x_m1, kde_m1, color=data['color'], linewidth=MARGINAL_KDE_LINEWIDTH,
                     label=data['label'])
-        ax_top.fill_between(x_m1, kde_m1, alpha=0.3, color=data['color'])
+        ax_top.fill_between(x_m1, kde_m1, alpha=MARGINAL_KDE_ALPHA, color=data['color'])
+
+        # Track maximum for gradient height
+        max_kde_m1 = max(max_kde_m1, np.max(kde_m1))
 
         # Right panel (mass_2 marginal)
         x_m2, kde_m2 = create_kde_1d(m2_filtered, MASS_2_RANGE)
-        ax_right.plot(kde_m2, x_m2, color=data['color'], linewidth=2)
-        ax_right.fill_betweenx(x_m2, kde_m2, alpha=0.3, color=data['color'])
+        ax_right.plot(kde_m2, x_m2, color=data['color'], linewidth=MARGINAL_KDE_LINEWIDTH)
+        ax_right.fill_betweenx(x_m2, kde_m2, alpha=MARGINAL_KDE_ALPHA, color=data['color'])
+
+        # Track maximum for gradient height
+        max_kde_m2 = max(max_kde_m2, np.max(kde_m2))
+
+    # Add MTOV gradient background to marginal plots (if enabled)
+    # This is done after plotting KDEs so we know the correct height ranges
+    if PLOT_MTOV_GRADIENT and mtov_cdf is not None:
+        from matplotlib.colors import LinearSegmentedColormap
+        # Reversed: white at low masses (NS), gray at high masses (BH)
+        cmap = LinearSegmentedColormap.from_list('mtov_gradient',
+                                                  ['white', MTOV_GRADIENT_COLOR])
+
+        # Add some padding for whitespace (10% extra)
+        padding_factor = 1.1
+        max_kde_m1_with_padding = max_kde_m1 * padding_factor
+        max_kde_m2_with_padding = max_kde_m2 * padding_factor
+
+        # Top panel (m1 marginal): horizontal gradient varying with m1
+        m1_grid = np.linspace(MASS_1_RANGE[0], MASS_1_RANGE[1], MTOV_GRADIENT_RESOLUTION)
+        m1_cdf_vals = mtov_cdf(m1_grid)
+        # Create 2D array for imshow (same gradient repeated vertically)
+        m1_gradient = np.tile(m1_cdf_vals, (50, 1))
+
+        ax_top.imshow(m1_gradient,
+                     extent=[MASS_1_RANGE[0], MASS_1_RANGE[1], MARGINAL_PLOT_MIN, max_kde_m1_with_padding],
+                     origin='lower',
+                     aspect='auto',
+                     cmap=cmap,
+                     alpha=MTOV_GRADIENT_ALPHA,
+                     vmin=0, vmax=1,
+                     zorder=-100)
+
+        # Right panel (m2 marginal): vertical gradient varying with m2
+        m2_grid = np.linspace(MASS_2_RANGE[0], MASS_2_RANGE[1], MTOV_GRADIENT_RESOLUTION)
+        m2_cdf_vals = mtov_cdf(m2_grid)
+        # Create 2D array for imshow (same gradient repeated horizontally)
+        m2_gradient = np.tile(m2_cdf_vals.reshape(-1, 1), (1, 50))
+
+        ax_right.imshow(m2_gradient,
+                       extent=[MARGINAL_PLOT_MIN, max_kde_m2_with_padding, MASS_2_RANGE[0], MASS_2_RANGE[1]],
+                       origin='lower',
+                       aspect='auto',
+                       cmap=cmap,
+                       alpha=MTOV_GRADIENT_ALPHA,
+                       vmin=0, vmax=1,
+                       zorder=-100)
+
+        # Set the y-limits to match the gradient heights
+        ax_top.set_ylim(bottom=MARGINAL_PLOT_MIN, top=max_kde_m1_with_padding)
+        ax_right.set_xlim(left=MARGINAL_PLOT_MIN, right=max_kde_m2_with_padding)
 
     # Plot equal mass ratio lines
     plot_equal_mass_ratio_lines(ax_main, MASS_1_RANGE, MASS_2_RANGE)
 
     # Format main plot
-    ax_main.set_xlabel(r'$m_1$ [M$_\odot$]', fontsize=16)
-    ax_main.set_ylabel(r'$m_2$ [M$_\odot$]', fontsize=16)
+    ax_main.set_xlabel(r'$m_1$ [M$_\odot$]', fontsize=MAIN_AXIS_LABEL_FONTSIZE)
+    ax_main.set_ylabel(r'$m_2$ [M$_\odot$]', fontsize=MAIN_AXIS_LABEL_FONTSIZE)
     ax_main.set_xlim(MASS_1_RANGE)
     ax_main.set_ylim(MASS_2_RANGE)
+    ax_main.tick_params(labelsize=MAIN_TICK_LABEL_FONTSIZE)
 
     # Add legend to main plot
     legend_elements = []
@@ -436,16 +510,23 @@ def create_m1m2_overview_plot(save_name: str = None) -> bool:
         legend_elements.append(
             mpatches.Patch(facecolor=data['color'], edgecolor='none', label=data['label'])
         )
-    ax_main.legend(handles=legend_elements, loc='upper right', fontsize=legend_fs)
+    ax_main.legend(handles=legend_elements, loc='upper right', fontsize=legend_fs,
+                   frameon=True, facecolor='white', framealpha=1, edgecolor='black')
 
     # Format marginal plots
-    ax_top.set_ylabel('Density', fontsize=14)
-    ax_top.tick_params(labelbottom=False)
-    ax_top.set_ylim(bottom=MARGINAL_PLOT_MIN)
+    ax_top.set_ylabel('Density', fontsize=MARGINAL_AXIS_LABEL_FONTSIZE)
+    ax_top.tick_params(labelbottom=False, labelsize=MARGINAL_TICK_LABEL_FONTSIZE)
+    # Set y-limits for top panel (if gradient not enabled, set based on KDE max)
+    if not PLOT_MTOV_GRADIENT or mtov_cdf is None:
+        padding_factor = 1.1
+        ax_top.set_ylim(bottom=MARGINAL_PLOT_MIN, top=max_kde_m1 * padding_factor)
 
-    ax_right.set_xlabel('Density', fontsize=14)
-    ax_right.tick_params(labelleft=False)
-    ax_right.set_xlim(left=MARGINAL_PLOT_MIN)
+    ax_right.set_xlabel('Density', fontsize=MARGINAL_AXIS_LABEL_FONTSIZE)
+    ax_right.tick_params(labelleft=False, labelsize=MARGINAL_TICK_LABEL_FONTSIZE)
+    # Set x-limits for right panel (if gradient not enabled, set based on KDE max)
+    if not PLOT_MTOV_GRADIENT or mtov_cdf is None:
+        padding_factor = 1.1
+        ax_right.set_xlim(left=MARGINAL_PLOT_MIN, right=max_kde_m2 * padding_factor)
 
     # Remove ticks from marginal plots where appropriate
     plt.setp(ax_top.get_xticklabels(), visible=False)
