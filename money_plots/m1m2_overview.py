@@ -511,7 +511,7 @@ def create_m1m2_overview_plot(save_name: str = None) -> bool:
             mpatches.Patch(facecolor=data['color'], edgecolor='none', label=data['label'])
         )
     ax_main.legend(handles=legend_elements, loc='upper right', fontsize=legend_fs,
-                   frameon=True, facecolor='white', framealpha=1, edgecolor='none')
+                   frameon=True, facecolor='white', framealpha=1, edgecolor='lightgray')
 
     # Format marginal plots
     ax_top.set_ylabel('Density', fontsize=MARGINAL_AXIS_LABEL_FONTSIZE)
