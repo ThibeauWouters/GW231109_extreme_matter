@@ -32,12 +32,13 @@ M1_XLIM = (1.2, 1.8)
 M2_XLIM = (1.1, 1.8)
 
 # Sample sizes (increase these for smoother KDEs)
-PRIOR_SAMPLE_SIZE = 50_000   # Number of initial samples to draw from priors
+PRIOR_SAMPLE_SIZE = 10_000   # Number of initial samples to draw from priors
 OUTPUT_SAMPLE_SIZE = 10_000  # Number of output samples after m1 >= m2 constraint
 
 # KDE parameters
 KDE_NBINS = 1_000             # Number of points for KDE evaluation (higher = smoother curves)
 KDE_SMOOTH = 2.0              # Smoothing factor (None = auto, or set to float like 1.5 for more smoothing)
+# KDE_SMOOTH = None
 
 # Output configuration
 OUTPUT_PATH = './figures/populations/populations_component_masses_comparison.pdf'
@@ -64,22 +65,6 @@ if "Woute029" in os.getcwd():
             "figure.titlesize": fs}
     plt.rcParams.update(rc_params)
 
-
-def compute_kde(data, Nbins, xMin, xMax, bounded=False, method=None, smooth=None):
-    """Compute KDE of `data` normalised across interval [`xMin`, `xMax`]
-    using Nbins bins.
-    """
-    xPoints = np.linspace(xMin, xMax, Nbins)
-
-    # Use simple gaussian KDE
-    kernel = scipy.stats.gaussian_kde(data)
-
-    # Apply bandwidth adjustment if requested
-    if smooth is not None:
-        kernel.set_bandwidth(kernel.factor * smooth)
-
-    return kernel.evaluate(xPoints)
-
 def create_prior_samps(priorpts_m1: np.array, priorpts_m2: np.array, nsamp: int):
     """
     Create prior samples ensuring m1 >= m2 and desired number of samples.
@@ -93,8 +78,8 @@ def create_prior_samps(priorpts_m1: np.array, priorpts_m2: np.array, nsamp: int)
         m1_samps, m2_samps (np.array, np.array): Component mass samples with m1 >= m2
     """
     
-    m1_draws = np.random.choice(priorpts_m1, nsamp, replace=True)
-    m2_draws = np.random.choice(priorpts_m2, nsamp, replace=True)
+    m1_draws = np.random.choice(priorpts_m1, nsamp, replace=False)
+    m2_draws = np.random.choice(priorpts_m2, nsamp, replace=False)
 
     m1_samps = []
     m2_samps = []
@@ -328,7 +313,7 @@ def load_posterior_data(data_dir='../posteriors/data/', run_names=None, nsamp=OU
     return posterior_data
 
 
-def compute_kdes_batch(data_dict, Nbins=KDE_NBINS, smooth=KDE_SMOOTH, prior_domains=None):
+def compute_kdes_batch(data_dict, Nbins=KDE_NBINS, smooth=KDE_SMOOTH, prior_domains=(1.0, 4.0)):
     """
     Compute KDEs for multiple datasets.
 
@@ -353,18 +338,15 @@ def compute_kdes_batch(data_dict, Nbins=KDE_NBINS, smooth=KDE_SMOOTH, prior_doma
 
     for name, data in data_dict.items():
         # Use theoretical domain if provided, otherwise use data range
-        if prior_domains is not None and name in prior_domains:
-            xMin, xMax = prior_domains[name]
-        else:
-            xMin, xMax = min(data), max(data)
+        xMin, xMax = prior_domains
 
         # Store the raw KDE object for later evaluation
-        kernel = scipy.stats.gaussian_kde(data)
+        # kernel = scipy.stats.gaussian_kde(data) # NOTE: PESummary version is preferred!
+        kernel = bounded_1d_kde(data, xlow=xMin, xhigh=xMax, method="Reflection")
         if smooth is not None:
             kernel.set_bandwidth(kernel.factor * smooth)
 
-        kde = compute_kde(data, Nbins=Nbins, xMin=xMin, xMax=xMax, smooth=smooth)
-
+        kde = kernel.evaluate(np.linspace(xMin, xMax, Nbins))
         kde_dict[name] = {
             'kde': kde,        # Store the evaluated KDE values, i.e. y(x)
             'kernel': kernel,  # Store the kernel object (i.e. the KDE object)
@@ -450,25 +432,16 @@ def main():
     # =============================================================================
     print("\nComputing KDEs for prior samples...")
 
-    # Define theoretical prior domains for proper JSD computation
-    # Using wide range that encompasses all prior types
-    prior_domains = {
-        'uniform': (1.0, 3.0),
-        'gaussian': (1.0, 1.7),
-        'double_gaussian': (1.0, 2.5),
-        'default': (1.0, 3.0),
-    }
-
     # Compute KDEs for priors with theoretical domains
     m1_prior_data = {name: data['m1'] for name, data in prior_samples.items()}
     m2_prior_data = {name: data['m2'] for name, data in prior_samples.items()}
 
-    m1_prior_kdes = compute_kdes_batch(m1_prior_data, prior_domains=prior_domains)
-    m2_prior_kdes = compute_kdes_batch(m2_prior_data, prior_domains=prior_domains)
+    m1_prior_kdes = compute_kdes_batch(m1_prior_data)
+    m2_prior_kdes = compute_kdes_batch(m2_prior_data)
 
     print("Computing KDEs for posterior samples...")
 
-    # Compute KDEs for posteriors (use data range, not theoretical prior domain)
+    # Compute KDEs for posteriors
     m1_posterior_data = {}
     m2_posterior_data = {}
     for prior_name, post_name in posterior_mapping.items():
@@ -554,7 +527,7 @@ def main():
     style_posterior = Line2D([0], [0], color='black', linestyle='-', linewidth=2, label='Posterior')
 
     # Color legend entries (for different prior types)
-    color_dg = Line2D([0], [0], color=colors['double_gaussian'], linewidth=2, label='Double Gauss')
+    color_dg = Line2D([0], [0], color=colors['double_gaussian'], linewidth=2, label='Double Gaussian')
     color_g = Line2D([0], [0], color=colors['gaussian'], linewidth=2, label='Gaussian')
     color_u = Line2D([0], [0], color=colors['uniform'], linewidth=2, label='Uniform')
     color_d = Line2D([0], [0], color=colors['default'], linewidth=2, label='Default')
@@ -592,9 +565,6 @@ def main():
 
         print(f"\n{dist_labels[post_idx]} posterior vs:")
         for prior_idx, prior_name in enumerate(dist_names):
-            if prior_name not in m1_prior_kdes:
-                continue
-
             jsd_val = compute_js_on_common_grid(
                 m1_posterior_kdes[post_name],
                 m1_prior_kdes[prior_name]
@@ -605,9 +575,6 @@ def main():
     print('\n======== mass 2 JSD ========')
     # Compute JSD for each posterior against all priors
     for post_idx, post_name in enumerate(dist_names):
-        if post_name not in m2_posterior_kdes:
-            continue
-
         m2_jsds[post_name] = {}
 
         print(f"\n{dist_labels[post_idx]} posterior vs:")

@@ -11,6 +11,7 @@ import matplotlib.pyplot as plt
 import matplotlib.patches as mpatches
 import corner
 from scipy.stats import gaussian_kde
+from scipy.interpolate import interp1d
 
 def ensure_directory_exists(filepath: str):
     """
@@ -23,6 +24,94 @@ def ensure_directory_exists(filepath: str):
     if directory and not os.path.exists(directory):
         os.makedirs(directory, exist_ok=True)
 
+def load_mtov_cdf(filepath: str = './data/GW170817_jester_constraints.npz') -> interp1d:
+    """
+    Load MTOV distribution from EOS constraints and create interpolated CDF.
+
+    Args:
+        filepath (str): Path to the npz file containing masses_EOS
+
+    Returns:
+        interp1d: Interpolated CDF function that maps mass -> probability
+    """
+    print(f"Loading MTOV data from {filepath}...")
+    data = np.load(filepath)
+
+    # Extract MTOV values (maximum mass for each EOS)
+    mtov_samples = np.max(data['masses_EOS'], axis=1)
+
+    print(f"  Number of EOS samples: {len(mtov_samples)}")
+    print(f"  MTOV range: {mtov_samples.min():.3f} - {mtov_samples.max():.3f} M_sun")
+    print(f"  MTOV median: {np.median(mtov_samples):.3f} M_sun")
+
+    # Sort samples and create empirical CDF
+    mtov_sorted = np.sort(mtov_samples)
+    cdf_values = np.arange(1, len(mtov_sorted) + 1) / len(mtov_sorted)
+
+    # Create interpolated CDF function
+    # Extrapolate: below minimum MTOV -> 0, above maximum MTOV -> 1
+    cdf_func = interp1d(mtov_sorted, cdf_values,
+                        kind='linear',
+                        bounds_error=False,
+                        fill_value=(0.0, 1.0))
+
+    return cdf_func
+
+def plot_mtov_cdf(cdf_func: interp1d, save_name: str = None) -> bool:
+    """
+    Plot and save the MTOV CDF visualization.
+
+    Args:
+        cdf_func (interp1d): Interpolated CDF function
+        save_name (str): Output filename (optional)
+
+    Returns:
+        bool: True if successful
+    """
+    if save_name is None:
+        save_name = "./figures/GW_PE/mtov_cdf.pdf"
+
+    print(f"Creating MTOV CDF plot...")
+
+    # Create mass range for evaluation
+    mass_range = np.linspace(1.0, 3.0, 1000)
+    cdf_eval = cdf_func(mass_range)
+
+    # Create figure
+    fig, ax = plt.subplots(figsize=(8, 6))
+
+    # Plot CDF
+    ax.plot(mass_range, cdf_eval, linewidth=2.5, color='navy', label='MTOV CDF')
+    ax.fill_between(mass_range, cdf_eval, alpha=0.3, color='navy')
+
+    # Add reference lines
+    ax.axhline(0.5, color='gray', linestyle='--', linewidth=1, alpha=0.5, label='Median')
+    ax.axhline(0.9, color='gray', linestyle=':', linewidth=1, alpha=0.5, label='90% credible')
+
+    # Format plot
+    ax.set_xlabel(r'Mass [M$_\odot$]', fontsize=16)
+    ax.set_ylabel('Cumulative Probability', fontsize=16)
+    ax.set_title(r'Maximum Neutron Star Mass ($M_{\rm TOV}$) Distribution', fontsize=18)
+    ax.set_xlim(1.0, 3.0)
+    ax.set_ylim(0, 1)
+    ax.grid(True, alpha=0.3)
+    ax.legend(fontsize=14)
+
+    # Add annotation
+    median_mass = mass_range[np.argmin(np.abs(cdf_eval - 0.5))]
+    ax.annotate(f'Median: {median_mass:.2f} M$_\\odot$',
+                xy=(median_mass, 0.5), xytext=(median_mass + 0.3, 0.3),
+                arrowprops=dict(arrowstyle='->', color='gray', alpha=0.7),
+                fontsize=14, color='gray')
+
+    # Save plot
+    ensure_directory_exists(save_name)
+    print(f"Saving MTOV CDF plot to {save_name}")
+    plt.savefig(save_name, bbox_inches='tight', dpi=300)
+    plt.close()
+
+    return True
+
 # User-configurable mass ranges (in solar masses)
 MASS_1_RANGE = (1.1, 5) # Primary mass range
 MASS_2_RANGE = (1.0, 2.5) # Secondary mass range
@@ -33,6 +122,9 @@ Q_LABEL_FONTSIZE = 16  # Font size for q-value labels on mass ratio lines
 
 # EOS sampling configuration
 USE_EOS_SAMPLING = False  # If True, use EOS sampling data for GW231109
+
+# MTOV gradient configuration
+PLOT_MTOV_GRADIENT = True  # If True, add gray gradient background showing NS-to-BH transition
 
 # If running on Mac, so we can use TeX (not on Jarvis), change some rc params
 cwd = os.getcwd()
@@ -143,7 +235,7 @@ def plot_equal_mass_ratio_lines(ax, mass_1_range: tuple, mass_2_range: tuple):
 
         if np.any(valid_mask):
             ax.plot(m1_line[valid_mask], m2_line[valid_mask],
-                   color='gray', linestyle='--', alpha=0.5, linewidth=1)
+                   color='gray', linestyle='--', alpha=0.5, linewidth=1, zorder=5)
 
             # Add rotated label along the line
             if np.any(valid_mask):
@@ -195,7 +287,7 @@ def plot_equal_mass_ratio_lines(ax, mass_1_range: tuple, mass_2_range: tuple):
                        fontsize=Q_LABEL_FONTSIZE, color='gray', alpha=0.9,
                        rotation=angle_deg,
                        rotation_mode='anchor',
-                       ha='center', va='bottom')
+                       ha='center', va='bottom', zorder=5)
 
 def create_m1m2_overview_plot(save_name: str = None) -> bool:
     """
@@ -216,7 +308,17 @@ def create_m1m2_overview_plot(save_name: str = None) -> bool:
 
     print("Creating mass_1 vs mass_2 overview plot...")
     print(f"EOS sampling mode: {USE_EOS_SAMPLING}")
+    print(f"MTOV gradient: {PLOT_MTOV_GRADIENT}")
     print(f"Output file: {save_name}")
+
+    # Load MTOV CDF for gradient background (if enabled)
+    if PLOT_MTOV_GRADIENT:
+        print("\n" + "="*60)
+        mtov_cdf = load_mtov_cdf()
+        plot_mtov_cdf(mtov_cdf)
+        print("="*60 + "\n")
+    else:
+        mtov_cdf = None
 
     # Load data for all events
     event_data = {}
@@ -250,6 +352,32 @@ def create_m1m2_overview_plot(save_name: str = None) -> bool:
     ax_top = fig.add_subplot(gs[0, 1], sharex=ax_main)
     ax_right = fig.add_subplot(gs[1, 2], sharey=ax_main)
 
+    # Add MTOV gradient background (if enabled)
+    if PLOT_MTOV_GRADIENT and mtov_cdf is not None:
+        # Create mesh grid for the gradient
+        m1_grid = np.linspace(MASS_1_RANGE[0], MASS_1_RANGE[1], 500)
+        m2_grid = np.linspace(MASS_2_RANGE[0], MASS_2_RANGE[1], 500)
+        M1, M2 = np.meshgrid(m1_grid, m2_grid)
+
+        # Evaluate CDF at each m1 position (use m1 since it's the primary mass)
+        # CDF = probability that MTOV < m1
+        # Low masses (< MTOV): CDF ≈ 0 → more gray (clearly NS region)
+        # High masses (> MTOV): CDF ≈ 1 → more white (likely BH region)
+        # So we want: gray at low masses, white at high masses
+        # Use reversed gray colormap: low values (CDF=0) → dark, high values (CDF=1) → light
+        alpha_grid = mtov_cdf(M1)
+
+        # Create gray background with varying intensity based on MTOV CDF
+        # Use reversed gray cmap so that high CDF (likely BH) = white, low CDF (clearly NS) = gray
+        ax_main.imshow(alpha_grid,
+                       extent=[MASS_1_RANGE[0], MASS_1_RANGE[1], MASS_2_RANGE[0], MASS_2_RANGE[1]],
+                       origin='lower',
+                       aspect='auto',
+                       cmap='gray_r',  # Reversed: dark at low values, light at high values
+                       alpha=0.4,  # Global alpha multiplier to keep it subtle
+                       vmin=0, vmax=1,
+                       zorder=-100)  # Very low zorder to stay behind everything
+
     # Plot 2D contours for each event
     for event_name, data in event_data.items():
         print(f"Creating 2D contours for {event_name}...")
@@ -272,13 +400,11 @@ def create_m1m2_overview_plot(save_name: str = None) -> bool:
                       ax=ax_main,
                       color=data['color'],
                       levels=[0.5, 0.9],  # 50% and 90% credible regions
-                      plot_datapoints=False,
+                      plot_datapoints=True,
                       plot_density=False,
                       plot_contours=False,
                       no_fill_contours=True,
                       fill_contours=True,
-                      smooth=0.4,
-                    #   no_fill_contours=False,
                       )
 
         # Create 1D marginal KDEs
