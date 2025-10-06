@@ -49,6 +49,7 @@ OUTPUT_PATH_WIDE = './figures/populations/populations_component_masses_compariso
 DPI = 600
 
 FIGSIZE = (6, 6)
+AXIS_LABEL_FONTSIZE = 18
 
 # =============================================================================
 
@@ -325,7 +326,7 @@ def load_posterior_data(data_dir='../posteriors/data/', run_names=None, nsamp=OU
     return posterior_data
 
 
-def compute_kdes_batch(data_dict, Nbins=KDE_NBINS, smooth=KDE_SMOOTH, prior_domains=(1.0, 4.0)):
+def compute_kdes_batch(data_dict, Nbins=KDE_NBINS, smooth=KDE_SMOOTH, prior_domains=(1.0, 4.0), use_method_selection=False):
     """
     Compute KDEs for multiple datasets.
 
@@ -340,6 +341,9 @@ def compute_kdes_batch(data_dict, Nbins=KDE_NBINS, smooth=KDE_SMOOTH, prior_doma
     prior_domains : dict or None
         Dictionary mapping names to (xMin, xMax) tuples for theoretical prior domains
         If None, uses min/max of data
+    use_method_selection : bool
+        If True, use Transform for uniform/default and Reflection for gaussian/double_gaussian
+        If False, use Reflection for all (default)
 
     Returns
     -------
@@ -352,9 +356,16 @@ def compute_kdes_batch(data_dict, Nbins=KDE_NBINS, smooth=KDE_SMOOTH, prior_doma
         # Use theoretical domain if provided, otherwise use data range
         xMin, xMax = prior_domains
 
+        # Determine KDE method based on distribution type (only if use_method_selection=True)
+        # Transform for uniform and default, Reflection for gaussian and double_gaussian
+        if use_method_selection and name in ['uniform', 'default']:
+            kde_method = 'Transform'
+        else:
+            kde_method = 'Reflection'
+
         # Store the raw KDE object for later evaluation
         # kernel = scipy.stats.gaussian_kde(data) # NOTE: PESummary version is preferred!
-        kernel = bounded_1d_kde(data, xlow=xMin, xhigh=xMax, method="Reflection")
+        kernel = bounded_1d_kde(data, xlow=xMin, xhigh=xMax, method=kde_method)
         if smooth is not None:
             kernel.set_bandwidth(kernel.factor * smooth)
 
@@ -448,8 +459,8 @@ def main():
     m1_prior_data = {name: data['m1'] for name, data in prior_samples.items()}
     m2_prior_data = {name: data['m2'] for name, data in prior_samples.items()}
 
-    m1_prior_kdes = compute_kdes_batch(m1_prior_data, prior_domains=PRIOR_DOMAIN_WIDE)
-    m2_prior_kdes = compute_kdes_batch(m2_prior_data, prior_domains=PRIOR_DOMAIN_WIDE)
+    m1_prior_kdes = compute_kdes_batch(m1_prior_data, prior_domains=PRIOR_DOMAIN_WIDE, use_method_selection=True)
+    m2_prior_kdes = compute_kdes_batch(m2_prior_data, prior_domains=PRIOR_DOMAIN_WIDE, use_method_selection=True)
 
     print("Computing KDEs for posterior samples...")
 
@@ -508,7 +519,7 @@ def main():
                               color=colors[name], alpha=0.3)
 
     ax[0].set_ylim(bottom=0)
-    ax[0].set_ylabel(r'$m_1$ density')
+    ax[0].set_ylabel(r'$m_1$ prob. density', fontsize=AXIS_LABEL_FONTSIZE)
 
     # Plot m2 priors
     for name in ['double_gaussian', 'gaussian', 'uniform', 'default']:
@@ -525,8 +536,8 @@ def main():
                               color=colors[name], alpha=0.3)
 
     ax[1].set_ylim(bottom=0)
-    ax[1].set_ylabel(r'$m_2$ density')
-    ax[1].set_xlabel(r'Mass $[M_\odot]$')
+    ax[1].set_ylabel(r'$m_2$ prob. density', fontsize=AXIS_LABEL_FONTSIZE)
+    ax[1].set_xlabel(r'Mass $[M_\odot]$', fontsize=AXIS_LABEL_FONTSIZE)
 
     # Set shared x-limits to wide domain
     ax[1].set_xlim(PRIOR_DOMAIN_WIDE)
@@ -578,7 +589,7 @@ def main():
                               color=colors[name], alpha=0.3)
 
     ax[0].set_ylim(bottom=0)
-    ax[0].set_ylabel(r'$m_1$ density')
+    ax[0].set_ylabel(r'$m_1$ prob. density', fontsize=AXIS_LABEL_FONTSIZE)
 
     # Plot m2 priors
     for name in ['double_gaussian', 'gaussian', 'uniform', 'default']:
@@ -595,8 +606,8 @@ def main():
                               color=colors[name], alpha=0.3)
 
     ax[1].set_ylim(bottom=0)
-    ax[1].set_ylabel(r'$m_2$ density')
-    ax[1].set_xlabel(r'Mass $[M_\odot]$')
+    ax[1].set_ylabel(r'$m_2$ prob. density', fontsize=AXIS_LABEL_FONTSIZE)
+    ax[1].set_xlabel(r'Mass $[M_\odot]$', fontsize=AXIS_LABEL_FONTSIZE)
 
     # Set shared x-limits - use the wider of M1_XLIM and M2_XLIM
     if M1_XLIM is not None and M2_XLIM is not None:
@@ -666,7 +677,7 @@ def main():
     # Generate LaTeX table
     # =============================================================================
     print("\nGenerating LaTeX table...")
-    generate_jsd_latex_table(m1_jsds, m2_jsds, output_file='./JSD_tabular_wide.tex')
+    generate_jsd_latex_table(m1_jsds, m2_jsds, output_file='./JSD_tabular.tex')
 
     print("\nDone!")
 
