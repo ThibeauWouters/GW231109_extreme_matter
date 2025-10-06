@@ -508,7 +508,7 @@ def main():
                               color=colors[name], alpha=0.3)
 
     ax[0].set_ylim(bottom=0)
-    ax[0].set_ylabel(r'$p(m_1|d)$')
+    ax[0].set_ylabel(r'$m_1$ density')
 
     # Plot m2 priors
     for name in ['double_gaussian', 'gaussian', 'uniform', 'default']:
@@ -525,7 +525,7 @@ def main():
                               color=colors[name], alpha=0.3)
 
     ax[1].set_ylim(bottom=0)
-    ax[1].set_ylabel(r'$p(m_2|d)$')
+    ax[1].set_ylabel(r'$m_2$ density')
     ax[1].set_xlabel(r'Mass $[M_\odot]$')
 
     # Set shared x-limits to wide domain
@@ -536,23 +536,19 @@ def main():
     style_prior = Line2D([0], [0], color='black', linestyle='--', linewidth=2, label='Prior')
     style_posterior = Line2D([0], [0], color='black', linestyle='-', linewidth=2, label='Posterior')
 
-    # Add empty handles to pad the first row to 4 columns
-    empty1 = Line2D([0], [0], color='none', label='')
-    empty2 = Line2D([0], [0], color='none', label='')
-
     # Second row: color legend entries
     color_dg = Line2D([0], [0], color=colors['double_gaussian'], linewidth=3, label='Double Gaussian')
     color_g = Line2D([0], [0], color=colors['gaussian'], linewidth=3, label='Gaussian')
     color_u = Line2D([0], [0], color=colors['uniform'], linewidth=3, label='Uniform')
     color_d = Line2D([0], [0], color=colors['default'], linewidth=3, label='Default')
 
-    # Arrange in 2 rows of 4 columns: [row1: Prior, Post, empty, empty], [row2: DG, G, U, D]
-    all_handles = [style_prior, style_posterior, empty1, empty2, color_dg, color_g, color_u, color_d]
+    # Create the handles
+    all_handles = [style_prior, style_posterior, color_dg, color_g, color_u, color_d]
 
-    # ncols=4 will create 2 rows with 4 items each
+    # Make the legend
     fig.legend(handles=all_handles,
-              loc='upper center', bbox_to_anchor=(0.5, 1.05), ncols=4,
-              frameon=True, fontsize=14, columnspacing=1.5)
+              loc='upper center', bbox_to_anchor=(0.5, 1.10), ncols=3,
+              frameon=True, fontsize=14, columnspacing=1.25)
 
     plt.subplots_adjust(left=None, bottom=None, right=None, top=0.95, wspace=None, hspace=0.05)
     plt.savefig(OUTPUT_PATH_WIDE, dpi=DPI, bbox_inches='tight')
@@ -565,7 +561,7 @@ def main():
     # =============================================================================
     print("\nCreating zoomed plot...")
 
-    fig, ax = plt.subplots(2, 1, figsize=(8, 8), sharex=True)
+    fig, ax = plt.subplots(2, 1, figsize=FIGSIZE, sharex=True)
 
     # Plot m1 priors
     for name in ['double_gaussian', 'gaussian', 'uniform', 'default']:
@@ -582,7 +578,7 @@ def main():
                               color=colors[name], alpha=0.3)
 
     ax[0].set_ylim(bottom=0)
-    ax[0].set_ylabel(r'$p(m_1|d)$')
+    ax[0].set_ylabel(r'$m_1$ density')
 
     # Plot m2 priors
     for name in ['double_gaussian', 'gaussian', 'uniform', 'default']:
@@ -599,7 +595,7 @@ def main():
                               color=colors[name], alpha=0.3)
 
     ax[1].set_ylim(bottom=0)
-    ax[1].set_ylabel(r'$p(m_2|d)$')
+    ax[1].set_ylabel(r'$m_2$ density')
     ax[1].set_xlabel(r'Mass $[M_\odot]$')
 
     # Set shared x-limits - use the wider of M1_XLIM and M2_XLIM
@@ -614,8 +610,8 @@ def main():
 
     # Add same legend (all_handles already defined from wide plot creation)
     fig.legend(handles=all_handles,
-              loc='upper center', bbox_to_anchor=(0.5, 1.05), ncols=4,
-              frameon=True, fontsize=14, columnspacing=1.5)
+              loc='upper center', bbox_to_anchor=(0.5, 1.08), ncols=3,
+              frameon=True, fontsize=14, columnspacing=1.25)
 
     plt.subplots_adjust(left=None, bottom=None, right=None, top=0.95, wspace=None, hspace=0.05)
     plt.savefig(OUTPUT_PATH, dpi=DPI, bbox_inches='tight')
