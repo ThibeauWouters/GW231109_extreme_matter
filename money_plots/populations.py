@@ -48,6 +48,8 @@ OUTPUT_PATH = './figures/populations/populations_component_masses_comparison.pdf
 OUTPUT_PATH_WIDE = './figures/populations/populations_component_masses_comparison_wide.pdf'
 DPI = 600
 
+FIGSIZE = (6, 6)
+
 # =============================================================================
 
 if "Woute029" in os.getcwd():
@@ -467,7 +469,7 @@ def main():
     # =============================================================================
     print("\nCreating wide domain plot...")
 
-    fig, ax = plt.subplots(1, 2, figsize=(12, 4.5), sharey=True)
+    fig, ax = plt.subplots(2, 1, figsize=FIGSIZE, sharex=True)
 
     # Plot configuration - same colors for prior/posterior pairs
     colors = {
@@ -506,10 +508,7 @@ def main():
                               color=colors[name], alpha=0.3)
 
     ax[0].set_ylim(bottom=0)
-    # Use wide domain for x-axis limits
-    ax[0].set_xlim(PRIOR_DOMAIN_WIDE)
-    ax[0].set_xlabel(r'$m_1 \, [M_\odot]$')
-    ax[0].set_ylabel('Density')
+    ax[0].set_ylabel(r'$p(m_1|d)$')
 
     # Plot m2 priors
     for name in ['double_gaussian', 'gaussian', 'uniform', 'default']:
@@ -525,32 +524,37 @@ def main():
             ax[1].fill_between(kde_data['x'], kde_data['kde'],
                               color=colors[name], alpha=0.3)
 
-    # ax[1].grid(alpha=0.5, linestyle='--')
     ax[1].set_ylim(bottom=0)
-    # Use wide domain for x-axis limits
-    ax[1].set_xlim(PRIOR_DOMAIN_WIDE)
-    ax[1].set_xlabel(r'$m_2 \, [M_\odot]$')
+    ax[1].set_ylabel(r'$p(m_2|d)$')
+    ax[1].set_xlabel(r'Mass $[M_\odot]$')
 
-    # Create single unified legend
-    # Line style indicators (in black)
+    # Set shared x-limits to wide domain
+    ax[1].set_xlim(PRIOR_DOMAIN_WIDE)
+
+    # Two-row legend: first row for line styles, second row for colors
+    # First row: line style indicators
     style_prior = Line2D([0], [0], color='black', linestyle='--', linewidth=2, label='Prior')
     style_posterior = Line2D([0], [0], color='black', linestyle='-', linewidth=2, label='Posterior')
 
-    # Color legend entries (for different prior types)
-    color_dg = Line2D([0], [0], color=colors['double_gaussian'], linewidth=2, label='Double Gaussian')
-    color_g = Line2D([0], [0], color=colors['gaussian'], linewidth=2, label='Gaussian')
-    color_u = Line2D([0], [0], color=colors['uniform'], linewidth=2, label='Uniform')
-    color_d = Line2D([0], [0], color=colors['default'], linewidth=2, label='Default')
+    # Add empty handles to pad the first row to 4 columns
+    empty1 = Line2D([0], [0], color='none', label='')
+    empty2 = Line2D([0], [0], color='none', label='')
 
-    # Combine all handles
-    all_handles = [style_prior, style_posterior, color_dg, color_g, color_u, color_d]
+    # Second row: color legend entries
+    color_dg = Line2D([0], [0], color=colors['double_gaussian'], linewidth=3, label='Double Gaussian')
+    color_g = Line2D([0], [0], color=colors['gaussian'], linewidth=3, label='Gaussian')
+    color_u = Line2D([0], [0], color=colors['uniform'], linewidth=3, label='Uniform')
+    color_d = Line2D([0], [0], color=colors['default'], linewidth=3, label='Default')
 
-    # Add single legend spanning both plots
+    # Arrange in 2 rows of 4 columns: [row1: Prior, Post, empty, empty], [row2: DG, G, U, D]
+    all_handles = [style_prior, style_posterior, empty1, empty2, color_dg, color_g, color_u, color_d]
+
+    # ncols=4 will create 2 rows with 4 items each
     fig.legend(handles=all_handles,
-              loc='upper center', bbox_to_anchor=(0.5, 1.0), ncols=6,
-              frameon=True, fontsize=14, columnspacing=1.0)
+              loc='upper center', bbox_to_anchor=(0.5, 1.05), ncols=4,
+              frameon=True, fontsize=14, columnspacing=1.5)
 
-    plt.subplots_adjust(left=None, bottom=None, right=None, top=None, wspace=0.05, hspace=None)
+    plt.subplots_adjust(left=None, bottom=None, right=None, top=0.95, wspace=None, hspace=0.05)
     plt.savefig(OUTPUT_PATH_WIDE, dpi=DPI, bbox_inches='tight')
     plt.close()
 
@@ -561,7 +565,7 @@ def main():
     # =============================================================================
     print("\nCreating zoomed plot...")
 
-    fig, ax = plt.subplots(1, 2, figsize=(12, 4.5), sharey=True)
+    fig, ax = plt.subplots(2, 1, figsize=(8, 8), sharex=True)
 
     # Plot m1 priors
     for name in ['double_gaussian', 'gaussian', 'uniform', 'default']:
@@ -578,11 +582,7 @@ def main():
                               color=colors[name], alpha=0.3)
 
     ax[0].set_ylim(bottom=0)
-    # Use zoomed xlim for this plot
-    if M1_XLIM is not None:
-        ax[0].set_xlim(M1_XLIM)
-    ax[0].set_xlabel(r'$m_1 \, [M_\odot]$')
-    ax[0].set_ylabel('Density')
+    ax[0].set_ylabel(r'$p(m_1|d)$')
 
     # Plot m2 priors
     for name in ['double_gaussian', 'gaussian', 'uniform', 'default']:
@@ -599,17 +599,25 @@ def main():
                               color=colors[name], alpha=0.3)
 
     ax[1].set_ylim(bottom=0)
-    # Use zoomed xlim for this plot
-    if M2_XLIM is not None:
+    ax[1].set_ylabel(r'$p(m_2|d)$')
+    ax[1].set_xlabel(r'Mass $[M_\odot]$')
+
+    # Set shared x-limits - use the wider of M1_XLIM and M2_XLIM
+    if M1_XLIM is not None and M2_XLIM is not None:
+        xlim_min = min(M1_XLIM[0], M2_XLIM[0])
+        xlim_max = max(M1_XLIM[1], M2_XLIM[1])
+        ax[1].set_xlim(xlim_min, xlim_max)
+    elif M1_XLIM is not None:
+        ax[1].set_xlim(M1_XLIM)
+    elif M2_XLIM is not None:
         ax[1].set_xlim(M2_XLIM)
-    ax[1].set_xlabel(r'$m_2 \, [M_\odot]$')
 
-    # Add same legend
+    # Add same legend (all_handles already defined from wide plot creation)
     fig.legend(handles=all_handles,
-              loc='upper center', bbox_to_anchor=(0.5, 1.0), ncols=6,
-              frameon=True, fontsize=14, columnspacing=1.0)
+              loc='upper center', bbox_to_anchor=(0.5, 1.05), ncols=4,
+              frameon=True, fontsize=14, columnspacing=1.5)
 
-    plt.subplots_adjust(left=None, bottom=None, right=None, top=None, wspace=0.05, hspace=None)
+    plt.subplots_adjust(left=None, bottom=None, right=None, top=0.95, wspace=None, hspace=0.05)
     plt.savefig(OUTPUT_PATH, dpi=DPI, bbox_inches='tight')
     plt.close()
 
