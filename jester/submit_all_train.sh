@@ -5,7 +5,8 @@ DATA_DIR="../posteriors/data/"
 
 # List of input files (just paste your filenames here)
 FILES=(
-  prod_BW_XP_s005_l5000_double_gaussian.npz
+  new_et_ce_run_alignedspin.npz
+  new_et_run_alignedspin.npz
 )
 
 # Loop over files and submit job for each
