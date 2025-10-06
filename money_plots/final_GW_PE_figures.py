@@ -654,8 +654,8 @@ def main():
         os.path.join(base_path, "new_et_ce_run_alignedspin.npz")
     ]
     labels_4 = [
-        "ET (new)",
-        "ET+CE (new)"
+        "ET",
+        "ET+CE"
     ]
     
     # Put the new injection parameters here
