@@ -40,9 +40,16 @@ KDE_NBINS = 1_000             # Number of points for KDE evaluation (higher = sm
 KDE_SMOOTH = 2.0              # Smoothing factor (None = auto, or set to float like 1.5 for more smoothing)
 # KDE_SMOOTH = None
 
+# Prior domain configuration
+PRIOR_DOMAIN_WIDE = (0.10, 6.0)  # Wide domain for KDE evaluation
+
 # Output configuration
 OUTPUT_PATH = './figures/populations/populations_component_masses_comparison.pdf'
+OUTPUT_PATH_WIDE = './figures/populations/populations_component_masses_comparison_wide.pdf'
 DPI = 600
+
+FIGSIZE = (6, 6)
+AXIS_LABEL_FONTSIZE = 18
 
 # =============================================================================
 
@@ -96,6 +103,12 @@ def create_prior_samps(priorpts_m1: np.array, priorpts_m2: np.array, nsamp: int)
 
 def compute_js(p1, p2):
     """Compute Jensen-Shannon divergence between two distributions."""
+    # Add small epsilon to avoid numerical issues with zeros
+    epsilon = 1e-10
+    p1 = p1 + epsilon
+    p2 = p2 + epsilon
+
+    # Normalize after adding epsilon
     p1 = p1 / p1.sum()
     p2 = p2 / p2.sum()
 
@@ -313,7 +326,7 @@ def load_posterior_data(data_dir='../posteriors/data/', run_names=None, nsamp=OU
     return posterior_data
 
 
-def compute_kdes_batch(data_dict, Nbins=KDE_NBINS, smooth=KDE_SMOOTH, prior_domains=(1.0, 4.0)):
+def compute_kdes_batch(data_dict, Nbins=KDE_NBINS, smooth=KDE_SMOOTH, prior_domains=(1.0, 4.0), use_method_selection=False):
     """
     Compute KDEs for multiple datasets.
 
@@ -328,6 +341,9 @@ def compute_kdes_batch(data_dict, Nbins=KDE_NBINS, smooth=KDE_SMOOTH, prior_doma
     prior_domains : dict or None
         Dictionary mapping names to (xMin, xMax) tuples for theoretical prior domains
         If None, uses min/max of data
+    use_method_selection : bool
+        If True, use Transform for uniform/default and Reflection for gaussian/double_gaussian
+        If False, use Reflection for all (default)
 
     Returns
     -------
@@ -340,9 +356,16 @@ def compute_kdes_batch(data_dict, Nbins=KDE_NBINS, smooth=KDE_SMOOTH, prior_doma
         # Use theoretical domain if provided, otherwise use data range
         xMin, xMax = prior_domains
 
+        # Determine KDE method based on distribution type (only if use_method_selection=True)
+        # Transform for uniform and default, Reflection for gaussian and double_gaussian
+        if use_method_selection and name in ['uniform', 'default']:
+            kde_method = 'Transform'
+        else:
+            kde_method = 'Reflection'
+
         # Store the raw KDE object for later evaluation
         # kernel = scipy.stats.gaussian_kde(data) # NOTE: PESummary version is preferred!
-        kernel = bounded_1d_kde(data, xlow=xMin, xhigh=xMax, method="Reflection")
+        kernel = bounded_1d_kde(data, xlow=xMin, xhigh=xMax, method=kde_method)
         if smooth is not None:
             kernel.set_bandwidth(kernel.factor * smooth)
 
@@ -432,16 +455,16 @@ def main():
     # =============================================================================
     print("\nComputing KDEs for prior samples...")
 
-    # Compute KDEs for priors with theoretical domains
+    # Compute KDEs for priors with wide theoretical domain
     m1_prior_data = {name: data['m1'] for name, data in prior_samples.items()}
     m2_prior_data = {name: data['m2'] for name, data in prior_samples.items()}
 
-    m1_prior_kdes = compute_kdes_batch(m1_prior_data)
-    m2_prior_kdes = compute_kdes_batch(m2_prior_data)
+    m1_prior_kdes = compute_kdes_batch(m1_prior_data, prior_domains=PRIOR_DOMAIN_WIDE, use_method_selection=True)
+    m2_prior_kdes = compute_kdes_batch(m2_prior_data, prior_domains=PRIOR_DOMAIN_WIDE, use_method_selection=True)
 
     print("Computing KDEs for posterior samples...")
 
-    # Compute KDEs for posteriors
+    # Compute KDEs for posteriors with wide domain
     m1_posterior_data = {}
     m2_posterior_data = {}
     for prior_name, post_name in posterior_mapping.items():
@@ -449,15 +472,15 @@ def main():
             m1_posterior_data[prior_name] = posterior_data[post_name]['m1']
             m2_posterior_data[prior_name] = posterior_data[post_name]['m2']
 
-    m1_posterior_kdes = compute_kdes_batch(m1_posterior_data)
-    m2_posterior_kdes = compute_kdes_batch(m2_posterior_data)
+    m1_posterior_kdes = compute_kdes_batch(m1_posterior_data, prior_domains=PRIOR_DOMAIN_WIDE)
+    m2_posterior_kdes = compute_kdes_batch(m2_posterior_data, prior_domains=PRIOR_DOMAIN_WIDE)
 
     # =============================================================================
-    # Create plots
+    # Create plots - Wide domain version
     # =============================================================================
-    print("\nCreating plots...")
+    print("\nCreating wide domain plot...")
 
-    fig, ax = plt.subplots(1, 2, figsize=(12, 4.5), sharey=True)
+    fig, ax = plt.subplots(2, 1, figsize=FIGSIZE, sharex=True)
 
     # Plot configuration - same colors for prior/posterior pairs
     colors = {
@@ -496,10 +519,7 @@ def main():
                               color=colors[name], alpha=0.3)
 
     ax[0].set_ylim(bottom=0)
-    if M1_XLIM is not None:
-        ax[0].set_xlim(M1_XLIM)
-    ax[0].set_xlabel(r'$m_1 \, [M_\odot]$')
-    ax[0].set_ylabel('Density')
+    ax[0].set_ylabel(r'$m_1$ prob. density', fontsize=AXIS_LABEL_FONTSIZE)
 
     # Plot m2 priors
     for name in ['double_gaussian', 'gaussian', 'uniform', 'default']:
@@ -515,36 +535,100 @@ def main():
             ax[1].fill_between(kde_data['x'], kde_data['kde'],
                               color=colors[name], alpha=0.3)
 
-    # ax[1].grid(alpha=0.5, linestyle='--')
     ax[1].set_ylim(bottom=0)
-    if M2_XLIM is not None:
-        ax[1].set_xlim(M2_XLIM)
-    ax[1].set_xlabel(r'$m_2 \, [M_\odot]$')
+    ax[1].set_ylabel(r'$m_2$ prob. density', fontsize=AXIS_LABEL_FONTSIZE)
+    ax[1].set_xlabel(r'Mass $[M_\odot]$', fontsize=AXIS_LABEL_FONTSIZE)
 
-    # Create single unified legend
-    # Line style indicators (in black)
+    # Set shared x-limits to wide domain
+    ax[1].set_xlim(PRIOR_DOMAIN_WIDE)
+
+    # Two-row legend: first row for line styles, second row for colors
+    # First row: line style indicators
     style_prior = Line2D([0], [0], color='black', linestyle='--', linewidth=2, label='Prior')
     style_posterior = Line2D([0], [0], color='black', linestyle='-', linewidth=2, label='Posterior')
 
-    # Color legend entries (for different prior types)
-    color_dg = Line2D([0], [0], color=colors['double_gaussian'], linewidth=2, label='Double Gaussian')
-    color_g = Line2D([0], [0], color=colors['gaussian'], linewidth=2, label='Gaussian')
-    color_u = Line2D([0], [0], color=colors['uniform'], linewidth=2, label='Uniform')
-    color_d = Line2D([0], [0], color=colors['default'], linewidth=2, label='Default')
+    # Second row: color legend entries
+    color_dg = Line2D([0], [0], color=colors['double_gaussian'], linewidth=3, label='Double Gaussian')
+    color_g = Line2D([0], [0], color=colors['gaussian'], linewidth=3, label='Gaussian')
+    color_u = Line2D([0], [0], color=colors['uniform'], linewidth=3, label='Uniform')
+    color_d = Line2D([0], [0], color=colors['default'], linewidth=3, label='Default')
 
-    # Combine all handles
+    # Create the handles
     all_handles = [style_prior, style_posterior, color_dg, color_g, color_u, color_d]
 
-    # Add single legend spanning both plots
+    # Make the legend
     fig.legend(handles=all_handles,
-              loc='upper center', bbox_to_anchor=(0.5, 1.0), ncols=6,
-              frameon=True, fontsize=14, columnspacing=1.0)
+              loc='upper center', bbox_to_anchor=(0.5, 1.10), ncols=3,
+              frameon=True, fontsize=14, columnspacing=1.25)
 
-    plt.subplots_adjust(left=None, bottom=None, right=None, top=None, wspace=0.05, hspace=None)
+    plt.subplots_adjust(left=None, bottom=None, right=None, top=0.95, wspace=None, hspace=0.05)
+    plt.savefig(OUTPUT_PATH_WIDE, dpi=DPI, bbox_inches='tight')
+    plt.close()
+
+    print(f"  Wide domain plot saved to: {OUTPUT_PATH_WIDE}")
+
+    # =============================================================================
+    # Create plots - Zoomed version (using same KDEs, just different xlim)
+    # =============================================================================
+    print("\nCreating zoomed plot...")
+
+    fig, ax = plt.subplots(2, 1, figsize=FIGSIZE, sharex=True)
+
+    # Plot m1 priors
+    for name in ['double_gaussian', 'gaussian', 'uniform', 'default']:
+        if name in m1_prior_kdes:
+            kde_data = m1_prior_kdes[name]
+            ax[0].plot(kde_data['x'], kde_data['kde'], **prior_config[name])
+
+    # Plot m1 posteriors
+    for name in ['double_gaussian', 'gaussian', 'uniform', 'default']:
+        if name in m1_posterior_kdes:
+            kde_data = m1_posterior_kdes[name]
+            ax[0].plot(kde_data['x'], kde_data['kde'], **posterior_config[name])
+            ax[0].fill_between(kde_data['x'], kde_data['kde'],
+                              color=colors[name], alpha=0.3)
+
+    ax[0].set_ylim(bottom=0)
+    ax[0].set_ylabel(r'$m_1$ prob. density', fontsize=AXIS_LABEL_FONTSIZE)
+
+    # Plot m2 priors
+    for name in ['double_gaussian', 'gaussian', 'uniform', 'default']:
+        if name in m2_prior_kdes:
+            kde_data = m2_prior_kdes[name]
+            ax[1].plot(kde_data['x'], kde_data['kde'], **prior_config[name])
+
+    # Plot m2 posteriors
+    for name in ['double_gaussian', 'gaussian', 'uniform', 'default']:
+        if name in m2_posterior_kdes:
+            kde_data = m2_posterior_kdes[name]
+            ax[1].plot(kde_data['x'], kde_data['kde'], **posterior_config[name])
+            ax[1].fill_between(kde_data['x'], kde_data['kde'],
+                              color=colors[name], alpha=0.3)
+
+    ax[1].set_ylim(bottom=0)
+    ax[1].set_ylabel(r'$m_2$ prob. density', fontsize=AXIS_LABEL_FONTSIZE)
+    ax[1].set_xlabel(r'Mass $[M_\odot]$', fontsize=AXIS_LABEL_FONTSIZE)
+
+    # Set shared x-limits - use the wider of M1_XLIM and M2_XLIM
+    if M1_XLIM is not None and M2_XLIM is not None:
+        xlim_min = min(M1_XLIM[0], M2_XLIM[0])
+        xlim_max = max(M1_XLIM[1], M2_XLIM[1])
+        ax[1].set_xlim(xlim_min, xlim_max)
+    elif M1_XLIM is not None:
+        ax[1].set_xlim(M1_XLIM)
+    elif M2_XLIM is not None:
+        ax[1].set_xlim(M2_XLIM)
+
+    # Add same legend (all_handles already defined from wide plot creation)
+    fig.legend(handles=all_handles,
+              loc='upper center', bbox_to_anchor=(0.5, 1.08), ncols=3,
+              frameon=True, fontsize=14, columnspacing=1.25)
+
+    plt.subplots_adjust(left=None, bottom=None, right=None, top=0.95, wspace=None, hspace=0.05)
     plt.savefig(OUTPUT_PATH, dpi=DPI, bbox_inches='tight')
     plt.close()
 
-    print(f"  Plot saved to: {OUTPUT_PATH}")
+    print(f"  Zoomed plot saved to: {OUTPUT_PATH}")
 
     # =============================================================================
     # Compute and print Jensen-Shannon divergences

@@ -11,6 +11,11 @@ import matplotlib.pyplot as plt
 import matplotlib.patches as mpatches
 import corner
 
+from bilby.gw.conversion import component_masses_to_chirp_mass, component_masses_to_mass_ratio
+from bilby.gw.conversion import lambda_1_lambda_2_to_lambda_tilde, lambda_1_lambda_2_to_delta_lambda_tilde
+from bilby.gw.conversion import convert_to_lal_binary_neutron_star_parameters
+from bilby.gw.conversion import generate_spin_parameters, generate_component_spins
+
 # If running on Mac, so we can use TeX (not on Jarvis), change some rc params
 if "Woute029" in os.getcwd():
     print(f"Updating plotting parameters for TeX")
@@ -639,6 +644,187 @@ def main():
         print(" Comparison 3 (ET vs ET+CE): comparison_ET_vs_ET_CE.pdf")
     else:
         print(" Comparison 3 (ET vs ET+CE): FAILED")
+        
+    ###
+    ### FINALLY, the new 3G runs
+    ###
+        
+    filepaths_4 = [
+        os.path.join(base_path, "new_et_run_alignedspin.npz"),
+        os.path.join(base_path, "new_et_ce_run_alignedspin.npz")
+    ]
+    labels_4 = [
+        "ET",
+        "ET+CE"
+    ]
+    
+    # Put the new injection parameters here
+    injection_parameters = {"mass_1": 1.5879187040159342,
+                            "mass_2": 1.4188967691574992,
+                            "geocent_time": 1383609314.0505133,
+                            "a_1": 0.0305182034770227,
+                            "a_2": 0.028570123024914268,
+                            "phi_12": 0.0,
+                            "phi_jl": 0.0,
+                            "psi": 1.5591681494817768,
+                            "theta_jn": 2.5287713998365304,
+                            "ra": 0.1778415509774547,
+                            "dec": -0.602827165369817,
+                            "tilt_1": 0.0,
+                            "tilt_2": 0.0,
+                            "phase": 3.139490467696903,
+                            "luminosity_distance": 168.3222418883087,
+                            'lambda_1': 271.02342967819004,
+                            'lambda_2': 553.1640516248044
+                            }
+    
+    # Add chirp mass, mass ratio and lambda_tilde
+    chirp_mass = component_masses_to_chirp_mass(injection_parameters['mass_1'], injection_parameters['mass_2'])
+    mass_ratio = component_masses_to_mass_ratio(injection_parameters['mass_1'], injection_parameters['mass_2'])
+    lambda_tilde = lambda_1_lambda_2_to_lambda_tilde(injection_parameters['lambda_1'], injection_parameters['lambda_2'],
+                                                  injection_parameters['mass_1'], injection_parameters['mass_2'])
+    injection_parameters['chirp_mass'] = chirp_mass
+    injection_parameters['mass_ratio'] = mass_ratio
+    injection_parameters['lambda_tilde'] = lambda_tilde
+
+    # This is also necessary for the spin calculation
+    injection_parameters["reference_frequency"] = 5.0
+    injection_parameters = generate_spin_parameters(injection_parameters)
+    
+    truths_4 = [injection_parameters[param] for param in parameters_3]
+    ranges_4 = {
+        "chirp_mass": (1.3063+0.1e-5, 1.3063+2.2e-5),
+        "mass_ratio": (0.78, 1.0),
+        "chi_eff": (0.027, 0.035),
+        "lambda_tilde": (290, 500)
+    }
+    
+    success_4 = create_comparison_cornerplot(
+        filepaths=filepaths_4,
+        parameters=parameters_3,
+        labels=labels_4,
+        colors=colors_3,
+        ranges=ranges_4,
+        zorders=zorders_3,
+        save_name="./figures/GW_PE/comparison_new_ET_vs_ET_CE.pdf",
+        overwrite=True,
+        dummy_normalization_indices=dummy_indices_3,
+        truths=truths_4,
+        reverse_legend=False
+    )
+
+    if success_4:
+        print(" Successfully created comparison 4: comparison_new_ET_vs_ET_CE.pdf")
+    else:
+        print(" Failed to create comparison 4")
+
+    # ====== COMPARISON 5: Low spin prior with default vs Gaussian chirp mass prior ======
+    print("\n" + "=" * 60)
+    print("COMPARISON 5: Low spin prior with default vs Gaussian chirp mass prior")
+    print("=" * 60)
+
+    # Parameters to include in comparison 5
+    parameters_5 = [
+        "chirp_mass",
+        "mass_ratio",
+        "chi_eff",
+        "lambda_1",
+        "lambda_2",
+        "lambda_tilde"
+    ]
+
+    filepaths_5 = [
+        os.path.join(base_path, "prod_BW_XP_s005_l5000_default.npz"),
+        os.path.join(base_path, "prod_BW_XP_s005_l5000_gaussian.npz"),
+    ]
+
+    labels_5 = [
+        r"Default",
+        r"Gaussian",
+    ]
+
+    colors_5 = [ORANGE, BLUE]
+
+    zorders_5 = [0, 1]  # Gaussian on top
+
+    # Use default ranges
+    ranges_5 = {param: DEFAULT_RANGES[param] for param in parameters_5}
+    ranges_5["lambda_1"] = (0, 5000)
+    ranges_5["lambda_2"] = (0, 5000)
+
+    # Use Gaussian dataset (index 1) for normalization on all parameters
+    dummy_indices_5 = [1] * len(parameters_5)
+
+    success_5 = create_comparison_cornerplot(
+        filepaths=filepaths_5,
+        parameters=parameters_5,
+        labels=labels_5,
+        colors=colors_5,
+        ranges=ranges_5,
+        zorders=zorders_5,
+        save_name="./figures/GW_PE/comparison_s005_l5000_default_vs_gaussian.pdf",
+        overwrite=True,
+        dummy_normalization_indices=dummy_indices_5
+    )
+
+    if success_5:
+        print("✓ Successfully created comparison 5: comparison_s005_l5000_default_vs_gaussian.pdf")
+    else:
+        print("✗ Failed to create comparison 5")
+
+    # ====== COMPARISON 6: Low spin prior with default vs double_gaussian chirp mass prior ======
+    print("\n" + "=" * 60)
+    print("COMPARISON 6: Low spin prior with default vs double_gaussian chirp mass prior")
+    print("=" * 60)
+
+    # Parameters to include in comparison 6
+    parameters_6 = [
+        "chirp_mass",
+        "mass_ratio",
+        "chi_eff",
+        "lambda_1",
+        "lambda_2",
+        "lambda_tilde"
+    ]
+
+    filepaths_6 = [
+        os.path.join(base_path, "prod_BW_XP_s005_l5000_default.npz"),
+        os.path.join(base_path, "prod_BW_XP_s005_l5000_double_gaussian.npz"),
+    ]
+
+    labels_6 = [
+        r"Default",
+        r"Double Gaussian",
+    ]
+
+    colors_6 = [ORANGE, GREEN]
+
+    zorders_6 = [0, 1]  # Double Gaussian on top
+
+    # Use default ranges
+    ranges_6 = {param: DEFAULT_RANGES[param] for param in parameters_6}
+    ranges_6["lambda_1"] = (0, 5000)
+    ranges_6["lambda_2"] = (0, 5000)
+
+    # Use Double Gaussian dataset (index 1) for normalization on all parameters
+    dummy_indices_6 = [1] * len(parameters_6)
+
+    success_6 = create_comparison_cornerplot(
+        filepaths=filepaths_6,
+        parameters=parameters_6,
+        labels=labels_6,
+        colors=colors_6,
+        ranges=ranges_6,
+        zorders=zorders_6,
+        save_name="./figures/GW_PE/comparison_s005_l5000_default_vs_double_gaussian.pdf",
+        overwrite=True,
+        dummy_normalization_indices=dummy_indices_6
+    )
+
+    if success_6:
+        print("✓ Successfully created comparison 6: comparison_s005_l5000_default_vs_double_gaussian.pdf")
+    else:
+        print("✗ Failed to create comparison 6")
 
 
 if __name__ == "__main__":
