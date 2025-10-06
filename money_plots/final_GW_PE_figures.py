@@ -718,6 +718,114 @@ def main():
     else:
         print(" Failed to create comparison 4")
 
+    # ====== COMPARISON 5: Low spin prior with default vs Gaussian chirp mass prior ======
+    print("\n" + "=" * 60)
+    print("COMPARISON 5: Low spin prior with default vs Gaussian chirp mass prior")
+    print("=" * 60)
+
+    # Parameters to include in comparison 5
+    parameters_5 = [
+        "chirp_mass",
+        "mass_ratio",
+        "chi_eff",
+        "lambda_1",
+        "lambda_2",
+        "lambda_tilde"
+    ]
+
+    filepaths_5 = [
+        os.path.join(base_path, "prod_BW_XP_s005_l5000_default.npz"),
+        os.path.join(base_path, "prod_BW_XP_s005_l5000_gaussian.npz"),
+    ]
+
+    labels_5 = [
+        r"Default",
+        r"Gaussian",
+    ]
+
+    colors_5 = [ORANGE, BLUE]
+
+    zorders_5 = [0, 1]  # Gaussian on top
+
+    # Use default ranges
+    ranges_5 = {param: DEFAULT_RANGES[param] for param in parameters_5}
+    ranges_5["lambda_1"] = (0, 5000)
+    ranges_5["lambda_2"] = (0, 5000)
+
+    # Use Gaussian dataset (index 1) for normalization on all parameters
+    dummy_indices_5 = [1] * len(parameters_5)
+
+    success_5 = create_comparison_cornerplot(
+        filepaths=filepaths_5,
+        parameters=parameters_5,
+        labels=labels_5,
+        colors=colors_5,
+        ranges=ranges_5,
+        zorders=zorders_5,
+        save_name="./figures/GW_PE/comparison_s005_l5000_default_vs_gaussian.pdf",
+        overwrite=True,
+        dummy_normalization_indices=dummy_indices_5
+    )
+
+    if success_5:
+        print("✓ Successfully created comparison 5: comparison_s005_l5000_default_vs_gaussian.pdf")
+    else:
+        print("✗ Failed to create comparison 5")
+
+    # ====== COMPARISON 6: Low spin prior with default vs double_gaussian chirp mass prior ======
+    print("\n" + "=" * 60)
+    print("COMPARISON 6: Low spin prior with default vs double_gaussian chirp mass prior")
+    print("=" * 60)
+
+    # Parameters to include in comparison 6
+    parameters_6 = [
+        "chirp_mass",
+        "mass_ratio",
+        "chi_eff",
+        "lambda_1",
+        "lambda_2",
+        "lambda_tilde"
+    ]
+
+    filepaths_6 = [
+        os.path.join(base_path, "prod_BW_XP_s005_l5000_default.npz"),
+        os.path.join(base_path, "prod_BW_XP_s005_l5000_double_gaussian.npz"),
+    ]
+
+    labels_6 = [
+        r"Default",
+        r"Double Gaussian",
+    ]
+
+    colors_6 = [ORANGE, GREEN]
+
+    zorders_6 = [0, 1]  # Double Gaussian on top
+
+    # Use default ranges
+    ranges_6 = {param: DEFAULT_RANGES[param] for param in parameters_6}
+    ranges_6["lambda_1"] = (0, 5000)
+    ranges_6["lambda_2"] = (0, 5000)
+
+    # Use Double Gaussian dataset (index 1) for normalization on all parameters
+    dummy_indices_6 = [1] * len(parameters_6)
+
+    success_6 = create_comparison_cornerplot(
+        filepaths=filepaths_6,
+        parameters=parameters_6,
+        labels=labels_6,
+        colors=colors_6,
+        ranges=ranges_6,
+        zorders=zorders_6,
+        save_name="./figures/GW_PE/comparison_s005_l5000_default_vs_double_gaussian.pdf",
+        overwrite=True,
+        dummy_normalization_indices=dummy_indices_6
+    )
+
+    if success_6:
+        print("✓ Successfully created comparison 6: comparison_s005_l5000_default_vs_double_gaussian.pdf")
+    else:
+        print("✗ Failed to create comparison 6")
+
 
 if __name__ == "__main__":
     main()
