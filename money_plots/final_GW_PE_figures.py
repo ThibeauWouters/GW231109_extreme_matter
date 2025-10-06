@@ -11,6 +11,11 @@ import matplotlib.pyplot as plt
 import matplotlib.patches as mpatches
 import corner
 
+from bilby.gw.conversion import component_masses_to_chirp_mass, component_masses_to_mass_ratio
+from bilby.gw.conversion import lambda_1_lambda_2_to_lambda_tilde, lambda_1_lambda_2_to_delta_lambda_tilde
+from bilby.gw.conversion import convert_to_lal_binary_neutron_star_parameters
+from bilby.gw.conversion import generate_spin_parameters, generate_component_spins
+
 # If running on Mac, so we can use TeX (not on Jarvis), change some rc params
 if "Woute029" in os.getcwd():
     print(f"Updating plotting parameters for TeX")
@@ -639,6 +644,75 @@ def main():
         print(" Comparison 3 (ET vs ET+CE): comparison_ET_vs_ET_CE.pdf")
     else:
         print(" Comparison 3 (ET vs ET+CE): FAILED")
+        
+    ###
+    ### FINALLY, the new 3G runs
+    ###
+        
+    filepaths_4 = [
+        os.path.join(base_path, "new_et_run_alignedspin.npz"),
+        os.path.join(base_path, "new_et_ce_run_alignedspin.npz")
+    ]
+    labels_4 = [
+        "ET (new)",
+        "ET+CE (new)"
+    ]
+    
+    # Put the new injection parameters here
+    injection_parameters = {"mass_1": 1.5879187040159342,
+                            "mass_2": 1.4188967691574992,
+                            "geocent_time": 1383609314.0505133,
+                            "a_1": 0.0305182034770227,
+                            "a_2": 0.028570123024914268,
+                            "phi_12": 0.0,
+                            "phi_jl": 0.0,
+                            "psi": 1.5591681494817768,
+                            "theta_jn": 2.5287713998365304,
+                            "ra": 0.1778415509774547,
+                            "dec": -0.602827165369817,
+                            "tilt_1": 0.0,
+                            "tilt_2": 0.0,
+                            "phase": 3.139490467696903,
+                            "luminosity_distance": 168.3222418883087,
+                            'lambda_1': 271.02342967819004,
+                            'lambda_2': 553.1640516248044
+                            }
+    
+    # Add chirp mass, mass ratio and lambda_tilde
+    chirp_mass = component_masses_to_chirp_mass(injection_parameters['mass_1'], injection_parameters['mass_2'])
+    mass_ratio = component_masses_to_mass_ratio(injection_parameters['mass_1'], injection_parameters['mass_2'])
+    lambda_tilde = lambda_1_lambda_2_to_lambda_tilde(injection_parameters['lambda_1'], injection_parameters['lambda_2'],
+                                                  injection_parameters['mass_1'], injection_parameters['mass_2'])
+    injection_parameters['chirp_mass'] = chirp_mass
+    injection_parameters['mass_ratio'] = mass_ratio
+    injection_parameters['lambda_tilde'] = lambda_tilde
+
+    # This is also necessary for the spin calculation
+    injection_parameters["reference_frequency"] = 5.0
+    injection_parameters = generate_spin_parameters(injection_parameters)
+    
+    truths_4 = [injection_parameters[param] for param in parameters_3]
+    
+    # TODO: ranges
+    
+    success_4 = create_comparison_cornerplot(
+        filepaths=filepaths_4,
+        parameters=parameters_3,
+        labels=labels_4,
+        colors=colors_3,
+        ranges=None,
+        zorders=zorders_3,
+        save_name="./figures/GW_PE/comparison_new_ET_vs_ET_CE.pdf",
+        overwrite=True,
+        dummy_normalization_indices=dummy_indices_3,
+        truths=truths_4,
+        reverse_legend=False
+    )
+
+    if success_4:
+        print(" Successfully created comparison 4: comparison_new_ET_vs_ET_CE.pdf")
+    else:
+        print(" Failed to create comparison 4")
 
 
 if __name__ == "__main__":
