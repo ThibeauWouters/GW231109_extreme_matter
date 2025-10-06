@@ -692,15 +692,19 @@ def main():
     injection_parameters = generate_spin_parameters(injection_parameters)
     
     truths_4 = [injection_parameters[param] for param in parameters_3]
-    
-    # TODO: ranges
+    ranges_4 = {
+        "chirp_mass": (1.3063+0.1e-5, 1.3063+2.2e-5),
+        "mass_ratio": (0.78, 1.0),
+        "chi_eff": (0.027, 0.035),
+        "lambda_tilde": (290, 500)
+    }
     
     success_4 = create_comparison_cornerplot(
         filepaths=filepaths_4,
         parameters=parameters_3,
         labels=labels_4,
         colors=colors_3,
-        ranges=None,
+        ranges=ranges_4,
         zorders=zorders_3,
         save_name="./figures/GW_PE/comparison_new_ET_vs_ET_CE.pdf",
         overwrite=True,
