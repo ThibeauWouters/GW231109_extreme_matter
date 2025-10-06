@@ -32,6 +32,10 @@ TOP_LEVEL_DIRS += ["/work/puecher/S231109/third_gen_runs/new_et_run_alignedspin/
                    "/work/puecher/S231109/third_gen_runs/new_et_ce_run_alignedspin/",
                    ]
 
+TOP_LEVEL_DIRS += ["/work/puecher/S231109/third_gen_runs/maxL_eos_et_run_alignedspin/",
+                   "/work/puecher/S231109/third_gen_runs/maxL_eos_et_ce_run_alignedspin/",
+                   ]
+
 # # Add Anna's EOS sampling runs as well
 # TOP_LEVEL_DIRS += ["/work/puecher/S231109/eos_sampling/prod_BW_XP_s005_leos_default/",
 #                    "/work/puecher/S231109/eos_sampling/prod_BW_XP_s040_leos_default/",
