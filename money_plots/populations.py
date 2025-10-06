@@ -40,8 +40,12 @@ KDE_NBINS = 1_000             # Number of points for KDE evaluation (higher = sm
 KDE_SMOOTH = 2.0              # Smoothing factor (None = auto, or set to float like 1.5 for more smoothing)
 # KDE_SMOOTH = None
 
+# Prior domain configuration
+PRIOR_DOMAIN_WIDE = (0.10, 6.0)  # Wide domain for KDE evaluation
+
 # Output configuration
 OUTPUT_PATH = './figures/populations/populations_component_masses_comparison.pdf'
+OUTPUT_PATH_WIDE = './figures/populations/populations_component_masses_comparison_wide.pdf'
 DPI = 600
 
 # =============================================================================
@@ -96,6 +100,12 @@ def create_prior_samps(priorpts_m1: np.array, priorpts_m2: np.array, nsamp: int)
 
 def compute_js(p1, p2):
     """Compute Jensen-Shannon divergence between two distributions."""
+    # Add small epsilon to avoid numerical issues with zeros
+    epsilon = 1e-10
+    p1 = p1 + epsilon
+    p2 = p2 + epsilon
+
+    # Normalize after adding epsilon
     p1 = p1 / p1.sum()
     p2 = p2 / p2.sum()
 
@@ -432,16 +442,16 @@ def main():
     # =============================================================================
     print("\nComputing KDEs for prior samples...")
 
-    # Compute KDEs for priors with theoretical domains
+    # Compute KDEs for priors with wide theoretical domain
     m1_prior_data = {name: data['m1'] for name, data in prior_samples.items()}
     m2_prior_data = {name: data['m2'] for name, data in prior_samples.items()}
 
-    m1_prior_kdes = compute_kdes_batch(m1_prior_data)
-    m2_prior_kdes = compute_kdes_batch(m2_prior_data)
+    m1_prior_kdes = compute_kdes_batch(m1_prior_data, prior_domains=PRIOR_DOMAIN_WIDE)
+    m2_prior_kdes = compute_kdes_batch(m2_prior_data, prior_domains=PRIOR_DOMAIN_WIDE)
 
     print("Computing KDEs for posterior samples...")
 
-    # Compute KDEs for posteriors
+    # Compute KDEs for posteriors with wide domain
     m1_posterior_data = {}
     m2_posterior_data = {}
     for prior_name, post_name in posterior_mapping.items():
@@ -449,13 +459,13 @@ def main():
             m1_posterior_data[prior_name] = posterior_data[post_name]['m1']
             m2_posterior_data[prior_name] = posterior_data[post_name]['m2']
 
-    m1_posterior_kdes = compute_kdes_batch(m1_posterior_data)
-    m2_posterior_kdes = compute_kdes_batch(m2_posterior_data)
+    m1_posterior_kdes = compute_kdes_batch(m1_posterior_data, prior_domains=PRIOR_DOMAIN_WIDE)
+    m2_posterior_kdes = compute_kdes_batch(m2_posterior_data, prior_domains=PRIOR_DOMAIN_WIDE)
 
     # =============================================================================
-    # Create plots
+    # Create plots - Wide domain version
     # =============================================================================
-    print("\nCreating plots...")
+    print("\nCreating wide domain plot...")
 
     fig, ax = plt.subplots(1, 2, figsize=(12, 4.5), sharey=True)
 
@@ -496,8 +506,8 @@ def main():
                               color=colors[name], alpha=0.3)
 
     ax[0].set_ylim(bottom=0)
-    if M1_XLIM is not None:
-        ax[0].set_xlim(M1_XLIM)
+    # Use wide domain for x-axis limits
+    ax[0].set_xlim(PRIOR_DOMAIN_WIDE)
     ax[0].set_xlabel(r'$m_1 \, [M_\odot]$')
     ax[0].set_ylabel('Density')
 
@@ -517,8 +527,8 @@ def main():
 
     # ax[1].grid(alpha=0.5, linestyle='--')
     ax[1].set_ylim(bottom=0)
-    if M2_XLIM is not None:
-        ax[1].set_xlim(M2_XLIM)
+    # Use wide domain for x-axis limits
+    ax[1].set_xlim(PRIOR_DOMAIN_WIDE)
     ax[1].set_xlabel(r'$m_2 \, [M_\odot]$')
 
     # Create single unified legend
@@ -541,10 +551,69 @@ def main():
               frameon=True, fontsize=14, columnspacing=1.0)
 
     plt.subplots_adjust(left=None, bottom=None, right=None, top=None, wspace=0.05, hspace=None)
+    plt.savefig(OUTPUT_PATH_WIDE, dpi=DPI, bbox_inches='tight')
+    plt.close()
+
+    print(f"  Wide domain plot saved to: {OUTPUT_PATH_WIDE}")
+
+    # =============================================================================
+    # Create plots - Zoomed version (using same KDEs, just different xlim)
+    # =============================================================================
+    print("\nCreating zoomed plot...")
+
+    fig, ax = plt.subplots(1, 2, figsize=(12, 4.5), sharey=True)
+
+    # Plot m1 priors
+    for name in ['double_gaussian', 'gaussian', 'uniform', 'default']:
+        if name in m1_prior_kdes:
+            kde_data = m1_prior_kdes[name]
+            ax[0].plot(kde_data['x'], kde_data['kde'], **prior_config[name])
+
+    # Plot m1 posteriors
+    for name in ['double_gaussian', 'gaussian', 'uniform', 'default']:
+        if name in m1_posterior_kdes:
+            kde_data = m1_posterior_kdes[name]
+            ax[0].plot(kde_data['x'], kde_data['kde'], **posterior_config[name])
+            ax[0].fill_between(kde_data['x'], kde_data['kde'],
+                              color=colors[name], alpha=0.3)
+
+    ax[0].set_ylim(bottom=0)
+    # Use zoomed xlim for this plot
+    if M1_XLIM is not None:
+        ax[0].set_xlim(M1_XLIM)
+    ax[0].set_xlabel(r'$m_1 \, [M_\odot]$')
+    ax[0].set_ylabel('Density')
+
+    # Plot m2 priors
+    for name in ['double_gaussian', 'gaussian', 'uniform', 'default']:
+        if name in m2_prior_kdes:
+            kde_data = m2_prior_kdes[name]
+            ax[1].plot(kde_data['x'], kde_data['kde'], **prior_config[name])
+
+    # Plot m2 posteriors
+    for name in ['double_gaussian', 'gaussian', 'uniform', 'default']:
+        if name in m2_posterior_kdes:
+            kde_data = m2_posterior_kdes[name]
+            ax[1].plot(kde_data['x'], kde_data['kde'], **posterior_config[name])
+            ax[1].fill_between(kde_data['x'], kde_data['kde'],
+                              color=colors[name], alpha=0.3)
+
+    ax[1].set_ylim(bottom=0)
+    # Use zoomed xlim for this plot
+    if M2_XLIM is not None:
+        ax[1].set_xlim(M2_XLIM)
+    ax[1].set_xlabel(r'$m_2 \, [M_\odot]$')
+
+    # Add same legend
+    fig.legend(handles=all_handles,
+              loc='upper center', bbox_to_anchor=(0.5, 1.0), ncols=6,
+              frameon=True, fontsize=14, columnspacing=1.0)
+
+    plt.subplots_adjust(left=None, bottom=None, right=None, top=None, wspace=0.05, hspace=None)
     plt.savefig(OUTPUT_PATH, dpi=DPI, bbox_inches='tight')
     plt.close()
 
-    print(f"  Plot saved to: {OUTPUT_PATH}")
+    print(f"  Zoomed plot saved to: {OUTPUT_PATH}")
 
     # =============================================================================
     # Compute and print Jensen-Shannon divergences
@@ -593,7 +662,7 @@ def main():
     # Generate LaTeX table
     # =============================================================================
     print("\nGenerating LaTeX table...")
-    generate_jsd_latex_table(m1_jsds, m2_jsds, output_file='./JSD_tabular.tex')
+    generate_jsd_latex_table(m1_jsds, m2_jsds, output_file='./JSD_tabular_wide.tex')
 
     print("\nDone!")
 
