@@ -7,7 +7,7 @@
 #SBATCH --gpus-per-node=1
 #SBATCH --cpus-per-gpu=1
 #SBATCH --mem-per-gpu=20G
-#SBATCH --output="./outdir_GW231109_ET_AS/log.out"
+#SBATCH --output="./outdir_GW231109_ET_new/log.out"
 #SBATCH --job-name="GW231109_inference"
 
 now=$(date)
@@ -23,9 +23,9 @@ nvidia-smi --query-gpu=name --format=csv,noheader
 
 # Run the script
 python inference.py \
-    --outdir ./outdir_GW231109_ET_AS/ \
-    --GW231109-NF-filepath ./NFs/et_run_alignedspin/model.eqx \
+    --outdir ./outdir_GW231109_ET_new/ \
+    --GW231109-NF-filepath ./NFs/new_et_run_alignedspin/model.eqx \
     --sample-GW231109 True \
     --sample-radio True \
 
-python postprocessing.py outdir_GW231109_ET_AS/
+python postprocessing.py outdir_GW231109_ET_new
