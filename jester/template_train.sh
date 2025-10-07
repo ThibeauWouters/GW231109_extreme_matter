@@ -40,7 +40,7 @@ python train_NF.py "$DATA_PATH" \
     --output-dir "$OUTDIR" \
     --learning-rate 0.0005 \
     --epochs 5000 \
-    --batch-size 128 \
+    --batch-size 64 \
     --nn-block-dim 16 \
     --nn-depth 6
 

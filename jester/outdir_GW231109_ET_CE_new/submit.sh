@@ -24,8 +24,10 @@ nvidia-smi --query-gpu=name --format=csv,noheader
 # Run the script
 python inference.py \
     --outdir ./outdir_GW231109_ET_CE_new/ \
-    --GW231109-NF-filepath ./NFs/new_et_ce_run_alignedspin/model.eqx \
+    --GW231109-NF-filepath ./NFs/maxL_eos_et_ce_run_alignedspin/model.eqx \
     --sample-GW231109 True \
     --sample-radio True \
+    --n-loop-production 50 \
+    --output-thinning 10 \
 
 python postprocessing.py outdir_GW231109_ET_CE_new
