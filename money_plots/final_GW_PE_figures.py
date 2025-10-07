@@ -15,6 +15,7 @@ from bilby.gw.conversion import component_masses_to_chirp_mass, component_masses
 from bilby.gw.conversion import lambda_1_lambda_2_to_lambda_tilde, lambda_1_lambda_2_to_delta_lambda_tilde
 from bilby.gw.conversion import convert_to_lal_binary_neutron_star_parameters
 from bilby.gw.conversion import generate_spin_parameters, generate_component_spins
+from bilby.gw.conversion import luminosity_distance_to_redshift
 
 # If running on Mac, so we can use TeX (not on Jarvis), change some rc params
 if "Woute029" in os.getcwd():
@@ -690,7 +691,15 @@ def main():
     # This is also necessary for the spin calculation
     injection_parameters["reference_frequency"] = 5.0
     injection_parameters = generate_spin_parameters(injection_parameters)
-    
+
+    # Compute source frame masses from detector frame masses
+    # First compute redshift from luminosity distance using bilby
+    z = luminosity_distance_to_redshift(injection_parameters['luminosity_distance'])
+
+    # Convert detector frame masses to source frame
+    injection_parameters['mass_1_source'] = injection_parameters['mass_1'] / (1 + z)
+    injection_parameters['mass_2_source'] = injection_parameters['mass_2'] / (1 + z)
+
     truths_4 = [injection_parameters[param] for param in parameters_3]
     ranges_4 = {
         "chirp_mass": (1.3063+0.1e-5, 1.3063+2.2e-5),
@@ -717,6 +726,53 @@ def main():
         print(" Successfully created comparison 4: comparison_new_ET_vs_ET_CE.pdf")
     else:
         print(" Failed to create comparison 4")
+
+    # ====== COMPARISON 4 DEBUG: ET vs ET+CE with component masses and Lambdas ======
+    print("\n" + "=" * 60)
+    print("COMPARISON 4 DEBUG: ET vs ET+CE with component masses and Lambdas")
+    print("=" * 60)
+
+    # Parameters to include in comparison 4 debug
+    parameters_4_debug = [
+        "mass_1_source",
+        "mass_2_source",
+        "lambda_1",
+        "lambda_2"
+    ]
+
+    # Use same filepaths and labels as comparison 4
+    filepaths_4_debug = filepaths_4
+    labels_4_debug = labels_4
+    colors_4_debug = colors_3
+    zorders_4_debug = zorders_3
+
+    # Use None for all ranges
+    ranges_4_debug = None
+
+    # Extract truths for the new parameters
+    truths_4_debug = [injection_parameters[param] for param in parameters_4_debug]
+
+    # Use ET+CE dataset (index 1) for normalization on all parameters
+    dummy_indices_4_debug = [1] * len(parameters_4_debug)
+
+    success_4_debug = create_comparison_cornerplot(
+        filepaths=filepaths_4_debug,
+        parameters=parameters_4_debug,
+        labels=labels_4_debug,
+        colors=colors_4_debug,
+        ranges=ranges_4_debug,
+        zorders=zorders_4_debug,
+        save_name="./figures/GW_PE/comparison_new_ET_vs_ET_CE_DEBUG.pdf",
+        overwrite=True,
+        dummy_normalization_indices=dummy_indices_4_debug,
+        truths=truths_4_debug,
+        reverse_legend=False
+    )
+
+    if success_4_debug:
+        print(" Successfully created comparison 4 debug: comparison_new_ET_vs_ET_CE_DEBUG.pdf")
+    else:
+        print(" Failed to create comparison 4 debug")
 
     # ====== COMPARISON 5: Low spin prior with default vs Gaussian chirp mass prior ======
     print("\n" + "=" * 60)

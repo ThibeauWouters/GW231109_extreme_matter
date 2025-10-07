@@ -24,7 +24,7 @@ def ensure_directory_exists(filepath: str):
     if directory and not os.path.exists(directory):
         os.makedirs(directory, exist_ok=True)
 
-def load_mtov_cdf(filepath: str = './data/GW170817_jester_constraints.npz') -> interp1d:
+def load_mtov_cdf(filepath: str = './data/radio_jester_constraints.npz') -> interp1d:
     """
     Load MTOV distribution from EOS constraints and create interpolated CDF.
 
