@@ -229,9 +229,29 @@ def main():
             
         # Save the marginalized posterior
         np.savez(output_filename, **params_dict)
-        
+
         print(f"Saved posterior samples to: {output_filename}")
         print(f"Number of samples: {len(posterior_data['mass_1_source'])}")
+
+        # For EOS sampling runs, also save a version with zero lambda values removed
+        if "eos_sampling" in top_level_dir:
+            # Create mask for non-zero lambda samples
+            mask = (params_dict['lambda_1'] != 0) & (params_dict['lambda_2'] != 0)
+            n_ditched = np.sum(~mask)
+            n_total = len(mask)
+
+            print(f"Filtering zero lambda samples: ditched {n_ditched}/{n_total} samples ({100*n_ditched/n_total:.2f}%)")
+
+            # Filter all parameters
+            params_dict_no_zeros = {key: value[mask] for key, value in params_dict.items()}
+
+            # Generate output filename with no_zeros suffix
+            output_filename_no_zeros = str(output_filename).replace('.npz', '_no_zeros.npz')
+
+            # Save filtered samples
+            np.savez(output_filename_no_zeros, **params_dict_no_zeros)
+            print(f"Saved filtered posterior samples to: {output_filename_no_zeros}")
+            print(f"Number of filtered samples: {len(params_dict_no_zeros['mass_1_source'])}")
     
     print(f"\n--- Processing complete ---")
     print(f"All files saved to: {output_dir}")
