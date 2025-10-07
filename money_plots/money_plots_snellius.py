@@ -1,4 +1,7 @@
-"""Money plots script for jester inference results on Snellius.
+"""
+NOTE: this has to be executed on Snellius, where the Jester posterior samples are stored.
+
+Money plots script for jester inference results on Snellius.
 
 This script generates comparison figures from multiple jester inference output directories:
 - Comparison histograms of MTOV, R14, and other EOS parameters overlaying all datasets
@@ -7,10 +10,6 @@ This script generates comparison figures from multiple jester inference output d
 
 The script creates single plots comparing all specified directories, rather than
 separate plots for each directory. All plots use the 'crest' colormap for consistency.
-
-Usage:
-    Modify the main() function to specify directories and colors, then run:
-    python money_plots_snellius.py
 """
 
 import numpy as np
@@ -53,10 +52,10 @@ COLORS_DICT = {"prior": "gray",
 ALPHA = 0.3
 figsize_vertical = (6, 8)
 figsize_horizontal = (8, 6)
-figsize_histograms = (6, 6)
+figsize_histograms = (5, 5)
 
 LABELS_DICT = {"outdir": "Prior",
-               "outdir_radio": "Radio timing",
+               "outdir_radio": "Heavy PSRs",
                "outdir_GW170817": "+GW170817",
                "outdir_GW231109": "+GW231109",
                "outdir_GW231109_XAS": r"+GW231109 (\texttt{XAS})",
@@ -134,7 +133,10 @@ def make_parameter_histograms(data_list: list,
                               outdir_names: list,
                               colors: list,
                               filename_prefix: str = "",
-                              legend_outside: bool = False):
+                              legend_outside: bool = False,
+                              fontsize_legend: int = 16,
+                              fontsize_labels: int = 16
+                              ):
     """Create comparison histograms for key EOS parameters across multiple datasets.
 
     Args:
@@ -151,7 +153,7 @@ def make_parameter_histograms(data_list: list,
     # Define parameter ranges and labels
     parameter_configs = {
         'MTOV': {'range': (1.75, 2.75), 'xlabel': r"$M_{\rm{TOV}}$ [$M_{\odot}$]"},
-        'R14': {'range': (10.0, 16.0), 'xlabel': r"$R_{1.4}$ [km]"},
+        'R14': {'range': (10.1, 16.0), 'xlabel': r"$R_{1.4}$ [km]"},
         'p3nsat': {'range': (0.1, 200.0), 'xlabel': r"$p(3n_{\rm{sat}})$ [MeV fm$^{-3}$]"}
     }
 
@@ -191,15 +193,15 @@ def make_parameter_histograms(data_list: list,
             plt.plot(x, y, color=color, lw=3.0, label=label)
             plt.fill_between(x, y, alpha=0.3, color=color)
 
-        plt.xlabel(config['xlabel'])
-        plt.ylabel('Probability density')
+        plt.xlabel(config['xlabel'], fontsize=fontsize_labels)
+        plt.ylabel('Probability density', fontsize=fontsize_labels)
         plt.xlim(config['range'])
         plt.ylim(bottom=0.0)
         if legend_outside:
             print(f"Putting the legend outside the plot.")
-            plt.legend(bbox_to_anchor=(1.05, 1), loc='upper left')
+            plt.legend(bbox_to_anchor=(1.05, 1), loc='upper left', fontsize = fontsize_legend)
         else:
-            plt.legend()
+            plt.legend(fontsize = fontsize_legend)
 
         # Save comparison plot
         save_name = os.path.join("./figures/EOS_comparison", f"{filename_prefix}_{param_name}_histogram.pdf")
@@ -529,7 +531,7 @@ def plot_injection(outdir: str):
     masses_prior, radii_prior = data_prior['masses'], data_prior['radii']
     n_prior, p_prior = data_prior['densities'], data_prior['pressures']
 
-    # Also load the radio timing
+    # Also load the Heavy PSRs
     data_radio = load_eos_data(os.path.join("../jester", "outdir_radio"))
     masses_radio, radii_radio = data_radio['masses'], data_radio['radii']
     n_radio, p_radio = data_radio['densities'], data_radio['pressures']
@@ -546,7 +548,7 @@ def plot_injection(outdir: str):
     y_radio = kde_radio(x)
     plt.plot(x, y_prior, color='darkgray', lw=3.0, label="Prior")
     plt.fill_between(x, y_prior, alpha=0.3, color='darkgray')
-    plt.plot(x, y_radio, color='dimgray', lw=3.0, label="Radio timing")
+    plt.plot(x, y_radio, color='dimgray', lw=3.0, label="Heavy PSRs")
     plt.fill_between(x, y_radio, alpha=0.3, color='dimgray')
     plt.plot(x, y, color=INJECTION_COLOR, lw=3.0, label="GW231109 (ET)")
     plt.fill_between(x, y, alpha=0.3, color=INJECTION_COLOR)
@@ -580,7 +582,7 @@ def plot_injection(outdir: str):
     y_radio = kde_radio(x)
     plt.plot(x, y_prior, color='darkgray', lw=3.0, label="Prior")
     plt.fill_between(x, y_prior, alpha=0.3, color='darkgray')
-    plt.plot(x, y_radio, color='dimgray', lw=3.0, label="Radio timing")
+    plt.plot(x, y_radio, color='dimgray', lw=3.0, label="Heavy PSRs")
     plt.fill_between(x, y_radio, alpha=0.3, color='dimgray')
     plt.plot(x, y, color=INJECTION_COLOR, lw=3.0, label="GW231109 (ET)")
     plt.fill_between(x, y, alpha=0.3, color=INJECTION_COLOR)
@@ -618,13 +620,13 @@ def plot_full_injection():
     P3NSAT_HAUKE = np.interp(3, n_hauke, p_hauke)
     print(f"  Hauke p3nsat = {P3NSAT_HAUKE:.2f}")
 
-    # Load ET data
-    data_et = load_eos_data(os.path.join("../jester", "outdir_GW231109_ET_AS"))
+    # Load ET data -- using Anna's new runs!
+    data_et = load_eos_data(os.path.join("../jester", "outdir_GW231109_ET_new"))
     masses_et, radii_et = data_et['masses'], data_et['radii']
     n_et, p_et = data_et['densities'], data_et['pressures']
 
-    # Load ET+CE data
-    data_et_ce = load_eos_data(os.path.join("../jester", "outdir_GW231109_ET_CE"))
+    # Load ET+CE data -- using Anna's new runs!
+    data_et_ce = load_eos_data(os.path.join("../jester", "outdir_GW231109_ET_CE_new"))
     masses_et_ce, radii_et_ce = data_et_ce['masses'], data_et_ce['radii']
     n_et_ce, p_et_ce = data_et_ce['densities'], data_et_ce['pressures']
 
@@ -633,7 +635,7 @@ def plot_full_injection():
     masses_prior, radii_prior = data_prior['masses'], data_prior['radii']
     n_prior, p_prior = data_prior['densities'], data_prior['pressures']
 
-    # Load the radio timing
+    # Load the Heavy PSRs
     data_radio = load_eos_data(os.path.join("../jester", "outdir_radio"))
     masses_radio, radii_radio = data_radio['masses'], data_radio['radii']
     n_radio, p_radio = data_radio['densities'], data_radio['pressures']
@@ -664,7 +666,7 @@ def plot_full_injection():
 
     plt.plot(x, y_prior, color='darkgray', lw=3.0, label="Prior")
     plt.fill_between(x, y_prior, alpha=0.3, color='darkgray')
-    # plt.plot(x, y_radio, color='dimgray', lw=3.0, label="Radio timing")
+    # plt.plot(x, y_radio, color='dimgray', lw=3.0, label="Heavy PSRs")
     # plt.fill_between(x, y_radio, alpha=0.3, color='dimgray')
     plt.plot(x, y_et, color=ET_COLOR, lw=3.0, label="ET")
     plt.fill_between(x, y_et, alpha=0.3, color=ET_COLOR)
@@ -729,7 +731,7 @@ def plot_full_injection():
 
     plt.plot(x, y_prior, color='darkgray', lw=3.0, label="Prior")
     plt.fill_between(x, y_prior, alpha=0.3, color='darkgray')
-    plt.plot(x, y_radio, color='dimgray', lw=3.0, label="Radio timing")
+    plt.plot(x, y_radio, color='dimgray', lw=3.0, label="Heavy PSRs")
     plt.fill_between(x, y_radio, alpha=0.3, color='dimgray')
     plt.plot(x, y_et, color=ET_COLOR, lw=3.0, label="ET")
     plt.fill_between(x, y_et, alpha=0.3, color=ET_COLOR)
@@ -821,17 +823,17 @@ def main():
     # save_suffix = ""
     # process_given_dirs(directories, save_suffix)
     
-    # =======================================================================
-    # 3b Check GW170817+GW190425 vs GW170817+GW231109
-    # =======================================================================
+    # # =======================================================================
+    # # 3b Check GW170817+GW190425 vs GW170817+GW231109
+    # # =======================================================================
     
-    directories = [
-        "../jester/outdir_radio",
-        "../jester/outdir_GW170817_GW190425",
-        "../jester/outdir_GW170817_GW231109",
-    ]
-    save_suffix = ""
-    process_given_dirs(directories, save_suffix, legend_outside=False, filename_prefix="GW190425_vs_GW231109_with_GW170817")
+    # directories = [
+    #     "../jester/outdir_radio",
+    #     "../jester/outdir_GW170817_GW190425",
+    #     "../jester/outdir_GW170817_GW231109",
+    # ]
+    # save_suffix = ""
+    # process_given_dirs(directories, save_suffix, legend_outside=False, filename_prefix="GW190425_vs_GW231109_with_GW170817")
     
     # # =======================================================================
     # # 3c Check GW170817+GW190425 vs GW170817+GW231109 without GW170817
@@ -881,18 +883,18 @@ def main():
     # save_suffix = ""
     # process_given_dirs(directories, save_suffix)
     
-    # =======================================================================
-    # 7 Increasing constraints with more and more GW BNS
-    # =======================================================================
+    # # =======================================================================
+    # # 7 Increasing constraints with more and more GW BNS
+    # # =======================================================================
 
-    directories = [
-        "../jester/outdir",
-        "../jester/outdir_GW170817",
-        "../jester/outdir_GW170817_GW190425",
-        "../jester/outdir_GW170817_GW190425_GW231109",
-    ]
-    save_suffix = ""
-    process_given_dirs(directories, save_suffix, filename_prefix="all_bns")
+    # directories = [
+    #     "../jester/outdir",
+    #     "../jester/outdir_GW170817",
+    #     "../jester/outdir_GW170817_GW190425",
+    #     "../jester/outdir_GW170817_GW190425_GW231109",
+    # ]
+    # save_suffix = ""
+    # process_given_dirs(directories, save_suffix, filename_prefix="all_bns")
     
 
     # =======================================================================
@@ -903,8 +905,8 @@ def main():
     # plot_injection(outdir="outdir_GW231109_ET_AS")
     # plot_injection(outdir="outdir_GW231109_ET_CE")
 
-    # # Combined ET and ET+CE plot
-    # plot_full_injection()
+    # Combined ET and ET+CE plot
+    plot_full_injection()
 
 
 if __name__ == "__main__":
