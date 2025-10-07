@@ -650,8 +650,8 @@ def main():
     ###
         
     filepaths_4 = [
-        os.path.join(base_path, "new_et_run_alignedspin.npz"),
-        os.path.join(base_path, "new_et_ce_run_alignedspin.npz")
+        os.path.join(base_path, "maxL_eos_et_run_alignedspin.npz"),
+        os.path.join(base_path, "maxL_eos_et_ce_run_alignedspin.npz")
     ]
     labels_4 = [
         "ET",
