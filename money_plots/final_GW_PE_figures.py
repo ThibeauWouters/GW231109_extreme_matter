@@ -441,7 +441,7 @@ def main():
     ]
 
     filepaths_2 = [
-        os.path.join(base_path, "prod_BW_XP_s040_leos_default.npz"),
+        os.path.join(base_path, "prod_BW_XP_s040_leos_default_no_zeros.npz"),
         os.path.join(base_path, "prod_BW_XP_s005_leos_default_no_zeros.npz"),
     ]
 
