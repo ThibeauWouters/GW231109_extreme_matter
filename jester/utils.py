@@ -161,6 +161,8 @@ class MicroToMacroTransform(NtoMTransform):
                  ndat_CSE: int = 100,
                  nb_masses: int = 100,
                  fixed_params: dict[str, float] = None,
+                 # NEW
+                 crust_name: str = "DH",
                 ):
     
         # By default, keep all names
@@ -178,11 +180,17 @@ class MicroToMacroTransform(NtoMTransform):
         self.ndat_CSE = ndat_CSE
         self.nb_masses = nb_masses
         
+        if crust_name not in ["DH", "BPS", "DH_fixed"]:
+            raise ValueError(f"crust_name must be either 'DH', 'DH_fixed' or 'BPS', got {crust_name} instead.")
+        
+        print(f"Crust name: {crust_name}")
+        
         # Create the EOS object -- there are several choices for the parametrizations
         if nb_CSE > 0:
             eos = MetaModel_with_CSE_EOS_model(nmax_nsat=self.nmax_nsat,
                                                ndat_metamodel=self.ndat_metamodel,
                                                ndat_CSE=self.ndat_CSE,
+                                               crust_name=crust_name
                     )
             self.transform_func = self.transform_func_MM_CSE
         else:

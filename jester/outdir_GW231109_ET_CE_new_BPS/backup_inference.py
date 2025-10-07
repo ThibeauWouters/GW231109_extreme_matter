@@ -40,7 +40,7 @@ def parse_arguments():
     parser.add_argument("--crust-name", 
                         type=str, 
                         default="DH",
-                        choices=["DH", "BPS", "DH_fixed"],
+                        choices=["DH", "BPS"],
                         help="Which filename for the crust to choose.")
     parser.add_argument("--which-nbreak-prior", 
                         type=str, 
