@@ -275,8 +275,8 @@ def main(args):
     if args.sample_GW231109:
         if ("et" in args.GW231109_NF_filepath.lower()) or ("ce" in args.GW231109_NF_filepath.lower()):
             print("Sampling a 3G-like injection of GW231109")
-            m1_GW231109_prior = UniformPrior(1.4, 1.65, parameter_names=["mass_1_GW231109"])
-            m2_GW231109_prior = UniformPrior(1.3, 1.50, parameter_names=["mass_2_GW231109"])
+            m1_GW231109_prior = UniformPrior(1.42, 1.62, parameter_names=["mass_1_GW231109"])
+            m2_GW231109_prior = UniformPrior(1.26, 1.45, parameter_names=["mass_2_GW231109"])
         else:
             m1_GW231109_prior = UniformPrior(1.3, 1.9, parameter_names=["mass_1_GW231109"])
             m2_GW231109_prior = UniformPrior(1.1, 1.5, parameter_names=["mass_2_GW231109"])
