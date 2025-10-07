@@ -396,8 +396,8 @@ def main():
     ]
 
     labels_1 = [
-        r"$|\chi_i| \leq 0.40$",
-        r"$|\chi_i| \leq 0.05$",
+        r"$\chi_i \leq 0.40$",
+        r"$\chi_i \leq 0.05$",
     ]
 
     colors_1 = [BLUE, ORANGE]
@@ -442,12 +442,12 @@ def main():
 
     filepaths_2 = [
         os.path.join(base_path, "prod_BW_XP_s040_leos_default.npz"),
-        os.path.join(base_path, "prod_BW_XP_s005_leos_default.npz"),
+        os.path.join(base_path, "prod_BW_XP_s005_leos_default_no_zeros.npz"),
     ]
 
     labels_2 = [
-        r"$|\chi_i| \leq 0.40$",
-        r"$|\chi_i| \leq 0.05$",
+        r"$\chi_i \leq 0.40$",
+        r"$\chi_i \leq 0.05$",
     ]
 
     colors_2 = [RED, GREEN]
