@@ -603,7 +603,9 @@ def plot_injection(outdir: str):
     plt.close()
     print(f"  p3nsat histogram saved to {save_name}")
 
-def plot_full_injection(plot_text: bool = True):
+def plot_full_injection(plot_text: bool = True,
+                        plot_prior: bool = True,
+                        what_prior: str = "radio"):
     """Plot both ET and ET+CE injection results together.
 
     Args:
@@ -653,25 +655,33 @@ def plot_full_injection(plot_text: bool = True):
     # =========================================================================
     R14_et = np.array([np.interp(1.4, mass, radius) for mass, radius in zip(masses_et, radii_et)])
     R14_et_ce = np.array([np.interp(1.4, mass, radius) for mass, radius in zip(masses_et_ce, radii_et_ce)])
-    R14_prior = np.array([np.interp(1.4, mass, radius) for mass, radius in zip(masses_prior, radii_prior)])
     R14_radio = np.array([np.interp(1.4, mass, radius) for mass, radius in zip(masses_radio, radii_radio)])
 
     plt.figure(figsize=figsize_histograms)
     kde_et = gaussian_kde(R14_et)
     kde_et_ce = gaussian_kde(R14_et_ce)
-    kde_prior = gaussian_kde(R14_prior)
     kde_radio = gaussian_kde(R14_radio)
 
     x = np.linspace(10.0, 16.0, 1000)
     y_et = kde_et(x)
     y_et_ce = kde_et_ce(x)
-    y_prior = kde_prior(x)
     y_radio = kde_radio(x)
 
-    plt.plot(x, y_prior, color='darkgray', lw=3.0, label="Prior")
-    plt.fill_between(x, y_prior, alpha=0.3, color='darkgray')
-    # plt.plot(x, y_radio, color='dimgray', lw=3.0, label="Heavy PSRs")
-    # plt.fill_between(x, y_radio, alpha=0.3, color='dimgray')
+    # Also do prior
+    if plot_prior:
+        if what_prior == "radio":
+            kde_prior = gaussian_kde(R14_radio)
+            R14_prior = R14_radio
+            prior_label = "Heavy PSRs"
+        else:
+            kde_prior = gaussian_kde(R14_prior)
+            R14_prior = np.array([np.interp(1.4, mass, radius) for mass, radius in zip(masses_prior, radii_prior)])
+            prior_label = "Prior"
+        y_prior = kde_prior(x)
+    
+        plt.plot(x, y_prior, color='darkgray', lw=3.0, label=prior_label)
+        plt.fill_between(x, y_prior, alpha=0.3, color='darkgray')
+        
     plt.plot(x, y_et, color=ET_COLOR, lw=3.0, label="ET")
     plt.fill_between(x, y_et, alpha=0.3, color=ET_COLOR)
     plt.plot(x, y_et_ce, color=ET_CE_COLOR, lw=3.0, label="ET+CE")
@@ -705,7 +715,7 @@ def plot_full_injection(plot_text: bool = True):
     plt.ylabel('Probability density', fontsize=16)
     plt.xlim(11.0, 14.0)
     plt.ylim(bottom=0.0)
-    plt.legend(fontsize=16)
+    plt.legend(fontsize=14)
 
     save_name = os.path.join("./figures/EOS_comparison", "ET_full_injection_R14_histogram.pdf")
     plt.savefig(save_name, bbox_inches="tight")
