@@ -652,7 +652,7 @@ def plot_full_injection():
     R14_prior = np.array([np.interp(1.4, mass, radius) for mass, radius in zip(masses_prior, radii_prior)])
     R14_radio = np.array([np.interp(1.4, mass, radius) for mass, radius in zip(masses_radio, radii_radio)])
 
-    plt.figure(figsize=figsize_horizontal)
+    plt.figure(figsize=figsize_histograms)
     kde_et = gaussian_kde(R14_et)
     kde_et_ce = gaussian_kde(R14_et_ce)
     kde_prior = gaussian_kde(R14_prior)
@@ -674,7 +674,7 @@ def plot_full_injection():
     plt.fill_between(x, y_et_ce, alpha=0.3, color=ET_CE_COLOR)
 
     # Truth line
-    plt.axvline(R14_HAUKE, color='black', ls='--', lw=2.0, label=f"Truth ({R14_HAUKE:.2f} km)")
+    plt.axvline(R14_HAUKE, color='black', ls='--', lw=2.0, label="Truth")
 
     # Compute 90% credible intervals
     low_et, high_et = arviz.hdi(R14_et, hdi_prob=0.90)
@@ -688,7 +688,7 @@ def plot_full_injection():
     x = 0.95
     y = 0.95
     dy = 0.15
-    fs = 24
+    fs = 16
     plt.text(x, y, textstr_et, transform=plt.gca().transAxes,
              verticalalignment='top', horizontalalignment='right',
              color=ET_COLOR, fontsize=fs)
@@ -696,11 +696,11 @@ def plot_full_injection():
              verticalalignment='top', horizontalalignment='right',
              color=ET_CE_COLOR, fontsize=fs)
 
-    plt.xlabel(r"$R_{1.4}$ [km]")
-    plt.ylabel('Density')
+    plt.xlabel(r"$R_{1.4}$ [km]", fontsize=16)
+    plt.ylabel('Probability density', fontsize=16)
     plt.xlim(11.0, 14.0)
     plt.ylim(bottom=0.0)
-    plt.legend()
+    plt.legend(fontsize=16)
 
     save_name = os.path.join("./figures/EOS_comparison", "ET_full_injection_R14_histogram.pdf")
     plt.savefig(save_name, bbox_inches="tight")
@@ -717,7 +717,7 @@ def plot_full_injection():
     p3nsat_prior = np.array([np.interp(3.0, dens, press) for dens, press in zip(n_prior, p_prior)])
     p3nsat_radio = np.array([np.interp(3.0, dens, press) for dens, press in zip(n_radio, p_radio)])
 
-    plt.figure(figsize=figsize_horizontal)
+    plt.figure(figsize=figsize_histograms)
     kde_et = gaussian_kde(p3nsat_et)
     kde_et_ce = gaussian_kde(p3nsat_et_ce)
     kde_prior = gaussian_kde(p3nsat_prior)
@@ -739,7 +739,7 @@ def plot_full_injection():
     plt.fill_between(x, y_et_ce, alpha=0.3, color=ET_CE_COLOR)
 
     # Truth line
-    plt.axvline(P3NSAT_HAUKE, color='black', ls='--', lw=2.0, label=f"Truth ({P3NSAT_HAUKE:.1f} MeV fm$^{{-3}}$)")
+    plt.axvline(P3NSAT_HAUKE, color='black', ls='--', lw=2.0, label="Truth")
 
     # Compute 90% credible intervals
     low_et, high_et = arviz.hdi(p3nsat_et, hdi_prob=0.90)
@@ -757,11 +757,11 @@ def plot_full_injection():
              verticalalignment='top', horizontalalignment='right',
              color=ET_CE_COLOR, fontsize=16)
 
-    plt.xlabel(r"$p(3n_{\rm{sat}})$ [MeV fm$^{-3}$]")
-    plt.ylabel('Density')
+    plt.xlabel(r"$p(3n_{\rm{sat}})$ [MeV fm$^{-3}$]", fontsize=16)
+    plt.ylabel('Probability density', fontsize=16)
     plt.xlim(0.1, 200.0)
     plt.ylim(bottom=0.0)
-    plt.legend()
+    plt.legend(fontsize=16)
 
     save_name = os.path.join("./figures/EOS_comparison", "ET_full_injection_p3nsat_histogram.pdf")
     plt.savefig(save_name, bbox_inches="tight")
