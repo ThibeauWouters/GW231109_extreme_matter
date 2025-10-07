@@ -238,7 +238,7 @@ def json_to_latex_table(json_filename: str, output_filename: str = "eos_paramete
             p3nsat = params['p3nsat']['credible_interval']
 
             # Escape special characters for LaTeX
-            label_escaped = label.replace('+', '$+$').replace('_', '\\_')
+            label_escaped = label.replace('+', '$+$')
 
             latex_content.append(f"{label_escaped} & ${mtov}$ & ${r14}$ & ${p3nsat}$ \\\\")
 
