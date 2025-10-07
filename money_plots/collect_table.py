@@ -23,14 +23,13 @@ import jesterTOV.utils as jose_utils
 
 # Labels and colors from money_plots_snellius.py
 LABELS_DICT = {"outdir": "Prior",
-               "outdir_radio": "Radio timing",
+               "outdir_radio": "Heavy PSRs",
                "outdir_GW170817": "GW170817",
                "outdir_GW190425": "GW190425",
-               "outdir_GW231109": "GW231109",
+               "outdir_GW231109": "GW231109 (default)",
                "outdir_GW231109_gaussian": "GW231109 (Gaussian)",
                "outdir_GW231109_double_gaussian": "GW231109 (double Gaussian)",
                "outdir_GW231109_quniv": "GW231109 (QUR)",
-               "outdir_GW231109_s025": "GW231109 ($\\chi \\leq 0.25$)",
                "outdir_GW231109_s040": "GW231109 ($\\chi \\leq 0.4$)",
                "outdir_GW231109_XAS": "GW231109 (\\texttt{XAS})",
                "outdir_GW170817_GW231109": "GW170817+GW231109",
@@ -197,7 +196,7 @@ def json_to_latex_table(json_filename: str, output_filename: str = "eos_paramete
         ["outdir_GW170817", "outdir_GW190425"],
         # Group 3: GW231109 variations
         ["outdir_GW231109", "outdir_GW231109_gaussian", "outdir_GW231109_double_gaussian",
-         "outdir_GW231109_quniv", "outdir_GW231109_s025", "outdir_GW231109_s040", "outdir_GW231109_XAS"],
+         "outdir_GW231109_quniv", "outdir_GW231109_s040", "outdir_GW231109_XAS"],
         # Group 4: Two-event combinations
         ["outdir_GW170817_GW231109", "outdir_GW170817_GW190425"],
         # Group 5: Three-event combination
@@ -224,7 +223,7 @@ def json_to_latex_table(json_filename: str, output_filename: str = "eos_paramete
     latex_content.append("\\label{tab:eos_parameters}")
     latex_content.append("\\renewcommand{\\arraystretch}{1.3}")
     latex_content.append("\\begin{tabular}{l@{\\hspace{1.5cm}}c@{\\hspace{1.5cm}}c@{\\hspace{1.5cm}}c}")
-    latex_content.append("\\toprule")
+    latex_content.append("\\toprule\\toprule")
     latex_content.append("Dataset & $M_{\\mathrm{TOV}}$ [$M_{\\odot}$] & $R_{1.4}$ [km] & $p(3n_{\\mathrm{sat}})$ [MeV fm$^{-3}$] \\\\")
     latex_content.append("\\midrule")
 
@@ -255,7 +254,7 @@ def json_to_latex_table(json_filename: str, output_filename: str = "eos_paramete
             latex_content.append("\\addlinespace")
 
     # End table
-    latex_content.append("\\bottomrule")
+    latex_content.append("\\bottomrule\\bottomrule")
     latex_content.append("\\end{tabular}")
     latex_content.append("\\end{table*}")
 
@@ -287,7 +286,6 @@ def main():
         "../jester/outdir_GW231109_gaussian",
         "../jester/outdir_GW231109_double_gaussian",
         "../jester/outdir_GW231109_quniv",
-        "../jester/outdir_GW231109_s025",
         "../jester/outdir_GW231109_s040",
         "../jester/outdir_GW231109_XAS",
 
