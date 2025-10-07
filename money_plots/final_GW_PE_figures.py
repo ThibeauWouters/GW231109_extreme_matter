@@ -396,7 +396,7 @@ def main():
     ]
 
     labels_1 = [
-        r"$\chi_i \leq 0.40$",
+        r"$\chi_i \leq 0.4$",
         r"$\chi_i \leq 0.05$",
     ]
 
@@ -446,7 +446,7 @@ def main():
     ]
 
     labels_2 = [
-        r"$\chi_i \leq 0.40$",
+        r"$\chi_i \leq 0.4$",
         r"$\chi_i \leq 0.05$",
     ]
 
@@ -482,9 +482,9 @@ def main():
         print(f"      Mean: {np.mean(lambda_tilde):.2f}, Median: {np.median(lambda_tilde):.2f}, Std: {np.std(lambda_tilde):.2f}")
         print(f"      5th-95th percentile: {np.percentile(lambda_tilde, 5):.2f} - {np.percentile(lambda_tilde, 95):.2f}")
 
-    # Use chi<0.05 EOS dataset (index 1) for most parameters, but chi<0.40 (index 0) for lambda_tilde
+    # Use chi<0.05 EOS dataset (index 1) for most parameters, but chi<0.4 (index 0) for lambda_tilde
     # Parameters order: chirp_mass, mass_ratio, chi_eff, lambda_tilde
-    dummy_indices_2 = [1, 1, 1, 0]  # Use high spin (chi<0.40) for lambda_tilde normalization
+    dummy_indices_2 = [1, 1, 1, 0]  # Use high spin (chi<0.4) for lambda_tilde normalization
 
     success_2 = create_comparison_cornerplot(
         filepaths=filepaths_2,
@@ -532,7 +532,7 @@ def main():
     ranges_2_debug["lambda_1"] = (0, 500)
     ranges_2_debug["lambda_2"] = (0, 1000)
 
-    # Use chi<0.05 EOS dataset (index 1) for most parameters, but chi<0.40 (index 0) for lambda parameters
+    # Use chi<0.05 EOS dataset (index 1) for most parameters, but chi<0.4 (index 0) for lambda parameters
     # Parameters order: chirp_mass, mass_ratio, chi_eff, lambda_tilde, mass_1_source, mass_2_source, lambda_1, lambda_2
     dummy_indices_2_debug = [1, 1, 1, 0, 1, 1, 0, 0]  # Use high spin for lambda params
 
