@@ -217,11 +217,6 @@ def json_to_latex_table(json_filename: str, output_filename: str = "eos_paramete
 
     # Start LaTeX table
     latex_content = []
-    latex_content.append("\\begin{table*}[htbp]")
-    latex_content.append("\\centering")
-    latex_content.append("\\caption{EOS parameter constraints with 90\\% credible intervals}")
-    latex_content.append("\\label{tab:eos_parameters}")
-    latex_content.append("\\renewcommand{\\arraystretch}{1.3}")
     latex_content.append("\\begin{tabular}{l@{\\hspace{1.5cm}}c@{\\hspace{1.5cm}}c@{\\hspace{1.5cm}}c}")
     latex_content.append("\\toprule\\toprule")
     latex_content.append("Dataset & $M_{\\mathrm{TOV}}$ [$M_{\\odot}$] & $R_{1.4}$ [km] & $p(3n_{\\mathrm{sat}})$ [MeV fm$^{-3}$] \\\\")
@@ -256,7 +251,6 @@ def json_to_latex_table(json_filename: str, output_filename: str = "eos_paramete
     # End table
     latex_content.append("\\bottomrule\\bottomrule")
     latex_content.append("\\end{tabular}")
-    latex_content.append("\\end{table*}")
 
     # Write to file
     with open(output_filename, 'w') as f:
