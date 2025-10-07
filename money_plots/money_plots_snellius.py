@@ -603,8 +603,12 @@ def plot_injection(outdir: str):
     plt.close()
     print(f"  p3nsat histogram saved to {save_name}")
 
-def plot_full_injection():
-    """Plot both ET and ET+CE injection results together."""
+def plot_full_injection(plot_text: bool = True):
+    """Plot both ET and ET+CE injection results together.
+
+    Args:
+        plot_text: If True, plot credible interval text in upper-right corner.
+    """
     print("Plotting combined ET and ET+CE injection results...")
 
     # Load the true EOS (macroscopic)
@@ -683,18 +687,19 @@ def plot_full_injection():
     med_et_ce = np.median(R14_et_ce)
 
     # Add credible intervals as text in top-right corner
-    textstr_et = f"${med_et:.2f}^{{+{high_et - med_et:.2f}}}_{{-{med_et - low_et:.2f}}}$"
-    textstr_et_ce = f"${med_et_ce:.2f}^{{+{high_et_ce - med_et_ce:.2f}}}_{{-{med_et_ce - low_et_ce:.2f}}}$"
-    x = 0.95
-    y = 0.95
-    dy = 0.15
-    fs = 16
-    plt.text(x, y, textstr_et, transform=plt.gca().transAxes,
-             verticalalignment='top', horizontalalignment='right',
-             color=ET_COLOR, fontsize=fs)
-    plt.text(x, y-dy, textstr_et_ce, transform=plt.gca().transAxes,
-             verticalalignment='top', horizontalalignment='right',
-             color=ET_CE_COLOR, fontsize=fs)
+    if plot_text:
+        textstr_et = f"${med_et:.2f}^{{+{high_et - med_et:.2f}}}_{{-{med_et - low_et:.2f}}}$"
+        textstr_et_ce = f"${med_et_ce:.2f}^{{+{high_et_ce - med_et_ce:.2f}}}_{{-{med_et_ce - low_et_ce:.2f}}}$"
+        x = 0.95
+        y = 0.95
+        dy = 0.15
+        fs = 16
+        plt.text(x, y, textstr_et, transform=plt.gca().transAxes,
+                 verticalalignment='top', horizontalalignment='right',
+                 color=ET_COLOR, fontsize=fs)
+        plt.text(x, y-dy, textstr_et_ce, transform=plt.gca().transAxes,
+                 verticalalignment='top', horizontalalignment='right',
+                 color=ET_CE_COLOR, fontsize=fs)
 
     plt.xlabel(r"$R_{1.4}$ [km]", fontsize=16)
     plt.ylabel('Probability density', fontsize=16)
@@ -748,14 +753,15 @@ def plot_full_injection():
     med_et_ce = np.median(p3nsat_et_ce)
 
     # Add credible intervals as text in top-right corner
-    textstr_et = f"${med_et:.1f}^{{+{high_et - med_et:.1f}}}_{{-{med_et - low_et:.1f}}}$"
-    textstr_et_ce = f"${med_et_ce:.1f}^{{+{high_et_ce - med_et_ce:.1f}}}_{{-{med_et_ce - low_et_ce:.1f}}}$"
-    plt.text(0.97, 0.97, textstr_et, transform=plt.gca().transAxes,
-             verticalalignment='top', horizontalalignment='right',
-             color=ET_COLOR, fontsize=16)
-    plt.text(0.97, 0.92, textstr_et_ce, transform=plt.gca().transAxes,
-             verticalalignment='top', horizontalalignment='right',
-             color=ET_CE_COLOR, fontsize=16)
+    if plot_text:
+        textstr_et = f"${med_et:.1f}^{{+{high_et - med_et:.1f}}}_{{-{med_et - low_et:.1f}}}$"
+        textstr_et_ce = f"${med_et_ce:.1f}^{{+{high_et_ce - med_et_ce:.1f}}}_{{-{med_et_ce - low_et_ce:.1f}}}$"
+        plt.text(0.97, 0.97, textstr_et, transform=plt.gca().transAxes,
+                 verticalalignment='top', horizontalalignment='right',
+                 color=ET_COLOR, fontsize=16)
+        plt.text(0.97, 0.92, textstr_et_ce, transform=plt.gca().transAxes,
+                 verticalalignment='top', horizontalalignment='right',
+                 color=ET_CE_COLOR, fontsize=16)
 
     plt.xlabel(r"$p(3n_{\rm{sat}})$ [MeV fm$^{-3}$]", fontsize=16)
     plt.ylabel('Probability density', fontsize=16)
