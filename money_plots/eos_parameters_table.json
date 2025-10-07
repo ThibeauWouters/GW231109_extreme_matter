@@ -26,7 +26,7 @@
     }
   },
   "outdir_radio": {
-    "label": "Radio timing",
+    "label": "Heavy PSRs",
     "parameters": {
       "MTOV": {
         "median": 2.2766726754320272,
@@ -104,7 +104,7 @@
     }
   },
   "outdir_GW231109": {
-    "label": "GW231109",
+    "label": "GW231109 (default)",
     "parameters": {
       "MTOV": {
         "median": 2.282077279736043,
@@ -207,34 +207,8 @@
       }
     }
   },
-  "outdir_GW231109_s025": {
-    "label": "GW231109 ($\\chi \\leq 0.25$)",
-    "parameters": {
-      "MTOV": {
-        "median": 2.2894352627550876,
-        "lower_error": 0.3624060475312634,
-        "upper_error": 0.4601596052150865,
-        "width": 0.8225656527463499,
-        "credible_interval": "2.29^{+0.46}_{-0.36}"
-      },
-      "R14": {
-        "median": 13.738852696658268,
-        "lower_error": 1.5792082489711525,
-        "upper_error": 1.1325673306920923,
-        "width": 2.711775579663245,
-        "credible_interval": "13.74^{+1.13}_{-1.58}"
-      },
-      "p3nsat": {
-        "median": 104.6891657571621,
-        "lower_error": 51.481633068155475,
-        "upper_error": 89.33794993904198,
-        "width": 140.81958300719745,
-        "credible_interval": "104.69^{+89.34}_{-51.48}"
-      }
-    }
-  },
   "outdir_GW231109_s040": {
-    "label": "GW231109 ($\\chi \\leq 0.4$)",
+    "label": "GW231109 ($\\chi_i \\leq 0.4$)",
     "parameters": {
       "MTOV": {
         "median": 2.284051493292805,
