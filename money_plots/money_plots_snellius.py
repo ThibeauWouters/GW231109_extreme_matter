@@ -787,17 +787,17 @@ def main():
     # process_given_dirs(directories, save_suffix)
     
     
-    # =======================================================================
-    # 2 Check GW231109 vs GW190425
-    # =======================================================================
+    # # =======================================================================
+    # # 2 Check GW231109 vs GW190425
+    # # =======================================================================
     
-    directories = [
-        "../jester/outdir_radio",
-        "../jester/outdir_GW190425",
-        "../jester/outdir_GW231109",
-    ]
-    save_suffix = ""
-    process_given_dirs(directories, save_suffix, filename_prefix="GW190425_vs_GW231109")
+    # directories = [
+    #     "../jester/outdir_radio",
+    #     "../jester/outdir_GW190425",
+    #     "../jester/outdir_GW231109",
+    # ]
+    # save_suffix = ""
+    # process_given_dirs(directories, save_suffix, filename_prefix="GW190425_vs_GW231109")
     
     # # =======================================================================
     # # 3a Check GW170817 vs GW170817+GW190425
