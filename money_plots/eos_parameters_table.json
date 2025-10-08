@@ -3,18 +3,18 @@
     "label": "Prior",
     "parameters": {
       "MTOV": {
-        "median": NaN,
-        "lower_error": NaN,
-        "upper_error": NaN,
-        "width": NaN,
-        "credible_interval": "nan^{+nan}_{-nan}"
+        "median": 0.6104476517849815,
+        "lower_error": 0.5168622968011776,
+        "upper_error": 1.601313929911983,
+        "width": 2.1181762267131603,
+        "credible_interval": "0.61^{+1.60}_{-0.52}"
       },
       "R14": {
-        "median": NaN,
-        "lower_error": NaN,
-        "upper_error": NaN,
-        "width": NaN,
-        "credible_interval": "nan^{+nan}_{-nan}"
+        "median": 13.477999888246899,
+        "lower_error": 2.242850138109052,
+        "upper_error": 2.2839801781044784,
+        "width": 4.52683031621353,
+        "credible_interval": "13.48^{+2.28}_{-2.24}"
       },
       "p3nsat": {
         "median": 80.6727511148336,
