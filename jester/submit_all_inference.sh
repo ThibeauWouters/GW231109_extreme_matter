@@ -7,12 +7,6 @@ for DIR in outdir*/; do
         # Remove trailing slash for cleaner output
         DIR_NAME="${DIR%/}"
         
-        # Skip if directory name contains "double_gaussian"
-        if [[ "$DIR_NAME" == *double_gaussian* ]]; then
-            echo "Skipping $DIR_NAME (contains 'double_gaussian')"
-            continue
-        fi
-
         # Check if submit.sh exists in the directory
         if [ -f "$DIR_NAME/submit.sh" ]; then
             echo "Submitting job for $DIR_NAME"

@@ -37,6 +37,11 @@ def parse_arguments():
                         default="default",
                         choices=["default", "small"],
                         help="Which NEP prior to sample from. If `small` then we do not include 3rd and 4th order and use a smaller range for L_sym.")
+    parser.add_argument("--crust-name", 
+                        type=str, 
+                        default="DH",
+                        choices=["DH", "BPS", "DH_fixed"],
+                        help="Which filename for the crust to choose.")
     parser.add_argument("--which-nbreak-prior", 
                         type=str, 
                         default="normal", 
@@ -237,7 +242,8 @@ def main(args):
     my_transform_eos = utils.MicroToMacroTransform(name_mapping,
                                                    keep_names=keep_names,
                                                    nmax_nsat=NMAX_NSAT,
-                                                   nb_CSE=NB_CSE
+                                                   nb_CSE=NB_CSE,
+                                                   crust_name=args.crust_name,
                                                 )
     
     # Create the output directory if it does not exist

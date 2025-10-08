@@ -1,0 +1,52 @@
+Tue Oct  7 20:28:09 CEST 2025
+Generating all plots for directory: outdir_GW231109_s040
+Data loaded successfully!
+Prior data loaded successfully!
+Creating pressures contour plot...
+n_min
+0.5
+n_max
+6.0
+0it [00:00, ?it/s]4it [00:00, 33.33it/s]8it [00:00, 33.23it/s]12it [00:00, 32.97it/s]16it [00:00, 32.71it/s]20it [00:00, 32.50it/s]24it [00:00, 32.15it/s]28it [00:00, 32.25it/s]32it [00:00, 32.38it/s]36it [00:01, 32.51it/s]40it [00:01, 32.57it/s]44it [00:01, 32.58it/s]48it [00:01, 32.67it/s]52it [00:01, 32.68it/s]56it [00:01, 32.74it/s]60it [00:01, 32.88it/s]64it [00:01, 33.02it/s]68it [00:02, 33.06it/s]72it [00:02, 33.01it/s]76it [00:02, 33.02it/s]80it [00:02, 33.00it/s]84it [00:02, 32.97it/s]88it [00:02, 32.89it/s]92it [00:02, 32.56it/s]96it [00:02, 32.59it/s]100it [00:03, 32.65it/s]100it [00:03, 32.72it/s]
+/gpfs/home6/twouters2/projects/GW231109/GW231109_extreme_matter/jester/postprocessing.py:435: UserWarning: No artists with labels found to put in legend.  Note that artists whose label start with an underscore are ignored when legend() is called with no argument.
+  plt.legend()
+Pressures contour plot saved to outdir_GW231109_s040/pressures_contour_plot.png
+Creating parameter histograms...
+Traceback (most recent call last):
+  File "/gpfs/home6/twouters2/projects/GW231109/GW231109_extreme_matter/jester/postprocessing.py", line 489, in <module>
+    main()
+  File "/gpfs/home6/twouters2/projects/GW231109/GW231109_extreme_matter/jester/postprocessing.py", line 486, in main
+    generate_all_plots(args.outdir)
+  File "/gpfs/home6/twouters2/projects/GW231109/GW231109_extreme_matter/jester/postprocessing.py", line 462, in generate_all_plots
+    make_parameter_histograms(data, prior_data, outdir)
+  File "/gpfs/home6/twouters2/projects/GW231109/GW231109_extreme_matter/jester/postprocessing.py", line 294, in make_parameter_histograms
+    kde_prior = gaussian_kde(prior_params[param_name])
+  File "/home/twouters2/miniconda3/envs/jester/lib/python3.10/site-packages/scipy/stats/_kde.py", line 223, in __init__
+    self.set_bandwidth(bw_method=bw_method)
+  File "/home/twouters2/miniconda3/envs/jester/lib/python3.10/site-packages/scipy/stats/_kde.py", line 571, in set_bandwidth
+    self._compute_covariance()
+  File "/home/twouters2/miniconda3/envs/jester/lib/python3.10/site-packages/scipy/stats/_kde.py", line 583, in _compute_covariance
+    self._data_cho_cov = linalg.cholesky(self._data_covariance,
+  File "/home/twouters2/miniconda3/envs/jester/lib/python3.10/site-packages/scipy/linalg/_decomp_cholesky.py", line 90, in cholesky
+    c, lower = _cholesky(a, lower=lower, overwrite_a=overwrite_a, clean=True,
+  File "/home/twouters2/miniconda3/envs/jester/lib/python3.10/site-packages/scipy/linalg/_decomp_cholesky.py", line 18, in _cholesky
+    a1 = asarray_chkfinite(a) if check_finite else asarray(a)
+  File "/home/twouters2/miniconda3/envs/jester/lib/python3.10/site-packages/numpy/lib/function_base.py", line 630, in asarray_chkfinite
+    raise ValueError(
+ValueError: array must not contain infs or NaNs
+DONE
+
+JOB STATISTICS
+==============
+Job ID: 15184926
+Cluster: snellius
+User/Group: twouters2/twouters2
+State: RUNNING
+Nodes: 1
+Cores per node: 16
+CPU Utilized: 00:00:00
+CPU Efficiency: 0.00% of 00:05:36 core-walltime
+Job Wall-clock time: 00:00:21
+Memory Utilized: 0.00 MB
+Memory Efficiency: 0.00% of 28.00 GB (1.75 GB/core)
+WARNING: Efficiency statistics can only be obtained after the job has ended as seff tool is based on the accounting database data.

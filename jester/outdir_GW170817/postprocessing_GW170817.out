@@ -1,4 +1,4 @@
-Sat Sep 20 11:13:31 CEST 2025
+Tue Oct  7 20:28:04 CEST 2025
 Generating all plots for directory: outdir_GW170817
 Data loaded successfully!
 Prior data loaded successfully!
@@ -7,39 +7,46 @@ n_min
 0.5
 n_max
 6.0
-0it [00:00, ?it/s]4it [00:00, 33.99it/s]8it [00:00, 33.80it/s]12it [00:00, 33.26it/s]16it [00:00, 32.60it/s]20it [00:00, 32.50it/s]24it [00:00, 32.59it/s]28it [00:00, 32.79it/s]32it [00:00, 33.00it/s]36it [00:01, 33.11it/s]40it [00:01, 33.21it/s]44it [00:01, 33.24it/s]48it [00:01, 33.22it/s]52it [00:01, 33.15it/s]56it [00:01, 33.21it/s]60it [00:01, 33.29it/s]64it [00:01, 33.38it/s]68it [00:02, 33.44it/s]72it [00:02, 33.51it/s]76it [00:02, 33.57it/s]80it [00:02, 33.56it/s]84it [00:02, 33.19it/s]88it [00:02, 33.27it/s]92it [00:02, 33.32it/s]96it [00:02, 33.42it/s]100it [00:03, 33.46it/s]100it [00:03, 33.24it/s]
-/gpfs/home6/twouters2/projects/GW231109/GW231109_extreme_matter/jester/postprocessing.py:414: UserWarning: No artists with labels found to put in legend.  Note that artists whose label start with an underscore are ignored when legend() is called with no argument.
+0it [00:00, ?it/s]4it [00:00, 33.67it/s]8it [00:00, 33.64it/s]12it [00:00, 33.49it/s]16it [00:00, 33.35it/s]20it [00:00, 33.20it/s]24it [00:00, 32.98it/s]28it [00:00, 32.80it/s]32it [00:00, 33.04it/s]36it [00:01, 33.21it/s]40it [00:01, 33.30it/s]44it [00:01, 33.39it/s]48it [00:01, 33.43it/s]52it [00:01, 33.37it/s]56it [00:01, 33.37it/s]60it [00:01, 33.52it/s]64it [00:01, 33.61it/s]68it [00:02, 33.67it/s]72it [00:02, 33.75it/s]76it [00:02, 33.77it/s]80it [00:02, 33.76it/s]84it [00:02, 33.73it/s]88it [00:02, 33.68it/s]92it [00:02, 33.67it/s]96it [00:02, 33.25it/s]100it [00:02, 33.32it/s]100it [00:02, 33.42it/s]
+/gpfs/home6/twouters2/projects/GW231109/GW231109_extreme_matter/jester/postprocessing.py:435: UserWarning: No artists with labels found to put in legend.  Note that artists whose label start with an underscore are ignored when legend() is called with no argument.
   plt.legend()
 Pressures contour plot saved to outdir_GW170817/pressures_contour_plot.png
-Creating mass-radius plot...
-Number of samples: 10000
-  0%|          | 0/10000 [00:00<?, ?it/s]  2%|▏         | 194/10000 [00:00<00:05, 1937.19it/s]  4%|▍         | 393/10000 [00:00<00:04, 1966.23it/s]  6%|▌         | 594/10000 [00:00<00:04, 1982.85it/s]  8%|▊         | 797/10000 [00:00<00:04, 1999.83it/s] 10%|▉         | 997/10000 [00:00<00:04, 1995.89it/s] 12%|█▏        | 1200/10000 [00:00<00:04, 2005.00it/s] 14%|█▍        | 1402/10000 [00:00<00:04, 2007.59it/s] 16%|█▌        | 1603/10000 [00:01<00:08, 1018.26it/s] 18%|█▊        | 1803/10000 [00:01<00:06, 1201.12it/s] 20%|██        | 2003/10000 [00:01<00:05, 1368.43it/s] 22%|██▏       | 2205/10000 [00:01<00:05, 1518.55it/s] 24%|██▍       | 2405/10000 [00:01<00:04, 1636.88it/s] 26%|██▌       | 2608/10000 [00:01<00:04, 1737.30it/s] 28%|██▊       | 2809/10000 [00:01<00:03, 1811.28it/s] 30%|███       | 3010/10000 [00:01<00:03, 1865.25it/s] 32%|███▏      | 3211/10000 [00:01<00:03, 1904.10it/s] 34%|███▍      | 3412/10000 [00:02<00:03, 1932.25it/s] 36%|███▌      | 3615/10000 [00:02<00:03, 1960.50it/s] 38%|███▊      | 3815/10000 [00:02<00:03, 1970.02it/s] 40%|████      | 4018/10000 [00:02<00:03, 1986.03it/s] 42%|████▏     | 4221/10000 [00:02<00:02, 1996.16it/s] 44%|████▍     | 4426/10000 [00:02<00:02, 2009.20it/s] 46%|████▋     | 4628/10000 [00:02<00:02, 2009.49it/s] 48%|████▊     | 4830/10000 [00:02<00:02, 2010.46it/s] 50%|█████     | 5032/10000 [00:02<00:02, 2004.99it/s] 52%|█████▏    | 5234/10000 [00:02<00:02, 2006.67it/s] 54%|█████▍    | 5437/10000 [00:03<00:02, 2011.28it/s] 56%|█████▋    | 5639/10000 [00:03<00:04, 996.61it/s]  58%|█████▊    | 5839/10000 [00:03<00:03, 1171.46it/s] 60%|██████    | 6040/10000 [00:03<00:02, 1338.29it/s] 62%|██████▏   | 6240/10000 [00:03<00:02, 1483.52it/s] 64%|██████▍   | 6441/10000 [00:03<00:02, 1608.78it/s] 66%|██████▋   | 6645/10000 [00:03<00:01, 1717.26it/s] 68%|██████▊   | 6847/10000 [00:04<00:01, 1796.21it/s] 70%|███████   | 7047/10000 [00:04<00:01, 1852.26it/s] 72%|███████▏  | 7248/10000 [00:04<00:01, 1896.71it/s] 74%|███████▍  | 7448/10000 [00:04<00:01, 1926.24it/s] 77%|███████▋  | 7652/10000 [00:04<00:01, 1957.30it/s] 79%|███████▊  | 7853/10000 [00:04<00:01, 1968.13it/s] 81%|████████  | 8053/10000 [00:04<00:00, 1975.60it/s] 83%|████████▎ | 8256/10000 [00:04<00:00, 1989.05it/s] 85%|████████▍ | 8457/10000 [00:04<00:00, 1993.62it/s] 87%|████████▋ | 8658/10000 [00:04<00:00, 1992.79it/s] 89%|████████▊ | 8860/10000 [00:05<00:00, 1997.88it/s] 91%|█████████ | 9061/10000 [00:05<00:00, 1997.77it/s] 93%|█████████▎| 9265/10000 [00:05<00:00, 2009.16it/s] 95%|█████████▍| 9467/10000 [00:05<00:00, 2008.36it/s] 97%|█████████▋| 9669/10000 [00:05<00:00, 2005.86it/s] 99%|█████████▊| 9870/10000 [00:05<00:00, 2001.04it/s]100%|██████████| 10000/10000 [00:05<00:00, 1775.79it/s]
-Excluded 80 invalid samples
-Mass-radius plot saved to outdir_GW170817/mass_radius_plot.pdf
-Creating EOS plot...
-  0%|          | 0/10000 [00:00<?, ?it/s]  2%|▏         | 198/10000 [00:00<00:04, 1973.20it/s]  4%|▍         | 397/10000 [00:00<00:04, 1981.06it/s]  6%|▌         | 598/10000 [00:00<00:04, 1993.97it/s]  8%|▊         | 800/10000 [00:00<00:04, 2004.17it/s] 10%|█         | 1001/10000 [00:00<00:04, 1997.82it/s] 12%|█▏        | 1202/10000 [00:00<00:04, 2001.24it/s] 14%|█▍        | 1405/10000 [00:00<00:04, 2007.36it/s] 16%|█▌        | 1607/10000 [00:00<00:04, 2008.23it/s] 18%|█▊        | 1808/10000 [00:00<00:04, 2004.16it/s] 20%|██        | 2009/10000 [00:01<00:04, 1957.10it/s] 22%|██▏       | 2212/10000 [00:01<00:03, 1977.43it/s] 24%|██▍       | 2411/10000 [00:01<00:03, 1980.56it/s] 26%|██▌       | 2613/10000 [00:01<00:03, 1989.99it/s] 28%|██▊       | 2814/10000 [00:01<00:03, 1994.69it/s] 30%|███       | 3015/10000 [00:01<00:03, 1996.92it/s] 32%|███▏      | 3215/10000 [00:01<00:03, 1992.62it/s] 34%|███▍      | 3415/10000 [00:02<00:06, 1007.25it/s] 36%|███▌      | 3615/10000 [00:02<00:05, 1183.11it/s] 38%|███▊      | 3813/10000 [00:02<00:04, 1343.14it/s] 40%|████      | 4014/10000 [00:02<00:04, 1491.16it/s] 42%|████▏     | 4212/10000 [00:02<00:03, 1609.54it/s] 44%|████▍     | 4414/10000 [00:02<00:03, 1714.14it/s] 46%|████▌     | 4614/10000 [00:02<00:03, 1790.03it/s] 48%|████▊     | 4814/10000 [00:02<00:02, 1846.07it/s] 50%|█████     | 5012/10000 [00:02<00:02, 1881.98it/s] 52%|█████▏    | 5211/10000 [00:02<00:02, 1909.90it/s] 54%|█████▍    | 5412/10000 [00:03<00:02, 1937.05it/s] 56%|█████▌    | 5611/10000 [00:03<00:02, 1951.42it/s] 58%|█████▊    | 5810/10000 [00:03<00:02, 1960.39it/s] 60%|██████    | 6010/10000 [00:03<00:02, 1969.57it/s] 62%|██████▏   | 6209/10000 [00:03<00:01, 1970.98it/s] 64%|██████▍   | 6408/10000 [00:03<00:01, 1973.88it/s] 66%|██████▌   | 6609/10000 [00:03<00:01, 1982.05it/s] 68%|██████▊   | 6808/10000 [00:03<00:01, 1982.13it/s] 70%|███████   | 7007/10000 [00:03<00:01, 1981.41it/s] 72%|███████▏  | 7206/10000 [00:03<00:01, 1982.94it/s] 74%|███████▍  | 7405/10000 [00:04<00:01, 1982.85it/s] 76%|███████▌  | 7607/10000 [00:04<00:01, 1991.26it/s] 78%|███████▊  | 7807/10000 [00:04<00:02, 924.06it/s]  80%|████████  | 8003/10000 [00:04<00:01, 1095.04it/s] 82%|████████▏ | 8203/10000 [00:04<00:01, 1266.74it/s] 84%|████████▍ | 8402/10000 [00:04<00:01, 1420.69it/s] 86%|████████▌ | 8600/10000 [00:05<00:00, 1550.27it/s] 88%|████████▊ | 8797/10000 [00:05<00:00, 1653.83it/s] 90%|████████▉ | 8996/10000 [00:05<00:00, 1740.12it/s] 92%|█████████▏| 9195/10000 [00:05<00:00, 1808.30it/s] 94%|█████████▍| 9395/10000 [00:05<00:00, 1860.45it/s] 96%|█████████▌| 9593/10000 [00:05<00:00, 1893.00it/s] 98%|█████████▊| 9790/10000 [00:05<00:00, 1912.53it/s]100%|█████████▉| 9987/10000 [00:05<00:00, 1877.05it/s]100%|██████████| 10000/10000 [00:05<00:00, 1737.17it/s]
-EOS plot saved to outdir_GW170817/eos_plot.pdf
 Creating parameter histograms...
-MTOV histogram saved to outdir_GW170817/MTOV_histogram.pdf
-R14 histogram saved to outdir_GW170817/R14_histogram.pdf
-p3nsat histogram saved to outdir_GW170817/p3nsat_histogram.pdf
-Creating radii contour plot...
-0it [00:00, ?it/s]4it [00:00, 33.85it/s]8it [00:00, 34.04it/s]12it [00:00, 34.05it/s]16it [00:00, 34.14it/s]20it [00:00, 34.18it/s]24it [00:00, 34.14it/s]28it [00:00, 34.09it/s]32it [00:00, 34.04it/s]36it [00:01, 34.02it/s]40it [00:01, 34.03it/s]44it [00:01, 33.96it/s]48it [00:01, 33.95it/s]52it [00:01, 33.97it/s]56it [00:01, 33.98it/s]60it [00:01, 33.95it/s]64it [00:01, 33.95it/s]68it [00:01, 33.95it/s]72it [00:02, 33.95it/s]76it [00:02, 33.90it/s]80it [00:02, 33.89it/s]84it [00:02, 33.85it/s]88it [00:02, 33.84it/s]92it [00:02, 33.84it/s]96it [00:02, 33.82it/s]100it [00:02, 33.87it/s]100it [00:02, 33.96it/s]
-Radii contour plot saved to outdir_GW170817/radii_contour_plot.pdf
-All plots generated and saved to outdir_GW170817
+Traceback (most recent call last):
+  File "/gpfs/home6/twouters2/projects/GW231109/GW231109_extreme_matter/jester/postprocessing.py", line 489, in <module>
+    main()
+  File "/gpfs/home6/twouters2/projects/GW231109/GW231109_extreme_matter/jester/postprocessing.py", line 486, in main
+    generate_all_plots(args.outdir)
+  File "/gpfs/home6/twouters2/projects/GW231109/GW231109_extreme_matter/jester/postprocessing.py", line 462, in generate_all_plots
+    make_parameter_histograms(data, prior_data, outdir)
+  File "/gpfs/home6/twouters2/projects/GW231109/GW231109_extreme_matter/jester/postprocessing.py", line 294, in make_parameter_histograms
+    kde_prior = gaussian_kde(prior_params[param_name])
+  File "/home/twouters2/miniconda3/envs/jester/lib/python3.10/site-packages/scipy/stats/_kde.py", line 223, in __init__
+    self.set_bandwidth(bw_method=bw_method)
+  File "/home/twouters2/miniconda3/envs/jester/lib/python3.10/site-packages/scipy/stats/_kde.py", line 571, in set_bandwidth
+    self._compute_covariance()
+  File "/home/twouters2/miniconda3/envs/jester/lib/python3.10/site-packages/scipy/stats/_kde.py", line 583, in _compute_covariance
+    self._data_cho_cov = linalg.cholesky(self._data_covariance,
+  File "/home/twouters2/miniconda3/envs/jester/lib/python3.10/site-packages/scipy/linalg/_decomp_cholesky.py", line 90, in cholesky
+    c, lower = _cholesky(a, lower=lower, overwrite_a=overwrite_a, clean=True,
+  File "/home/twouters2/miniconda3/envs/jester/lib/python3.10/site-packages/scipy/linalg/_decomp_cholesky.py", line 18, in _cholesky
+    a1 = asarray_chkfinite(a) if check_finite else asarray(a)
+  File "/home/twouters2/miniconda3/envs/jester/lib/python3.10/site-packages/numpy/lib/function_base.py", line 630, in asarray_chkfinite
+    raise ValueError(
+ValueError: array must not contain infs or NaNs
 DONE
 
 JOB STATISTICS
 ==============
-Job ID: 14803535
+Job ID: 15184911
 Cluster: snellius
 User/Group: twouters2/twouters2
 State: RUNNING
 Nodes: 1
 Cores per node: 16
 CPU Utilized: 00:00:00
-CPU Efficiency: 0.00% of 00:22:24 core-walltime
-Job Wall-clock time: 00:01:24
+CPU Efficiency: 0.00% of 00:06:08 core-walltime
+Job Wall-clock time: 00:00:23
 Memory Utilized: 0.00 MB
 Memory Efficiency: 0.00% of 28.00 GB (1.75 GB/core)
 WARNING: Efficiency statistics can only be obtained after the job has ended as seff tool is based on the accounting database data.
