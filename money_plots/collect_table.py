@@ -14,12 +14,10 @@ Usage:
 import numpy as np
 import os
 import json
-import sys
 import arviz
 
-# Add jester directory to path for imports
-sys.path.append('../jester')
-import jesterTOV.utils as jose_utils
+# Import shared EOS loading utilities
+from eos_utils import load_eos_data
 
 # Labels and colors from money_plots_snellius.py
 LABELS_DICT = {"outdir": "Prior",
@@ -37,35 +35,6 @@ LABELS_DICT = {"outdir": "Prior",
                "outdir_GW170817_GW190425_GW231109": "GW170817+GW190425+GW231109",
                "outdir_ET_AS": "ET",
                }
-
-def load_eos_data(outdir: str):
-    """Load EOS data from the specified output directory."""
-    filename = os.path.join(outdir, "eos_samples.npz")
-    if not os.path.exists(filename):
-        raise FileNotFoundError(f"EOS samples file not found: {filename}")
-
-    print(f"Loading data from {filename}")
-    data = np.load(filename)
-    m, r, l = data["masses_EOS"], data["radii_EOS"], data["Lambdas_EOS"]
-    n, p, e, cs2 = data["n"], data["p"], data["e"], data["cs2"]
-
-    # Convert units
-    n = n / jose_utils.fm_inv3_to_geometric / 0.16
-    p = p / jose_utils.MeV_fm_inv3_to_geometric
-    e = e / jose_utils.MeV_fm_inv3_to_geometric
-
-    log_prob = data["log_prob"]
-
-    return {
-        'masses': m,
-        'radii': r,
-        'lambdas': l,
-        'densities': n,
-        'pressures': p,
-        'energies': e,
-        'cs2': cs2,
-        'log_prob': log_prob
-    }
 
 def report_credible_interval(values: np.array,
                              hdi_prob: float = 0.90,
