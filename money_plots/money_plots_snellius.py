@@ -103,7 +103,7 @@ def make_parameter_histograms(data_list: list,
                               colors: list,
                               filename_prefix: str = "",
                               legend_outside: bool = False,
-                              fontsize_legend: int = 16,
+                              fontsize_legend: int = 14,
                               fontsize_labels: int = 16
                               ):
     """Create comparison histograms for key EOS parameters across multiple datasets.
@@ -643,8 +643,8 @@ def plot_full_injection(plot_text: bool = True,
             R14_prior = R14_radio
             prior_label = "Heavy PSRs"
         else:
-            kde_prior = gaussian_kde(R14_prior)
             R14_prior = np.array([np.interp(1.4, mass, radius) for mass, radius in zip(masses_prior, radii_prior)])
+            kde_prior = gaussian_kde(R14_prior)
             prior_label = "Prior"
         y_prior = kde_prior(x)
     
@@ -746,7 +746,7 @@ def plot_full_injection(plot_text: bool = True,
     plt.ylabel('Probability density', fontsize=16)
     plt.xlim(0.1, 200.0)
     plt.ylim(bottom=0.0)
-    plt.legend(fontsize=16)
+    plt.legend(fontsize=14)
 
     save_name = os.path.join("./figures/EOS_comparison", "ET_full_injection_p3nsat_histogram.pdf")
     plt.savefig(save_name, bbox_inches="tight")
@@ -903,7 +903,7 @@ def main():
     # plot_injection(outdir="outdir_GW231109_ET_CE")
 
     # Combined ET and ET+CE plot
-    plot_full_injection(plot_text=False)
+    plot_full_injection(plot_text=False, what_prior="radio")
 
 
 if __name__ == "__main__":
