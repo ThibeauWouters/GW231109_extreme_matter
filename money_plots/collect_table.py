@@ -73,17 +73,22 @@ def calculate_eos_parameters(data_dict: dict) -> dict:
         'p3nsat': p3nsat_list
     }
 
-def collect_parameters_from_directories(directories: list, hdi_prob: float = 0.90) -> dict:
+def collect_parameters_from_directories(directories: list, hdi_prob: float = 0.90, add_prior: bool = False) -> dict:
     """Collect EOS parameters from multiple directories and calculate credible intervals.
 
     Args:
         directories: List of directory paths containing EOS samples
         hdi_prob: Credible interval probability (default 0.90)
+        add_prior: If False, skip the "outdir" (Prior) directory (default False)
 
     Returns:
         dict: Nested dictionary with results for each directory and parameter
     """
     results = {}
+
+    # Filter out "outdir" if add_prior is False
+    if not add_prior:
+        directories = [d for d in directories if not os.path.basename(d.rstrip('/')) == 'outdir']
 
     for outdir in directories:
         # Check if directory exists
@@ -143,7 +148,7 @@ def save_results_to_json(results: dict, filename: str = "eos_parameters_table.js
         json.dump(results, f, indent=2)
     print(f"Results saved to {filename}")
 
-def json_to_latex_table(json_filename: str, output_filename: str = "eos_parameters_table.tex"):
+def json_to_latex_table(json_filename: str, output_filename: str = "eos_parameters_table.tex", add_prior: bool = False):
     """Convert JSON results to LaTeX table format.
 
     Formats entries with the smallest width (uncertainty) in bold for each parameter.
@@ -152,25 +157,41 @@ def json_to_latex_table(json_filename: str, output_filename: str = "eos_paramete
     Args:
         json_filename: Input JSON filename
         output_filename: Output LaTeX filename
+        add_prior: If False, skip the "outdir" (Prior) directory (default False)
     """
     # Load JSON data
     with open(json_filename, 'r') as f:
         results = json.load(f)
 
     # Define group organization
-    group_order = [
-        # Group 1: Prior and radio timing
-        ["outdir", "outdir_radio"],
-        # Group 2: Individual GW events
-        ["outdir_GW170817", "outdir_GW190425"],
-        # Group 3: GW231109 variations
-        ["outdir_GW231109", "outdir_GW231109_gaussian", "outdir_GW231109_double_gaussian",
-         "outdir_GW231109_quniv", "outdir_GW231109_s040", "outdir_GW231109_XAS"],
-        # Group 4: Two-event combinations
-        ["outdir_GW170817_GW231109", "outdir_GW170817_GW190425"],
-        # Group 5: Three-event combination
-        ["outdir_GW170817_GW190425_GW231109"]
-    ]
+    if add_prior:
+        group_order = [
+            # Group 1: Prior and radio timing
+            ["outdir", "outdir_radio"],
+            # Group 2: Individual GW events
+            ["outdir_GW170817", "outdir_GW190425"],
+            # Group 3: GW231109 variations
+            ["outdir_GW231109", "outdir_GW231109_gaussian", "outdir_GW231109_double_gaussian",
+             "outdir_GW231109_quniv", "outdir_GW231109_s040", "outdir_GW231109_XAS"],
+            # Group 4: Two-event combinations
+            ["outdir_GW170817_GW231109", "outdir_GW170817_GW190425"],
+            # Group 5: Three-event combination
+            ["outdir_GW170817_GW190425_GW231109"]
+        ]
+    else:
+        group_order = [
+            # Group 1: Radio timing only
+            ["outdir_radio"],
+            # Group 2: Individual GW events
+            ["outdir_GW170817", "outdir_GW190425"],
+            # Group 3: GW231109 variations
+            ["outdir_GW231109", "outdir_GW231109_gaussian", "outdir_GW231109_double_gaussian",
+             "outdir_GW231109_quniv", "outdir_GW231109_s040", "outdir_GW231109_XAS"],
+            # Group 4: Two-event combinations
+            ["outdir_GW170817_GW231109", "outdir_GW170817_GW190425"],
+            # Group 5: Three-event combination
+            ["outdir_GW170817_GW190425_GW231109"]
+        ]
 
     # Find entries with minimum width for each parameter
     min_widths = {}
@@ -227,8 +248,12 @@ def json_to_latex_table(json_filename: str, output_filename: str = "eos_paramete
 
     print(f"LaTeX table saved to {output_filename}")
 
-def main():
-    """Main function - configure directories and generate tables."""
+def main(add_prior: bool = False):
+    """Main function - configure directories and generate tables.
+
+    Args:
+        add_prior: If False, skip the "outdir" (Prior) directory (default False)
+    """
 
     # =======================================================================
     # Configure directories to process
@@ -260,10 +285,13 @@ def main():
 
     print("EOS Parameter Table Generator")
     print("=" * 50)
-    print(f"Processing {len(directories)} directories...")
+    if add_prior:
+        print(f"Processing {len(directories)} directories (including Prior)...")
+    else:
+        print(f"Processing {len(directories)} directories (excluding Prior)...")
 
     # Collect parameters and calculate credible intervals
-    results = collect_parameters_from_directories(directories, hdi_prob=0.90)
+    results = collect_parameters_from_directories(directories, hdi_prob=0.90, add_prior=add_prior)
 
     if len(results) == 0:
         print("Error: No valid results found!")
@@ -275,7 +303,7 @@ def main():
 
     # Convert to LaTeX table
     latex_filename = "eos_parameters_table.tex"
-    json_to_latex_table(json_filename, latex_filename)
+    json_to_latex_table(json_filename, latex_filename, add_prior=add_prior)
 
     print(f"\nProcessing complete!")
     print(f"JSON output: {json_filename}")
