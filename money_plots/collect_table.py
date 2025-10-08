@@ -168,11 +168,11 @@ def json_to_latex_table(json_filename: str, output_filename: str = "eos_paramete
         group_order = [
             # Group 1: Prior and radio timing
             ["outdir", "outdir_radio"],
-            # Group 2: Individual GW events
-            ["outdir_GW170817", "outdir_GW190425"],
-            # Group 3: GW231109 variations
+            # Group 2: GW231109 variations
             ["outdir_GW231109", "outdir_GW231109_gaussian", "outdir_GW231109_double_gaussian",
              "outdir_GW231109_quniv", "outdir_GW231109_s040", "outdir_GW231109_XAS"],
+            # Group 3: Individual GW events
+            ["outdir_GW170817", "outdir_GW190425"],
             # Group 4: Two-event combinations
             ["outdir_GW170817_GW231109", "outdir_GW170817_GW190425"],
             # Group 5: Three-event combination
@@ -182,11 +182,11 @@ def json_to_latex_table(json_filename: str, output_filename: str = "eos_paramete
         group_order = [
             # Group 1: Radio timing only
             ["outdir_radio"],
-            # Group 2: Individual GW events
-            ["outdir_GW170817", "outdir_GW190425"],
-            # Group 3: GW231109 variations
+            # Group 2: GW231109 variations
             ["outdir_GW231109", "outdir_GW231109_gaussian", "outdir_GW231109_double_gaussian",
              "outdir_GW231109_quniv", "outdir_GW231109_s040", "outdir_GW231109_XAS"],
+            # Group 3: Individual GW events
+            ["outdir_GW170817", "outdir_GW190425"],
             # Group 4: Two-event combinations
             ["outdir_GW170817_GW231109", "outdir_GW170817_GW190425"],
             # Group 5: Three-event combination
