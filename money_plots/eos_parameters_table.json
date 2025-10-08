@@ -1,30 +1,4 @@
 {
-  "outdir": {
-    "label": "Prior",
-    "parameters": {
-      "MTOV": {
-        "median": 0.6104476517849815,
-        "lower_error": 0.5168622968011776,
-        "upper_error": 1.601313929911983,
-        "width": 2.1181762267131603,
-        "credible_interval": "0.61^{+1.60}_{-0.52}"
-      },
-      "R14": {
-        "median": 13.477999888246899,
-        "lower_error": 2.242850138109052,
-        "upper_error": 2.2839801781044784,
-        "width": 4.52683031621353,
-        "credible_interval": "13.48^{+2.28}_{-2.24}"
-      },
-      "p3nsat": {
-        "median": 80.6727511148336,
-        "lower_error": 64.54670641097005,
-        "upper_error": 109.90970174218384,
-        "width": 174.4564081531539,
-        "credible_interval": "80.67^{+109.91}_{-64.55}"
-      }
-    }
-  },
   "outdir_radio": {
     "label": "Heavy PSRs",
     "parameters": {
