@@ -904,7 +904,7 @@ def main():
     # # =======================================================================
 
     # directories = [
-    #     "../jester/outdir",
+    #     "../jester/outdir_radio",
     #     "../jester/outdir_GW170817",
     #     "../jester/outdir_GW170817_GW190425",
     #     "../jester/outdir_GW170817_GW190425_GW231109",
@@ -913,12 +913,12 @@ def main():
     # process_given_dirs(directories, save_suffix, filename_prefix="all_bns")
     
 
-    # =======================================================================
-    # INJECTIONS
-    # =======================================================================
+    # # =======================================================================
+    # # INJECTIONS
+    # # =======================================================================
 
     # # Individual injection plots
-    # plot_injection(outdir="outdir_GW231109_ET_AS")
+    # plot_injection(outdir="outdir_GW231109_ET")
     # plot_injection(outdir="outdir_GW231109_ET_CE")
 
     # Combined ET and ET+CE plot
