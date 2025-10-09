@@ -270,15 +270,15 @@ def json_to_latex_table_r14_only(json_filename: str, output_filename: str = "eos
     if add_radio:
         selected_datasets.append("outdir_radio")
 
-    # Add GW events
+    # Add GW events in custom order
     selected_datasets.extend([
         # Individual events
-        "outdir_GW231109",
         "outdir_GW170817",
         "outdir_GW190425",
+        "outdir_GW231109",
         # Two-event combinations
-        "outdir_GW170817_GW231109",
         "outdir_GW170817_GW190425",
+        "outdir_GW170817_GW231109",
         # Three-event combination
         "outdir_GW170817_GW190425_GW231109"
     ])
