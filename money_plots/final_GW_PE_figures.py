@@ -22,9 +22,9 @@ if "Woute029" in os.getcwd():
     print(f"Updating plotting parameters for TeX")
     fs = 18
     ticks_fs = 20
-    label_fs = 22  # Bigger labels
-    legend_fs = 22  # Smaller legend
-    labelpad = 15  # Bigger labelpad
+    label_fs = 24  # Bigger labels
+    legend_fs = 24  # Smaller legend
+    labelpad = 18  # Bigger labelpad
     rc_params = {"axes.grid": False,
             "text.usetex" : True,
             "font.family" : "serif",
@@ -77,7 +77,7 @@ DEFAULT_CORNER_KWARGS = {
     "show_titles": False,
     "title_fmt": ".3f",
     "levels": [0.5, 0.9],  # 50% and 90% credible regions
-    "labelpad": 0.05,
+    "labelpad": 0.10,
     "max_n_ticks": 3,
     "min_n_ticks": 2,
 }
@@ -450,7 +450,7 @@ def main():
         r"$\chi_i \leq 0.05$",
     ]
 
-    colors_2 = [RED, GREEN]
+    colors_2 = ["#2596be", "#ff642c"]
 
     zorders_2 = [0, 1]  # Low spin prior (chi<0.05) on top
 
