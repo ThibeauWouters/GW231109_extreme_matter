@@ -641,8 +641,9 @@ def main():
 
     zorders_3 = [0, 1]  # ET+CE on top
 
-    # Use ET+CE dataset (index 1) for normalization on all parameters
-    dummy_indices_3 = [1] * len(parameters_3)
+    # Use ET+CE dataset (index 1) for normalization on most parameters, but ET (index 0) for chi_eff
+    # Parameters order: chirp_mass, mass_ratio, chi_eff, lambda_tilde
+    dummy_indices_3 = [1, 1, 0, 1]  # Use ET (index 0) for chi_eff normalization
 
     # Put the new injection parameters here
     injection_parameters = {"mass_1": 1.5879187040159342,
