@@ -573,8 +573,8 @@ def main():
     ]
 
     filepaths_3 = [
-        os.path.join(base_path, "et_run_alignedspin.npz"),
-        os.path.join(base_path, "et_ce_run_alignedspin.npz"),
+        os.path.join(base_path, "jester_eos_et_run_alignedspin.npz"),
+        os.path.join(base_path, "jester_eos_et_ce_run_alignedspin.npz"),
     ]
 
     labels_3 = [
@@ -651,8 +651,8 @@ def main():
     ###
         
     filepaths_4 = [
-        os.path.join(base_path, "maxL_eos_et_run_alignedspin.npz"),
-        os.path.join(base_path, "maxL_eos_et_ce_run_alignedspin.npz")
+        os.path.join(base_path, "jester_eos_et_run_alignedspin.npz"),
+        os.path.join(base_path, "jester_eos_et_ce_run_alignedspin.npz")
     ]
     labels_4 = [
         "ET",
