@@ -32,6 +32,11 @@ TOP_LEVEL_DIRS = []
 #                    "/work/puecher/S231109/third_gen_runs/new_et_ce_run_alignedspin/",
 #                    ]
 
+# Add my new 3G runs as well (this is with the EOS sampling median parameters)
+TOP_LEVEL_DIRS += ["/work/wouters/GW231109/third_gen_runs/jester_eos_et_run_alignedspin/",
+                   "/work/wouters/GW231109/third_gen_runs/jester_eos_et_ce_run_alignedspin/",
+                   ]
+
 # TOP_LEVEL_DIRS += ["/work/puecher/S231109/third_gen_runs/maxL_eos_et_run_alignedspin/",
 #                    "/work/puecher/S231109/third_gen_runs/maxL_eos_et_ce_run_alignedspin/",
 #                    ]
