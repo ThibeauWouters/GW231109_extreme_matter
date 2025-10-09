@@ -248,6 +248,63 @@ def json_to_latex_table(json_filename: str, output_filename: str = "eos_paramete
 
     print(f"LaTeX table saved to {output_filename}")
 
+def json_to_latex_table_r14_only(json_filename: str, output_filename: str = "eos_r14_table.tex"):
+    """Convert JSON results to LaTeX table showing only R1.4 for selected datasets.
+
+    Includes: GW231109 (default), GW170817, GW190425, and their combinations.
+
+    Args:
+        json_filename: Input JSON filename
+        output_filename: Output LaTeX filename
+    """
+    # Load JSON data
+    with open(json_filename, 'r') as f:
+        results = json.load(f)
+
+    # Define specific datasets to include in order
+    selected_datasets = [
+        # Individual events
+        "outdir_GW231109",
+        "outdir_GW170817",
+        "outdir_GW190425",
+        # Two-event combinations
+        "outdir_GW170817_GW231109",
+        "outdir_GW170817_GW190425",
+        # Three-event combination
+        "outdir_GW170817_GW190425_GW231109"
+    ]
+
+    # Start LaTeX table
+    latex_content = []
+    latex_content.append("\\begin{tabular}{lc}")
+    latex_content.append("\\toprule")
+    latex_content.append("Dataset & $R_{1.4}$ [km] \\\\")
+    latex_content.append("\\midrule")
+
+    # Add data rows
+    for dir_basename in selected_datasets:
+        if dir_basename not in results:
+            continue  # Skip if directory wasn't processed
+
+        data = results[dir_basename]
+        label = data['label']
+        r14 = data['parameters']['R14']['credible_interval']
+
+        # Escape special characters for LaTeX
+        label_escaped = label.replace('+', '$+$')
+
+        latex_content.append(f"{label_escaped} & ${r14}$ \\\\")
+
+    # End table
+    latex_content.append("\\bottomrule")
+    latex_content.append("\\end{tabular}")
+
+    # Write to file
+    with open(output_filename, 'w') as f:
+        f.write('\n'.join(latex_content))
+
+    print(f"R1.4-only LaTeX table saved to {output_filename}")
+
 def main(add_prior: bool = False):
     """Main function - configure directories and generate tables.
 
@@ -305,9 +362,14 @@ def main(add_prior: bool = False):
     latex_filename = "eos_parameters_table.tex"
     json_to_latex_table(json_filename, latex_filename, add_prior=add_prior)
 
+    # Generate R1.4-only table for selected datasets
+    r14_latex_filename = "eos_r14_table.tex"
+    json_to_latex_table_r14_only(json_filename, r14_latex_filename)
+
     print(f"\nProcessing complete!")
     print(f"JSON output: {json_filename}")
     print(f"LaTeX output: {latex_filename}")
+    print(f"R1.4-only LaTeX output: {r14_latex_filename}")
 
 if __name__ == "__main__":
     main()
