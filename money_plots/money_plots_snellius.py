@@ -936,7 +936,7 @@ def main():
     # plot_injection(outdir="outdir_GW231109_ET_CE")
 
     # Combined ET and ET+CE plot
-    plot_full_injection(plot_text=True, what_prior="radio")
+    plot_full_injection(plot_text=False, what_prior="radio")
 
 
 if __name__ == "__main__":
