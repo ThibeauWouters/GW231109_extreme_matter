@@ -554,15 +554,15 @@ def main():
         print("✗ Failed to create comparison 2 debug")
 
 
-    # Summary
-    print("\n" + "=" * 60)
-    print("SUMMARY")
-    print("=" * 60)
+    # # Summary
+    # print("\n" + "=" * 60)
+    # print("SUMMARY")
+    # print("=" * 60)
 
-    # ====== COMPARISON 3: ET vs ET+CE ======
-    print("\n" + "=" * 60)
-    print("COMPARISON 3: ET vs ET+CE")
-    print("=" * 60)
+    # # ====== COMPARISON 3: ET vs ET+CE ======
+    # print("\n" + "=" * 60)
+    # print("COMPARISON 3: ET vs ET+CE")
+    # print("=" * 60)
 
     # Parameters to include in comparison 3
     parameters_3 = [
@@ -592,73 +592,6 @@ def main():
     # Use ET+CE dataset (index 1) for normalization on all parameters
     dummy_indices_3 = [1] * len(parameters_3)
 
-    # Load injection values for truths
-    injection_file = "./data/injection_ETCE_gw231109_injectionxas_a3eaf212_chi_eff_chirp_mass_lambda_1_lambda_2_lambda_tilde_mass_ratio.npz"
-    injection_data = np.load(injection_file, allow_pickle=True)
-    injection_params = injection_data['injection_params'].item()
-
-    # Extract truths in the same order as parameters_3
-    truths_3 = [injection_params[param] for param in parameters_3]
-    print(f"Injection values: {dict(zip(parameters_3, truths_3))}")
-
-    # Load data to compute chirp_mass quantiles
-    print("\nComputing ranges for ET vs ET+CE comparison...")
-    all_chirp_mass = []
-    for filepath in filepaths_3:
-        data = np.load(filepath)
-        all_chirp_mass.append(data['chirp_mass'])
-    all_chirp_mass = np.concatenate(all_chirp_mass)
-    chirp_mass_min = np.quantile(all_chirp_mass, 0.001)
-    chirp_mass_max = np.quantile(all_chirp_mass, 0.99)
-    print(f"  Chirp mass range (0.01-0.99 quantiles): ({chirp_mass_min:.6f}, {chirp_mass_max:.6f})")
-
-    # Set custom ranges
-    ranges_3 = {
-        "chirp_mass": (chirp_mass_min, chirp_mass_max),
-        "mass_ratio": (0.82, 1.0),
-        "chi_eff": (0.029, 0.035),
-        "lambda_tilde": (220, 400)
-    }
-    print(f"  Final ranges: {ranges_3}")
-
-    success_3 = create_comparison_cornerplot(
-        filepaths=filepaths_3,
-        parameters=parameters_3,
-        labels=labels_3,
-        colors=colors_3,
-        ranges=ranges_3,
-        zorders=zorders_3,
-        save_name="./figures/GW_PE/comparison_ET_vs_ET_CE.pdf",
-        overwrite=True,
-        dummy_normalization_indices=dummy_indices_3,
-        truths=truths_3,
-        reverse_legend=False
-    )
-
-    if success_3:
-        print(" Successfully created comparison 3: comparison_ET_vs_ET_CE.pdf")
-    else:
-        print(" Failed to create comparison 3")
-
-    # Update summary
-    if success_3:
-        print(" Comparison 3 (ET vs ET+CE): comparison_ET_vs_ET_CE.pdf")
-    else:
-        print(" Comparison 3 (ET vs ET+CE): FAILED")
-        
-    ###
-    ### FINALLY, the new 3G runs
-    ###
-        
-    filepaths_4 = [
-        os.path.join(base_path, "jester_eos_et_run_alignedspin.npz"),
-        os.path.join(base_path, "jester_eos_et_ce_run_alignedspin.npz")
-    ]
-    labels_4 = [
-        "ET",
-        "ET+CE"
-    ]
-    
     # Put the new injection parameters here
     injection_parameters = {"mass_1": 1.5879187040159342,
                             "mass_2": 1.4188967691574992,
@@ -699,26 +632,41 @@ def main():
     # Convert detector frame masses to source frame
     injection_parameters['mass_1_source'] = injection_parameters['mass_1'] / (1 + z)
     injection_parameters['mass_2_source'] = injection_parameters['mass_2'] / (1 + z)
+    
+    # If jester was in the EOS, then get
+    filename = "../figures/EOS_data/jester_GW170817_maxL_EOS.npz"
+    eos_data = np.load(filename)
+    
+    print(list(eos_data.keys()))
+    
+    # Interpolate Lambdas again
+    lambda_1_interp = np.interp(injection_parameters['mass_1_source'], eos_data['masses'], eos_data['Lambdas'])
+    lambda_2_interp = np.interp(injection_parameters['mass_2_source'], eos_data['masses'], eos_data['Lambdas'])
+    injection_parameters['lambda_1'] = lambda_1_interp
+    injection_parameters['lambda_2'] = lambda_2_interp
+    injection_parameters['lambda_tilde'] = lambda_1_lambda_2_to_lambda_tilde(lambda_1_interp, lambda_2_interp,
+                                                  injection_parameters['mass_1'], injection_parameters['mass_2'])
 
-    truths_4 = [injection_parameters[param] for param in parameters_3]
-    ranges_4 = {
+
+    truths_3 = [injection_parameters[param] for param in parameters_3]
+    ranges_3 = {
         "chirp_mass": (1.3063+0.1e-5, 1.3063+2.2e-5),
         "mass_ratio": (0.78, 1.0),
         "chi_eff": (0.027, 0.035),
-        "lambda_tilde": (290, 500)
+        "lambda_tilde": (250, 450)
     }
     
     success_4 = create_comparison_cornerplot(
-        filepaths=filepaths_4,
+        filepaths=filepaths_3,
         parameters=parameters_3,
-        labels=labels_4,
+        labels=labels_3,
         colors=colors_3,
-        ranges=ranges_4,
+        ranges=ranges_3,
         zorders=zorders_3,
         save_name="./figures/GW_PE/comparison_new_ET_vs_ET_CE.pdf",
         overwrite=True,
         dummy_normalization_indices=dummy_indices_3,
-        truths=truths_4,
+        truths=truths_3,
         reverse_legend=False
     )
 
@@ -741,8 +689,8 @@ def main():
     ]
 
     # Use same filepaths and labels as comparison 4
-    filepaths_4_debug = filepaths_4
-    labels_4_debug = labels_4
+    filepaths_4_debug = filepaths_3
+    labels_4_debug = labels_3
     colors_4_debug = colors_3
     zorders_4_debug = zorders_3
 
