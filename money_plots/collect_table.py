@@ -248,21 +248,30 @@ def json_to_latex_table(json_filename: str, output_filename: str = "eos_paramete
 
     print(f"LaTeX table saved to {output_filename}")
 
-def json_to_latex_table_r14_only(json_filename: str, output_filename: str = "eos_r14_table.tex"):
+def json_to_latex_table_r14_only(json_filename: str, output_filename: str = "eos_r14_table.tex", add_radio: bool = True):
     """Convert JSON results to LaTeX table showing only R1.4 for selected datasets.
 
     Includes: GW231109 (default), GW170817, GW190425, and their combinations.
+    Optionally includes Heavy PSRs.
 
     Args:
         json_filename: Input JSON filename
         output_filename: Output LaTeX filename
+        add_radio: If True, include Heavy PSRs dataset (default True)
     """
     # Load JSON data
     with open(json_filename, 'r') as f:
         results = json.load(f)
 
     # Define specific datasets to include in order
-    selected_datasets = [
+    selected_datasets = []
+
+    # Optionally add Heavy PSRs
+    if add_radio:
+        selected_datasets.append("outdir_radio")
+
+    # Add GW events
+    selected_datasets.extend([
         # Individual events
         "outdir_GW231109",
         "outdir_GW170817",
@@ -272,7 +281,7 @@ def json_to_latex_table_r14_only(json_filename: str, output_filename: str = "eos
         "outdir_GW170817_GW190425",
         # Three-event combination
         "outdir_GW170817_GW190425_GW231109"
-    ]
+    ])
 
     # Start LaTeX table
     latex_content = []
@@ -306,11 +315,12 @@ def json_to_latex_table_r14_only(json_filename: str, output_filename: str = "eos
 
     print(f"R1.4-only LaTeX table saved to {output_filename}")
 
-def main(add_prior: bool = False):
+def main(add_prior: bool = False, add_radio: bool = True):
     """Main function - configure directories and generate tables.
 
     Args:
         add_prior: If False, skip the "outdir" (Prior) directory (default False)
+        add_radio: If True, include Heavy PSRs in R1.4-only table (default True)
     """
 
     # =======================================================================
@@ -365,7 +375,7 @@ def main(add_prior: bool = False):
 
     # Generate R1.4-only table for selected datasets
     r14_latex_filename = "eos_r14_table.tex"
-    json_to_latex_table_r14_only(json_filename, r14_latex_filename)
+    json_to_latex_table_r14_only(json_filename, r14_latex_filename, add_radio=add_radio)
 
     print(f"\nProcessing complete!")
     print(f"JSON output: {json_filename}")
