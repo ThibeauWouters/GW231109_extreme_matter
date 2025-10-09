@@ -10,6 +10,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.patches as mpatches
 import corner
+import arviz
 
 from bilby.gw.conversion import component_masses_to_chirp_mass, component_masses_to_mass_ratio
 from bilby.gw.conversion import lambda_1_lambda_2_to_lambda_tilde, lambda_1_lambda_2_to_delta_lambda_tilde
@@ -159,7 +160,8 @@ def create_comparison_cornerplot(
     overwrite: bool = False,
     dummy_normalization_indices: list[int] = None,
     truths: list[float] = None,
-    reverse_legend: bool = True
+    reverse_legend: bool = True,
+    show_credible_intervals: bool = True
 ) -> bool:
     """
     Create a comparison corner plot with multiple datasets overlaid.
@@ -177,6 +179,7 @@ def create_comparison_cornerplot(
             to create a dummy normalization dataset (optional)
         truths (list[float]): True values for each parameter to plot as reference lines (optional)
         reverse_legend (bool): Whether to reverse legend order (default True shows highest z-order first)
+        show_credible_intervals (bool): Whether to show 90% credible intervals on 1D panels (default True)
 
     Returns:
         bool: True if successful, False otherwise
@@ -339,6 +342,55 @@ def create_comparison_cornerplot(
                 invisible_kwargs["truth_color"] = "black"
 
             corner.corner(dummy_dataset, **invisible_kwargs)
+
+        # Add credible interval annotations as titles on 1D panels
+        if show_credible_intervals:
+            print("Adding 90% credible interval annotations as titles...")
+
+            # Get the axes from the figure (corner plot creates a grid of axes)
+            axes = np.array(fig.axes).reshape((len(parameters), len(parameters)))
+
+            # For each parameter (diagonal), compute credible intervals for all datasets
+            for param_idx, param in enumerate(parameters):
+                ax = axes[param_idx, param_idx]  # Get diagonal axis
+
+                # Font size for credible intervals
+                fontsize = 18
+
+                # Add credible interval text for each dataset with matching colors
+                for dataset_idx in range(len(all_samples)):
+                    # Get samples for this parameter from this dataset
+                    param_samples = all_samples[dataset_idx][:, param_idx]
+
+                    # Compute 90% HDI credible interval using arviz
+                    low, high = arviz.hdi(param_samples, hdi_prob=0.90)
+                    med = np.median(param_samples)
+
+                    # Format credible interval string
+                    # Determine number of decimal places based on parameter range
+                    param_range = np.ptp([low, high])
+                    if param_range < 0.1:
+                        fmt = ".4f"
+                    elif param_range < 1:
+                        fmt = ".3f"
+                    elif param_range < 10:
+                        fmt = ".2f"
+                    else:
+                        fmt = ".1f"
+
+                    textstr = f"${med:{fmt}}^{{+{high - med:{fmt}}}}_{{-{med - low:{fmt}}}}$"
+
+                    # Position text above the plot (stacked vertically for multiple datasets)
+                    # Start from y=1.05 and stack downward with spacing
+                    y_pos = 1.05 + (len(all_samples) - 1 - dataset_idx) * 0.20
+
+                    # Add colored text
+                    ax.text(0.5, y_pos, textstr,
+                           transform=ax.transAxes,
+                           verticalalignment='bottom',
+                           horizontalalignment='center',
+                           color=colors[dataset_idx],
+                           fontsize=fontsize)
 
         # Add legend
         legend_elements = []
