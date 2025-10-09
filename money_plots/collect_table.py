@@ -276,8 +276,8 @@ def json_to_latex_table_r14_only(json_filename: str, output_filename: str = "eos
 
     # Start LaTeX table
     latex_content = []
-    latex_content.append("\\begin{tabular}{lc}")
-    latex_content.append("\\toprule")
+    latex_content.append("\\begin{tabular}{l@{\\hspace{1.5cm}}c}")
+    latex_content.append("\\toprule\\toprule")
     latex_content.append("Dataset & $R_{1.4}$ [km] \\\\")
     latex_content.append("\\midrule")
 
@@ -294,9 +294,10 @@ def json_to_latex_table_r14_only(json_filename: str, output_filename: str = "eos
         label_escaped = label.replace('+', '$+$')
 
         latex_content.append(f"{label_escaped} & ${r14}$ \\\\")
+        latex_content.append("\\addlinespace")
 
     # End table
-    latex_content.append("\\bottomrule")
+    latex_content.append("\\bottomrule\\bottomrule")
     latex_content.append("\\end{tabular}")
 
     # Write to file
