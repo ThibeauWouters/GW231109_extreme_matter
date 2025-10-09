@@ -65,7 +65,8 @@ PARAMETER_LABELS = {
     "tilt_1": r"$\theta_1$",
     "tilt_2": r"$\theta_2$",
     "phi_12": r"$\Delta\phi$",
-    "phi_jl": r"$\phi_{JL}$"
+    "phi_jl": r"$\phi_{JL}$",
+    "EOS": r"EOS"
 }
 
 # Default corner plot settings
@@ -604,6 +605,177 @@ def main():
         print("✓ Successfully created comparison 2 debug: comparison_leos_spin_debug.pdf")
     else:
         print("✗ Failed to create comparison 2 debug")
+
+    # ====== COMPARISON 2 DEBUG WITH EOS: leos with EOS parameter ======
+    print("\n" + "=" * 60)
+    print("COMPARISON 2 DEBUG WITH EOS: leos with EOS parameter")
+    print("=" * 60)
+
+    # Parameters to include in comparison 2 debug with EOS (extended version)
+    parameters_2_debug_eos = [
+        "chirp_mass",
+        "mass_ratio",
+        "chi_eff",
+        "lambda_tilde",
+        "EOS"
+    ]
+
+    # Use same filepaths and labels as comparison 2
+    filepaths_2_debug_eos = filepaths_2
+    labels_2_debug_eos = labels_2
+    colors_2_debug_eos = colors_2
+    zorders_2_debug_eos = zorders_2
+
+    # Use default ranges but override EOS parameter
+    ranges_2_debug_eos = {param: DEFAULT_RANGES.get(param) for param in parameters_2_debug_eos}
+    ranges_2_debug_eos["lambda_tilde"] = (0, 1000)  # Same as comparison 2
+    ranges_2_debug_eos["EOS"] = (0, 5000)
+
+    # Use chi<0.05 EOS dataset (index 1) for most parameters, but chi<0.4 (index 0) for lambda_tilde and EOS
+    # Parameters order: chirp_mass, mass_ratio, chi_eff, lambda_tilde, EOS
+    dummy_indices_2_debug_eos = [1, 1, 1, 0, 0]  # Use high spin for lambda_tilde and EOS
+
+    success_2_debug_eos = create_comparison_cornerplot(
+        filepaths=filepaths_2_debug_eos,
+        parameters=parameters_2_debug_eos,
+        labels=labels_2_debug_eos,
+        colors=colors_2_debug_eos,
+        ranges=ranges_2_debug_eos,
+        zorders=zorders_2_debug_eos,
+        save_name="./figures/GW_PE/comparison_leos_spin_debug_eos.pdf",
+        overwrite=True,
+        dummy_normalization_indices=dummy_indices_2_debug_eos
+    )
+
+    if success_2_debug_eos:
+        print("✓ Successfully created comparison 2 debug EOS: comparison_leos_spin_debug_eos.pdf")
+    else:
+        print("✗ Failed to create comparison 2 debug EOS")
+
+    # ====== COMPARISON 2 WITH ZEROS: leos with different spin priors (including zero Lambdas) ======
+    print("\n" + "=" * 60)
+    print("COMPARISON 2 WITH ZEROS: leos with different spin priors (including zero Lambdas)")
+    print("=" * 60)
+
+    # Parameters to include in comparison 2 with zeros
+    parameters_2_zeros = [
+        "chirp_mass",
+        "mass_ratio",
+        "chi_eff",
+        "lambda_tilde"
+    ]
+
+    filepaths_2_zeros = [
+        os.path.join(base_path, "prod_BW_XP_s040_leos_default.npz"),
+        os.path.join(base_path, "prod_BW_XP_s005_leos_default.npz"),
+    ]
+
+    labels_2_zeros = [
+        r"$\chi_i \leq 0.4$",
+        r"$\chi_i \leq 0.05$",
+    ]
+
+    colors_2_zeros = ["#2596be", "#ff642c"]
+
+    zorders_2_zeros = [0, 1]  # Low spin prior (chi<0.05) on top
+
+    # Use default ranges but override lambda_tilde for EOS plot
+    ranges_2_zeros = {param: DEFAULT_RANGES[param] for param in parameters_2_zeros}
+    ranges_2_zeros["lambda_tilde"] = (0, 1000)  # Tighter range for EOS plot
+
+    # Print Lambda statistics for EOS runs with zeros
+    print("\nLambda parameter statistics for EOS runs (with zeros):")
+    for i, (filepath, label) in enumerate(zip(filepaths_2_zeros, labels_2_zeros)):
+        data = np.load(filepath)
+        print(f"\n  {label}:")
+
+        # Lambda_1
+        lambda_1 = data['lambda_1']
+        print(f"    Lambda_1:")
+        print(f"      Mean: {np.mean(lambda_1):.2f}, Median: {np.median(lambda_1):.2f}, Std: {np.std(lambda_1):.2f}")
+        print(f"      5th-95th percentile: {np.percentile(lambda_1, 5):.2f} - {np.percentile(lambda_1, 95):.2f}")
+        print(f"      Number of zeros: {np.sum(lambda_1 == 0)}")
+
+        # Lambda_2
+        lambda_2 = data['lambda_2']
+        print(f"    Lambda_2:")
+        print(f"      Mean: {np.mean(lambda_2):.2f}, Median: {np.median(lambda_2):.2f}, Std: {np.std(lambda_2):.2f}")
+        print(f"      5th-95th percentile: {np.percentile(lambda_2, 5):.2f} - {np.percentile(lambda_2, 95):.2f}")
+        print(f"      Number of zeros: {np.sum(lambda_2 == 0)}")
+
+        # Lambda_tilde
+        lambda_tilde = data['lambda_tilde']
+        print(f"    Lambda_tilde:")
+        print(f"      Mean: {np.mean(lambda_tilde):.2f}, Median: {np.median(lambda_tilde):.2f}, Std: {np.std(lambda_tilde):.2f}")
+        print(f"      5th-95th percentile: {np.percentile(lambda_tilde, 5):.2f} - {np.percentile(lambda_tilde, 95):.2f}")
+        print(f"      Number of zeros: {np.sum(lambda_tilde == 0)}")
+
+    # Use chi<0.05 EOS dataset (index 1) for most parameters, but chi<0.4 (index 0) for lambda_tilde
+    # Parameters order: chirp_mass, mass_ratio, chi_eff, lambda_tilde
+    dummy_indices_2_zeros = [1, 1, 1, 0]  # Use high spin (chi<0.4) for lambda_tilde normalization
+
+    success_2_zeros = create_comparison_cornerplot(
+        filepaths=filepaths_2_zeros,
+        parameters=parameters_2_zeros,
+        labels=labels_2_zeros,
+        colors=colors_2_zeros,
+        ranges=ranges_2_zeros,
+        zorders=zorders_2_zeros,
+        save_name="./figures/GW_PE/comparison_leos_spin_with_zeros.pdf",
+        overwrite=True,
+        dummy_normalization_indices=dummy_indices_2_zeros
+    )
+
+    if success_2_zeros:
+        print("✓ Successfully created comparison 2 with zeros: comparison_leos_spin_with_zeros.pdf")
+    else:
+        print("✗ Failed to create comparison 2 with zeros")
+
+    # ====== COMPARISON 2 WITH ZEROS DEBUG WITH EOS: leos with EOS parameter (including zeros) ======
+    print("\n" + "=" * 60)
+    print("COMPARISON 2 WITH ZEROS DEBUG WITH EOS: leos with EOS parameter (including zeros)")
+    print("=" * 60)
+
+    # Parameters to include in comparison 2 with zeros debug with EOS
+    parameters_2_zeros_debug_eos = [
+        "chirp_mass",
+        "mass_ratio",
+        "chi_eff",
+        "lambda_tilde",
+        "EOS"
+    ]
+
+    # Use same filepaths and labels as comparison 2 with zeros
+    filepaths_2_zeros_debug_eos = filepaths_2_zeros
+    labels_2_zeros_debug_eos = labels_2_zeros
+    colors_2_zeros_debug_eos = colors_2_zeros
+    zorders_2_zeros_debug_eos = zorders_2_zeros
+
+    # Use default ranges but override EOS parameter
+    ranges_2_zeros_debug_eos = {param: DEFAULT_RANGES.get(param) for param in parameters_2_zeros_debug_eos}
+    ranges_2_zeros_debug_eos["lambda_tilde"] = (0, 1000)  # Same as comparison 2
+    ranges_2_zeros_debug_eos["EOS"] = (0, 5000)
+
+    # Use chi<0.05 EOS dataset (index 1) for most parameters, but chi<0.4 (index 0) for lambda_tilde and EOS
+    # Parameters order: chirp_mass, mass_ratio, chi_eff, lambda_tilde, EOS
+    dummy_indices_2_zeros_debug_eos = [1, 1, 1, 0, 0]  # Use high spin for lambda_tilde and EOS
+
+    success_2_zeros_debug_eos = create_comparison_cornerplot(
+        filepaths=filepaths_2_zeros_debug_eos,
+        parameters=parameters_2_zeros_debug_eos,
+        labels=labels_2_zeros_debug_eos,
+        colors=colors_2_zeros_debug_eos,
+        ranges=ranges_2_zeros_debug_eos,
+        zorders=zorders_2_zeros_debug_eos,
+        save_name="./figures/GW_PE/comparison_leos_spin_with_zeros_debug_eos.pdf",
+        overwrite=True,
+        dummy_normalization_indices=dummy_indices_2_zeros_debug_eos
+    )
+
+    if success_2_zeros_debug_eos:
+        print("✓ Successfully created comparison 2 with zeros debug EOS: comparison_leos_spin_with_zeros_debug_eos.pdf")
+    else:
+        print("✗ Failed to create comparison 2 with zeros debug EOS")
 
 
     # # Summary
