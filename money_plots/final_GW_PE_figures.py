@@ -450,7 +450,7 @@ def main():
         r"$\chi_i \leq 0.05$",
     ]
 
-    colors_2 = [RED, GREEN]
+    colors_2 = ["#2596be", "#fe8053"]
 
     zorders_2 = [0, 1]  # Low spin prior (chi<0.05) on top
 
