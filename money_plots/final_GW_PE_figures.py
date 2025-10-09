@@ -720,7 +720,8 @@ def main():
         overwrite=True,
         dummy_normalization_indices=dummy_indices_3,
         truths=truths_3,
-        reverse_legend=False
+        reverse_legend=False,
+        show_credible_intervals=False
     )
 
     if success_4:
@@ -767,7 +768,8 @@ def main():
         overwrite=True,
         dummy_normalization_indices=dummy_indices_4_debug,
         truths=truths_4_debug,
-        reverse_legend=False
+        reverse_legend=False,
+        show_credible_intervals=False
     )
 
     if success_4_debug:
