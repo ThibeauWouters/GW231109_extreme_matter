@@ -78,7 +78,7 @@ DEFAULT_CORNER_KWARGS = {
     "fill_contours": True,
     "show_titles": False,
     "title_fmt": ".3f",
-    "levels": [0.5, 0.9],  # 50% and 90% credible regions
+    "levels": [0.68, 0.95],
     "labelpad": 0.10,
     "max_n_ticks": 3,
     "min_n_ticks": 2,
