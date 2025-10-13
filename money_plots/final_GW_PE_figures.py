@@ -18,6 +18,9 @@ from bilby.gw.conversion import convert_to_lal_binary_neutron_star_parameters
 from bilby.gw.conversion import generate_spin_parameters, generate_component_spins
 from bilby.gw.conversion import luminosity_distance_to_redshift
 
+# Configuration flag: recompute lambda_tilde from lambda_1, lambda_2 and source-frame masses
+RECOMPUTE_LAMBDA_TILDE = True
+
 # If running on Mac, so we can use TeX (not on Jarvis), change some rc params
 if "Woute029" in os.getcwd():
     print(f"Updating plotting parameters for TeX")
@@ -163,7 +166,8 @@ def create_comparison_cornerplot(
     truths: list[float] = None,
     reverse_legend: bool = True,
     show_credible_intervals: bool = True,
-    credible_interval_formats: dict = None
+    credible_interval_formats: dict = None,
+    recompute_lambda_tilde: bool = False
 ) -> bool:
     """
     Create a comparison corner plot with multiple datasets overlaid.
@@ -184,6 +188,8 @@ def create_comparison_cornerplot(
         show_credible_intervals (bool): Whether to show 90% credible intervals on 1D panels (default True)
         credible_interval_formats (dict): Custom format strings for credible intervals as {param: format_string}
             (e.g., {"chirp_mass": ".5f"}). If not provided, format is auto-determined from parameter range (optional)
+        recompute_lambda_tilde (bool): Whether to recompute lambda_tilde from lambda_1, lambda_2, and source-frame masses
+            using bilby.gw.conversion.lambda_1_lambda_2_to_lambda_tilde (default False)
 
     Returns:
         bool: True if successful, False otherwise
@@ -219,6 +225,29 @@ def create_comparison_cornerplot(
             print(f"  Label: {labels[i]}, Color: {colors[i]}, Z-order: {zorders[i]}")
 
             samples = load_npz_data(filepath, parameters)
+
+            # Recompute lambda_tilde if requested
+            if recompute_lambda_tilde and "lambda_tilde" in parameters:
+                print(f"  Recomputing lambda_tilde from lambda_1, lambda_2, and source-frame masses...")
+                lt_idx = parameters.index("lambda_tilde")
+
+                # Load the required data for recomputation
+                data = np.load(filepath)
+                lambda_1 = data['lambda_1']
+                lambda_2 = data['lambda_2']
+                mass_1_source = data['mass_1_source']
+                mass_2_source = data['mass_2_source']
+
+                # Recompute lambda_tilde using bilby with source-frame masses
+                lambda_tilde_new = lambda_1_lambda_2_to_lambda_tilde(
+                    lambda_1, lambda_2, mass_1_source, mass_2_source
+                )
+
+                # Replace in samples array
+                samples[:, lt_idx] = lambda_tilde_new
+                print(f"  Lambda_tilde recomputed: mean={np.mean(lambda_tilde_new):.2f}, "
+                      f"median={np.median(lambda_tilde_new):.2f}")
+
             all_samples.append(samples)
 
         if not all_samples:
@@ -555,7 +584,8 @@ def main():
         zorders=zorders_2,
         save_name="./figures/GW_PE/comparison_leos_spin.pdf",
         overwrite=True,
-        dummy_normalization_indices=dummy_indices_2
+        dummy_normalization_indices=dummy_indices_2,
+        recompute_lambda_tilde=RECOMPUTE_LAMBDA_TILDE
     )
 
     if success_2:
@@ -563,17 +593,13 @@ def main():
     else:
         print(" Failed to create comparison 2")
 
-    # ====== COMPARISON 2 DEBUG: leos with additional parameters ======
+    # ====== COMPARISON 2 DEBUG: leos with component masses and Lambdas ======
     print("\n" + "=" * 60)
-    print("COMPARISON 2 DEBUG: leos with additional parameters")
+    print("COMPARISON 2 DEBUG: leos with component masses and Lambdas")
     print("=" * 60)
 
-    # Parameters to include in comparison 2 debug (extended version)
+    # Parameters to include in comparison 2 debug (component masses and Lambdas only)
     parameters_2_debug = [
-        "chirp_mass",
-        "mass_ratio",
-        "chi_eff",
-        "lambda_tilde",
         "mass_1_source",
         "mass_2_source",
         "lambda_1",
@@ -586,15 +612,17 @@ def main():
     colors_2_debug = colors_2
     zorders_2_debug = zorders_2
 
-    # Use default ranges but override lambda parameters
-    ranges_2_debug = {param: DEFAULT_RANGES.get(param) for param in parameters_2_debug}
-    ranges_2_debug["lambda_tilde"] = (0, 1000)  # Same as comparison 2
-    ranges_2_debug["lambda_1"] = (0, 500)
-    ranges_2_debug["lambda_2"] = (0, 1000)
+    # Use custom ranges based on data (slightly wider than credible intervals)
+    ranges_2_debug = {
+        "mass_1_source": (1.3, 2.2),
+        "mass_2_source": (1.0, 1.6),
+        "lambda_1": (0, 700),
+        "lambda_2": (0, 2200)
+    }
 
-    # Use chi<0.05 EOS dataset (index 1) for most parameters, but chi<0.4 (index 0) for lambda parameters
-    # Parameters order: chirp_mass, mass_ratio, chi_eff, lambda_tilde, mass_1_source, mass_2_source, lambda_1, lambda_2
-    dummy_indices_2_debug = [1, 1, 1, 0, 1, 1, 0, 0]  # Use high spin for lambda params
+    # Use chi<0.05 EOS dataset (index 1) for mass parameters, but chi<0.4 (index 0) for lambda parameters
+    # Parameters order: mass_1_source, mass_2_source, lambda_1, lambda_2
+    dummy_indices_2_debug = [1, 1, 0, 0]  # Use high spin for lambda params
 
     success_2_debug = create_comparison_cornerplot(
         filepaths=filepaths_2_debug,
@@ -651,7 +679,8 @@ def main():
         zorders=zorders_2_debug_eos,
         save_name="./figures/GW_PE/comparison_leos_spin_debug_eos.pdf",
         overwrite=True,
-        dummy_normalization_indices=dummy_indices_2_debug_eos
+        dummy_normalization_indices=dummy_indices_2_debug_eos,
+        recompute_lambda_tilde=RECOMPUTE_LAMBDA_TILDE
     )
 
     if success_2_debug_eos:
@@ -730,7 +759,8 @@ def main():
         zorders=zorders_2_zeros,
         save_name="./figures/GW_PE/comparison_leos_spin_with_zeros.pdf",
         overwrite=True,
-        dummy_normalization_indices=dummy_indices_2_zeros
+        dummy_normalization_indices=dummy_indices_2_zeros,
+        recompute_lambda_tilde=RECOMPUTE_LAMBDA_TILDE
     )
 
     if success_2_zeros:
@@ -776,7 +806,8 @@ def main():
         zorders=zorders_2_zeros_debug_eos,
         save_name="./figures/GW_PE/comparison_leos_spin_with_zeros_debug_eos.pdf",
         overwrite=True,
-        dummy_normalization_indices=dummy_indices_2_zeros_debug_eos
+        dummy_normalization_indices=dummy_indices_2_zeros_debug_eos,
+        recompute_lambda_tilde=RECOMPUTE_LAMBDA_TILDE
     )
 
     if success_2_zeros_debug_eos:
