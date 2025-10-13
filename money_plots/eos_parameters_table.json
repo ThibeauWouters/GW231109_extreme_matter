@@ -182,7 +182,7 @@
     }
   },
   "outdir_GW231109_s040": {
-    "label": "GW231109 ($\\chi_i \\leq 0.4$)",
+    "label": "GW231109 ($a_i \\leq 0.4$)",
     "parameters": {
       "MTOV": {
         "median": 2.2884719843694894,
