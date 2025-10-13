@@ -190,7 +190,8 @@ if "Woute029" in cwd:
 EVENTS = {
     'GW170817': {
         'file': '../posteriors/data/GW170817.npz',
-        'color': '#fab6c7',  # Light red/pink
+        # 'color': '#fab6c7',  # Light red/pink
+        'color': 'purple',  # purple
         'label': 'GW170817'
     },
     'GW231109': {

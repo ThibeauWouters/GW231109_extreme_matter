@@ -1,2 +1,4 @@
 GW170817_jester_constraints.npz
 radio_jester_constraints.npz
+jester_eos_samples_ET.npz
+jester_eos_samples_ET_CE.npz
