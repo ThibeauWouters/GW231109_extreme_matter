@@ -564,7 +564,7 @@ def make_anna_tim_favourite_plot(
 
         # Create figure
         print("\nCreating plot...")
-        fig = plt.figure(figsize=(12, 8))
+        fig = plt.figure(figsize=(8, 8))
         mchirp_min, mchirp_max = xlim
 
         # Initialize colormap variables for later use (even if not plotting GW170817 EOS)
@@ -807,7 +807,7 @@ def make_anna_tim_favourite_plot(
         # Add colorbar for EOS posterior probability (only if GW170817 EOS curves were plotted)
         if sm is not None:
             ax = fig.gca()
-            cbar = fig.colorbar(sm, ax=ax, pad=0.02)
+            cbar = fig.colorbar(sm, ax=ax, pad=0.02, fraction=0.03, aspect=35)
             cbar.set_label(f"EOS posterior density ({eos_name})", fontsize=16)
             cbar.ax.tick_params(labelsize=14)
 
@@ -841,7 +841,7 @@ def main():
         save_name="./figures/GW_PE/anna_tim_favourite_plot.pdf",
         overwrite=True,
         show_injection_truth=True,
-        xlim=(1.15, 1.45),
+        xlim=(1.1501, 1.45),
         ylim=(100, 1000)
     )
 
