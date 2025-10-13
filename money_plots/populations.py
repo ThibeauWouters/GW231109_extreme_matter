@@ -37,6 +37,7 @@ OUTPUT_SAMPLE_SIZE = 10_000  # Number of output samples after m1 >= m2 constrain
 
 # KDE parameters
 KDE_NBINS = 1_000             # Number of points for KDE evaluation (higher = smoother curves)
+KDE_PLOT_NBINS = 5_000        # Number of points for plotting KDEs (finer for smoother plots)
 KDE_SMOOTH = 2.0              # Smoothing factor (None = auto, or set to float like 1.5 for more smoothing)
 # KDE_SMOOTH = None
 
@@ -357,8 +358,8 @@ def compute_kdes_batch(data_dict, Nbins=KDE_NBINS, smooth=KDE_SMOOTH, prior_doma
         xMin, xMax = prior_domains
 
         # Determine KDE method based on distribution type (only if use_method_selection=True)
-        # Transform for uniform and default, Reflection for gaussian and double_gaussian
-        if use_method_selection and name in ['uniform', 'default']:
+        # Transform for default only, Reflection for gaussian, double_gaussian, and uniform
+        if use_method_selection and name in ['default']:
             kde_method = 'Transform'
         else:
             kde_method = 'Reflection'
@@ -412,7 +413,9 @@ def compute_js_on_common_grid(kde_dict1, kde_dict2, Nbins=KDE_NBINS):
     p2 = kde_dict2['kernel'].evaluate(x_common)
 
     return compute_js(p1, p2)
-    
+
+
+
 
 def main():
     """Main execution function."""
@@ -476,6 +479,32 @@ def main():
     m2_posterior_kdes = compute_kdes_batch(m2_posterior_data, prior_domains=PRIOR_DOMAIN_WIDE)
 
     # =============================================================================
+    # Compute NEW KDEs on zoomed domain for plotting
+    # =============================================================================
+    print("Computing new KDEs on zoomed domain for plotting...")
+
+    # Determine zoom domain from M1_XLIM and M2_XLIM
+    if M1_XLIM is not None and M2_XLIM is not None:
+        xlim_min = min(M1_XLIM[0], M2_XLIM[0])
+        xlim_max = max(M1_XLIM[1], M2_XLIM[1])
+        zoom_domain = (xlim_min, xlim_max)
+    elif M1_XLIM is not None:
+        zoom_domain = M1_XLIM
+    elif M2_XLIM is not None:
+        zoom_domain = M2_XLIM
+    else:
+        # Fallback to wide domain if no zoom specified
+        zoom_domain = PRIOR_DOMAIN_WIDE
+
+    print(f"  Zoom domain: {zoom_domain[0]:.2f} to {zoom_domain[1]:.2f} solar masses")
+
+    # Compute NEW KDEs fitted on the zoom domain with finer grid
+    m1_prior_kdes_plot = compute_kdes_batch(m1_prior_data, Nbins=KDE_PLOT_NBINS, prior_domains=zoom_domain, use_method_selection=True)
+    m2_prior_kdes_plot = compute_kdes_batch(m2_prior_data, Nbins=KDE_PLOT_NBINS, prior_domains=zoom_domain, use_method_selection=True)
+    m1_posterior_kdes_plot = compute_kdes_batch(m1_posterior_data, Nbins=KDE_PLOT_NBINS, prior_domains=zoom_domain)
+    m2_posterior_kdes_plot = compute_kdes_batch(m2_posterior_data, Nbins=KDE_PLOT_NBINS, prior_domains=zoom_domain)
+
+    # =============================================================================
     # Create plots - Wide domain version
     # =============================================================================
     print("\nCreating wide domain plot...")
@@ -488,6 +517,21 @@ def main():
         'gaussian': 'dodgerblue',
         'uniform': 'darkgreen',
         'default': 'darkorange'
+    }
+
+    # Rescale factors for prior KDEs (to make them more visible)
+    m1_prior_rescale = {
+        'double_gaussian': 1.0,
+        'gaussian': 1.0,
+        'uniform': 1.0,
+        'default': 1.0
+    }
+
+    m2_prior_rescale = {
+        'double_gaussian': 1.0,
+        'gaussian': 1.0,
+        'uniform': 1.0,
+        'default': 500.0
     }
 
     prior_config = {
@@ -508,7 +552,7 @@ def main():
     for name in ['double_gaussian', 'gaussian', 'uniform', 'default']:
         if name in m1_prior_kdes:
             kde_data = m1_prior_kdes[name]
-            ax[0].plot(kde_data['x'], kde_data['kde'], **prior_config[name])
+            ax[0].plot(kde_data['x'], kde_data['kde'] * m1_prior_rescale[name], **prior_config[name])
 
     # Plot m1 posteriors
     for name in ['double_gaussian', 'gaussian', 'uniform', 'default']:
@@ -525,7 +569,7 @@ def main():
     for name in ['double_gaussian', 'gaussian', 'uniform', 'default']:
         if name in m2_prior_kdes:
             kde_data = m2_prior_kdes[name]
-            ax[1].plot(kde_data['x'], kde_data['kde'], **prior_config[name])
+            ax[1].plot(kde_data['x'], kde_data['kde'] * m2_prior_rescale[name], **prior_config[name])
 
     # Plot m2 posteriors
     for name in ['double_gaussian', 'gaussian', 'uniform', 'default']:
@@ -568,22 +612,22 @@ def main():
     print(f"  Wide domain plot saved to: {OUTPUT_PATH_WIDE}")
 
     # =============================================================================
-    # Create plots - Zoomed version (using same KDEs, just different xlim)
+    # Create plots - Zoomed version (using finer KDE evaluations)
     # =============================================================================
     print("\nCreating zoomed plot...")
 
     fig, ax = plt.subplots(2, 1, figsize=FIGSIZE, sharex=True)
 
-    # Plot m1 priors
+    # Plot m1 priors (using fine grid)
     for name in ['double_gaussian', 'gaussian', 'uniform', 'default']:
-        if name in m1_prior_kdes:
-            kde_data = m1_prior_kdes[name]
-            ax[0].plot(kde_data['x'], kde_data['kde'], **prior_config[name])
+        if name in m1_prior_kdes_plot:
+            kde_data = m1_prior_kdes_plot[name]
+            ax[0].plot(kde_data['x'], kde_data['kde'] * m1_prior_rescale[name], **prior_config[name])
 
-    # Plot m1 posteriors
+    # Plot m1 posteriors (using fine grid)
     for name in ['double_gaussian', 'gaussian', 'uniform', 'default']:
-        if name in m1_posterior_kdes:
-            kde_data = m1_posterior_kdes[name]
+        if name in m1_posterior_kdes_plot:
+            kde_data = m1_posterior_kdes_plot[name]
             ax[0].plot(kde_data['x'], kde_data['kde'], **posterior_config[name])
             ax[0].fill_between(kde_data['x'], kde_data['kde'],
                               color=colors[name], alpha=0.3)
@@ -591,16 +635,16 @@ def main():
     ax[0].set_ylim(bottom=0)
     ax[0].set_ylabel(r'$m_1$ prob. density', fontsize=AXIS_LABEL_FONTSIZE)
 
-    # Plot m2 priors
+    # Plot m2 priors (using fine grid)
     for name in ['double_gaussian', 'gaussian', 'uniform', 'default']:
-        if name in m2_prior_kdes:
-            kde_data = m2_prior_kdes[name]
-            ax[1].plot(kde_data['x'], kde_data['kde'], **prior_config[name])
+        if name in m2_prior_kdes_plot:
+            kde_data = m2_prior_kdes_plot[name]
+            ax[1].plot(kde_data['x'], kde_data['kde'] * m2_prior_rescale[name], **prior_config[name])
 
-    # Plot m2 posteriors
+    # Plot m2 posteriors (using fine grid)
     for name in ['double_gaussian', 'gaussian', 'uniform', 'default']:
-        if name in m2_posterior_kdes:
-            kde_data = m2_posterior_kdes[name]
+        if name in m2_posterior_kdes_plot:
+            kde_data = m2_posterior_kdes_plot[name]
             ax[1].plot(kde_data['x'], kde_data['kde'], **posterior_config[name])
             ax[1].fill_between(kde_data['x'], kde_data['kde'],
                               color=colors[name], alpha=0.3)
