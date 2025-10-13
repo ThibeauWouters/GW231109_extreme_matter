@@ -842,7 +842,7 @@ def main():
         overwrite=True,
         show_injection_truth=True,
         xlim=(1.101, 1.45),
-        ylim=(100, 1500)
+        ylim=(100, 1400)
     )
 
     if not success:
