@@ -162,7 +162,8 @@ def create_comparison_cornerplot(
     dummy_normalization_indices: list[int] = None,
     truths: list[float] = None,
     reverse_legend: bool = True,
-    show_credible_intervals: bool = True
+    show_credible_intervals: bool = True,
+    credible_interval_formats: dict = None
 ) -> bool:
     """
     Create a comparison corner plot with multiple datasets overlaid.
@@ -181,6 +182,8 @@ def create_comparison_cornerplot(
         truths (list[float]): True values for each parameter to plot as reference lines (optional)
         reverse_legend (bool): Whether to reverse legend order (default True shows highest z-order first)
         show_credible_intervals (bool): Whether to show 90% credible intervals on 1D panels (default True)
+        credible_interval_formats (dict): Custom format strings for credible intervals as {param: format_string}
+            (e.g., {"chirp_mass": ".5f"}). If not provided, format is auto-determined from parameter range (optional)
 
     Returns:
         bool: True if successful, False otherwise
@@ -368,16 +371,20 @@ def create_comparison_cornerplot(
                     med = np.median(param_samples)
 
                     # Format credible interval string
-                    # Determine number of decimal places based on parameter range
-                    param_range = np.ptp([low, high])
-                    if param_range < 0.1:
-                        fmt = ".4f"
-                    elif param_range < 1:
-                        fmt = ".3f"
-                    elif param_range < 10:
-                        fmt = ".2f"
+                    # Check if custom format is provided for this parameter
+                    if credible_interval_formats is not None and param in credible_interval_formats:
+                        fmt = credible_interval_formats[param]
                     else:
-                        fmt = ".1f"
+                        # Determine number of decimal places based on parameter range
+                        param_range = np.ptp([low, high])
+                        if param_range < 0.1:
+                            fmt = ".4f"
+                        elif param_range < 1:
+                            fmt = ".3f"
+                        elif param_range < 10:
+                            fmt = ".2f"
+                        else:
+                            fmt = ".1f"
 
                     textstr = f"${med:{fmt}}^{{+{high - med:{fmt}}}}_{{-{med - low:{fmt}}}}$"
 
@@ -893,7 +900,8 @@ def main():
         dummy_normalization_indices=dummy_indices_3,
         truths=truths_3,
         reverse_legend=False,
-        show_credible_intervals=False
+        show_credible_intervals=True,
+        credible_interval_formats={"chirp_mass": ".5f"}
     )
 
     if success_4:
