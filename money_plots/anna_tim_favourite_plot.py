@@ -808,7 +808,7 @@ def make_anna_tim_favourite_plot(
         if sm is not None:
             ax = fig.gca()
             cbar = fig.colorbar(sm, ax=ax, pad=0.02, fraction=0.03, aspect=35)
-            cbar.set_label(f"EOS posterior density ({eos_name})", fontsize=16)
+            cbar.set_label(f"EOS posterior density", fontsize=16)
             cbar.ax.tick_params(labelsize=14)
 
         # Ensure directory exists
@@ -841,8 +841,8 @@ def main():
         save_name="./figures/GW_PE/anna_tim_favourite_plot.pdf",
         overwrite=True,
         show_injection_truth=True,
-        xlim=(1.1501, 1.45),
-        ylim=(100, 1000)
+        xlim=(1.101, 1.45),
+        ylim=(100, 1500)
     )
 
     if not success:
