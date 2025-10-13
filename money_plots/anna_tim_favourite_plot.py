@@ -101,6 +101,10 @@ PLOT_GW170817_EOS = True  # If True, plot EOS curves from GW170817 constraint
 PLOT_JESTER_ET_EOS = False  # If True, plot EOS curves from jester ET inference
 PLOT_JESTER_ET_CE_EOS = False  # If True, plot EOS curves from jester ET+CE inference
 
+# Colorbar font sizes
+COLORBAR_LABEL_FONTSIZE = 20  # Font size for colorbar label
+COLORBAR_TICKS_FONTSIZE = 18  # Font size for colorbar tick labels
+
 
 def load_eos_curves(eos_name: str):
     """
@@ -683,7 +687,7 @@ def make_anna_tim_favourite_plot(
         inj_mchirp, inj_lambda_tilde = load_injection_eos_curve(xlim)
         if inj_mchirp is not None:
             plt.plot(inj_mchirp, inj_lambda_tilde, color=TRUTH_COLOR, alpha=1.0,
-                    lw=3.0, zorder=200000, linestyle='--', label='Injection EOS')
+                    lw=3.0, zorder=200000, linestyle='--', label='Injection')
 
         # Set up corner kwargs based on display mode
         if CORNER_PLOT_MODE == "scatter":
@@ -789,8 +793,7 @@ def make_anna_tim_favourite_plot(
 
         if inj_mchirp is not None:
             legend_elements.append(
-                plt.Line2D([0], [0], color=TRUTH_COLOR, lw=3, linestyle='--',
-                          label='Truth')
+                plt.Line2D([0], [0], color=TRUTH_COLOR, lw=3, linestyle='--', label='Injection')
             )
 
         # if show_injection_truth:
@@ -808,8 +811,8 @@ def make_anna_tim_favourite_plot(
         if sm is not None:
             ax = fig.gca()
             cbar = fig.colorbar(sm, ax=ax, pad=0.02, fraction=0.03, aspect=35)
-            cbar.set_label(f"EOS posterior density", fontsize=16)
-            cbar.ax.tick_params(labelsize=14)
+            cbar.set_label(f"EOS posterior density", fontsize=COLORBAR_LABEL_FONTSIZE)
+            cbar.ax.tick_params(labelsize=COLORBAR_TICKS_FONTSIZE)
 
         # Ensure directory exists
         os.makedirs(os.path.dirname(save_name), exist_ok=True)
