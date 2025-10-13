@@ -456,8 +456,8 @@ def main():
     ]
 
     labels_1 = [
-        r"$\chi_i \leq 0.4$",
-        r"$\chi_i \leq 0.05$",
+        r"$a_i \leq 0.4$",
+        r"$a_i \leq 0.05$",
     ]
 
     colors_1 = [BLUE, ORANGE]
@@ -506,8 +506,8 @@ def main():
     ]
 
     labels_2 = [
-        r"$\chi_i \leq 0.4$",
-        r"$\chi_i \leq 0.05$",
+        r"$a_i \leq 0.4$",
+        r"$a_i \leq 0.05$",
     ]
 
     colors_2 = ["#2596be", "#ff642c"]
@@ -678,8 +678,8 @@ def main():
     ]
 
     labels_2_zeros = [
-        r"$\chi_i \leq 0.4$",
-        r"$\chi_i \leq 0.05$",
+        r"$a_i \leq 0.4$",
+        r"$a_i \leq 0.05$",
     ]
 
     colors_2_zeros = ["#2596be", "#ff642c"]
