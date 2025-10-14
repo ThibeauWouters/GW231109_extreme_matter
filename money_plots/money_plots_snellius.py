@@ -35,12 +35,12 @@ mpl_params = {"axes.grid": False,
         "axes.labelcolor" : "black",
         "axes.edgecolor" : "black",
         "font.serif" : ["Computer Modern Serif"],
-        "xtick.labelsize": 16,
-        "ytick.labelsize": 16,
-        "axes.labelsize": 16,
-        "legend.fontsize": 16,
-        "legend.title_fontsize": 16,
-        "figure.titlesize": 16}
+        "xtick.labelsize": 12,
+        "ytick.labelsize": 12,
+        "axes.labelsize": 12,
+        "legend.fontsize": 12,
+        "legend.title_fontsize": 12,
+        "figure.titlesize": 12}
 plt.rcParams.update(mpl_params)
 
 # Constants
@@ -104,8 +104,8 @@ def make_parameter_histograms(data_list: list,
                               colors: list,
                               filename_prefix: str = "",
                               legend_outside: bool = False,
-                              fontsize_legend: int = 14,
-                              fontsize_labels: int = 16
+                              fontsize_legend: int = 11,
+                              fontsize_labels: int = 12
                               ):
     """Create comparison histograms for key EOS parameters across multiple datasets.
 
@@ -703,7 +703,7 @@ def plot_full_injection(plot_text: bool = True,
         x = 0.95
         y = 0.95
         dy = 0.15
-        fs = 16
+        fs = 12
         plt.text(x, y, textstr_et, transform=plt.gca().transAxes,
                  verticalalignment='top', horizontalalignment='right',
                  color=ET_COLOR, fontsize=fs)
@@ -711,11 +711,11 @@ def plot_full_injection(plot_text: bool = True,
                  verticalalignment='top', horizontalalignment='right',
                  color=ET_CE_COLOR, fontsize=fs)
 
-    plt.xlabel(r"$R_{1.4}$ [km]", fontsize=16)
-    plt.ylabel('Probability density', fontsize=16)
+    plt.xlabel(r"$R_{1.4}$ [km]", fontsize=12)
+    plt.ylabel('Probability density', fontsize=12)
     plt.xlim(11.0, 14.0)
     plt.ylim(bottom=0.0)
-    plt.legend(fontsize=14)
+    plt.legend(fontsize=11)
 
     save_name = os.path.join("./figures/EOS_comparison", "ET_full_injection_R14_histogram.pdf")
     plt.savefig(save_name, bbox_inches="tight")
@@ -770,16 +770,16 @@ def plot_full_injection(plot_text: bool = True,
         textstr_et_ce = f"${med_et_ce:.1f}^{{+{high_et_ce - med_et_ce:.1f}}}_{{-{med_et_ce - low_et_ce:.1f}}}$"
         plt.text(0.97, 0.97, textstr_et, transform=plt.gca().transAxes,
                  verticalalignment='top', horizontalalignment='right',
-                 color=ET_COLOR, fontsize=16)
+                 color=ET_COLOR, fontsize=12)
         plt.text(0.97, 0.92, textstr_et_ce, transform=plt.gca().transAxes,
                  verticalalignment='top', horizontalalignment='right',
-                 color=ET_CE_COLOR, fontsize=16)
+                 color=ET_CE_COLOR, fontsize=12)
 
-    plt.xlabel(r"$p(3n_{\rm{sat}})$ [MeV fm$^{-3}$]", fontsize=16)
-    plt.ylabel('Probability density', fontsize=16)
+    plt.xlabel(r"$p(3n_{\rm{sat}})$ [MeV fm$^{-3}$]", fontsize=12)
+    plt.ylabel('Probability density', fontsize=12)
     plt.xlim(0.1, 200.0)
     plt.ylim(bottom=0.0)
-    plt.legend(fontsize=14)
+    plt.legend(fontsize=11)
 
     save_name = os.path.join("./figures/EOS_comparison", "ET_full_injection_p3nsat_histogram.pdf")
     plt.savefig(save_name, bbox_inches="tight")

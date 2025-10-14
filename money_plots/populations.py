@@ -479,31 +479,8 @@ def main():
     m1_posterior_kdes = compute_kdes_batch(m1_posterior_data, prior_domains=PRIOR_DOMAIN_WIDE)
     m2_posterior_kdes = compute_kdes_batch(m2_posterior_data, prior_domains=PRIOR_DOMAIN_WIDE)
 
-    # =============================================================================
-    # Compute NEW KDEs on zoomed domain for plotting
-    # =============================================================================
-    print("Computing new KDEs on zoomed domain for plotting...")
-
-    # Determine zoom domain from M1_XLIM and M2_XLIM
-    if M1_XLIM is not None and M2_XLIM is not None:
-        xlim_min = min(M1_XLIM[0], M2_XLIM[0])
-        xlim_max = max(M1_XLIM[1], M2_XLIM[1])
-        zoom_domain = (xlim_min, xlim_max)
-    elif M1_XLIM is not None:
-        zoom_domain = M1_XLIM
-    elif M2_XLIM is not None:
-        zoom_domain = M2_XLIM
-    else:
-        # Fallback to wide domain if no zoom specified
-        zoom_domain = PRIOR_DOMAIN_WIDE
-
-    print(f"  Zoom domain: {zoom_domain[0]:.2f} to {zoom_domain[1]:.2f} solar masses")
-
-    # Compute NEW KDEs fitted on the zoom domain with finer grid
-    m1_prior_kdes_plot = compute_kdes_batch(m1_prior_data, Nbins=KDE_PLOT_NBINS, prior_domains=zoom_domain, use_method_selection=True)
-    m2_prior_kdes_plot = compute_kdes_batch(m2_prior_data, Nbins=KDE_PLOT_NBINS, prior_domains=zoom_domain, use_method_selection=True)
-    m1_posterior_kdes_plot = compute_kdes_batch(m1_posterior_data, Nbins=KDE_PLOT_NBINS, prior_domains=zoom_domain)
-    m2_posterior_kdes_plot = compute_kdes_batch(m2_posterior_data, Nbins=KDE_PLOT_NBINS, prior_domains=zoom_domain)
+    # NOTE: We use the SAME KDEs computed on the wide domain for both wide and zoomed plots
+    # The zoomed plot will simply use plt.xlim to zoom in on the same KDE
 
     # =============================================================================
     # Create plots - Wide domain version
@@ -645,22 +622,22 @@ def main():
     print(f"  Wide domain plot saved to: {OUTPUT_PATH_WIDE}")
 
     # =============================================================================
-    # Create plots - Zoomed version (using finer KDE evaluations)
+    # Create plots - Zoomed version (using SAME KDEs, just different xlim)
     # =============================================================================
     print("\nCreating zoomed plot...")
 
     fig, ax = plt.subplots(2, 1, figsize=FIGSIZE, sharex=True)
 
-    # Plot m1 priors (using fine grid)
+    # Plot m1 priors (using SAME KDEs as wide plot)
     for name in ['double_gaussian', 'gaussian', 'uniform', 'default']:
-        if name in m1_prior_kdes_plot:
-            kde_data = m1_prior_kdes_plot[name]
+        if name in m1_prior_kdes:
+            kde_data = m1_prior_kdes[name]
             ax[0].plot(kde_data['x'], kde_data['kde'] * m1_prior_rescale[name], **prior_config[name])
 
-    # Plot m1 posteriors (using fine grid)
+    # Plot m1 posteriors (using SAME KDEs as wide plot)
     for name in ['double_gaussian', 'gaussian', 'uniform', 'default']:
-        if name in m1_posterior_kdes_plot:
-            kde_data = m1_posterior_kdes_plot[name]
+        if name in m1_posterior_kdes:
+            kde_data = m1_posterior_kdes[name]
             ax[0].plot(kde_data['x'], kde_data['kde'], **posterior_config[name])
             ax[0].fill_between(kde_data['x'], kde_data['kde'],
                               color=colors[name], alpha=0.3)
@@ -668,16 +645,16 @@ def main():
     ax[0].set_ylim(bottom=0)
     ax[0].set_ylabel(r'$m_1$ prob. density', fontsize=AXIS_LABEL_FONTSIZE)
 
-    # Plot m2 priors (using fine grid)
+    # Plot m2 priors (using SAME KDEs as wide plot)
     for name in ['double_gaussian', 'gaussian', 'uniform', 'default']:
-        if name in m2_prior_kdes_plot:
-            kde_data = m2_prior_kdes_plot[name]
+        if name in m2_prior_kdes:
+            kde_data = m2_prior_kdes[name]
             ax[1].plot(kde_data['x'], kde_data['kde'] * m2_prior_rescale[name], **prior_config[name])
 
-    # Plot m2 posteriors (using fine grid)
+    # Plot m2 posteriors (using SAME KDEs as wide plot)
     for name in ['double_gaussian', 'gaussian', 'uniform', 'default']:
-        if name in m2_posterior_kdes_plot:
-            kde_data = m2_posterior_kdes_plot[name]
+        if name in m2_posterior_kdes:
+            kde_data = m2_posterior_kdes[name]
             ax[1].plot(kde_data['x'], kde_data['kde'], **posterior_config[name])
             ax[1].fill_between(kde_data['x'], kde_data['kde'],
                               color=colors[name], alpha=0.3)
