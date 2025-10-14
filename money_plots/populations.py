@@ -37,7 +37,7 @@ OUTPUT_SAMPLE_SIZE = 10_000  # Number of output samples after m1 >= m2 constrain
 
 # KDE parameters
 KDE_NBINS = 1_000             # Number of points for KDE evaluation (higher = smoother curves)
-KDE_PLOT_NBINS = 5_000        # Number of points for plotting KDEs (finer for smoother plots)
+KDE_PLOT_NBINS = 1_000        # Number of points for plotting KDEs (finer for smoother plots)
 KDE_SMOOTH = 2.0              # Smoothing factor (None = auto, or set to float like 1.5 for more smoothing)
 # KDE_SMOOTH = None
 
@@ -114,9 +114,9 @@ def compute_js(p1, p2):
     p2 = p2 / p2.sum()
 
     p_m = 0.5 * (p1 + p2)
-    jsd = 0.5 * (entropy(p1, p_m) + entropy(p2, p_m))
+    jsd = 0.5 * (entropy(p1, p_m, base=2) + entropy(p2, p_m, base=2))
 
-    jsd_spy = jensenshannon(p1, p2)
+    jsd_spy = jensenshannon(p1, p2, base=2)
 
     return np.array([jsd, jsd_spy*jsd_spy])
 
@@ -148,7 +148,7 @@ def generate_jsd_latex_table(m1_jsds, m2_jsds, output_file='./JSD_tabular.tex'):
     # Tabular spec: c column for multirow label, l for row labels, then data columns
     lines.append(r'\begin{tabular}{c @{}l@{} cccc c||c cccc}')
     lines.append(r'\hline\hline')
-    lines.append(r' & & \multicolumn{4}{c}{$m_1$ prior} & & & \multicolumn{4}{c}{$m_2$ prior} \\')
+    lines.append(r' & & \multicolumn{4}{c}{$m_1$ \textsc{Prior}} & & & \multicolumn{4}{c}{$m_2$ \textsc{Prior}} \\')
     lines.append(r'\hline')
 
     # Column headers
@@ -360,7 +360,8 @@ def compute_kdes_batch(data_dict, Nbins=KDE_NBINS, smooth=KDE_SMOOTH, prior_doma
         # Determine KDE method based on distribution type (only if use_method_selection=True)
         # Transform for default only, Reflection for gaussian, double_gaussian, and uniform
         if use_method_selection and name in ['default']:
-            kde_method = 'Transform'
+            kde_method = 'Reflection'
+            # kde_method = 'Transform' # NOTE: This seems to break things
         else:
             kde_method = 'Reflection'
 
@@ -531,7 +532,7 @@ def main():
         'double_gaussian': 1.0,
         'gaussian': 1.0,
         'uniform': 1.0,
-        'default': 500.0
+        'default': 1.0
     }
 
     prior_config = {
@@ -548,11 +549,27 @@ def main():
         'default': {'color': colors['default'], 'linestyle': '-', 'linewidth': 2}
     }
 
+    # Plot m1 prior histograms first (so they're in the background)
+    for name in ['double_gaussian', 'gaussian', 'uniform', 'default']:
+        if name in m1_prior_kdes:
+            kde_data = m1_prior_kdes[name]
+            ax[0].hist(kde_data['data'], bins=50, density=True,
+                      color=colors[name], alpha=0.15, range=PRIOR_DOMAIN_WIDE,
+                      edgecolor=colors[name], linewidth=0.5)
+
     # Plot m1 priors
     for name in ['double_gaussian', 'gaussian', 'uniform', 'default']:
         if name in m1_prior_kdes:
             kde_data = m1_prior_kdes[name]
             ax[0].plot(kde_data['x'], kde_data['kde'] * m1_prior_rescale[name], **prior_config[name])
+
+    # Plot m1 posterior histograms
+    for name in ['double_gaussian', 'gaussian', 'uniform', 'default']:
+        if name in m1_posterior_kdes:
+            kde_data = m1_posterior_kdes[name]
+            ax[0].hist(kde_data['data'], bins=50, density=True,
+                      color=colors[name], alpha=0.15, range=PRIOR_DOMAIN_WIDE,
+                      edgecolor=colors[name], linewidth=0.5)
 
     # Plot m1 posteriors
     for name in ['double_gaussian', 'gaussian', 'uniform', 'default']:
@@ -565,11 +582,27 @@ def main():
     ax[0].set_ylim(bottom=0)
     ax[0].set_ylabel(r'$m_1$ prob. density', fontsize=AXIS_LABEL_FONTSIZE)
 
+    # Plot m2 prior histograms first (so they're in the background)
+    for name in ['double_gaussian', 'gaussian', 'uniform', 'default']:
+        if name in m2_prior_kdes:
+            kde_data = m2_prior_kdes[name]
+            ax[1].hist(kde_data['data'], bins=50, density=True,
+                      color=colors[name], alpha=0.15, range=PRIOR_DOMAIN_WIDE,
+                      edgecolor=colors[name], linewidth=0.5)
+
     # Plot m2 priors
     for name in ['double_gaussian', 'gaussian', 'uniform', 'default']:
         if name in m2_prior_kdes:
             kde_data = m2_prior_kdes[name]
             ax[1].plot(kde_data['x'], kde_data['kde'] * m2_prior_rescale[name], **prior_config[name])
+
+    # Plot m2 posterior histograms
+    for name in ['double_gaussian', 'gaussian', 'uniform', 'default']:
+        if name in m2_posterior_kdes:
+            kde_data = m2_posterior_kdes[name]
+            ax[1].hist(kde_data['data'], bins=50, density=True,
+                      color=colors[name], alpha=0.15, range=PRIOR_DOMAIN_WIDE,
+                      edgecolor=colors[name], linewidth=0.5)
 
     # Plot m2 posteriors
     for name in ['double_gaussian', 'gaussian', 'uniform', 'default']:
