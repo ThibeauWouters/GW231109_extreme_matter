@@ -96,6 +96,10 @@ CORNER_PLOT_MODE = "contour"
 PLOT_DEBUG_LUMINOSITY_DISTANCE = False  # If True, create histogram of luminosity_distance for all datasets
 PLOT_DEBUG_REDSHIFT = False  # If True, create histogram of redshift for all datasets, NOTE: this can take a bit for the redshift conversion
 
+# Posterior plotting flags
+PLOT_GW231109_ET = True  # If True, plot GW231109 ET posterior
+PLOT_GW231109_ET_CE = False  # If True, plot GW231109 ET+CE posterior
+
 # EOS curves flags
 PLOT_GW170817_EOS = True  # If True, plot EOS curves from GW170817 constraint
 PLOT_JESTER_ET_EOS = False  # If True, plot EOS curves from jester ET inference
@@ -510,11 +514,17 @@ def make_anna_tim_favourite_plot(
         print("\nLoading GW170817 posterior...")
         chirp_mass_GW170817, lambda_tilde_GW170817, dL_GW170817 = load_GW170817_posterior()
 
-        print("\nLoading GW231109 ET posterior...")
-        chirp_mass_ET, lambda_tilde_ET, dL_ET = load_GW231109_ET_posterior()
+        # Conditionally load ET posterior
+        chirp_mass_ET, lambda_tilde_ET, dL_ET = None, None, None
+        if PLOT_GW231109_ET:
+            print("\nLoading GW231109 ET posterior...")
+            chirp_mass_ET, lambda_tilde_ET, dL_ET = load_GW231109_ET_posterior()
 
-        print("\nLoading GW231109 ET+CE posterior...")
-        chirp_mass_ET_CE, lambda_tilde_ET_CE, dL_ET_CE = load_GW231109_ET_CE_posterior()
+        # Conditionally load ET+CE posterior
+        chirp_mass_ET_CE, lambda_tilde_ET_CE, dL_ET_CE = None, None, None
+        if PLOT_GW231109_ET_CE:
+            print("\nLoading GW231109 ET+CE posterior...")
+            chirp_mass_ET_CE, lambda_tilde_ET_CE, dL_ET_CE = load_GW231109_ET_CE_posterior()
 
         # Create debug plot for luminosity distance if enabled
         if PLOT_DEBUG_LUMINOSITY_DISTANCE:
@@ -522,19 +532,21 @@ def make_anna_tim_favourite_plot(
                 'GW170817': {
                     'luminosity_distance': dL_GW170817,
                     'color': GW170817_COLOR,
-                    'label': 'GW170817 (2G)'
-                },
-                'ET': {
+                    'label': 'GW170817 (HLV)'
+                }
+            }
+            if PLOT_GW231109_ET and dL_ET is not None:
+                debug_datasets['ET'] = {
                     'luminosity_distance': dL_ET,
                     'color': GW231109_ET_COLOR,
                     'label': 'GW231109 (ET)'
-                },
-                'ET+CE': {
+                }
+            if PLOT_GW231109_ET_CE and dL_ET_CE is not None:
+                debug_datasets['ET+CE'] = {
                     'luminosity_distance': dL_ET_CE,
                     'color': GW231109_ET_CE_COLOR,
                     'label': 'GW231109 (ET+CE)'
                 }
-            }
             plot_debug_luminosity_distance(debug_datasets)
 
         # Create debug plot for redshift if enabled
@@ -543,19 +555,21 @@ def make_anna_tim_favourite_plot(
                 'GW170817': {
                     'luminosity_distance': dL_GW170817,
                     'color': GW170817_COLOR,
-                    'label': 'GW170817 (2G)'
-                },
-                'ET': {
+                    'label': 'GW170817 (HLV)'
+                }
+            }
+            if PLOT_GW231109_ET and dL_ET is not None:
+                debug_datasets['ET'] = {
                     'luminosity_distance': dL_ET,
                     'color': GW231109_ET_COLOR,
                     'label': 'GW231109 (ET)'
-                },
-                'ET+CE': {
+                }
+            if PLOT_GW231109_ET_CE and dL_ET_CE is not None:
+                debug_datasets['ET+CE'] = {
                     'luminosity_distance': dL_ET_CE,
                     'color': GW231109_ET_CE_COLOR,
                     'label': 'GW231109 (ET+CE)'
                 }
-            }
             plot_debug_redshift(debug_datasets)
 
         # Get injection truth if requested
@@ -702,16 +716,18 @@ def make_anna_tim_favourite_plot(
                       zorder=5000, rasterized=True)
 
             # Plot GW231109 ET posterior on top (higher z-order)
-            print("Plotting GW231109 ET posterior samples...")
-            ax.scatter(chirp_mass_ET, lambda_tilde_ET,
-                      color=GW231109_ET_COLOR, alpha=0.3, s=1,
-                      zorder=6000, rasterized=True)
+            if PLOT_GW231109_ET and chirp_mass_ET is not None:
+                print("Plotting GW231109 ET posterior samples...")
+                ax.scatter(chirp_mass_ET, lambda_tilde_ET,
+                          color=GW231109_ET_COLOR, alpha=0.3, s=1,
+                          zorder=6000, rasterized=True)
 
             # Plot GW231109 ET+CE posterior on top (highest z-order)
-            print("Plotting GW231109 ET+CE posterior samples...")
-            ax.scatter(chirp_mass_ET_CE, lambda_tilde_ET_CE,
-                      color=GW231109_ET_CE_COLOR, alpha=0.3, s=1,
-                      zorder=7000, rasterized=True)
+            if PLOT_GW231109_ET_CE and chirp_mass_ET_CE is not None:
+                print("Plotting GW231109 ET+CE posterior samples...")
+                ax.scatter(chirp_mass_ET_CE, lambda_tilde_ET_CE,
+                          color=GW231109_ET_CE_COLOR, alpha=0.3, s=1,
+                          zorder=7000, rasterized=True)
 
         else:  # "contours" mode
             print(f"Using contours mode for corner plots (68% and 95% credible regions)")
@@ -738,30 +754,32 @@ def make_anna_tim_favourite_plot(
             )
 
             # Plot GW231109 ET posterior on top (higher z-order)
-            print("Plotting GW231109 ET posterior...")
-            corner_kwargs_et = default_corner_kwargs.copy()
-            corner_kwargs_et.update(mode_kwargs)
-            corner_kwargs_et['color'] = GW231109_ET_COLOR
-            corner_kwargs_et['zorder'] = 6000
-            corner.hist2d(
-                chirp_mass_ET,
-                lambda_tilde_ET,
-                fig=fig,
-                **corner_kwargs_et
-            )
+            if PLOT_GW231109_ET and chirp_mass_ET is not None:
+                print("Plotting GW231109 ET posterior...")
+                corner_kwargs_et = default_corner_kwargs.copy()
+                corner_kwargs_et.update(mode_kwargs)
+                corner_kwargs_et['color'] = GW231109_ET_COLOR
+                corner_kwargs_et['zorder'] = 6000
+                corner.hist2d(
+                    chirp_mass_ET,
+                    lambda_tilde_ET,
+                    fig=fig,
+                    **corner_kwargs_et
+                )
 
             # Plot GW231109 ET+CE posterior on top (highest z-order)
-            print("Plotting GW231109 ET+CE posterior...")
-            corner_kwargs_et_ce = default_corner_kwargs.copy()
-            corner_kwargs_et_ce.update(mode_kwargs)
-            corner_kwargs_et_ce['color'] = GW231109_ET_CE_COLOR
-            corner_kwargs_et_ce['zorder'] = 7000
-            corner.hist2d(
-                chirp_mass_ET_CE,
-                lambda_tilde_ET_CE,
-                fig=fig,
-                **corner_kwargs_et_ce
-            )
+            if PLOT_GW231109_ET_CE and chirp_mass_ET_CE is not None:
+                print("Plotting GW231109 ET+CE posterior...")
+                corner_kwargs_et_ce = default_corner_kwargs.copy()
+                corner_kwargs_et_ce.update(mode_kwargs)
+                corner_kwargs_et_ce['color'] = GW231109_ET_CE_COLOR
+                corner_kwargs_et_ce['zorder'] = 7000
+                corner.hist2d(
+                    chirp_mass_ET_CE,
+                    lambda_tilde_ET_CE,
+                    fig=fig,
+                    **corner_kwargs_et_ce
+                )
 
         # Plot injection truth as star
         if show_injection_truth and injection_params is not None:
@@ -784,12 +802,20 @@ def make_anna_tim_favourite_plot(
         plt.xlim(xlim)
         plt.ylim(ylim)
 
-        # Add legend
+        # Add legend (only include elements that are actually plotted)
         legend_elements = [
-            mpatches.Patch(facecolor=GW170817_COLOR, edgecolor='k', label='GW170817 (2G)'),
-            mpatches.Patch(facecolor=GW231109_ET_COLOR, edgecolor='k', label='GW231109 (ET)'),
-            mpatches.Patch(facecolor=GW231109_ET_CE_COLOR, edgecolor='k', label='GW231109 (ET+CE)')
+            mpatches.Patch(facecolor=GW170817_COLOR, edgecolor='k', label='GW170817 (HLV)')
         ]
+
+        if PLOT_GW231109_ET and chirp_mass_ET is not None:
+            legend_elements.append(
+                mpatches.Patch(facecolor=GW231109_ET_COLOR, edgecolor='k', label='GW231109 (ET)')
+            )
+
+        if PLOT_GW231109_ET_CE and chirp_mass_ET_CE is not None:
+            legend_elements.append(
+                mpatches.Patch(facecolor=GW231109_ET_CE_COLOR, edgecolor='k', label='GW231109 (ET+CE)')
+            )
 
         if inj_mchirp is not None:
             legend_elements.append(
@@ -845,7 +871,7 @@ def main():
         overwrite=True,
         show_injection_truth=True,
         xlim=(1.101, 1.45),
-        ylim=(100, 1400)
+        ylim=(0, 1300)
     )
 
     if not success:

@@ -91,7 +91,7 @@ DEFAULT_CORNER_KWARGS = {
 ORANGE = "#de8f07"
 BLUE = "#0472b1"
 GREEN = "#019e72"
-RED = "#cc3311"
+RED = "palevioletred"
 
 # Default parameter ranges for plots
 DEFAULT_RANGES = {
@@ -539,7 +539,7 @@ def main():
         r"$a_i \leq 0.05$",
     ]
 
-    colors_2 = ["#2596be", "#ff642c"]
+    colors_2 = ["#2596be", RED]
 
     zorders_2 = [0, 1]  # Low spin prior (chi<0.05) on top
 
