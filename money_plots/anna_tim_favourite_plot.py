@@ -532,7 +532,7 @@ def make_anna_tim_favourite_plot(
                 'GW170817': {
                     'luminosity_distance': dL_GW170817,
                     'color': GW170817_COLOR,
-                    'label': 'GW170817 (HLV)'
+                    'label': 'GW170817 (2G)'
                 }
             }
             if PLOT_GW231109_ET and dL_ET is not None:
@@ -555,7 +555,7 @@ def make_anna_tim_favourite_plot(
                 'GW170817': {
                     'luminosity_distance': dL_GW170817,
                     'color': GW170817_COLOR,
-                    'label': 'GW170817 (HLV)'
+                    'label': 'GW170817 (2G)'
                 }
             }
             if PLOT_GW231109_ET and dL_ET is not None:
@@ -804,7 +804,7 @@ def make_anna_tim_favourite_plot(
 
         # Add legend (only include elements that are actually plotted)
         legend_elements = [
-            mpatches.Patch(facecolor=GW170817_COLOR, edgecolor='k', label='GW170817 (HLV)')
+            mpatches.Patch(facecolor=GW170817_COLOR, edgecolor='k', label='GW170817 (2G)')
         ]
 
         if PLOT_GW231109_ET and chirp_mass_ET is not None:
