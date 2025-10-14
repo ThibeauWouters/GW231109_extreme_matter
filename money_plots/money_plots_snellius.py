@@ -688,7 +688,7 @@ def plot_full_injection(plot_text: bool = True,
     plt.fill_between(x, y_et_ce, alpha=0.3, color=ET_CE_COLOR)
 
     # Truth line
-    plt.axvline(x=R14_TARGET, color='black', ls='--', lw=2.0, label="Truth")
+    plt.axvline(x=R14_TARGET, color='black', ls='--', lw=2.0, label="Injection")
 
     # Compute 90% credible intervals
     low_et, high_et = arviz.hdi(R14_et, hdi_prob=0.90)
@@ -756,7 +756,7 @@ def plot_full_injection(plot_text: bool = True,
     # Truth line
     print("P3NSAT_TARGET")
     print(P3NSAT_TARGET)
-    plt.axvline(x=P3NSAT_TARGET, color='black', ls='--', lw=2.0, label="Truth")
+    plt.axvline(x=P3NSAT_TARGET, color='black', ls='--', lw=2.0, label="Injection")
 
     # Compute 90% credible intervals
     low_et, high_et = arviz.hdi(p3nsat_et, hdi_prob=0.90)

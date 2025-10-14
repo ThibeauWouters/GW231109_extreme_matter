@@ -17,25 +17,35 @@ from bilby.gw.conversion import component_masses_to_chirp_mass, chirp_mass_and_m
 from bilby.gw.conversion import lambda_1_lambda_2_to_lambda_tilde
 from bilby.gw.conversion import luminosity_distance_to_redshift
 
+# ============================================================================
+# FONT SIZE CONFIGURATION - Adjust these values to change all font sizes
+# ============================================================================
+BASE_FONTSIZE = 22          # Base font size for titles and general text
+TICK_FONTSIZE = 24          # Font size for axis tick labels
+AXIS_LABEL_FONTSIZE = 28    # Font size for axis labels (x and y)
+LEGEND_FONTSIZE = 18        # Font size for legend text
+CORNER_FONTSIZE = 20        # Font size for corner plot labels
+COLORBAR_LABEL_FONTSIZE = 20  # Font size for colorbar label
+COLORBAR_TICKS_FONTSIZE = 18  # Font size for colorbar tick labels
+DEBUG_AXIS_FONTSIZE = 20    # Font size for debug plot axes
+DEBUG_TITLE_FONTSIZE = 22   # Font size for debug plot titles
+# ============================================================================
+
 # If running on Mac, use TeX for better typography
 if "Woute029" in os.getcwd():
     print(f"Updating plotting parameters for TeX")
-    fs = 18
-    ticks_fs = 20
-    label_fs = 24
-    legend_fs = 24
     labelpad = 18
     rc_params = {
         "axes.grid": False,
         "text.usetex": True,
         "font.family": "serif",
         "font.serif": ["Computer Modern Serif"],
-        "xtick.labelsize": ticks_fs,
-        "ytick.labelsize": ticks_fs,
-        "axes.labelsize": label_fs,
-        "legend.fontsize": legend_fs,
-        "legend.title_fontsize": legend_fs,
-        "figure.titlesize": fs
+        "xtick.labelsize": TICK_FONTSIZE,
+        "ytick.labelsize": TICK_FONTSIZE,
+        "axes.labelsize": AXIS_LABEL_FONTSIZE,
+        "legend.fontsize": LEGEND_FONTSIZE,
+        "legend.title_fontsize": LEGEND_FONTSIZE,
+        "figure.titlesize": BASE_FONTSIZE
     }
     plt.rcParams.update(rc_params)
 else:
@@ -47,12 +57,12 @@ else:
         "xtick.color": "black",
         "axes.labelcolor": "black",
         "axes.edgecolor": "black",
-        "xtick.labelsize": 16,
-        "ytick.labelsize": 16,
-        "axes.labelsize": 16,
-        "legend.fontsize": 16,
-        "legend.title_fontsize": 16,
-        "figure.titlesize": 16
+        "xtick.labelsize": TICK_FONTSIZE,
+        "ytick.labelsize": TICK_FONTSIZE,
+        "axes.labelsize": AXIS_LABEL_FONTSIZE,
+        "legend.fontsize": LEGEND_FONTSIZE,
+        "legend.title_fontsize": LEGEND_FONTSIZE,
+        "figure.titlesize": BASE_FONTSIZE
     }
     plt.rcParams.update(params)
 
@@ -62,8 +72,8 @@ default_corner_kwargs = dict(
     smooth=0.9,
     show_titles=False,
     title_fmt=".3f",
-    label_kwargs=dict(fontsize=16),
-    title_kwargs=dict(fontsize=16),
+    label_kwargs=dict(fontsize=CORNER_FONTSIZE),
+    title_kwargs=dict(fontsize=CORNER_FONTSIZE),
     plot_density=False,
     plot_datapoints=False,
     fill_contours=True,
@@ -104,10 +114,6 @@ PLOT_GW231109_ET_CE = False  # If True, plot GW231109 ET+CE posterior
 PLOT_GW170817_EOS = True  # If True, plot EOS curves from GW170817 constraint
 PLOT_JESTER_ET_EOS = False  # If True, plot EOS curves from jester ET inference
 PLOT_JESTER_ET_CE_EOS = False  # If True, plot EOS curves from jester ET+CE inference
-
-# Colorbar font sizes
-COLORBAR_LABEL_FONTSIZE = 20  # Font size for colorbar label
-COLORBAR_TICKS_FONTSIZE = 18  # Font size for colorbar tick labels
 
 
 def load_eos_curves(eos_name: str):
@@ -192,10 +198,10 @@ def plot_debug_luminosity_distance(datasets: dict, save_name: str = "./figures/G
 
         ax.hist(dL, bins=50, alpha=0.5, color=color, label=label, density=True)
 
-    ax.set_xlabel(r'Luminosity Distance [Mpc]', fontsize=16)
-    ax.set_ylabel('Density', fontsize=16)
-    ax.set_title('Luminosity Distance Distributions (DEBUG)', fontsize=18)
-    ax.legend(fontsize=14, loc='upper right', frameon=True)
+    ax.set_xlabel(r'Luminosity Distance [Mpc]', fontsize=DEBUG_AXIS_FONTSIZE)
+    ax.set_ylabel('Density', fontsize=DEBUG_AXIS_FONTSIZE)
+    ax.set_title('Luminosity Distance Distributions (DEBUG)', fontsize=DEBUG_TITLE_FONTSIZE)
+    ax.legend(fontsize=LEGEND_FONTSIZE, loc='upper right', frameon=True)
     ax.grid(True, alpha=0.3)
 
     # Ensure directory exists
@@ -239,10 +245,10 @@ def plot_debug_redshift(datasets: dict, save_name: str = "./figures/GW_PE/DEBUG_
 
         ax.hist(z, bins=50, alpha=0.5, color=color, label=label, density=True)
 
-    ax.set_xlabel(r'Redshift $z$', fontsize=16)
-    ax.set_ylabel('Density', fontsize=16)
-    ax.set_title('Redshift Distributions (DEBUG)', fontsize=18)
-    ax.legend(fontsize=14, loc='upper right', frameon=True)
+    ax.set_xlabel(r'Redshift $z$', fontsize=DEBUG_AXIS_FONTSIZE)
+    ax.set_ylabel('Density', fontsize=DEBUG_AXIS_FONTSIZE)
+    ax.set_title('Redshift Distributions (DEBUG)', fontsize=DEBUG_TITLE_FONTSIZE)
+    ax.legend(fontsize=LEGEND_FONTSIZE, loc='upper right', frameon=True)
     ax.grid(True, alpha=0.3)
 
     # Ensure directory exists
@@ -831,7 +837,7 @@ def make_anna_tim_favourite_plot(
         #                   markeredgewidth=INJECTION_MARKER_EDGEWIDTH)
         #     )
 
-        plt.legend(handles=legend_elements, loc='upper right', frameon=True)
+        plt.legend(handles=legend_elements, loc='upper right', frameon=True, fontsize=LEGEND_FONTSIZE)
 
         # Add colorbar for EOS posterior probability (only if GW170817 EOS curves were plotted)
         if sm is not None:
