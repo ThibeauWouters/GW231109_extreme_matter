@@ -17,8 +17,8 @@ from bilby.gw.conversion import lambda_1_lambda_2_to_lambda_tilde, lambda_1_lamb
 # Define the top-level directories from which to fetch posteriors -- essentially in this dirs there should be outdir/final_result/ or outdir/*.json for me to find the posterior samples
 TOP_LEVEL_DIRS = []
 
-# # Add all the runs that I did
-# TOP_LEVEL_DIRS += glob.glob(os.path.join("/work/wouters/GW231109/", "prod_BW_*"))
+# Add all the runs that I did
+TOP_LEVEL_DIRS += glob.glob(os.path.join("/work/wouters/GW231109/", "prod_BW_*"))
 
 # # Add Anna's 3G runs as well
 # TOP_LEVEL_DIRS += ["/work/puecher/S231109/third_gen_runs/et_run/",
@@ -32,19 +32,19 @@ TOP_LEVEL_DIRS = []
 #                    "/work/puecher/S231109/third_gen_runs/new_et_ce_run_alignedspin/",
 #                    ]
 
-# Add my new 3G runs as well (this is with the EOS sampling median parameters)
-TOP_LEVEL_DIRS += ["/work/wouters/GW231109/third_gen_runs/jester_eos_et_run_alignedspin/",
-                   "/work/wouters/GW231109/third_gen_runs/jester_eos_et_ce_run_alignedspin/",
-                   ]
+# # Add my new 3G runs as well (this is with the EOS sampling median parameters)
+# TOP_LEVEL_DIRS += ["/work/wouters/GW231109/third_gen_runs/jester_eos_et_run_alignedspin/",
+#                    "/work/wouters/GW231109/third_gen_runs/jester_eos_et_ce_run_alignedspin/",
+#                    ]
 
 # TOP_LEVEL_DIRS += ["/work/puecher/S231109/third_gen_runs/maxL_eos_et_run_alignedspin/",
 #                    "/work/puecher/S231109/third_gen_runs/maxL_eos_et_ce_run_alignedspin/",
 #                    ]
 
-# Add Anna's EOS sampling runs as well
-TOP_LEVEL_DIRS += ["/work/puecher/S231109/eos_sampling/prod_BW_XP_s005_leos_default/",
-                   "/work/puecher/S231109/eos_sampling/prod_BW_XP_s040_leos_default/",
-                   ]
+# # Add Anna's EOS sampling runs as well
+# TOP_LEVEL_DIRS += ["/work/puecher/S231109/eos_sampling/prod_BW_XP_s005_leos_default/",
+#                    "/work/puecher/S231109/eos_sampling/prod_BW_XP_s040_leos_default/",
+#                    ]
 
 # # Add my run for GW170817 as well
 # TOP_LEVEL_DIRS += ["/work/wouters/neural_priors_paper_runs/GW170817/bns/default"]
