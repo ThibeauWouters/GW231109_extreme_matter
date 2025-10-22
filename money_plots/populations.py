@@ -166,7 +166,7 @@ def generate_jsd_latex_table_separate(m_jsds, mass_label, output_file):
     for idx, post_name in enumerate(dist_order):
         # First column: vertical "Posterior" label on first row, empty otherwise
         if idx == 0:
-            row = r'\multirow{5}{*}{\rotatebox[origin=c]{90}{\parbox[c][8mm][c]{2cm}{\centering \textsc{Posterior}}}}'
+            row = r'\multirow{4}{*}{\rotatebox[origin=c]{90}{\parbox[c][8mm][c]{2cm}{\centering \textsc{Posterior}}}}'
         else:
             row = ''
 
@@ -212,20 +212,19 @@ def generate_jsd_latex_table(m1_jsds, m2_jsds, output_file='./JSD_tabular.tex'):
     """
     dist_labels = {
         'default': 'Default',
-        'double_gaussian': 'Double Gaussian',
-        'double_gaussian_niu': 'Double Gaussian (Niu)',
+        'double_gaussian_niu': 'Double Gaussian',
         'gaussian': 'Gaussian',
         'uniform': 'Uniform'
     }
 
-    dist_order = ['default', 'double_gaussian', 'double_gaussian_niu', 'gaussian', 'uniform']
+    dist_order = ['default', 'double_gaussian_niu', 'gaussian', 'uniform']
 
     # Start building the table
     lines = []
-    # Tabular spec: c column for multirow label, l for row labels, then data columns (5 distributions now)
-    lines.append(r'\begin{tabular}{c @{}l@{} ccccc c||c ccccc}')
+    # Tabular spec: c column for multirow label, l for row labels, then data columns (4 distributions now)
+    lines.append(r'\begin{tabular}{c @{}l@{} cccc c||c cccc}')
     lines.append(r'\hline\hline')
-    lines.append(r' & & \multicolumn{5}{c}{$m_1$ \textsc{Prior}} & & & \multicolumn{5}{c}{$m_2$ \textsc{Prior}} \\')
+    lines.append(r' & & \multicolumn{4}{c}{$m_1$ \textsc{Prior}} & & & \multicolumn{4}{c}{$m_2$ \textsc{Prior}} \\')
     lines.append(r'\hline')
 
     # Column headers
@@ -242,7 +241,7 @@ def generate_jsd_latex_table(m1_jsds, m2_jsds, output_file='./JSD_tabular.tex'):
     for idx, post_name in enumerate(dist_order):
         # First column: vertical "Posterior" label on first row, empty otherwise
         if idx == 0:
-            row = r'\multirow{5}{*}{\rotatebox[origin=c]{90}{\parbox[c][8mm][c]{2cm}{\centering \textsc{Posterior}}}}'
+            row = r'\multirow{4}{*}{\rotatebox[origin=c]{90}{\parbox[c][8mm][c]{2cm}{\centering \textsc{Posterior}}}}'
         else:
             row = ''
 
