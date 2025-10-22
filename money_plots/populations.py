@@ -27,6 +27,9 @@ np.random.seed(42)
 # Configuration - Adjust these parameters as needed
 # =============================================================================
 
+# Toggle to use Niu et al. hyperparameters for double Gaussian posterior
+USE_NIU = True  # If True, uses double_gaussian_niu posterior; if False, uses double_gaussian posterior
+
 # Ranges used for the plotting (zoom in on the posterior to make it a bit nicer)
 M1_XLIM = (1.2, 1.8)
 M2_XLIM = (1.1, 1.8)
@@ -38,8 +41,8 @@ OUTPUT_SAMPLE_SIZE = 10_000  # Number of output samples after m1 >= m2 constrain
 # KDE parameters
 KDE_NBINS = 1_000             # Number of points for KDE evaluation (higher = smoother curves)
 KDE_PLOT_NBINS = 1_000        # Number of points for plotting KDEs (finer for smoother plots)
-KDE_SMOOTH = 2.0              # Smoothing factor (None = auto, or set to float like 1.5 for more smoothing)
-# KDE_SMOOTH = None
+# KDE_SMOOTH = 2.0              # Smoothing factor (None = auto, or set to float like 1.5 for more smoothing)
+KDE_SMOOTH = None
 
 # Prior domain configuration
 PRIOR_DOMAIN_WIDE = (0.10, 6.0)  # Wide domain for KDE evaluation
@@ -121,6 +124,79 @@ def compute_js(p1, p2):
     return np.array([jsd, jsd_spy*jsd_spy])
 
 
+def generate_jsd_latex_table_separate(m_jsds, mass_label, output_file):
+    """
+    Generate a LaTeX table of Jensen-Shannon divergences for a single mass component.
+
+    Parameters
+    ----------
+    m_jsds : dict of dict
+        m_jsds[posterior_name][prior_name] = (entropy_jsd, scipy_jsd)
+    mass_label : str
+        Label for the mass component (e.g., 'm_1' or 'm_2')
+    output_file : str
+        Path to output LaTeX file
+    """
+    dist_labels = {
+        'default': 'Default',
+        'double_gaussian': 'Double Gaussian',
+        'double_gaussian_niu': 'Double Gaussian (Niu)',
+        'gaussian': 'Gaussian',
+        'uniform': 'Uniform'
+    }
+
+    dist_order = ['default', 'double_gaussian', 'double_gaussian_niu', 'gaussian', 'uniform']
+
+    # Start building the table
+    lines = []
+    # Tabular spec: c column for multirow label, l for row labels, then data columns (5 distributions)
+    lines.append(r'\begin{tabular}{c @{}l@{} ccccc}')
+    lines.append(r'\hline\hline')
+    lines.append(r' & & \multicolumn{5}{c}{$' + mass_label + r'$ \textsc{Prior}} \\')
+    lines.append(r'\hline')
+
+    # Column headers
+    header = r' &'  # Empty cells for multirow column and row label column
+    for name in dist_order:
+        header += f' & {dist_labels[name]}'
+    lines.append(header + r' \\')
+    lines.append(r'\hline\hline')
+
+    # Data rows
+    for idx, post_name in enumerate(dist_order):
+        # First column: vertical "Posterior" label on first row, empty otherwise
+        if idx == 0:
+            row = r'\multirow{5}{*}{\rotatebox[origin=c]{90}{\parbox[c][8mm][c]{2cm}{\centering \textsc{Posterior}}}}'
+        else:
+            row = ''
+
+        # Row label
+        row += r' & \multicolumn{1}{|l}{' + dist_labels[post_name] + r'}'
+
+        # Find minimum JSD in this row
+        m_vals = {prior_name: m_jsds[post_name][prior_name][1] for prior_name in dist_order}
+        min_m_prior = min(m_vals, key=m_vals.get)
+
+        # JSDs (using scipy version)
+        for prior_name in dist_order:
+            jsd_val = m_jsds[post_name][prior_name][1]  # scipy JSD
+            if prior_name == min_m_prior:
+                row += f' & \\textbf{{{jsd_val:.2f}}}'
+            else:
+                row += f' & {jsd_val:.2f}'
+
+        lines.append(row + r' \\')
+
+    lines.append(r'\hline')
+    lines.append(r'\end{tabular}')
+
+    # Write to file
+    with open(output_file, 'w') as f:
+        f.write('\n'.join(lines))
+
+    print(f"  LaTeX table saved to: {output_file}")
+
+
 def generate_jsd_latex_table(m1_jsds, m2_jsds, output_file='./JSD_tabular.tex'):
     """
     Generate a LaTeX table of Jensen-Shannon divergences.
@@ -137,18 +213,19 @@ def generate_jsd_latex_table(m1_jsds, m2_jsds, output_file='./JSD_tabular.tex'):
     dist_labels = {
         'default': 'Default',
         'double_gaussian': 'Double Gaussian',
+        'double_gaussian_niu': 'Double Gaussian (Niu)',
         'gaussian': 'Gaussian',
         'uniform': 'Uniform'
     }
 
-    dist_order = ['default', 'double_gaussian', 'gaussian', 'uniform']
+    dist_order = ['default', 'double_gaussian', 'double_gaussian_niu', 'gaussian', 'uniform']
 
     # Start building the table
     lines = []
-    # Tabular spec: c column for multirow label, l for row labels, then data columns
-    lines.append(r'\begin{tabular}{c @{}l@{} cccc c||c cccc}')
+    # Tabular spec: c column for multirow label, l for row labels, then data columns (5 distributions now)
+    lines.append(r'\begin{tabular}{c @{}l@{} ccccc c||c ccccc}')
     lines.append(r'\hline\hline')
-    lines.append(r' & & \multicolumn{4}{c}{$m_1$ \textsc{Prior}} & & & \multicolumn{4}{c}{$m_2$ \textsc{Prior}} \\')
+    lines.append(r' & & \multicolumn{5}{c}{$m_1$ \textsc{Prior}} & & & \multicolumn{5}{c}{$m_2$ \textsc{Prior}} \\')
     lines.append(r'\hline')
 
     # Column headers
@@ -165,7 +242,7 @@ def generate_jsd_latex_table(m1_jsds, m2_jsds, output_file='./JSD_tabular.tex'):
     for idx, post_name in enumerate(dist_order):
         # First column: vertical "Posterior" label on first row, empty otherwise
         if idx == 0:
-            row = r'\multirow{4}{*}{\rotatebox[origin=c]{90}{\parbox[c][8mm][c]{2cm}{\centering \textsc{Posterior}}}}'
+            row = r'\multirow{5}{*}{\rotatebox[origin=c]{90}{\parbox[c][8mm][c]{2cm}{\centering \textsc{Posterior}}}}'
         else:
             row = ''
 
@@ -249,6 +326,12 @@ def generate_prior_samples(prior_config, nsamp=OUTPUT_SAMPLE_SIZE, prior_pts_siz
         m1_pts = np.array(m1_prior.sample(prior_pts_size))
         m2_pts = np.array(m2_prior.sample(prior_pts_size))
 
+    elif prior_type == 'double_gaussian_niu':
+        m1_prior = DoubleGaussian(mu1=1.372, mu2=1.534, sigma1=0.05768, sigma2=0.09102, w=0.7137)
+        m2_prior = DoubleGaussian(mu1=1.372, mu2=1.534, sigma1=0.05768, sigma2=0.09102, w=0.7137)
+        m1_pts = np.array(m1_prior.sample(prior_pts_size))
+        m2_pts = np.array(m2_prior.sample(prior_pts_size))
+
     elif prior_type == 'default':
         
         # Taken from our bilby config files
@@ -302,6 +385,7 @@ def load_posterior_data(data_dir='../posteriors/data/', run_names=None, nsamp=OU
         # Default run names
         run_names = [
             'prod_BW_XP_s005_l5000_double_gaussian',
+            'prod_BW_XP_s005_l5000_double_gaussian_niu',
             'prod_BW_XP_s005_l5000_gaussian',
             'prod_BW_XP_s005_l5000_uniform',
             'prod_BW_XP_s005_l5000_default'
@@ -426,10 +510,12 @@ def main():
     # =============================================================================
     print("Generating prior samples...")
 
+    # If USE_NIU is True, use Niu parameters for 'double_gaussian', otherwise use original
     prior_configs = {
         'uniform': {'type': 'uniform'},
         'gaussian': {'type': 'gaussian'},
-        'double_gaussian': {'type': 'double_gaussian'},
+        'double_gaussian': {'type': 'double_gaussian_niu' if USE_NIU else 'double_gaussian'},
+        'double_gaussian_niu': {'type': 'double_gaussian_niu'},
         'default': {'type': 'default'},
     }
 
@@ -447,8 +533,10 @@ def main():
     posterior_data = load_posterior_data()
 
     # Map posterior data to prior names for easier handling
+    # If USE_NIU is True, map 'double_gaussian' to the Niu posterior, otherwise use the original
     posterior_mapping = {
-        'double_gaussian': 'prod_BW_XP_s005_l5000_double_gaussian',
+        'double_gaussian': 'prod_BW_XP_s005_l5000_double_gaussian_niu' if USE_NIU else 'prod_BW_XP_s005_l5000_double_gaussian',
+        'double_gaussian_niu': 'prod_BW_XP_s005_l5000_double_gaussian_niu',
         'gaussian': 'prod_BW_XP_s005_l5000_gaussian',
         'uniform': 'prod_BW_XP_s005_l5000_uniform',
         'default': 'prod_BW_XP_s005_l5000_default'
@@ -492,6 +580,7 @@ def main():
     # Plot configuration - same colors for prior/posterior pairs
     colors = {
         'double_gaussian': 'palevioletred',
+        'double_gaussian_niu': 'purple',
         'gaussian': 'dodgerblue',
         'uniform': 'darkgreen',
         'default': 'darkorange'
@@ -500,6 +589,7 @@ def main():
     # Rescale factors for prior KDEs (to make them more visible)
     m1_prior_rescale = {
         'double_gaussian': 1.0,
+        'double_gaussian_niu': 1.0,
         'gaussian': 1.0,
         'uniform': 1.0,
         'default': 1.0
@@ -507,6 +597,7 @@ def main():
 
     m2_prior_rescale = {
         'double_gaussian': 1.0,
+        'double_gaussian_niu': 1.0,
         'gaussian': 1.0,
         'uniform': 1.0,
         'default': 1.0
@@ -514,6 +605,7 @@ def main():
 
     prior_config = {
         'double_gaussian': {'color': colors['double_gaussian'], 'linestyle': '--', 'linewidth': 2},
+        'double_gaussian_niu': {'color': colors['double_gaussian_niu'], 'linestyle': '--', 'linewidth': 2},
         'gaussian': {'color': colors['gaussian'], 'linestyle': '--', 'linewidth': 2},
         'uniform': {'color': colors['uniform'], 'linestyle': '--', 'linewidth': 2},
         'default': {'color': colors['default'], 'linestyle': '--', 'linewidth': 2}
@@ -521,13 +613,17 @@ def main():
 
     posterior_config = {
         'double_gaussian': {'color': colors['double_gaussian'], 'linestyle': '-', 'linewidth': 2},
+        'double_gaussian_niu': {'color': colors['double_gaussian_niu'], 'linestyle': '-', 'linewidth': 2},
         'gaussian': {'color': colors['gaussian'], 'linestyle': '-', 'linewidth': 2},
         'uniform': {'color': colors['uniform'], 'linestyle': '-', 'linewidth': 2},
         'default': {'color': colors['default'], 'linestyle': '-', 'linewidth': 2}
     }
 
+    # Determine which distributions to plot (exclude double_gaussian_niu to avoid duplication)
+    plot_names = ['double_gaussian', 'gaussian', 'uniform', 'default']
+
     # Plot m1 prior histograms first (so they're in the background)
-    for name in ['double_gaussian', 'gaussian', 'uniform', 'default']:
+    for name in plot_names:
         if name in m1_prior_kdes:
             kde_data = m1_prior_kdes[name]
             ax[0].hist(kde_data['data'], bins=50, density=True,
@@ -535,13 +631,13 @@ def main():
                       edgecolor=colors[name], linewidth=0.5)
 
     # Plot m1 priors
-    for name in ['double_gaussian', 'gaussian', 'uniform', 'default']:
+    for name in plot_names:
         if name in m1_prior_kdes:
             kde_data = m1_prior_kdes[name]
             ax[0].plot(kde_data['x'], kde_data['kde'] * m1_prior_rescale[name], **prior_config[name])
 
     # Plot m1 posterior histograms
-    for name in ['double_gaussian', 'gaussian', 'uniform', 'default']:
+    for name in plot_names:
         if name in m1_posterior_kdes:
             kde_data = m1_posterior_kdes[name]
             ax[0].hist(kde_data['data'], bins=50, density=True,
@@ -549,7 +645,7 @@ def main():
                       edgecolor=colors[name], linewidth=0.5)
 
     # Plot m1 posteriors
-    for name in ['double_gaussian', 'gaussian', 'uniform', 'default']:
+    for name in plot_names:
         if name in m1_posterior_kdes:
             kde_data = m1_posterior_kdes[name]
             ax[0].plot(kde_data['x'], kde_data['kde'], **posterior_config[name])
@@ -560,7 +656,7 @@ def main():
     ax[0].set_ylabel(r'$m_1$ prob. density', fontsize=AXIS_LABEL_FONTSIZE)
 
     # Plot m2 prior histograms first (so they're in the background)
-    for name in ['double_gaussian', 'gaussian', 'uniform', 'default']:
+    for name in plot_names:
         if name in m2_prior_kdes:
             kde_data = m2_prior_kdes[name]
             ax[1].hist(kde_data['data'], bins=50, density=True,
@@ -568,13 +664,13 @@ def main():
                       edgecolor=colors[name], linewidth=0.5)
 
     # Plot m2 priors
-    for name in ['double_gaussian', 'gaussian', 'uniform', 'default']:
+    for name in plot_names:
         if name in m2_prior_kdes:
             kde_data = m2_prior_kdes[name]
             ax[1].plot(kde_data['x'], kde_data['kde'] * m2_prior_rescale[name], **prior_config[name])
 
     # Plot m2 posterior histograms
-    for name in ['double_gaussian', 'gaussian', 'uniform', 'default']:
+    for name in plot_names:
         if name in m2_posterior_kdes:
             kde_data = m2_posterior_kdes[name]
             ax[1].hist(kde_data['data'], bins=50, density=True,
@@ -582,7 +678,7 @@ def main():
                       edgecolor=colors[name], linewidth=0.5)
 
     # Plot m2 posteriors
-    for name in ['double_gaussian', 'gaussian', 'uniform', 'default']:
+    for name in plot_names:
         if name in m2_posterior_kdes:
             kde_data = m2_posterior_kdes[name]
             ax[1].plot(kde_data['x'], kde_data['kde'], **posterior_config[name])
@@ -601,7 +697,7 @@ def main():
     style_prior = Line2D([0], [0], color='black', linestyle='--', linewidth=2, label='Prior')
     style_posterior = Line2D([0], [0], color='black', linestyle='-', linewidth=2, label='Posterior')
 
-    # Second row: color legend entries
+    # Second row: color legend entries (exclude double_gaussian_niu to avoid duplication)
     color_dg = Line2D([0], [0], color=colors['double_gaussian'], linewidth=3, label='Double Gaussian')
     color_g = Line2D([0], [0], color=colors['gaussian'], linewidth=3, label='Gaussian')
     color_u = Line2D([0], [0], color=colors['uniform'], linewidth=3, label='Uniform')
@@ -629,13 +725,13 @@ def main():
     fig, ax = plt.subplots(2, 1, figsize=FIGSIZE, sharex=True)
 
     # Plot m1 priors (using SAME KDEs as wide plot)
-    for name in ['double_gaussian', 'gaussian', 'uniform', 'default']:
+    for name in plot_names:
         if name in m1_prior_kdes:
             kde_data = m1_prior_kdes[name]
             ax[0].plot(kde_data['x'], kde_data['kde'] * m1_prior_rescale[name], **prior_config[name])
 
     # Plot m1 posteriors (using SAME KDEs as wide plot)
-    for name in ['double_gaussian', 'gaussian', 'uniform', 'default']:
+    for name in plot_names:
         if name in m1_posterior_kdes:
             kde_data = m1_posterior_kdes[name]
             ax[0].plot(kde_data['x'], kde_data['kde'], **posterior_config[name])
@@ -646,13 +742,13 @@ def main():
     ax[0].set_ylabel(r'$m_1$ prob. density', fontsize=AXIS_LABEL_FONTSIZE)
 
     # Plot m2 priors (using SAME KDEs as wide plot)
-    for name in ['double_gaussian', 'gaussian', 'uniform', 'default']:
+    for name in plot_names:
         if name in m2_prior_kdes:
             kde_data = m2_prior_kdes[name]
             ax[1].plot(kde_data['x'], kde_data['kde'] * m2_prior_rescale[name], **prior_config[name])
 
     # Plot m2 posteriors (using SAME KDEs as wide plot)
-    for name in ['double_gaussian', 'gaussian', 'uniform', 'default']:
+    for name in plot_names:
         if name in m2_posterior_kdes:
             kde_data = m2_posterior_kdes[name]
             ax[1].plot(kde_data['x'], kde_data['kde'], **posterior_config[name])
@@ -689,8 +785,8 @@ def main():
     # =============================================================================
     print("\nComputing Jensen-Shannon divergences...")
 
-    dist_labels = ['Double Gaussian', 'Gaussian', 'Uniform', 'Default']
-    dist_names = ['double_gaussian', 'gaussian', 'uniform', 'default']
+    dist_labels = ['Double Gaussian', 'Double Gaussian (Niu)', 'Gaussian', 'Uniform', 'Default']
+    dist_names = ['double_gaussian', 'double_gaussian_niu', 'gaussian', 'uniform', 'default']
 
     # Store JSD values for LaTeX table generation - full matrix
     m1_jsds = {}
@@ -728,10 +824,16 @@ def main():
             print(f"  {dist_labels[prior_idx]:20s} === JSD entropy: {jsd_val[0]:.6f}  JSD scipy: {jsd_val[1]:.6f}")
 
     # =============================================================================
-    # Generate LaTeX table
+    # Generate LaTeX tables
     # =============================================================================
-    print("\nGenerating LaTeX table...")
+    print("\nGenerating LaTeX tables...")
+
+    # Generate combined table (original)
     generate_jsd_latex_table(m1_jsds, m2_jsds, output_file='./JSD_tabular.tex')
+
+    # Generate separate tables for m1 and m2
+    generate_jsd_latex_table_separate(m1_jsds, 'm_1', output_file='./JSD_tabular_m1.tex')
+    generate_jsd_latex_table_separate(m2_jsds, 'm_2', output_file='./JSD_tabular_m2.tex')
 
     print("\nDone!")
 
