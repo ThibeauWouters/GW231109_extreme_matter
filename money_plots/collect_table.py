@@ -26,7 +26,7 @@ LABELS_DICT = {"outdir": "Prior",
                "outdir_GW190425": "GW190425",
                "outdir_GW231109": "GW231109 (default)",
                "outdir_GW231109_gaussian": "GW231109 (Gaussian)",
-               "outdir_GW231109_double_gaussian": "GW231109 (double Gaussian)",
+               "outdir_GW231109_double_gaussian_niu": "GW231109 (double Gaussian)",
                "outdir_GW231109_quniv": "GW231109 (QUR)",
                "outdir_GW231109_s040": "GW231109 ($a_i \\leq 0.4$)",
                "outdir_GW231109_XAS": "GW231109 (\\texttt{XAS})",
@@ -169,7 +169,7 @@ def json_to_latex_table(json_filename: str, output_filename: str = "eos_paramete
             # Group 1: Prior and radio timing
             ["outdir", "outdir_radio"],
             # Group 2: GW231109 variations
-            ["outdir_GW231109", "outdir_GW231109_gaussian", "outdir_GW231109_double_gaussian",
+            ["outdir_GW231109", "outdir_GW231109_gaussian", "outdir_GW231109_double_gaussian_niu",
              "outdir_GW231109_quniv", "outdir_GW231109_s040", "outdir_GW231109_XAS"],
             # Group 3: Individual GW events
             ["outdir_GW170817", "outdir_GW190425"],
@@ -183,7 +183,7 @@ def json_to_latex_table(json_filename: str, output_filename: str = "eos_paramete
             # Group 1: Radio timing only
             ["outdir_radio"],
             # Group 2: GW231109 variations
-            ["outdir_GW231109", "outdir_GW231109_gaussian", "outdir_GW231109_double_gaussian",
+            ["outdir_GW231109", "outdir_GW231109_gaussian", "outdir_GW231109_double_gaussian_niu",
              "outdir_GW231109_quniv", "outdir_GW231109_s040", "outdir_GW231109_XAS"],
             # Group 3: Individual GW events
             ["outdir_GW170817", "outdir_GW190425"],
@@ -340,7 +340,7 @@ def main(add_prior: bool = False, add_radio: bool = True):
         # Group 3: GW231109 variations
         "../jester/outdir_GW231109",
         "../jester/outdir_GW231109_gaussian",
-        "../jester/outdir_GW231109_double_gaussian",
+        "../jester/outdir_GW231109_double_gaussian_niu",
         "../jester/outdir_GW231109_quniv",
         "../jester/outdir_GW231109_s040",
         "../jester/outdir_GW231109_XAS",
