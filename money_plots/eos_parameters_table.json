@@ -129,29 +129,29 @@
       }
     }
   },
-  "outdir_GW231109_double_gaussian": {
+  "outdir_GW231109_double_gaussian_niu": {
     "label": "GW231109 (double Gaussian)",
     "parameters": {
       "MTOV": {
-        "median": 2.2812569907033438,
-        "lower_error": 0.3269515130414895,
-        "upper_error": 0.41818073361927377,
-        "width": 0.7451322466607633,
-        "credible_interval": "2.28^{+0.42}_{-0.33}"
+        "median": 2.2941904294693822,
+        "lower_error": 0.33866452465405716,
+        "upper_error": 0.3914794069208605,
+        "width": 0.7301439315749176,
+        "credible_interval": "2.29^{+0.39}_{-0.34}"
       },
       "R14": {
-        "median": 13.29521849612862,
-        "lower_error": 1.0319254790456114,
-        "upper_error": 0.8599850487214269,
-        "width": 1.8919105277670383,
-        "credible_interval": "13.30^{+0.86}_{-1.03}"
+        "median": 13.454159987423086,
+        "lower_error": 0.8628044508534494,
+        "upper_error": 0.7656735705355313,
+        "width": 1.6284780213889807,
+        "credible_interval": "13.45^{+0.77}_{-0.86}"
       },
       "p3nsat": {
-        "median": 100.18188631608422,
-        "lower_error": 41.16101327626077,
-        "upper_error": 77.79057462370693,
-        "width": 118.9515878999677,
-        "credible_interval": "100.18^{+77.79}_{-41.16}"
+        "median": 101.72923113731963,
+        "lower_error": 42.30751142441948,
+        "upper_error": 78.88330331344844,
+        "width": 121.19081473786792,
+        "credible_interval": "101.73^{+78.88}_{-42.31}"
       }
     }
   },
