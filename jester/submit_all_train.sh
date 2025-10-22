@@ -5,8 +5,7 @@ DATA_DIR="../posteriors/data/"
 
 # List of input files (just paste your filenames here)
 FILES=(
-  jester_eos_et_ce_run_alignedspin.npz
-  jester_eos_et_run_alignedspin.npz
+  prod_BW_XP_s005_l5000_double_gaussian_niu.npz
 )
 
 # Loop over files and submit job for each
