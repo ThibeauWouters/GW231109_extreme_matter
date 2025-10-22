@@ -41,8 +41,8 @@ OUTPUT_SAMPLE_SIZE = 10_000  # Number of output samples after m1 >= m2 constrain
 # KDE parameters
 KDE_NBINS = 1_000             # Number of points for KDE evaluation (higher = smoother curves)
 KDE_PLOT_NBINS = 1_000        # Number of points for plotting KDEs (finer for smoother plots)
-# KDE_SMOOTH = 2.0              # Smoothing factor (None = auto, or set to float like 1.5 for more smoothing)
-KDE_SMOOTH = None
+KDE_SMOOTH = 2.0              # Smoothing factor (None = auto, or set to float like 1.5 for more smoothing)
+# KDE_SMOOTH = None
 
 # Prior domain configuration
 PRIOR_DOMAIN_WIDE = (0.10, 6.0)  # Wide domain for KDE evaluation
