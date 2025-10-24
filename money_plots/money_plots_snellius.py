@@ -720,7 +720,7 @@ def plot_full_injection(plot_text: bool = True,
 
     plt.xlabel(r"$R_{1.4}$ [km]", fontsize=12)
     plt.ylabel('Probability density', fontsize=12)
-    plt.xlim(9.0, 15.0)
+    plt.xlim(11.0, 14.0)
     plt.ylim(bottom=0.0)
     plt.legend(fontsize=11)
 
@@ -923,37 +923,37 @@ def main():
     # save_suffix = ""
     # process_given_dirs(directories, save_suffix)
 
+    # # =======================================================================
+    # # 7 Increasing constraints with more and more GW BNS
+    # # =======================================================================
+
+    # directories = [
+    #     "../jester/outdir_radio",
+    #     "../jester/outdir_GW170817",
+    #     "../jester/outdir_GW231109",
+    #     gw170817_gw231109_dir,
+    # ]
+    # save_suffix = ""
+    # process_given_dirs(directories, save_suffix, filename_prefix="final", do_contours=False)
+    
+    # # # Additionally also this plot where we force the original run
+    
+    # directories = [
+    #     "../jester/outdir_radio",
+    #     "../jester/outdir_GW170817",
+    #     "../jester/outdir_GW231109",
+    #     gw170817_gw231109_dir,
+    # ]
+    # save_suffix = ""
+    # process_given_dirs(directories, save_suffix, filename_prefix="all_bns", do_contours=False)
+    
+
     # =======================================================================
-    # 7 Increasing constraints with more and more GW BNS
+    # INJECTIONS
     # =======================================================================
 
-    directories = [
-        "../jester/outdir_radio",
-        "../jester/outdir_GW170817",
-        "../jester/outdir_GW231109",
-        gw170817_gw231109_dir,
-    ]
-    save_suffix = ""
-    process_given_dirs(directories, save_suffix, filename_prefix="final", do_contours=False)
-    
-    # # Additionally also this plot where we force the original run
-    
-    directories = [
-        "../jester/outdir_radio",
-        "../jester/outdir_GW170817",
-        "../jester/outdir_GW231109",
-        gw170817_gw231109_dir,
-    ]
-    save_suffix = ""
-    process_given_dirs(directories, save_suffix, filename_prefix="all_bns", do_contours=False)
-    
-
-    # # # =======================================================================
-    # # # INJECTIONS
-    # # # =======================================================================
-
-    # # # Combined ET and ET+CE plot
-    # # plot_full_injection(plot_text=False, what_prior="radio")
+    # Combined ET and ET+CE plot
+    plot_full_injection(plot_text=False, what_prior="radio")
 
 
 if __name__ == "__main__":
