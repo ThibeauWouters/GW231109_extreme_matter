@@ -40,6 +40,27 @@ LABELS_DICT = {"outdir": "Prior",
                "outdir_ET_AS": "ET",
                }
 
+def format_to_sig_figs(value: float, sig_figs: int = 2) -> tuple:
+    """Format a value to a specified number of significant figures.
+
+    Args:
+        value: The value to format
+        sig_figs: Number of significant figures
+
+    Returns:
+        tuple: (formatted_string, number of decimal places)
+    """
+    if value == 0:
+        return "0", 0
+
+    # Calculate the order of magnitude
+    magnitude = int(np.floor(np.log10(abs(value))))
+    # Calculate decimal places needed
+    decimal_places = sig_figs - magnitude - 1
+    decimal_places = max(0, decimal_places)
+
+    return f"{value:.{decimal_places}f}", decimal_places
+
 def report_credible_interval(values: np.array,
                              hdi_prob: float = 0.90,
                              verbose: bool = False) -> tuple:
@@ -119,10 +140,18 @@ def collect_parameters_from_directories(directories: list, hdi_prob: float = 0.9
                 low_err, med, high_err = report_credible_interval(param_values, hdi_prob=hdi_prob, verbose=True)
                 width = high_err + low_err
 
-                # Use 1 decimal place for R14, 2 for others
+                # Format based on parameter type
                 if param_name == 'R14':
+                    # Use 1 decimal place for R14
                     credible_interval_str = f"{med:.1f}^{{+{high_err:.1f}}}_{{-{low_err:.1f}}}"
+                elif param_name == 'p3nsat':
+                    # Use 2 significant figures for pressure
+                    med_str, n_dec = format_to_sig_figs(med, sig_figs=2)
+                    low_err_str = f"{low_err:.{n_dec}f}"
+                    high_err_str = f"{high_err:.{n_dec}f}"
+                    credible_interval_str = f"{med_str}^{{+{high_err_str}}}_{{-{low_err_str}}}"
                 else:
+                    # Use 2 decimal places for MTOV
                     credible_interval_str = f"{med:.2f}^{{+{high_err:.2f}}}_{{-{low_err:.2f}}}"
 
                 param_results[param_name] = {
