@@ -79,13 +79,13 @@ COLORS_DICT = {"outdir": "darkgray",
                "outdir_GW190425": "#c7de81",
                "outdir_GW231109": "orange",
                "outdir_GW231109_XAS": "red",
-               "outdir_GW170817_GW231109": "purple",
-               "outdir_GW170817_GW231109_longer_sampling": "purple",
+               "outdir_GW170817_GW231109": "mediumslateblue",
+               "outdir_GW170817_GW231109_longer_sampling": "mediumslateblue",
                "outdir_GW170817_GW190425": "#c7de81",
                "outdir_GW170817_GW190425_GW231109": "orange",
-               "outdir_GW231109_double_gaussian": "purple",
+               "outdir_GW231109_double_gaussian": "mediumslateblue",
                "outdir_GW231109_quniv": "red",
-               "outdir_GW231109_s025": "purple",
+               "outdir_GW231109_s025": "mediumslateblue",
                "outdir_GW231109_s040": "blue",
                "outdir_ET_AS": INJECTION_COLOR
                }
@@ -381,7 +381,7 @@ def get_colors_for_directories(directories: list):
         list: Colors corresponding to each directory
     """
     colors = []
-    default_colors = ['blue', 'red', 'green', 'orange', 'purple', 'brown', 'pink', 'gray', 'olive', 'cyan']
+    default_colors = ['blue', 'red', 'green', 'orange', 'mediumslateblue', 'brown', 'pink', 'gray', 'olive', 'cyan']
 
     for i, outdir in enumerate(directories):
         dir_basename = os.path.basename(outdir.rstrip('/'))
@@ -655,7 +655,7 @@ def plot_full_injection(plot_text: bool = True,
 
     # Define colors for ET and ET+CE
     ET_COLOR = "#de8f05"
-    ET_CE_COLOR = "purple"
+    ET_CE_COLOR = "mediumslateblue"
 
     # =========================================================================
     # R14 histogram
