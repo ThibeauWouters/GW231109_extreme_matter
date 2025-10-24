@@ -128,7 +128,7 @@ def make_parameter_histograms(data_list: list,
     # Define parameter ranges and labels
     parameter_configs = {
         'MTOV': {'range': (1.75, 2.75), 'xlabel': r"$M_{\rm{TOV}}$ [$M_{\odot}$]"},
-        'R14': {'range': (10.1, 16.0), 'xlabel': r"$R_{1.4}$ [km]"},
+        'R14': {'range': (9.0, 15.0), 'xlabel': r"$R_{1.4}$ [km]"},
         'p3nsat': {'range': (0.1, 200.0), 'xlabel': r"$p(3n_{\rm{sat}})$ [MeV fm$^{-3}$]"}
     }
 
@@ -669,7 +669,7 @@ def plot_full_injection(plot_text: bool = True,
     kde_et_ce = gaussian_kde(R14_et_ce)
     kde_radio = gaussian_kde(R14_radio)
 
-    x = np.linspace(10.0, 16.0, 1000)
+    x = np.linspace(9.0, 15.0, 1000)
     y_et = kde_et(x)
     y_et_ce = kde_et_ce(x)
     y_radio = kde_radio(x)
@@ -720,7 +720,7 @@ def plot_full_injection(plot_text: bool = True,
 
     plt.xlabel(r"$R_{1.4}$ [km]", fontsize=12)
     plt.ylabel('Probability density', fontsize=12)
-    plt.xlim(11.0, 14.0)
+    plt.xlim(9.0, 15.0)
     plt.ylim(bottom=0.0)
     plt.legend(fontsize=11)
 
