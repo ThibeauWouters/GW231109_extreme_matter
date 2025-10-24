@@ -19,6 +19,9 @@ import arviz
 # Import shared EOS loading utilities
 from eos_utils import load_eos_data
 
+# Flag to use longer sampling run for GW170817+GW231109
+USE_LONGER_SAMPLING = True
+
 # Labels and colors from money_plots_snellius.py
 LABELS_DICT = {"outdir": "Prior",
                "outdir_radio": "Heavy PSRs",
@@ -31,6 +34,7 @@ LABELS_DICT = {"outdir": "Prior",
                "outdir_GW231109_s040": "GW231109 ($a_i \\leq 0.4$)",
                "outdir_GW231109_XAS": "GW231109 (\\texttt{XAS})",
                "outdir_GW170817_GW231109": "GW170817+GW231109",
+               "outdir_GW170817_GW231109_longer_sampling": "GW170817+GW231109",
                "outdir_GW170817_GW190425": "GW170817+GW190425",
                "outdir_GW170817_GW190425_GW231109": "GW170817+GW190425+GW231109",
                "outdir_ET_AS": "ET",
@@ -114,12 +118,19 @@ def collect_parameters_from_directories(directories: list, hdi_prob: float = 0.9
             for param_name, param_values in parameters.items():
                 low_err, med, high_err = report_credible_interval(param_values, hdi_prob=hdi_prob, verbose=True)
                 width = high_err + low_err
+
+                # Use 1 decimal place for R14, 2 for others
+                if param_name == 'R14':
+                    credible_interval_str = f"{med:.1f}^{{+{high_err:.1f}}}_{{-{low_err:.1f}}}"
+                else:
+                    credible_interval_str = f"{med:.2f}^{{+{high_err:.2f}}}_{{-{low_err:.2f}}}"
+
                 param_results[param_name] = {
                     'median': float(med),
                     'lower_error': float(low_err),
                     'upper_error': float(high_err),
                     'width': float(width),
-                    'credible_interval': f"{med:.2f}^{{+{high_err:.2f}}}_{{-{low_err:.2f}}}"
+                    'credible_interval': credible_interval_str
                 }
                 print(f"  {param_name}: {param_results[param_name]['credible_interval']}")
 
@@ -163,6 +174,9 @@ def json_to_latex_table(json_filename: str, output_filename: str = "eos_paramete
     with open(json_filename, 'r') as f:
         results = json.load(f)
 
+    # Determine which GW170817+GW231109 directory to use based on the flag
+    gw170817_gw231109_key = "outdir_GW170817_GW231109_longer_sampling" if USE_LONGER_SAMPLING else "outdir_GW170817_GW231109"
+
     # Define group organization
     if add_prior:
         group_order = [
@@ -174,7 +188,7 @@ def json_to_latex_table(json_filename: str, output_filename: str = "eos_paramete
             # Group 3: Individual GW events
             ["outdir_GW170817", "outdir_GW190425"],
             # Group 4: Two-event combinations
-            ["outdir_GW170817_GW231109", "outdir_GW170817_GW190425"],
+            [gw170817_gw231109_key, "outdir_GW170817_GW190425"],
             # Group 5: Three-event combination
             ["outdir_GW170817_GW190425_GW231109"]
         ]
@@ -188,7 +202,7 @@ def json_to_latex_table(json_filename: str, output_filename: str = "eos_paramete
             # Group 3: Individual GW events
             ["outdir_GW170817", "outdir_GW190425"],
             # Group 4: Two-event combinations
-            ["outdir_GW170817_GW231109", "outdir_GW170817_GW190425"],
+            [gw170817_gw231109_key, "outdir_GW170817_GW190425"],
             # Group 5: Three-event combination
             ["outdir_GW170817_GW190425_GW231109"]
         ]
@@ -263,6 +277,9 @@ def json_to_latex_table_r14_only(json_filename: str, output_filename: str = "eos
     with open(json_filename, 'r') as f:
         results = json.load(f)
 
+    # Determine which GW170817+GW231109 directory to use based on the flag
+    gw170817_gw231109_key = "outdir_GW170817_GW231109_longer_sampling" if USE_LONGER_SAMPLING else "outdir_GW170817_GW231109"
+
     # Define specific datasets to include in order
     selected_datasets = []
 
@@ -278,7 +295,7 @@ def json_to_latex_table_r14_only(json_filename: str, output_filename: str = "eos
         "outdir_GW231109",
         # Two-event combinations
         "outdir_GW170817_GW190425",
-        "outdir_GW170817_GW231109",
+        gw170817_gw231109_key,
         # Three-event combination
         "outdir_GW170817_GW190425_GW231109"
     ])
@@ -327,6 +344,9 @@ def main(add_prior: bool = False, add_radio: bool = True):
     # Configure directories to process
     # =======================================================================
 
+    # Determine which GW170817+GW231109 directory to use
+    gw170817_gw231109_dir = "../jester/outdir_GW170817_GW231109_longer_sampling" if USE_LONGER_SAMPLING else "../jester/outdir_GW170817_GW231109"
+
     # Organize directories into logical groups
     directories = [
         # Group 1: Prior and radio timing
@@ -346,7 +366,7 @@ def main(add_prior: bool = False, add_radio: bool = True):
         "../jester/outdir_GW231109_XAS",
 
         # Group 4: Combinations
-        "../jester/outdir_GW170817_GW231109",
+        gw170817_gw231109_dir,
         "../jester/outdir_GW170817_GW190425",
         "../jester/outdir_GW170817_GW190425_GW231109",
     ]
