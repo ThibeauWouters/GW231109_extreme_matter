@@ -75,7 +75,7 @@ COLORS_DICT = {"outdir": "darkgray",
                "outdir_GW190425": "#c7de81",
                "outdir_GW231109": "orange",
                "outdir_GW231109_XAS": "red",
-               "outdir_GW170817_GW231109": "orange",
+               "outdir_GW170817_GW231109": "red",
                "outdir_GW170817_GW190425": "#c7de81",
                "outdir_GW170817_GW190425_GW231109": "orange",
                "outdir_GW231109_double_gaussian": "purple",
@@ -792,126 +792,126 @@ def plot_full_injection(plot_text: bool = True,
 def main():
     """Main function - configures directories and calls processing."""
 
-    # =======================================================================
-    # 1 Check GW231109
-    # =======================================================================
+    # # =======================================================================
+    # # 1 Check GW231109
+    # # =======================================================================
 
-    directories = [
-        "../jester/outdir",
-        "../jester/outdir_radio",
-        "../jester/outdir_GW231109",
-    ]
-    save_suffix = ""
-    process_given_dirs(directories, save_suffix)
+    # directories = [
+    #     "../jester/outdir",
+    #     "../jester/outdir_radio",
+    #     "../jester/outdir_GW231109",
+    # ]
+    # save_suffix = ""
+    # process_given_dirs(directories, save_suffix)
     
     
-    # =======================================================================
-    # 2 Check GW231109 vs GW190425
-    # =======================================================================
+    # # =======================================================================
+    # # 2 Check GW231109 vs GW190425
+    # # =======================================================================
     
-    directories = [
-        "../jester/outdir_radio",
-        "../jester/outdir_GW190425",
-        "../jester/outdir_GW231109",
-    ]
-    save_suffix = ""
-    process_given_dirs(directories, save_suffix, filename_prefix="GW190425_vs_GW231109_radio")
+    # directories = [
+    #     "../jester/outdir_radio",
+    #     "../jester/outdir_GW190425",
+    #     "../jester/outdir_GW231109",
+    # ]
+    # save_suffix = ""
+    # process_given_dirs(directories, save_suffix, filename_prefix="GW190425_vs_GW231109_radio")
     
-    # =======================================================================
-    # 2 Check GW231109 vs GW190425 -- but now with just the prior for comparison
-    # =======================================================================
+    # # =======================================================================
+    # # 2 Check GW231109 vs GW190425 -- but now with just the prior for comparison
+    # # =======================================================================
     
-    directories = [
-        "../jester/outdir",
-        "../jester/outdir_GW190425",
-        "../jester/outdir_GW231109",
-    ]
-    save_suffix = ""
-    process_given_dirs(directories, save_suffix, filename_prefix="GW190425_vs_GW231109_prior")
+    # directories = [
+    #     "../jester/outdir",
+    #     "../jester/outdir_GW190425",
+    #     "../jester/outdir_GW231109",
+    # ]
+    # save_suffix = ""
+    # process_given_dirs(directories, save_suffix, filename_prefix="GW190425_vs_GW231109_prior")
     
-    # =======================================================================
-    # 3a Check GW170817 vs GW170817+GW190425
-    # =======================================================================
+    # # =======================================================================
+    # # 3a Check GW170817 vs GW170817+GW190425
+    # # =======================================================================
     
-    directories = [
-        "../jester/outdir_radio",
-        "../jester/outdir_GW170817",
-        "../jester/outdir_GW170817_GW190425",
-    ]
-    save_suffix = ""
-    process_given_dirs(directories, save_suffix)
+    # directories = [
+    #     "../jester/outdir_radio",
+    #     "../jester/outdir_GW170817",
+    #     "../jester/outdir_GW170817_GW190425",
+    # ]
+    # save_suffix = ""
+    # process_given_dirs(directories, save_suffix)
     
-    # =======================================================================
-    # 3a Check GW170817 vs GW170817+GW231109
-    # =======================================================================
+    # # =======================================================================
+    # # 3a Check GW170817 vs GW170817+GW231109
+    # # =======================================================================
     
-    directories = [
-        "../jester/outdir_radio",
-        "../jester/outdir_GW170817",
-        "../jester/outdir_GW170817_GW231109",
-    ]
-    save_suffix = ""
-    process_given_dirs(directories, save_suffix)
+    # directories = [
+    #     "../jester/outdir_radio",
+    #     "../jester/outdir_GW170817",
+    #     "../jester/outdir_GW170817_GW231109",
+    # ]
+    # save_suffix = ""
+    # process_given_dirs(directories, save_suffix)
     
-    # =======================================================================
-    # 3b Check GW170817+GW190425 vs GW170817+GW231109
-    # =======================================================================
+    # # =======================================================================
+    # # 3b Check GW170817+GW190425 vs GW170817+GW231109
+    # # =======================================================================
     
-    directories = [
-        "../jester/outdir_radio",
-        "../jester/outdir_GW170817_GW190425",
-        "../jester/outdir_GW170817_GW231109",
-    ]
-    save_suffix = ""
-    process_given_dirs(directories, save_suffix, legend_outside=False, filename_prefix="GW190425_vs_GW231109_with_GW170817")
+    # directories = [
+    #     "../jester/outdir_radio",
+    #     "../jester/outdir_GW170817_GW190425",
+    #     "../jester/outdir_GW170817_GW231109",
+    # ]
+    # save_suffix = ""
+    # process_given_dirs(directories, save_suffix, legend_outside=False, filename_prefix="GW190425_vs_GW231109_with_GW170817")
     
-    # =======================================================================
-    # 3c Check GW170817+GW190425 vs GW170817+GW231109 without GW170817
-    # =======================================================================
+    # # =======================================================================
+    # # 3c Check GW170817+GW190425 vs GW170817+GW231109 without GW170817
+    # # =======================================================================
     
-    directories = [
-        "../jester/outdir_radio",
-        "../jester/outdir_GW170817_GW190425",
-        "../jester/outdir_GW170817_GW231109",
-    ]
-    save_suffix = ""
-    process_given_dirs(directories, save_suffix, legend_outside=True)
+    # directories = [
+    #     "../jester/outdir_radio",
+    #     "../jester/outdir_GW170817_GW190425",
+    #     "../jester/outdir_GW170817_GW231109",
+    # ]
+    # save_suffix = ""
+    # process_given_dirs(directories, save_suffix, legend_outside=True)
     
-    # =======================================================================
-    # 4 Check GW231109 spins
-    # =======================================================================
+    # # =======================================================================
+    # # 4 Check GW231109 spins
+    # # =======================================================================
     
-    directories = [
-        "../jester/outdir_radio",
-        "../jester/outdir_GW231109",
-        "../jester/outdir_GW231109_s025",
-        "../jester/outdir_GW231109_s040",
-    ]
-    save_suffix = ""
-    process_given_dirs(directories, save_suffix, legend_outside=True)
+    # directories = [
+    #     "../jester/outdir_radio",
+    #     "../jester/outdir_GW231109",
+    #     "../jester/outdir_GW231109_s025",
+    #     "../jester/outdir_GW231109_s040",
+    # ]
+    # save_suffix = ""
+    # process_given_dirs(directories, save_suffix, legend_outside=True)
     
-    # =======================================================================
-    # 5 Check GW231109 other prior choices
-    # =======================================================================
+    # # =======================================================================
+    # # 5 Check GW231109 other prior choices
+    # # =======================================================================
     
-    directories = [
-        "../jester/outdir_GW231109",
-        "../jester/outdir_GW231109_double_gaussian",
-        "../jester/outdir_GW231109_quniv",
-    ]
-    save_suffix = ""
-    process_given_dirs(directories, save_suffix)
+    # directories = [
+    #     "../jester/outdir_GW231109",
+    #     "../jester/outdir_GW231109_double_gaussian",
+    #     "../jester/outdir_GW231109_quniv",
+    # ]
+    # save_suffix = ""
+    # process_given_dirs(directories, save_suffix)
     
-    # =======================================================================
-    # 6 Check XP vs XAS
-    # =======================================================================
+    # # =======================================================================
+    # # 6 Check XP vs XAS
+    # # =======================================================================
     
-    directories = [
-        "../jester/outdir_GW231109",
-        "../jester/outdir_GW231109_XAS",
-    ]
-    save_suffix = ""
-    process_given_dirs(directories, save_suffix)
+    # directories = [
+    #     "../jester/outdir_GW231109",
+    #     "../jester/outdir_GW231109_XAS",
+    # ]
+    # save_suffix = ""
+    # process_given_dirs(directories, save_suffix)
     
     # =======================================================================
     # 7 Increasing constraints with more and more GW BNS
@@ -920,19 +920,19 @@ def main():
     directories = [
         "../jester/outdir_radio",
         "../jester/outdir_GW170817",
-        "../jester/outdir_GW170817_GW190425",
-        "../jester/outdir_GW170817_GW190425_GW231109",
+        "../jester/outdir_GW231109",
+        "../jester/outdir_GW170817_GW231109",
     ]
     save_suffix = ""
     process_given_dirs(directories, save_suffix, filename_prefix="all_bns")
     
 
-    # =======================================================================
-    # INJECTIONS
-    # =======================================================================
+    # # =======================================================================
+    # # INJECTIONS
+    # # =======================================================================
 
-    # Combined ET and ET+CE plot
-    plot_full_injection(plot_text=False, what_prior="radio")
+    # # Combined ET and ET+CE plot
+    # plot_full_injection(plot_text=False, what_prior="radio")
 
 
 if __name__ == "__main__":
