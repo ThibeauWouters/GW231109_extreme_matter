@@ -610,7 +610,7 @@ def make_anna_tim_favourite_plot(
 
             # Get colormap for probability coloring
             norm = plt.Normalize(vmin=np.min(prob), vmax=np.max(prob))
-            cmap = sns.color_palette("crest", as_cmap=True)
+            cmap = sns.cubehelix_palette(start=.5, rot=-.5, as_cmap=True)
             sm = plt.cm.ScalarMappable(cmap=cmap, norm=norm)
 
             # Plot EOS curves in background

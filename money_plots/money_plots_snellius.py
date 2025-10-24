@@ -655,7 +655,7 @@ def plot_full_injection(plot_text: bool = True,
 
     # Define colors for ET and ET+CE
     ET_COLOR = "#de8f05"
-    ET_CE_COLOR = "#d45d01"
+    ET_CE_COLOR = "purple"
 
     # =========================================================================
     # R14 histogram

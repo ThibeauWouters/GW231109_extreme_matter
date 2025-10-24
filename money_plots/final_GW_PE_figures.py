@@ -846,7 +846,7 @@ def main():
 
     # Colors from money_plots_snellius.py
     ET_COLOR = "#de8f05"
-    ET_CE_COLOR = "#d45d01"
+    ET_CE_COLOR = "purple"
     colors_3 = [ET_COLOR, ET_CE_COLOR]
 
     zorders_3 = [0, 1]  # ET+CE on top
