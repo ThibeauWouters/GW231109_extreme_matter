@@ -1,1 +1,3 @@
 *.npz
+neural_priors_*
+!posterior_samples
