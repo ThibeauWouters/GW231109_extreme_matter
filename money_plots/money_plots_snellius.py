@@ -79,8 +79,8 @@ COLORS_DICT = {"outdir": "darkgray",
                "outdir_GW190425": "#c7de81",
                "outdir_GW231109": "orange",
                "outdir_GW231109_XAS": "red",
-               "outdir_GW170817_GW231109": "mediumslateblue",
-               "outdir_GW170817_GW231109_longer_sampling": "mediumslateblue",
+               "outdir_GW170817_GW231109": "red",
+               "outdir_GW170817_GW231109_longer_sampling": "red",
                "outdir_GW170817_GW190425": "#c7de81",
                "outdir_GW170817_GW190425_GW231109": "orange",
                "outdir_GW231109_double_gaussian": "mediumslateblue",
@@ -923,18 +923,18 @@ def main():
     # save_suffix = ""
     # process_given_dirs(directories, save_suffix)
 
-    # # =======================================================================
-    # # 7 Increasing constraints with more and more GW BNS
-    # # =======================================================================
+    # =======================================================================
+    # 7 Increasing constraints with more and more GW BNS
+    # =======================================================================
 
-    # directories = [
-    #     "../jester/outdir_radio",
-    #     "../jester/outdir_GW170817",
-    #     "../jester/outdir_GW231109",
-    #     gw170817_gw231109_dir,
-    # ]
-    # save_suffix = ""
-    # process_given_dirs(directories, save_suffix, filename_prefix="final", do_contours=False)
+    directories = [
+        "../jester/outdir_radio",
+        "../jester/outdir_GW170817",
+        "../jester/outdir_GW231109",
+        gw170817_gw231109_dir,
+    ]
+    save_suffix = ""
+    process_given_dirs(directories, save_suffix, filename_prefix="final", do_contours=False)
     
     # # # Additionally also this plot where we force the original run
     
