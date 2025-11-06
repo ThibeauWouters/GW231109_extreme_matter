@@ -486,7 +486,8 @@ def make_anna_tim_favourite_plot(
     mass_min: float = 0.25,
     mass_max: float = 2.0,
     Lambda_min: float = 0.0,
-    Lambda_max: float = 15000.0
+    Lambda_max: float = 15000.0,
+    figsize: tuple = (8, 8)
 ):
     """
     Create Anna and Tim's favourite plot: GW170817 posterior with GW231109 ET blob.
@@ -503,6 +504,7 @@ def make_anna_tim_favourite_plot(
         mass_max (float): Maximum mass for EOS curves
         Lambda_min (float): Minimum Lambda for EOS curves
         Lambda_max (float): Maximum Lambda for EOS curves
+        figsize (tuple): Figure size (width, height) in inches. Default (8, 8) for paper.
 
     Returns:
         bool: True if successful, False otherwise
@@ -588,7 +590,7 @@ def make_anna_tim_favourite_plot(
 
         # Create figure
         print("\nCreating plot...")
-        fig = plt.figure(figsize=(8, 8))
+        fig = plt.figure(figsize=figsize)
         mchirp_min, mchirp_max = xlim
 
         # Initialize colormap variables for later use (even if not plotting GW170817 EOS)
@@ -870,19 +872,49 @@ def make_anna_tim_favourite_plot(
 def main():
     """
     Main function to create the favourite plot.
+    Creates both paper version (square) and presentation version (wide).
     """
-    # Create the plot with default settings
-    success = make_anna_tim_favourite_plot(
+    # Shared parameters
+    common_params = {
+        'overwrite': True,
+        'show_injection_truth': True,
+        'xlim': (1.101, 1.45),
+        'ylim': (0, 1300)
+    }
+
+    # Create the paper version (optimized for 2-column paper)
+    print("\n" + "=" * 60)
+    print("Creating PAPER version (square format)")
+    print("=" * 60)
+    success_paper = make_anna_tim_favourite_plot(
         save_name="./figures/GW_PE/anna_tim_favourite_plot.pdf",
-        overwrite=True,
-        show_injection_truth=True,
-        xlim=(1.101, 1.45),
-        ylim=(0, 1300)
+        figsize=(8, 8),
+        **common_params
     )
 
-    if not success:
-        print("Failed to create the plot. Please check the error messages above.")
+    if not success_paper:
+        print("Failed to create the paper version. Please check the error messages above.")
         return 1
+
+    # Create the presentation version (wide format for slides)
+    print("\n" + "=" * 60)
+    print("Creating PRESENTATION version (wide format)")
+    print("=" * 60)
+    success_presentation = make_anna_tim_favourite_plot(
+        save_name="./figures/GW_PE/anna_tim_favourite_plot_presentation.pdf",
+        figsize=(14, 6),
+        **common_params
+    )
+
+    if not success_presentation:
+        print("Failed to create the presentation version. Please check the error messages above.")
+        return 1
+
+    print("\n" + "=" * 60)
+    print("✓ Successfully created both versions!")
+    print("  - Paper version: ./figures/GW_PE/anna_tim_favourite_plot.pdf")
+    print("  - Presentation version: ./figures/GW_PE/anna_tim_favourite_plot_presentation.pdf")
+    print("=" * 60)
 
     return 0
 
