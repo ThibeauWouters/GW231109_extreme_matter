@@ -119,7 +119,7 @@ def read_lines_file(filename, filts):
 
 def plot_light_curves(lines_file, observations_file,
                      output_filename='light_curves.pdf',
-                     n_cols=2, figsize=(7.5, 9), xlim=(0.3, 4.9), ylim=(25, 15),
+                     n_cols=2, figsize=(7.5, 13), xlim=(0.3, 4.9), ylim=(25, 15),
                      n_model_lines=10):
     """
     Create multi-panel plot similar to the reference figure.
@@ -147,8 +147,8 @@ def plot_light_curves(lines_file, observations_file,
     # Get all unique panel names from both files
     all_panels = [
         'sdssu', 'ps1::g', 'ps1::r', 'ps1::i',
-        'ps1::z', #'ps1::y',
-        '2massj', #'2massh', '2massks'
+        'ps1::z', 'ps1::y',
+        '2massj', '2massh', '2massks'
     ]
     n_panels = len(all_panels)
     # Read data from both files
@@ -201,10 +201,16 @@ def plot_light_curves(lines_file, observations_file,
         
         # Plot lines (models/predictions) if available
         if panel_name in lines_data and not lines_data[panel_name].empty:
-            df_line = lines_data[panel_name] 
-            df_obs = obs_data[panel_name]
-            obs_idx = np.where(np.isfinite(df_obs['error']))[0]
-            noobs_idx = np.where(~np.isfinite(df_obs['error']))[0]
+            df_line = lines_data[panel_name]
+            have_obs = panel_name in obs_data
+            if have_obs:
+                df_obs = obs_data[panel_name]
+                obs_idx = np.where(np.isfinite(df_obs['error']))[0]
+                noobs_idx = np.where(~np.isfinite(df_obs['error']))[0]
+            else:
+                df_obs = None
+                obs_idx = np.array([], dtype=int)
+                noobs_idx = np.array([], dtype=int)
 
             ax.plot(
                 df_line['time'], df_line['magnitude'], 
@@ -228,20 +234,21 @@ def plot_light_curves(lines_file, observations_file,
                 color=colors[idx], linewidth=3., zorder=1,
                 alpha=0.5
             )
-            if len(obs_idx) > 0:
-                ax.errorbar(
-                    df_obs['time'][obs_idx],
-                    df_obs['magnitude'][obs_idx],
-                    yerr=df_obs['error'][obs_idx],
-                    c='k', markersize=3, fmt='o', 
-                    capsize=5,
-                    linewidth=1.5, zorder=2)
-            if len(noobs_idx) > 0:
-                ax.scatter(df_obs['time'][noobs_idx],
-                           df_obs['magnitude'][noobs_idx],
-                           c='white', s=20, marker='v', 
-                           edgecolors='black', 
-                           linewidth=1.5, zorder=2)
+            if have_obs and df_obs is not None:
+                if len(obs_idx) > 0:
+                    ax.errorbar(
+                        df_obs['time'][obs_idx],
+                        df_obs['magnitude'][obs_idx],
+                        yerr=df_obs['error'][obs_idx],
+                        c='k', markersize=3, fmt='o',
+                        capsize=5,
+                        linewidth=1.5, zorder=2)
+                if len(noobs_idx) > 0:
+                    ax.scatter(df_obs['time'][noobs_idx],
+                               df_obs['magnitude'][noobs_idx],
+                               c='white', s=20, marker='v',
+                               edgecolors='black',
+                               linewidth=1.5, zorder=2)
             ax.invert_yaxis()
         
         # Formatting
