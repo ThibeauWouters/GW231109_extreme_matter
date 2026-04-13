@@ -29,6 +29,7 @@ LARGE_LAYOUT = dict(
     panel_label_fontsize = 14,    # band name text inside each panel
     wspace               = 0.05,  # horizontal gap between panels
     hspace               = 0.10,  # vertical gap between panels
+    sharey               = False,
 )
 
 # ── Layout tuning — small (2-panel) figure ───────────────────────────────────
@@ -36,16 +37,17 @@ SMALL_LAYOUT = dict(
     figsize              = (8, 4),
     legend_top_margin    = 1.0,
     legend_bbox_y        = 1.15,
-    legend_fontsize      = 16,
+    legend_fontsize      = 18,
     ylabel_use_figtext   = False, # uses axes[0].set_ylabel() instead
     ylabel_x             = 0.01,  # unused in set_ylabel mode
-    ylabel_fontsize      = 16,
+    ylabel_fontsize      = 20,
     ylabel_ypos_frac     = 0.50,  # unused in set_ylabel mode
-    xlabel_fontsize      = 14,
+    xlabel_fontsize      = 18,
     tick_labelsize       = 14,
-    panel_label_fontsize = 14,
+    panel_label_fontsize = 18,
     wspace               = 0.05,
     hspace               = 0.075,
+    sharey               = True,
 )
 # ─────────────────────────────────────────────────────────────────────────────
 
@@ -239,7 +241,7 @@ def plot_light_curves(lines_file, observations_file,
     n_rows = (n_panels + n_cols - 1) // n_cols
     
     # Create figure
-    fig, axes = plt.subplots(n_rows, n_cols, figsize=lyt['figsize'])
+    fig, axes = plt.subplots(n_rows, n_cols, figsize=lyt['figsize'], sharey=lyt['sharey'])
     
     # Flatten axes array for easier indexing
     if n_panels == 1:
@@ -316,14 +318,13 @@ def plot_light_curves(lines_file, observations_file,
                fontsize=lyt['panel_label_fontsize'], fontweight='bold', va='top', ha='right')
 
         # Set labels only for left column and bottom row
-        if idx % n_cols == 0:
-            ax.set_yticks([15, 18, 21, 24])
-            ax.set_yticklabels([15, 18, 21, 24])
-        else:
-            ax.set_yticklabels([])
+        ax.set_yticks([15, 18, 21, 24])
+        ax.set_yticklabels([15, 18, 21, 24])
+        if idx % n_cols != 0:
+            ax.tick_params(labelleft=False)
 
         if idx >= n_panels - n_cols:
-            ax.set_xlabel('Time since merger (days)', fontsize=lyt['xlabel_fontsize'])
+            ax.set_xlabel('Time since merger [days]', fontsize=lyt['xlabel_fontsize'])
         else:
             ax.set_xticklabels([])
 
