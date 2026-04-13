@@ -11,6 +11,20 @@ plt.rcParams.update({
 })
 from astropy.time import Time
 
+# ── Layout tuning ────────────────────────────────────────────────────────────
+# Fraction of figure height reserved above the panels for the legend.
+# Increase to push panels down and give more space to the legend.
+LEGEND_TOP_MARGIN = 0.96   # subplots top edge in figure coords (0–1)
+# y anchor of the legend box in figure coords.
+# Should sit just above LEGEND_TOP_MARGIN so it appears right above the panels.
+LEGEND_BBOX_Y     = 1.01  # legend anchor y (lower value → closer to panels)
+LEGEND_FONTSIZE   = 18
+# x position of the rotated y-axis label in figure coords (left of panels).
+YLABEL_X          = 0.01
+YLABEL_FONTSIZE = 24
+YLABEL_YPOS_FRAC = 0.55 # fraction at which the ylabel is put -- higher is more towards top
+# ─────────────────────────────────────────────────────────────────────────────
+
 def read_observations_file(
     filename, merger_time='2017-08-17T12:41:04'
 ):
@@ -117,10 +131,22 @@ def read_lines_file(filename, filts):
     
     return data
 
+FILTER_LABELS = {
+    'sdssu': 'u',
+    'ps1::g': 'g',
+    'ps1::r': 'r',
+    'ps1::i': 'i',
+    'ps1::z': 'z',
+    'ps1::y': 'y',
+    '2massj': 'J',
+    '2massh': 'H',
+    '2massks': 'K',
+}
+
 def plot_light_curves(lines_file, observations_file,
                      output_filename='light_curves.pdf',
                      n_cols=2, figsize=(7.5, 13), xlim=(0.3, 4.9), ylim=(25, 15),
-                     n_model_lines=10):
+                     n_model_lines=10, show_40mpc=True):
     """
     Create multi-panel plot similar to the reference figure.
     
@@ -175,29 +201,6 @@ def plot_light_curves(lines_file, observations_file,
     for idx, panel_name in enumerate(all_panels):
         ax = axes[idx]
         
-        if idx == 0:
-            ax.scatter(
-                10., 10.,
-                c='k', s=10, marker='o', 
-                label='AT2017gfo')
-            ax.plot(
-                [10., 10.],
-                [10., 10.], 
-                color='k', linewidth=2., zorder=1,
-                label='Estimation'
-            )
-            ax.plot(
-                [10., 10.],
-                [10., 10.], 
-                color='k', linewidth=2., zorder=1,
-                linestyle='--',
-                label='Estimation at 40Mpc'
-            )
-            ax.legend(
-                bbox_to_anchor=(-0.1, 1.02),
-                loc='lower left', ncols=3,
-                fontsize=14
-            )
         
         # Plot lines (models/predictions) if available
         if panel_name in lines_data and not lines_data[panel_name].empty:
@@ -223,17 +226,18 @@ def plot_light_curves(lines_file, observations_file,
                 color=colors[idx], linewidth=3., zorder=1,
                 alpha=0.5
             )
-            ax.plot(
-                df_line['time'], df_line['magnitude_170817'],
-                color=colors[idx], linewidth=3., zorder=1, linestyle='--'
-            )
-            ax.fill_between(
-                df_line['time'],
-                df_line['magnitude_170817_low'], 
-                df_line['magnitude_170817_high'], 
-                color=colors[idx], linewidth=3., zorder=1,
-                alpha=0.5
-            )
+            if show_40mpc:
+                ax.plot(
+                    df_line['time'], df_line['magnitude_170817'],
+                    color=colors[idx], linewidth=3., zorder=1, linestyle='--'
+                )
+                ax.fill_between(
+                    df_line['time'],
+                    df_line['magnitude_170817_low'],
+                    df_line['magnitude_170817_high'],
+                    color=colors[idx], linewidth=3., zorder=1,
+                    alpha=0.5
+                )
             if have_obs and df_obs is not None:
                 if len(obs_idx) > 0:
                     ax.errorbar(
@@ -254,16 +258,12 @@ def plot_light_curves(lines_file, observations_file,
         # Formatting
         ax.set_xlim(xlim)
         ax.set_ylim(ylim)
-        ax.text(0.95, 0.95, panel_name.replace('_',':'), transform=ax.transAxes,
+        panel_label = FILTER_LABELS.get(panel_name, panel_name.replace('_', ':'))
+        ax.text(0.95, 0.95, panel_label, transform=ax.transAxes,
                fontsize=14, fontweight='bold', va='top', ha='right')
         
         # Set labels only for left column and bottom row
-        if idx % n_cols == 0 and panel_name == 'ps1::z':
-            ax.set_ylabel('Apparent magnitude', fontsize=20)
-            ax.yaxis.set_label_coords(-0.15, 1.6)
-            ax.set_yticks([15, 18, 21, 24])
-            ax.set_yticklabels([15, 18, 21, 24])
-        elif idx % n_cols == 0:
+        if idx % n_cols == 0:
             ax.set_yticks([15, 18, 21, 24])
             ax.set_yticklabels([15, 18, 21, 24])
         else:
@@ -280,8 +280,32 @@ def plot_light_curves(lines_file, observations_file,
     # Hide unused subplots
     for idx in range(n_panels, len(axes)):
         axes[idx].set_visible(False)
-    
-    plt.subplots_adjust(wspace=0.05, hspace=0.1)
+
+    plt.subplots_adjust(wspace=0.05, hspace=0.1, top=LEGEND_TOP_MARGIN)
+
+    # Centered figure-level legend above the panels
+    from matplotlib.lines import Line2D
+    legend_handles = [
+        plt.scatter([], [], c='k', s=10, marker='o', label='AT2017gfo'),
+        Line2D([0], [0], color='k', linewidth=2., label='Estimated lightcurves'),
+    ]
+    if show_40mpc:
+        legend_handles.append(
+            Line2D([0], [0], color='k', linewidth=2., linestyle='--', label='Estimation at 40Mpc')
+        )
+    fig.legend(
+        handles=legend_handles,
+        loc='upper center',
+        bbox_to_anchor=(0.5, LEGEND_BBOX_Y),
+        ncol=len(legend_handles),
+        fontsize=LEGEND_FONTSIZE,
+        frameon=True,
+    )
+
+    # Vertically centered y-label on the figure (row 3 of 5)
+    fig.text(YLABEL_X, YLABEL_YPOS_FRAC, 'Apparent magnitude', va='center', ha='center',
+             rotation='vertical', fontsize=YLABEL_FONTSIZE)
+
     plt.savefig(output_filename, bbox_inches='tight')
     print(f"Figure saved as {output_filename}")
     return fig
@@ -290,12 +314,15 @@ def plot_light_curves(lines_file, observations_file,
 if __name__ == "__main__":
     import sys
     
+    print("Making plot...")
+    
     if len(sys.argv) >= 2:
         lines_file = sys.argv[1]
         obser_file = sys.argv[2]
         output_file = sys.argv[3] if len(sys.argv) > 3 else 'light_curves.pdf'
-        
-        plot_light_curves(lines_file, obser_file, output_file)
+        show_40mpc = '--no-40mpc' not in sys.argv
+
+        plot_light_curves(lines_file, obser_file, output_file, show_40mpc=show_40mpc)
     else:
         print("Usage: python script.py <lines_file> [output_file]")
         print("\nLines file format (columnar):")
@@ -309,3 +336,5 @@ if __name__ == "__main__":
         print("2.0 nan -15.5 nan -15.2")
         print("\nExample:")
         print("python script.py lines.txt observations.txt output.pdf")
+
+    print("Making plot... DONE")
