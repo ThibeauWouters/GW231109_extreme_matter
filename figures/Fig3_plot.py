@@ -1,6 +1,7 @@
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
+import seaborn as sns
 plt.rcParams.update({
     'text.usetex': True,
     'font.size': 18,
@@ -11,18 +12,41 @@ plt.rcParams.update({
 })
 from astropy.time import Time
 
-# ── Layout tuning ────────────────────────────────────────────────────────────
+# ── Layout tuning — large (9-panel) figure ───────────────────────────────────
 # Fraction of figure height reserved above the panels for the legend.
 # Increase to push panels down and give more space to the legend.
-LEGEND_TOP_MARGIN = 0.96   # subplots top edge in figure coords (0–1)
-# y anchor of the legend box in figure coords.
-# Should sit just above LEGEND_TOP_MARGIN so it appears right above the panels.
-LEGEND_BBOX_Y     = 1.01  # legend anchor y (lower value → closer to panels)
-LEGEND_FONTSIZE   = 18
-# x position of the rotated y-axis label in figure coords (left of panels).
-YLABEL_X          = 0.01
-YLABEL_FONTSIZE = 24
-YLABEL_YPOS_FRAC = 0.55 # fraction at which the ylabel is put -- higher is more towards top
+LARGE_LAYOUT = dict(
+    figsize              = (7.5, 13),  # (width, height) in inches
+    legend_top_margin    = 0.96,  # subplots top edge in figure coords (0–1)
+    legend_bbox_y        = 1.01,  # legend anchor y (lower value → closer to panels)
+    legend_fontsize      = 18,
+    ylabel_use_figtext   = True,  # True → fig.text(); False → axes[0].set_ylabel()
+    ylabel_x             = 0.01,  # x pos of rotated fig.text label (figtext mode only)
+    ylabel_fontsize      = 24,
+    ylabel_ypos_frac     = 0.55,  # vertical anchor for figtext (0=bottom, 1=top)
+    xlabel_fontsize      = 15,    # 'Time since merger' label
+    tick_labelsize       = 13,    # axis tick labels
+    panel_label_fontsize = 14,    # band name text inside each panel
+    wspace               = 0.05,  # horizontal gap between panels
+    hspace               = 0.10,  # vertical gap between panels
+)
+
+# ── Layout tuning — small (2-panel) figure ───────────────────────────────────
+SMALL_LAYOUT = dict(
+    figsize              = (8, 4),
+    legend_top_margin    = 1.0,
+    legend_bbox_y        = 1.15,
+    legend_fontsize      = 16,
+    ylabel_use_figtext   = False, # uses axes[0].set_ylabel() instead
+    ylabel_x             = 0.01,  # unused in set_ylabel mode
+    ylabel_fontsize      = 16,
+    ylabel_ypos_frac     = 0.50,  # unused in set_ylabel mode
+    xlabel_fontsize      = 14,
+    tick_labelsize       = 14,
+    panel_label_fontsize = 14,
+    wspace               = 0.05,
+    hspace               = 0.075,
+)
 # ─────────────────────────────────────────────────────────────────────────────
 
 def read_observations_file(
@@ -143,10 +167,26 @@ FILTER_LABELS = {
     '2massks': 'K',
 }
 
+# Filters shown in the compact 2-panel figure (one optical, one nIR).
+# Change these strings to switch bands without touching the rest of the code.
+SMALL_PLOT_PANELS = ['ps1::r', '2massj']
+
+# Per-panel colors for the compact figure.  Any matplotlib color string works.
+# Default: borrow the same rainbow hues used in the large 9-panel figure so
+# the two figures look visually consistent (H-band red for the nIR panel).
+_LARGE_PANEL_ORDER = ['sdssu', 'ps1::g', 'ps1::r', 'ps1::i',
+                      'ps1::z', 'ps1::y', '2massj', '2massh', '2massks']
+_LARGE_COLORS = sns.color_palette("rainbow", n_colors=len(_LARGE_PANEL_ORDER))
+SMALL_PLOT_COLORS = {
+    'ps1::r': _LARGE_COLORS[_LARGE_PANEL_ORDER.index('ps1::r')],   # same blue-green as large r
+    '2massj': _LARGE_COLORS[_LARGE_PANEL_ORDER.index('2massh')],   # H-band red from large figure
+}
+
 def plot_light_curves(lines_file, observations_file,
                      output_filename='light_curves.pdf',
-                     n_cols=2, figsize=(7.5, 13), xlim=(0.3, 4.9), ylim=(25, 15),
-                     n_model_lines=10, show_40mpc=True):
+                     n_cols=2, xlim=(0.3, 4.9), ylim=(25, 15),
+                     n_model_lines=10, show_40mpc=True,
+                     panels=None, layout=None, panel_colors=None):
     """
     Create multi-panel plot similar to the reference figure.
     
@@ -161,21 +201,34 @@ def plot_light_curves(lines_file, observations_file,
         Output filename for the figure
     n_cols : int
         Number of columns in the grid
-    figsize : tuple
-        Figure size (width, height)
     xlim : tuple
         X-axis limits
     ylim : tuple
         Y-axis limits
     n_model_lines : int
         Number of model lines to plot (for gradient effect)
+    panels : list of str or None
+        Subset of filter names to include, in the desired order.
+        Pass e.g. ``['ps1::r', '2massj']`` for a compact 2-panel figure.
+        ``None`` (default) shows all nine standard bands.
+    layout : dict or None
+        Override any layout hyperparameter defined in ``LARGE_LAYOUT``.
+        ``None`` uses ``LARGE_LAYOUT`` unchanged.  Pass ``SMALL_LAYOUT``
+        (or a custom dict) for the compact figure.
+    panel_colors : dict or None
+        Map of filter name → matplotlib color for each panel.
+        Missing entries fall back to the auto rainbow palette.
+        Pass ``SMALL_PLOT_COLORS`` (or a custom dict) for the compact figure.
     """
-    # Get all unique panel names from both files
-    all_panels = [
+    lyt = {**LARGE_LAYOUT, **(layout or {})}
+
+    # Default panel order — all nine standard bands
+    _default_panels = [
         'sdssu', 'ps1::g', 'ps1::r', 'ps1::i',
         'ps1::z', 'ps1::y',
         '2massj', '2massh', '2massks'
     ]
+    all_panels = panels if panels is not None else _default_panels
     n_panels = len(all_panels)
     # Read data from both files
     lines_data = read_lines_file(lines_file, all_panels)
@@ -186,7 +239,7 @@ def plot_light_curves(lines_file, observations_file,
     n_rows = (n_panels + n_cols - 1) // n_cols
     
     # Create figure
-    fig, axes = plt.subplots(n_rows, n_cols, figsize=figsize)
+    fig, axes = plt.subplots(n_rows, n_cols, figsize=lyt['figsize'])
     
     # Flatten axes array for easier indexing
     if n_panels == 1:
@@ -194,14 +247,14 @@ def plot_light_curves(lines_file, observations_file,
     else:
         axes = axes.flatten()
 
-    # Create multiple lines with color gradient (simulating model ensemble)
-    import seaborn as sns
-    colors = sns.color_palette("rainbow", n_colors=n_panels)
-    
+    # Per-panel colors: use panel_colors dict where provided, rainbow fallback elsewhere
+    _auto_colors = sns.color_palette("rainbow", n_colors=n_panels)
+    _panel_colors = panel_colors or {}
+
     for idx, panel_name in enumerate(all_panels):
         ax = axes[idx]
-        
-        
+        color = _panel_colors.get(panel_name, _auto_colors[idx])
+
         # Plot lines (models/predictions) if available
         if panel_name in lines_data and not lines_data[panel_name].empty:
             df_line = lines_data[panel_name]
@@ -217,25 +270,25 @@ def plot_light_curves(lines_file, observations_file,
 
             ax.plot(
                 df_line['time'], df_line['magnitude'], 
-                color=colors[idx], linewidth=3., zorder=1
+                color=color, linewidth=3., zorder=1
             )
             ax.fill_between(
                 df_line['time'],
                 df_line['magnitude_low'], 
                 df_line['magnitude_high'], 
-                color=colors[idx], linewidth=3., zorder=1,
+                color=color, linewidth=3., zorder=1,
                 alpha=0.5
             )
             if show_40mpc:
                 ax.plot(
                     df_line['time'], df_line['magnitude_170817'],
-                    color=colors[idx], linewidth=3., zorder=1, linestyle='--'
+                    color=color, linewidth=3., zorder=1, linestyle='--'
                 )
                 ax.fill_between(
                     df_line['time'],
                     df_line['magnitude_170817_low'],
                     df_line['magnitude_170817_high'],
-                    color=colors[idx], linewidth=3., zorder=1,
+                    color=color, linewidth=3., zorder=1,
                     alpha=0.5
                 )
             if have_obs and df_obs is not None:
@@ -260,28 +313,28 @@ def plot_light_curves(lines_file, observations_file,
         ax.set_ylim(ylim)
         panel_label = FILTER_LABELS.get(panel_name, panel_name.replace('_', ':'))
         ax.text(0.95, 0.95, panel_label, transform=ax.transAxes,
-               fontsize=14, fontweight='bold', va='top', ha='right')
-        
+               fontsize=lyt['panel_label_fontsize'], fontweight='bold', va='top', ha='right')
+
         # Set labels only for left column and bottom row
         if idx % n_cols == 0:
             ax.set_yticks([15, 18, 21, 24])
             ax.set_yticklabels([15, 18, 21, 24])
         else:
             ax.set_yticklabels([])
-        
+
         if idx >= n_panels - n_cols:
-            ax.set_xlabel('Time since merger (days)', fontsize=15)
+            ax.set_xlabel('Time since merger (days)', fontsize=lyt['xlabel_fontsize'])
         else:
             ax.set_xticklabels([])
-        
+
         ax.grid(False)
-        ax.tick_params(labelsize=13)
+        ax.tick_params(labelsize=lyt['tick_labelsize'])
     
     # Hide unused subplots
     for idx in range(n_panels, len(axes)):
         axes[idx].set_visible(False)
 
-    plt.subplots_adjust(wspace=0.05, hspace=0.1, top=LEGEND_TOP_MARGIN)
+    plt.subplots_adjust(wspace=lyt['wspace'], hspace=lyt['hspace'], top=lyt['legend_top_margin'])
 
     # Centered figure-level legend above the panels
     from matplotlib.lines import Line2D
@@ -296,15 +349,18 @@ def plot_light_curves(lines_file, observations_file,
     fig.legend(
         handles=legend_handles,
         loc='upper center',
-        bbox_to_anchor=(0.5, LEGEND_BBOX_Y),
+        bbox_to_anchor=(0.5, lyt['legend_bbox_y']),
         ncol=len(legend_handles),
-        fontsize=LEGEND_FONTSIZE,
+        fontsize=lyt['legend_fontsize'],
         frameon=True,
     )
 
-    # Vertically centered y-label on the figure (row 3 of 5)
-    fig.text(YLABEL_X, YLABEL_YPOS_FRAC, 'Apparent magnitude', va='center', ha='center',
-             rotation='vertical', fontsize=YLABEL_FONTSIZE)
+    # Y-axis label: fig.text for the large figure, set_ylabel for the small figure
+    if lyt['ylabel_use_figtext']:
+        fig.text(lyt['ylabel_x'], lyt['ylabel_ypos_frac'], 'Apparent magnitude',
+                 va='center', ha='center', rotation='vertical', fontsize=lyt['ylabel_fontsize'])
+    else:
+        axes[0].set_ylabel('Apparent magnitude', fontsize=lyt['ylabel_fontsize'])
 
     plt.savefig(output_filename, bbox_inches='tight')
     print(f"Figure saved as {output_filename}")
@@ -322,7 +378,21 @@ if __name__ == "__main__":
         output_file = sys.argv[3] if len(sys.argv) > 3 else 'light_curves.pdf'
         show_40mpc = '--no-40mpc' not in sys.argv
 
-        plot_light_curves(lines_file, obser_file, output_file, show_40mpc=show_40mpc)
+        # Large plot — all nine bands (tune via LARGE_LAYOUT at top of file)
+        plot_light_curves(lines_file, obser_file, output_file,
+                          show_40mpc=show_40mpc, layout=LARGE_LAYOUT)
+
+        # Small plot — one optical + one nIR band (tune via SMALL_LAYOUT /
+        # SMALL_PLOT_PANELS at top of file)
+        small_output = output_file.replace('.pdf', '_small.pdf')
+        plot_light_curves(
+            lines_file, obser_file, small_output,
+            n_cols=2,
+            show_40mpc=show_40mpc,
+            panels=SMALL_PLOT_PANELS,
+            layout=SMALL_LAYOUT,
+            panel_colors=SMALL_PLOT_COLORS,
+        )
     else:
         print("Usage: python script.py <lines_file> [output_file]")
         print("\nLines file format (columnar):")
