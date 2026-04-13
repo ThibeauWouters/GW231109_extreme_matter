@@ -1,83 +1,117 @@
-# S250818k investigations
+# GW231109 Extreme Matter Analysis
 
-## Overview of runs
+Code and data for the GW231109 (S250818k) paper: Bayesian parameter estimation of a sub-threshold binary neutron star candidate, with implications for the neutron star equation of state, remnant classification, and kilonova detectability.
 
-Generated automatically on: 2025-09-20 11:08:44 CEST
+---
 
-## Run Overview Table
+## Repository layout
 
-|   # | Waveform               | Chirp Mass Prior                            | Mass Ratio Prior                            | Spin Prior                  | Lambda Prior         |   Log Bayes Factor |   Sampling Time (hrs) | Directory                                                         |
-|-----|------------------------|---------------------------------------------|---------------------------------------------|-----------------------------|----------------------|--------------------|-----------------------|-------------------------------------------------------------------|
-|   1 | IMRPhenomXP_NRTidalv3  | UniformInComponentsChirpMass [1.290, 1.320] | UniformInComponentsMassRatio [0.125, 1.000] | Uniform [0.000, 0.050]      | Uniform [0, 5000]    |           12.5229  |                  2.22 | /work/puecher/S231109/bw_runs_debug/flow_23                       |
-|   2 | IMRPhenomXP_NRTidalv3  | UniformInComponentsChirpMass [1.290, 1.320] | UniformInComponentsMassRatio [0.125, 1.000] | Uniform [0.000, 0.050]      | Uniform [0, 5000]    |           12.9767  |                  1.1  | /work/puecher/S231109/bw_runs_debug/test_settings                 |
-|   3 | IMRPhenomXP_NRTidalv3  | UniformInComponentsChirpMass [1.290, 1.320] | UniformInComponentsMassRatio [0.125, 1.000] | Uniform [0.000, 0.150]      | Uniform [0, 2000]    |           14.3254  |                  2.29 | /work/wouters/GW231109/l1_2000_l2_4000                            |
-|   4 | IMRPhenomXP_NRTidalv3  | Constraint [0.800, 3.000]                   | NFPrior                                     | Uniform [0.000, 0.150]      | N/A                  |           15.8788  |                  2.42 | /work/wouters/GW231109/neural_priors                              |
-|   5 | IMRPhenomXP_NRTidalv3  | Constraint [0.800, 3.000]                   | NFPrior                                     | Uniform [0.000, 0.150]      | N/A                  |           15.7167  |                  4.39 | /work/wouters/GW231109/neural_priors_double_gaussian_radio        |
-|   6 | IMRPhenomXP_NRTidalv3  | Constraint [0.800, 3.000]                   | NFPrior                                     | Uniform [0.000, 0.150]      | N/A                  |           16.0799  |                  4.51 | /work/wouters/GW231109/neural_priors_double_gaussian_radio_NICER  |
-|   7 | IMRPhenomXP_NRTidalv3  | Constraint [0.800, 3.000]                   | NFPrior                                     | Uniform [0.000, 0.150]      | N/A                  |           15.8567  |                  4.68 | /work/wouters/GW231109/neural_priors_double_gaussian_radio_chiEFT |
-|   8 | IMRPhenomXP_NRTidalv3  | Constraint [0.800, 3.000]                   | NFPrior                                     | Uniform [0.000, 0.150]      | N/A                  |           16.1972  |                  4.33 | /work/wouters/GW231109/neural_priors_gaussian_radio               |
-|   9 | IMRPhenomXP_NRTidalv3  | Constraint [0.800, 3.000]                   | NFPrior                                     | Uniform [0.000, 0.150]      | N/A                  |           15.9601  |                  8.09 | /work/wouters/GW231109/neural_priors_gaussian_radio_NICER         |
-|  10 | IMRPhenomXP_NRTidalv3  | Constraint [0.800, 3.000]                   | NFPrior                                     | Uniform [0.000, 0.150]      | N/A                  |           16.2386  |                  4.34 | /work/wouters/GW231109/neural_priors_gaussian_radio_chiEFT        |
-|  11 | IMRPhenomXP_NRTidalv3  | Constraint [0.800, 3.000]                   | NFPrior                                     | Uniform [0.000, 0.150]      | N/A                  |           14.7358  |                  5.04 | /work/wouters/GW231109/neural_priors_uniform_radio                |
-|  12 | IMRPhenomXP_NRTidalv3  | Constraint [0.800, 3.000]                   | NFPrior                                     | Uniform [0.000, 0.150]      | N/A                  |           14.5697  |                  5.18 | /work/wouters/GW231109/neural_priors_uniform_radio_NICER          |
-|  13 | IMRPhenomXP_NRTidalv3  | Constraint [0.800, 3.000]                   | NFPrior                                     | Uniform [0.000, 0.150]      | N/A                  |           11.9306  |                  5.47 | /work/wouters/GW231109/neural_priors_uniform_radio_chiEFT         |
-|  14 | IMRPhenomXAS_NRTidalv3 | UniformInComponentsChirpMass [1.290, 1.320] | UniformInComponentsMassRatio [0.125, 1.000] | AlignedSpin [-0.050, 0.050] | Uniform [0, 10000]   |           11.0565  |                  0.66 | /work/wouters/GW231109/prod_BW_XAS_s005_l10000_default            |
-|  15 | IMRPhenomXAS_NRTidalv3 | UniformInComponentsChirpMass [1.290, 1.320] | UniformInComponentsMassRatio [0.125, 1.000] | AlignedSpin [-0.050, 0.050] | Uniform [0, 5000]    |           12.3179  |                  0.67 | /work/wouters/GW231109/prod_BW_XAS_s005_l5000_default             |
-|  16 | IMRPhenomXAS_NRTidalv3 | UniformInComponentsChirpMass [1.290, 1.320] | UniformInComponentsMassRatio [0.125, 1.000] | AlignedSpin [-0.050, 0.050] | Constraint [0, 5000] |           13.2977  |                  0.46 | /work/wouters/GW231109/prod_BW_XAS_s005_lquniv_default            |
-|  17 | IMRPhenomXAS_NRTidalv3 | UniformInComponentsChirpMass [1.290, 1.320] | UniformInComponentsMassRatio [0.125, 1.000] | AlignedSpin [-0.250, 0.250] | Uniform [0, 10000]   |           13.54    |                  0.81 | /work/wouters/GW231109/prod_BW_XAS_s025_l10000_default            |
-|  18 | IMRPhenomXAS_NRTidalv3 | UniformInComponentsChirpMass [1.290, 1.320] | UniformInComponentsMassRatio [0.125, 1.000] | AlignedSpin [-0.250, 0.250] | Uniform [0, 5000]    |           14.0859  |                  0.79 | /work/wouters/GW231109/prod_BW_XAS_s025_l5000_default             |
-|  19 | IMRPhenomXAS_NRTidalv3 | UniformInComponentsChirpMass [1.290, 1.320] | UniformInComponentsMassRatio [0.125, 1.000] | AlignedSpin [-0.250, 0.250] | Constraint [0, 5000] |           14.131   |                  0.68 | /work/wouters/GW231109/prod_BW_XAS_s025_lquniv_default            |
-|  20 | IMRPhenomXAS_NRTidalv3 | UniformInComponentsChirpMass [1.290, 1.320] | UniformInComponentsMassRatio [0.125, 1.000] | AlignedSpin [-0.400, 0.400] | Uniform [0, 10000]   |           13.3467  |                  0.95 | /work/wouters/GW231109/prod_BW_XAS_s040_l10000_default            |
-|  21 | IMRPhenomXAS_NRTidalv3 | UniformInComponentsChirpMass [1.290, 1.320] | UniformInComponentsMassRatio [0.125, 1.000] | AlignedSpin [-0.400, 0.400] | Uniform [0, 5000]    |           13.5945  |                  1.07 | /work/wouters/GW231109/prod_BW_XAS_s040_l5000_default             |
-|  22 | IMRPhenomXAS_NRTidalv3 | UniformInComponentsChirpMass [1.290, 1.320] | UniformInComponentsMassRatio [0.125, 1.000] | AlignedSpin [-0.400, 0.400] | Constraint [0, 5000] |           14.3124  |                  0.8  | /work/wouters/GW231109/prod_BW_XAS_s040_lquniv_default            |
-|  23 | IMRPhenomXP_NRTidalv3  | UniformInComponentsChirpMass [1.290, 1.320] | UniformInComponentsMassRatio [0.125, 1.000] | Uniform [0.000, 0.050]      | Uniform [0, 10000]   |           10.8857  |                  1.17 | /work/wouters/GW231109/prod_BW_XP_s005_l10000_default             |
-|  24 | IMRPhenomXP_NRTidalv3  | Constraint [0.800, 3.000]                   | Constraint [0.125, 1.000]                   | Uniform [0.000, 0.050]      | Uniform [0, 10000]   |            8.43695 |                  3.68 | /work/wouters/GW231109/prod_BW_XP_s005_l10000_double_gaussian     |
-|  25 | IMRPhenomXP_NRTidalv3  | Constraint [0.800, 3.000]                   | Constraint [0.125, 1.000]                   | Uniform [0.000, 0.050]      | Uniform [0, 10000]   |           11.7054  |                  3    | /work/wouters/GW231109/prod_BW_XP_s005_l10000_gaussian            |
-|  26 | IMRPhenomXP_NRTidalv3  | Constraint [0.800, 3.000]                   | Constraint [0.125, 1.000]                   | Uniform [0.000, 0.050]      | Uniform [0, 10000]   |            8.53463 |                  3.33 | /work/wouters/GW231109/prod_BW_XP_s005_l10000_uniform             |
-|  27 | IMRPhenomXP_NRTidalv3  | UniformInComponentsChirpMass [1.290, 1.320] | UniformInComponentsMassRatio [0.125, 1.000] | Uniform [0.000, 0.050]      | Uniform [0, 5000]    |           12.0347  |                  1.11 | /work/wouters/GW231109/prod_BW_XP_s005_l5000_default              |
-|  28 | IMRPhenomXP_NRTidalv3  | Constraint [0.800, 3.000]                   | Constraint [0.125, 1.000]                   | Uniform [0.000, 0.050]      | Uniform [0, 5000]    |            8.87679 |                  3.44 | /work/wouters/GW231109/prod_BW_XP_s005_l5000_double_gaussian      |
-|  29 | IMRPhenomXP_NRTidalv3  | Constraint [0.800, 3.000]                   | Constraint [0.125, 1.000]                   | Uniform [0.000, 0.050]      | Uniform [0, 5000]    |           13.0037  |                  2.93 | /work/wouters/GW231109/prod_BW_XP_s005_l5000_gaussian             |
-|  30 | IMRPhenomXP_NRTidalv3  | Constraint [0.800, 3.000]                   | Constraint [0.125, 1.000]                   | Uniform [0.000, 0.050]      | Uniform [0, 5000]    |            9.26511 |                  2.97 | /work/wouters/GW231109/prod_BW_XP_s005_l5000_uniform              |
-|  31 | IMRPhenomXP_NRTidalv3  | UniformInComponentsChirpMass [1.290, 1.320] | UniformInComponentsMassRatio [0.125, 1.000] | Uniform [0.000, 0.050]      | Constraint [0, 5000] |           12.9538  |                  0.75 | /work/wouters/GW231109/prod_BW_XP_s005_lquniv_default             |
-|  32 | IMRPhenomXP_NRTidalv3  | UniformInComponentsChirpMass [1.290, 1.320] | UniformInComponentsMassRatio [0.125, 1.000] | Uniform [0.000, 0.250]      | Uniform [0, 10000]   |           13.4529  |                  1.51 | /work/wouters/GW231109/prod_BW_XP_s025_l10000_default             |
-|  33 | IMRPhenomXP_NRTidalv3  | Constraint [0.800, 3.000]                   | Constraint [0.125, 1.000]                   | Uniform [0.000, 0.250]      | Uniform [0, 10000]   |           10.4693  |                  3.81 | /work/wouters/GW231109/prod_BW_XP_s025_l10000_double_gaussian     |
-|  34 | IMRPhenomXP_NRTidalv3  | Constraint [0.800, 3.000]                   | Constraint [0.125, 1.000]                   | Uniform [0.000, 0.250]      | Uniform [0, 10000]   |           13.5611  |                  3.03 | /work/wouters/GW231109/prod_BW_XP_s025_l10000_gaussian            |
-|  35 | IMRPhenomXP_NRTidalv3  | Constraint [0.800, 3.000]                   | Constraint [0.125, 1.000]                   | Uniform [0.000, 0.250]      | Uniform [0, 10000]   |           10.5482  |                  3.75 | /work/wouters/GW231109/prod_BW_XP_s025_l10000_uniform             |
-|  36 | IMRPhenomXP_NRTidalv3  | UniformInComponentsChirpMass [1.290, 1.320] | UniformInComponentsMassRatio [0.125, 1.000] | Uniform [0.000, 0.250]      | Uniform [0, 5000]    |           13.7328  |                  1.38 | /work/wouters/GW231109/prod_BW_XP_s025_l5000_default              |
-|  37 | IMRPhenomXP_NRTidalv3  | Constraint [0.800, 3.000]                   | Constraint [0.125, 1.000]                   | Uniform [0.000, 0.250]      | Uniform [0, 5000]    |           10.7448  |                  3.99 | /work/wouters/GW231109/prod_BW_XP_s025_l5000_double_gaussian      |
-|  38 | IMRPhenomXP_NRTidalv3  | Constraint [0.800, 3.000]                   | Constraint [0.125, 1.000]                   | Uniform [0.000, 0.250]      | Uniform [0, 5000]    |           13.4765  |                  2.99 | /work/wouters/GW231109/prod_BW_XP_s025_l5000_gaussian             |
-|  39 | IMRPhenomXP_NRTidalv3  | Constraint [0.800, 3.000]                   | Constraint [0.125, 1.000]                   | Uniform [0.000, 0.250]      | Uniform [0, 5000]    |           11.4574  |                  3.4  | /work/wouters/GW231109/prod_BW_XP_s025_l5000_uniform              |
-|  40 | IMRPhenomXP_NRTidalv3  | UniformInComponentsChirpMass [1.290, 1.320] | UniformInComponentsMassRatio [0.125, 1.000] | Uniform [0.000, 0.400]      | Uniform [0, 10000]   |           13.2492  |                  1.66 | /work/wouters/GW231109/prod_BW_XP_s040_l10000_default             |
-|  41 | IMRPhenomXP_NRTidalv3  | Constraint [0.800, 3.000]                   | Constraint [0.125, 1.000]                   | Uniform [0.000, 0.400]      | Uniform [0, 10000]   |           12.2591  |                  3.65 | /work/wouters/GW231109/prod_BW_XP_s040_l10000_double_gaussian     |
-|  42 | IMRPhenomXP_NRTidalv3  | Constraint [0.800, 3.000]                   | Constraint [0.125, 1.000]                   | Uniform [0.000, 0.400]      | Uniform [0, 10000]   |           13.3573  |                  3.19 | /work/wouters/GW231109/prod_BW_XP_s040_l10000_gaussian            |
-|  43 | IMRPhenomXP_NRTidalv3  | Constraint [0.800, 3.000]                   | Constraint [0.125, 1.000]                   | Uniform [0.000, 0.400]      | Uniform [0, 10000]   |           10.7704  |                  3.69 | /work/wouters/GW231109/prod_BW_XP_s040_l10000_uniform             |
-|  44 | IMRPhenomXP_NRTidalv3  | UniformInComponentsChirpMass [1.290, 1.320] | UniformInComponentsMassRatio [0.125, 1.000] | Uniform [0.000, 0.400]      | Uniform [0, 5000]    |           13.3497  |                  1.7  | /work/wouters/GW231109/prod_BW_XP_s040_l5000_default              |
-|  45 | IMRPhenomXP_NRTidalv3  | Constraint [0.800, 3.000]                   | Constraint [0.125, 1.000]                   | Uniform [0.000, 0.400]      | Uniform [0, 5000]    |           11.6994  |                  3.94 | /work/wouters/GW231109/prod_BW_XP_s040_l5000_double_gaussian      |
-|  46 | IMRPhenomXP_NRTidalv3  | Constraint [0.800, 3.000]                   | Constraint [0.125, 1.000]                   | Uniform [0.000, 0.400]      | Uniform [0, 5000]    |           13.3426  |                  3.26 | /work/wouters/GW231109/prod_BW_XP_s040_l5000_gaussian             |
-|  47 | IMRPhenomXP_NRTidalv3  | Constraint [0.800, 3.000]                   | Constraint [0.125, 1.000]                   | Uniform [0.000, 0.400]      | Uniform [0, 5000]    |           10.9496  |                  3.53 | /work/wouters/GW231109/prod_BW_XP_s040_l5000_uniform              |
-|  48 | IMRPhenomXP_NRTidalv3  | UniformInComponentsChirpMass [1.290, 1.320] | UniformInComponentsMassRatio [0.125, 1.000] | Uniform [0.000, 0.400]      | Constraint [0, 5000] |           13.9811  |                  1.56 | /work/wouters/GW231109/prod_BW_XP_s040_lquniv_default             |
-|  49 | IMRPhenomXP_NRTidalv3  | UniformInComponentsChirpMass [1.290, 1.320] | UniformInComponentsMassRatio [0.125, 1.000] | Uniform [0.000, 0.050]      | Uniform [0, 10000]   |           12.3707  |                  3.4  | /work/wouters/GW231109/prod_XP_s005_l10000_default                |
-|  50 | IMRPhenomXP_NRTidalv3  | Constraint [0.800, 3.000]                   | Constraint [0.125, 1.000]                   | Uniform [0.000, 0.050]      | Uniform [0, 10000]   |           13.0304  |                  3.93 | /work/wouters/GW231109/prod_XP_s005_l10000_double_gaussian        |
-|  51 | IMRPhenomXP_NRTidalv3  | Constraint [0.800, 3.000]                   | Constraint [0.125, 1.000]                   | Uniform [0.000, 0.050]      | Uniform [0, 10000]   |           13.3973  |                  4.16 | /work/wouters/GW231109/prod_XP_s005_l10000_gaussian               |
-|  52 | IMRPhenomXP_NRTidalv3  | Constraint [0.800, 3.000]                   | Constraint [0.125, 1.000]                   | Uniform [0.000, 0.050]      | Uniform [0, 10000]   |           10.1726  |                  4.7  | /work/wouters/GW231109/prod_XP_s005_l10000_uniform                |
-|  53 | IMRPhenomXP_NRTidalv3  | UniformInComponentsChirpMass [1.290, 1.320] | UniformInComponentsMassRatio [0.125, 1.000] | Uniform [0.000, 0.050]      | Uniform [0, 5000]    |           13.7665  |                  2.35 | /work/wouters/GW231109/prod_XP_s005_l5000_default                 |
-|  54 | IMRPhenomXP_NRTidalv3  | Constraint [0.800, 3.000]                   | Constraint [0.125, 1.000]                   | Uniform [0.000, 0.050]      | Uniform [0, 5000]    |           11.9411  |                  4.28 | /work/wouters/GW231109/prod_XP_s005_l5000_double_gaussian         |
-|  55 | IMRPhenomXP_NRTidalv3  | Constraint [0.800, 3.000]                   | Constraint [0.125, 1.000]                   | Uniform [0.000, 0.050]      | Uniform [0, 5000]    |           14.9828  |                  3.89 | /work/wouters/GW231109/prod_XP_s005_l5000_gaussian                |
-|  56 | IMRPhenomXP_NRTidalv3  | Constraint [0.800, 3.000]                   | Constraint [0.125, 1.000]                   | Uniform [0.000, 0.050]      | Uniform [0, 5000]    |           10.1927  |                  4.81 | /work/wouters/GW231109/prod_XP_s005_l5000_uniform                 |
-|  57 | IMRPhenomXP_NRTidalv3  | UniformInComponentsChirpMass [1.290, 1.320] | UniformInComponentsMassRatio [0.125, 1.000] | Uniform [0.000, 0.400]      | Uniform [0, 10000]   |           15.6057  |                  2.77 | /work/wouters/GW231109/prod_XP_s040_l10000_default                |
-|  58 | IMRPhenomXP_NRTidalv3  | Constraint [0.800, 3.000]                   | Constraint [0.125, 1.000]                   | Uniform [0.000, 0.400]      | Uniform [0, 10000]   |            6.00389 |                  5.19 | /work/wouters/GW231109/prod_XP_s040_l10000_double_gaussian        |
-|  59 | IMRPhenomXP_NRTidalv3  | Constraint [0.800, 3.000]                   | Constraint [0.125, 1.000]                   | Uniform [0.000, 0.400]      | Uniform [0, 10000]   |           15.7486  |                  4.22 | /work/wouters/GW231109/prod_XP_s040_l10000_gaussian               |
-|  60 | IMRPhenomXP_NRTidalv3  | Constraint [0.800, 3.000]                   | Constraint [0.125, 1.000]                   | Uniform [0.000, 0.400]      | Uniform [0, 10000]   |           12.0791  |                  5.08 | /work/wouters/GW231109/prod_XP_s040_l10000_uniform                |
-|  61 | IMRPhenomXP_NRTidalv3  | UniformInComponentsChirpMass [1.290, 1.320] | UniformInComponentsMassRatio [0.125, 1.000] | Uniform [0.000, 0.400]      | Uniform [0, 5000]    |           15.601   |                  2.59 | /work/wouters/GW231109/prod_XP_s040_l5000_default                 |
-|  62 | IMRPhenomXP_NRTidalv3  | Constraint [0.800, 3.000]                   | Constraint [0.125, 1.000]                   | Uniform [0.000, 0.400]      | Uniform [0, 5000]    |           11.9547  |                  5.21 | /work/wouters/GW231109/prod_XP_s040_l5000_double_gaussian         |
-|  63 | IMRPhenomXP_NRTidalv3  | Constraint [0.800, 3.000]                   | Constraint [0.125, 1.000]                   | Uniform [0.000, 0.400]      | Uniform [0, 5000]    |           16.0109  |                  4.02 | /work/wouters/GW231109/prod_XP_s040_l5000_gaussian                |
-|  64 | IMRPhenomXP_NRTidalv3  | Constraint [0.800, 3.000]                   | Constraint [0.125, 1.000]                   | Uniform [0.000, 0.400]      | Uniform [0, 5000]    |           12.6869  |                  4.72 | /work/wouters/GW231109/prod_XP_s040_l5000_uniform                 |
-|  65 | IMRPhenomXAS_NRTidalv3 | UniformInComponentsChirpMass [1.290, 1.320] | UniformInComponentsMassRatio [0.125, 1.000] | AlignedSpin [-0.100, 0.100] | Uniform [0, 5000]    |           14.7725  |                  1.4  | /work/wouters/GW231109/test                                       |
-|  66 | IMRPhenomXAS_NRTidalv3 | UniformInComponentsChirpMass [1.290, 1.320] | UniformInComponentsMassRatio [0.125, 1.000] | AlignedSpin [-0.100, 0.100] | Uniform [0, 5000]    |           14.7728  |                  1.26 | /work/wouters/GW231109/test_fmax2kHz                              |
-|  67 | IMRPhenomXAS_NRTidalv3 | UniformInComponentsChirpMass [1.290, 1.320] | UniformInComponentsMassRatio [0.125, 1.000] | AlignedSpin [-0.150, 0.150] | Uniform [0, 5000]    |           14.8205  |                  1.43 | /work/wouters/GW231109/test_high_spins                            |
-|  68 | IMRPhenomXP_NRTidalv3  | UniformInComponentsChirpMass [1.290, 1.320] | UniformInComponentsMassRatio [0.125, 1.000] | Uniform [0.000, 0.050]      | Uniform [0, 5000]    |           13.7127  |                  2.32 | /work/wouters/GW231109/test_precessing                            |
-|  69 | IMRPhenomXP_NRTidalv3  | UniformInComponentsChirpMass [1.290, 1.320] | UniformInComponentsMassRatio [0.125, 1.000] | Uniform [0.000, 0.050]      | Uniform [0, 5000]    |           13.3604  |                  2.29 | /work/wouters/GW231109/test_precessing_fmax2kHz                   |
-|  70 | IMRPhenomXP_NRTidalv3  | UniformInComponentsChirpMass [1.290, 1.320] | UniformInComponentsMassRatio [0.125, 1.000] | Uniform [0.000, 0.150]      | Uniform [0, 5000]    |           15.3188  |                  2.29 | /work/wouters/GW231109/test_precessing_high_spins                 |
-|  71 | IMRPhenomXP_NRTidalv3  | UniformInComponentsChirpMass [1.290, 1.320] | UniformInComponentsMassRatio [0.125, 1.000] | Uniform [0.000, 0.150]      | Uniform [0, 5000]    |           14.1725  |                  2.29 | /work/wouters/GW231109/test_precessing_timefix                    |
-|  72 | IMRPhenomXP_NRTidalv3  | UniformInComponentsChirpMass [1.290, 1.320] | UniformInComponentsMassRatio [0.125, 1.000] | Uniform [0.000, 0.150]      | Uniform [0, 5000]    |           16.8609  |                  3.19 | /work/wouters/GW231109/test_precessing_timefix_bw                 |
-|  73 | IMRPhenomXP_NRTidalv3  | UniformInComponentsChirpMass [1.290, 1.320] | UniformInComponentsMassRatio [0.125, 1.000] | Uniform [0.000, 0.150]      | Uniform [0, 5000]    |           15.3876  |                  2.44 | /work/wouters/GW231109/test_precessing_timefix_bw_fast            |
+```
+GW231109_extreme_matter/
+├── jester/             # Main inference pipeline (JAX/flowMC)
+├── neural_priors/      # Normalizing flow mass priors trained on NS population models
+├── figures/            # Plotting scripts for GW PE results and kilonova lightcurves
+├── money_plots/        # Final publication figures and tables
+├── em_lightcurves/     # Kilonova lightcurve modelling (NMMA-based)
+├── posteriors/         # Posterior samples and marginalization scripts
+├── PSD/                # Power spectral density utilities
+├── overview/           # Run metadata (all_runs_information.json)
+├── utils.py            # Shared utilities (fetch posteriors, log BFs, run metadata)
+└── make_overview_table.py  # Auto-generates the run summary table in this README
+```
+
+---
+
+## Paper figures
+
+These are the figures that appear in the paper, together with the scripts that produce them.
+
+| Figure (PDF) | Location | Generating script |
+|---|---|---|
+| `m1m2_overview.pdf` | `money_plots/figures/GW_PE/` | `money_plots/m1m2_overview.py` |
+| `populations_component_masses_comparison.pdf` | `money_plots/figures/populations/` | `money_plots/populations.py` |
+| `GW231109_lc_with_band_referee_small.pdf` | `paper/` (copied from `figures/`) | `figures/Fig3_plot.py` + `em_lightcurves/peter_estimate/lightcurve_estimation_fullpos.py` |
+| `comparison_new_ET_vs_ET_CE.pdf` | `money_plots/figures/GW_PE/` | `money_plots/final_GW_PE_figures.py` |
+| `anna_tim_favourite_plot.pdf` | `money_plots/figures/GW_PE/` | `money_plots/anna_tim_favourite_plot.py` |
+| `ET_full_injection_R14_histogram.pdf` | `money_plots/figures/EOS_comparison/` | `money_plots/money_plots_snellius.py` / `money_plots_jarvis.py` |
+
+Paper table:
+
+| Table | File |
+|---|---|
+| EOS R14 constraints | `money_plots/eos_r14_table.tex` |
+
+---
+
+## Analysis overview
+
+### Gravitational wave parameter estimation
+
+The core inference is in `jester/inference.py`, which wraps [jim](https://github.com/ThibeauWouters/jim) (a flowMC-based GW inference framework with JAX backend). We ran 70+ configurations varying:
+
+- Waveform: `IMRPhenomXP_NRTidalv3` (precessing) and `IMRPhenomXAS_NRTidalv3` (aligned spin)
+- Chirp mass priors: narrow default ([1.29, 1.32] M☉) vs. broad astrophysical priors
+- Spin priors: χ ∈ [0, 0.05], [0, 0.15], [0, 0.25], [0, 0.40]
+- Lambda priors: uniform [0, 5000] / [0, 10000], quasi-universal relations, neural flow priors
+
+All runs were executed on compute clusters (BW, Snellius, Jarvis). Posterior files live in `jester/outdir_*/`, with key samples saved to `money_plots/data/`.
+
+A summary table of all runs (waveform, priors, log Bayes factor, wall time) is auto-generated by `make_overview_table.py`.
+
+### Neural flow priors
+
+`neural_priors/train_NF_prior.py` trains normalizing flows on NS population models (single Gaussian, double Gaussian, uniform) using [glasflow](https://github.com/uofgravity/glasflow). These flows encode the (m1, m2, Λ1, Λ2) prior from astrophysical observations and are plugged into the bilby inference as `NFPrior`. Trained models live in `jester/NFs/`.
+
+### Equation of state inference
+
+Post-processing is done in `jester/postprocessing.py`. EOS inference reweights GW posteriors onto a tabulated EOS grid (data in `figures/EOS_data/`). The key derived observable is R14 (neutron star radius at 1.4 M☉), summarised in `money_plots/eos_r14_table.tex`.
+
+### Kilonova lightcurves (Fig. 3)
+
+The workflow is two-step:
+
+1. **On cluster** — `em_lightcurves/peter_estimate/lightcurve_estimation_fullpos.py` loops over posterior samples, runs NMMA with the Bu2019lm model, and outputs median/credible-interval lightcurves in multiple filters (u, g, r, i, z, y, J, H, K) to `lc_data_band.dat`.
+2. **Locally** — `figures/Fig3_plot.py` reads `lc_data_band.dat` and AT2017gfo photometry (`AT2017gfo.dat`) and produces the publication figure.
+
+### Population inference
+
+`money_plots/populations.py` compares the GW231109 component mass posteriors to NS population distributions (single/double Gaussian, uniform) using Jensen–Shannon divergences. Results feed Sec. II.C of the paper.
+
+---
+
+## Reproducing the results
+
+```bash
+# Run a single inference job (on cluster, GPU recommended)
+python jester/inference.py --make-cornerplot True
+
+# Post-process a completed run
+python jester/postprocessing.py
+
+# Regenerate the run overview table
+python make_overview_table.py
+
+# Remake the kilonova lightcurve figure (step 2, after lc_data_band.dat is available)
+cd figures/
+python Fig3_plot.py \
+    ../em_lightcurves/peter_estimate/lc_data_band.dat \
+    ../em_lightcurves/peter_estimate/AT2017gfo.dat \
+    ../../paper/GW231109_lc_with_band.pdf
+
+# Remake the money plots
+python money_plots/m1m2_overview.py
+python money_plots/populations.py
+python money_plots/anna_tim_favourite_plot.py
+python money_plots/final_GW_PE_figures.py
+```
+
+---
+
+## Key dependencies
+
+- [jim / jimgw](https://github.com/ThibeauWouters/jim) — GW inference with flowMC
+- [JAX](https://github.com/google/jax) — GPU-accelerated numerics
+- [bilby](https://git.ligo.org/lscsoft/bilby) — Bayesian inference framework
+- [glasflow](https://github.com/uofgravity/glasflow) — normalizing flows for priors
+- [NMMA](https://github.com/nuclear-multimessenger-astronomy/nmma) — kilonova lightcurve modelling
+- corner, h5py, numpy, scipy, matplotlib
