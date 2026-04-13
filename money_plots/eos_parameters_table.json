@@ -14,14 +14,14 @@
         "lower_error": 1.1669398610582373,
         "upper_error": 0.984998715516122,
         "width": 2.1519385765743593,
-        "credible_interval": "13.20^{+0.98}_{-1.17}"
+        "credible_interval": "13.2^{+1.0}_{-1.2}"
       },
       "p3nsat": {
         "median": 98.01522109823091,
         "lower_error": 45.6563052887669,
         "upper_error": 62.000440216351734,
         "width": 107.65674550511864,
-        "credible_interval": "98.02^{+62.00}_{-45.66}"
+        "credible_interval": "98^{+62}_{-46}"
       }
     }
   },
@@ -40,14 +40,14 @@
         "lower_error": 1.3722187163697281,
         "upper_error": 1.0604162264903678,
         "width": 2.432634942860096,
-        "credible_interval": "12.21^{+1.06}_{-1.37}"
+        "credible_interval": "12.2^{+1.1}_{-1.4}"
       },
       "p3nsat": {
         "median": 83.68306608757172,
         "lower_error": 46.72846024753511,
         "upper_error": 63.90271274640514,
         "width": 110.63117299394025,
-        "credible_interval": "83.68^{+63.90}_{-46.73}"
+        "credible_interval": "84^{+64}_{-47}"
       }
     }
   },
@@ -66,14 +66,14 @@
         "lower_error": 0.9078442786851273,
         "upper_error": 0.6907331369569985,
         "width": 1.5985774156421257,
-        "credible_interval": "13.49^{+0.69}_{-0.91}"
+        "credible_interval": "13.5^{+0.7}_{-0.9}"
       },
       "p3nsat": {
         "median": 104.10696374344582,
         "lower_error": 38.548185361782586,
         "upper_error": 71.00384621247451,
         "width": 109.5520315742571,
-        "credible_interval": "104.11^{+71.00}_{-38.55}"
+        "credible_interval": "104^{+71}_{-39}"
       }
     }
   },
@@ -92,14 +92,14 @@
         "lower_error": 1.083663111864169,
         "upper_error": 0.9052152804187905,
         "width": 1.9888783922829596,
-        "credible_interval": "13.26^{+0.91}_{-1.08}"
+        "credible_interval": "13.3^{+0.9}_{-1.1}"
       },
       "p3nsat": {
         "median": 100.40312504379793,
         "lower_error": 44.29204351234473,
         "upper_error": 75.5939189449771,
         "width": 119.88596245732184,
-        "credible_interval": "100.40^{+75.59}_{-44.29}"
+        "credible_interval": "100^{+76}_{-44}"
       }
     }
   },
@@ -118,40 +118,40 @@
         "lower_error": 1.113677047705,
         "upper_error": 0.8876541247738636,
         "width": 2.0013311724788636,
-        "credible_interval": "13.37^{+0.89}_{-1.11}"
+        "credible_interval": "13.4^{+0.9}_{-1.1}"
       },
       "p3nsat": {
         "median": 103.12664377157256,
         "lower_error": 44.3295229024854,
         "upper_error": 80.39131636890906,
         "width": 124.72083927139445,
-        "credible_interval": "103.13^{+80.39}_{-44.33}"
+        "credible_interval": "103^{+80}_{-44}"
       }
     }
   },
-  "outdir_GW231109_double_gaussian": {
+  "outdir_GW231109_double_gaussian_niu": {
     "label": "GW231109 (double Gaussian)",
     "parameters": {
       "MTOV": {
-        "median": 2.2812569907033438,
-        "lower_error": 0.3269515130414895,
-        "upper_error": 0.41818073361927377,
-        "width": 0.7451322466607633,
-        "credible_interval": "2.28^{+0.42}_{-0.33}"
+        "median": 2.2941904294693822,
+        "lower_error": 0.33866452465405716,
+        "upper_error": 0.3914794069208605,
+        "width": 0.7301439315749176,
+        "credible_interval": "2.29^{+0.39}_{-0.34}"
       },
       "R14": {
-        "median": 13.29521849612862,
-        "lower_error": 1.0319254790456114,
-        "upper_error": 0.8599850487214269,
-        "width": 1.8919105277670383,
-        "credible_interval": "13.30^{+0.86}_{-1.03}"
+        "median": 13.454159987423086,
+        "lower_error": 0.8628044508534494,
+        "upper_error": 0.7656735705355313,
+        "width": 1.6284780213889807,
+        "credible_interval": "13.5^{+0.8}_{-0.9}"
       },
       "p3nsat": {
-        "median": 100.18188631608422,
-        "lower_error": 41.16101327626077,
-        "upper_error": 77.79057462370693,
-        "width": 118.9515878999677,
-        "credible_interval": "100.18^{+77.79}_{-41.16}"
+        "median": 101.72923113731963,
+        "lower_error": 42.30751142441948,
+        "upper_error": 78.88330331344844,
+        "width": 121.19081473786792,
+        "credible_interval": "102^{+79}_{-42}"
       }
     }
   },
@@ -170,14 +170,14 @@
         "lower_error": 1.0470175553259988,
         "upper_error": 0.8234518967310009,
         "width": 1.8704694520569998,
-        "credible_interval": "13.33^{+0.82}_{-1.05}"
+        "credible_interval": "13.3^{+0.8}_{-1.0}"
       },
       "p3nsat": {
         "median": 103.38844315633123,
         "lower_error": 41.26012569617367,
         "upper_error": 86.77376796714508,
         "width": 128.03389366331874,
-        "credible_interval": "103.39^{+86.77}_{-41.26}"
+        "credible_interval": "103^{+87}_{-41}"
       }
     }
   },
@@ -196,14 +196,14 @@
         "lower_error": 1.0627795643355693,
         "upper_error": 0.796325811497077,
         "width": 1.8591053758326463,
-        "credible_interval": "13.40^{+0.80}_{-1.06}"
+        "credible_interval": "13.4^{+0.8}_{-1.1}"
       },
       "p3nsat": {
         "median": 103.2450828103203,
         "lower_error": 42.10425596759091,
         "upper_error": 77.10759623909286,
         "width": 119.21185220668377,
-        "credible_interval": "103.25^{+77.11}_{-42.10}"
+        "credible_interval": "103^{+77}_{-42}"
       }
     }
   },
@@ -222,40 +222,40 @@
         "lower_error": 1.284924112103102,
         "upper_error": 0.7983437021050683,
         "width": 2.0832678142081704,
-        "credible_interval": "13.27^{+0.80}_{-1.28}"
+        "credible_interval": "13.3^{+0.8}_{-1.3}"
       },
       "p3nsat": {
         "median": 102.70429972606007,
         "lower_error": 47.73684221417781,
         "upper_error": 74.98675802905231,
         "width": 122.72360024323012,
-        "credible_interval": "102.70^{+74.99}_{-47.74}"
+        "credible_interval": "103^{+75}_{-48}"
       }
     }
   },
-  "outdir_GW170817_GW231109": {
+  "outdir_GW170817_GW231109_longer_sampling": {
     "label": "GW170817+GW231109",
     "parameters": {
       "MTOV": {
-        "median": 2.183615526917353,
-        "lower_error": 0.27100245611729745,
-        "upper_error": 0.3784425048179423,
-        "width": 0.6494449609352397,
-        "credible_interval": "2.18^{+0.38}_{-0.27}"
+        "median": 2.2101875434415224,
+        "lower_error": 0.3300585587485412,
+        "upper_error": 0.41091779599188794,
+        "width": 0.7409763547404291,
+        "credible_interval": "2.21^{+0.41}_{-0.33}"
       },
       "R14": {
-        "median": 12.075670559196249,
-        "lower_error": 1.2355558406329017,
-        "upper_error": 1.0956883965505178,
-        "width": 2.3312442371834194,
-        "credible_interval": "12.08^{+1.10}_{-1.24}"
+        "median": 12.18115799540794,
+        "lower_error": 1.2404755531041278,
+        "upper_error": 1.0459617332196558,
+        "width": 2.2864372863237836,
+        "credible_interval": "12.2^{+1.0}_{-1.2}"
       },
       "p3nsat": {
-        "median": 78.03339344316912,
-        "lower_error": 37.87118635137967,
-        "upper_error": 64.7672440605529,
-        "width": 102.63843041193257,
-        "credible_interval": "78.03^{+64.77}_{-37.87}"
+        "median": 82.17723505522233,
+        "lower_error": 39.93409187535481,
+        "upper_error": 72.04366315050018,
+        "width": 111.97775502585499,
+        "credible_interval": "82^{+72}_{-40}"
       }
     }
   },
@@ -274,14 +274,14 @@
         "lower_error": 1.1507043336195242,
         "upper_error": 1.2245735007011298,
         "width": 2.375277834320654,
-        "credible_interval": "12.29^{+1.22}_{-1.15}"
+        "credible_interval": "12.3^{+1.2}_{-1.2}"
       },
       "p3nsat": {
         "median": 84.41204244200074,
         "lower_error": 41.032647287423494,
         "upper_error": 59.54787670942383,
         "width": 100.58052399684732,
-        "credible_interval": "84.41^{+59.55}_{-41.03}"
+        "credible_interval": "84^{+60}_{-41}"
       }
     }
   },
@@ -300,14 +300,14 @@
         "lower_error": 1.1876756587799253,
         "upper_error": 1.0784525247997436,
         "width": 2.266128183579669,
-        "credible_interval": "12.07^{+1.08}_{-1.19}"
+        "credible_interval": "12.1^{+1.1}_{-1.2}"
       },
       "p3nsat": {
         "median": 83.49772028385803,
         "lower_error": 39.02193252856234,
         "upper_error": 63.74844890907738,
         "width": 102.77038143763971,
-        "credible_interval": "83.50^{+63.75}_{-39.02}"
+        "credible_interval": "83^{+64}_{-39}"
       }
     }
   }

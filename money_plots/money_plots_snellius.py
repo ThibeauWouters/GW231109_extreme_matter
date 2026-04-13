@@ -24,6 +24,9 @@ import jesterTOV.utils as jose_utils
 # Import shared EOS loading utilities
 from eos_utils import load_eos_data
 
+# Flag to use longer sampling run for GW170817+GW231109
+USE_LONGER_SAMPLING = True
+
 INJECTION_COLOR = "#cb78bd" # avoid importing since bilby not on Snellius
 
 # Matplotlib parameters
@@ -60,6 +63,7 @@ LABELS_DICT = {"outdir": "Prior",
                "outdir_GW231109_XAS": r"+GW231109 (\texttt{XAS})",
                "outdir_GW190425": "+GW190425",
                "outdir_GW170817_GW231109": "+GW170817\n+GW231109",
+               "outdir_GW170817_GW231109_longer_sampling": "+GW170817\n+GW231109",
                "outdir_GW170817_GW190425": "+GW170817\n+GW190425",
                "outdir_GW170817_GW190425_GW231109": "+GW170817\n+GW190425\n+GW231109",
                "outdir_GW231109_double_gaussian": "+GW231109 (double Gaussian)",
@@ -75,12 +79,13 @@ COLORS_DICT = {"outdir": "darkgray",
                "outdir_GW190425": "#c7de81",
                "outdir_GW231109": "orange",
                "outdir_GW231109_XAS": "red",
-               "outdir_GW170817_GW231109": "orange",
+               "outdir_GW170817_GW231109": "red",
+               "outdir_GW170817_GW231109_longer_sampling": "red",
                "outdir_GW170817_GW190425": "#c7de81",
                "outdir_GW170817_GW190425_GW231109": "orange",
-               "outdir_GW231109_double_gaussian": "purple",
+               "outdir_GW231109_double_gaussian": "mediumslateblue",
                "outdir_GW231109_quniv": "red",
-               "outdir_GW231109_s025": "purple",
+               "outdir_GW231109_s025": "mediumslateblue",
                "outdir_GW231109_s040": "blue",
                "outdir_ET_AS": INJECTION_COLOR
                }
@@ -123,7 +128,7 @@ def make_parameter_histograms(data_list: list,
     # Define parameter ranges and labels
     parameter_configs = {
         'MTOV': {'range': (1.75, 2.75), 'xlabel': r"$M_{\rm{TOV}}$ [$M_{\odot}$]"},
-        'R14': {'range': (10.1, 16.0), 'xlabel': r"$R_{1.4}$ [km]"},
+        'R14': {'range': (9.0, 15.0), 'xlabel': r"$R_{1.4}$ [km]"},
         'p3nsat': {'range': (0.1, 200.0), 'xlabel': r"$p(3n_{\rm{sat}})$ [MeV fm$^{-3}$]"}
     }
 
@@ -376,7 +381,7 @@ def get_colors_for_directories(directories: list):
         list: Colors corresponding to each directory
     """
     colors = []
-    default_colors = ['blue', 'red', 'green', 'orange', 'purple', 'brown', 'pink', 'gray', 'olive', 'cyan']
+    default_colors = ['blue', 'red', 'green', 'orange', 'mediumslateblue', 'brown', 'pink', 'gray', 'olive', 'cyan']
 
     for i, outdir in enumerate(directories):
         dir_basename = os.path.basename(outdir.rstrip('/'))
@@ -423,7 +428,7 @@ def load_all_data(directories: list):
 
 import os
 
-def process_given_dirs(directories, save_suffix="", legend_outside=False, filename_prefix=None):
+def process_given_dirs(directories, save_suffix="", legend_outside=False, filename_prefix=None, do_contours: bool = True):
     """Process given directories and generate comparison plots.
 
     Args:
@@ -461,8 +466,10 @@ def process_given_dirs(directories, save_suffix="", legend_outside=False, filena
     # Create all comparison plots
     try:
         make_parameter_histograms(data_list, valid_directories, valid_colors, filename_prefix, legend_outside=legend_outside)
-        make_mass_radius_contour_plot(data_list, valid_directories, valid_colors, filename_prefix, legend_outside=legend_outside)
-        make_pressure_density_contour_plot(data_list, valid_directories, valid_colors, filename_prefix, legend_outside=legend_outside)
+        if do_contours:
+            print("Also plotting the contour plots...")
+            make_mass_radius_contour_plot(data_list, valid_directories, valid_colors, filename_prefix, legend_outside=legend_outside)
+            make_pressure_density_contour_plot(data_list, valid_directories, valid_colors, filename_prefix, legend_outside=legend_outside)
         print(f"\nAll comparison plots generated successfully!")
     except Exception as e:
         print(f"Error generating comparison plots: {e}")
@@ -648,7 +655,7 @@ def plot_full_injection(plot_text: bool = True,
 
     # Define colors for ET and ET+CE
     ET_COLOR = "#de8f05"
-    ET_CE_COLOR = "#d45d01"
+    ET_CE_COLOR = "mediumslateblue"
 
     # =========================================================================
     # R14 histogram
@@ -662,7 +669,7 @@ def plot_full_injection(plot_text: bool = True,
     kde_et_ce = gaussian_kde(R14_et_ce)
     kde_radio = gaussian_kde(R14_radio)
 
-    x = np.linspace(10.0, 16.0, 1000)
+    x = np.linspace(9.0, 15.0, 1000)
     y_et = kde_et(x)
     y_et_ce = kde_et_ce(x)
     y_radio = kde_radio(x)
@@ -792,6 +799,9 @@ def plot_full_injection(plot_text: bool = True,
 def main():
     """Main function - configures directories and calls processing."""
 
+    # Determine which GW170817+GW231109 directory to use
+    gw170817_gw231109_dir = "../jester/outdir_GW170817_GW231109_longer_sampling" if USE_LONGER_SAMPLING else "../jester/outdir_GW170817_GW231109"
+
     # # =======================================================================
     # # 1 Check GW231109
     # # =======================================================================
@@ -803,12 +813,12 @@ def main():
     # ]
     # save_suffix = ""
     # process_given_dirs(directories, save_suffix)
-    
-    
+
+
     # # =======================================================================
     # # 2 Check GW231109 vs GW190425
     # # =======================================================================
-    
+
     # directories = [
     #     "../jester/outdir_radio",
     #     "../jester/outdir_GW190425",
@@ -816,11 +826,11 @@ def main():
     # ]
     # save_suffix = ""
     # process_given_dirs(directories, save_suffix, filename_prefix="GW190425_vs_GW231109_radio")
-    
+
     # # =======================================================================
     # # 2 Check GW231109 vs GW190425 -- but now with just the prior for comparison
     # # =======================================================================
-    
+
     # directories = [
     #     "../jester/outdir",
     #     "../jester/outdir_GW190425",
@@ -828,11 +838,11 @@ def main():
     # ]
     # save_suffix = ""
     # process_given_dirs(directories, save_suffix, filename_prefix="GW190425_vs_GW231109_prior")
-    
+
     # # =======================================================================
     # # 3a Check GW170817 vs GW170817+GW190425
     # # =======================================================================
-    
+
     # directories = [
     #     "../jester/outdir_radio",
     #     "../jester/outdir_GW170817",
@@ -840,47 +850,47 @@ def main():
     # ]
     # save_suffix = ""
     # process_given_dirs(directories, save_suffix)
-    
+
     # # =======================================================================
     # # 3a Check GW170817 vs GW170817+GW231109
     # # =======================================================================
-    
+
     # directories = [
     #     "../jester/outdir_radio",
     #     "../jester/outdir_GW170817",
-    #     "../jester/outdir_GW170817_GW231109",
+    #     gw170817_gw231109_dir,
     # ]
     # save_suffix = ""
     # process_given_dirs(directories, save_suffix)
-    
+
     # # =======================================================================
     # # 3b Check GW170817+GW190425 vs GW170817+GW231109
     # # =======================================================================
-    
+
     # directories = [
     #     "../jester/outdir_radio",
     #     "../jester/outdir_GW170817_GW190425",
-    #     "../jester/outdir_GW170817_GW231109",
+    #     gw170817_gw231109_dir,
     # ]
     # save_suffix = ""
     # process_given_dirs(directories, save_suffix, legend_outside=False, filename_prefix="GW190425_vs_GW231109_with_GW170817")
-    
+
     # # =======================================================================
     # # 3c Check GW170817+GW190425 vs GW170817+GW231109 without GW170817
     # # =======================================================================
-    
+
     # directories = [
     #     "../jester/outdir_radio",
     #     "../jester/outdir_GW170817_GW190425",
-    #     "../jester/outdir_GW170817_GW231109",
+    #     gw170817_gw231109_dir,
     # ]
     # save_suffix = ""
     # process_given_dirs(directories, save_suffix, legend_outside=True)
-    
+
     # # =======================================================================
     # # 4 Check GW231109 spins
     # # =======================================================================
-    
+
     # directories = [
     #     "../jester/outdir_radio",
     #     "../jester/outdir_GW231109",
@@ -889,11 +899,11 @@ def main():
     # ]
     # save_suffix = ""
     # process_given_dirs(directories, save_suffix, legend_outside=True)
-    
+
     # # =======================================================================
     # # 5 Check GW231109 other prior choices
     # # =======================================================================
-    
+
     # directories = [
     #     "../jester/outdir_GW231109",
     #     "../jester/outdir_GW231109_double_gaussian",
@@ -901,39 +911,46 @@ def main():
     # ]
     # save_suffix = ""
     # process_given_dirs(directories, save_suffix)
-    
+
     # # =======================================================================
     # # 6 Check XP vs XAS
     # # =======================================================================
-    
+
     # directories = [
     #     "../jester/outdir_GW231109",
     #     "../jester/outdir_GW231109_XAS",
     # ]
     # save_suffix = ""
     # process_given_dirs(directories, save_suffix)
-    
-    # # =======================================================================
-    # # 7 Increasing constraints with more and more GW BNS
-    # # =======================================================================
 
+    # =======================================================================
+    # 7 Increasing constraints with more and more GW BNS
+    # =======================================================================
+
+    directories = [
+        "../jester/outdir_radio",
+        "../jester/outdir_GW170817",
+        "../jester/outdir_GW231109",
+        gw170817_gw231109_dir,
+    ]
+    save_suffix = ""
+    process_given_dirs(directories, save_suffix, filename_prefix="final", do_contours=False)
+    
+    # # # Additionally also this plot where we force the original run
+    
     # directories = [
     #     "../jester/outdir_radio",
     #     "../jester/outdir_GW170817",
-    #     "../jester/outdir_GW170817_GW190425",
-    #     "../jester/outdir_GW170817_GW190425_GW231109",
+    #     "../jester/outdir_GW231109",
+    #     gw170817_gw231109_dir,
     # ]
     # save_suffix = ""
-    # process_given_dirs(directories, save_suffix, filename_prefix="all_bns")
+    # process_given_dirs(directories, save_suffix, filename_prefix="all_bns", do_contours=False)
     
 
-    # # =======================================================================
-    # # INJECTIONS
-    # # =======================================================================
-
-    # # Individual injection plots
-    # plot_injection(outdir="outdir_GW231109_ET")
-    # plot_injection(outdir="outdir_GW231109_ET_CE")
+    # =======================================================================
+    # INJECTIONS
+    # =======================================================================
 
     # Combined ET and ET+CE plot
     plot_full_injection(plot_text=False, what_prior="radio")
