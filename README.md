@@ -99,7 +99,7 @@ python Fig3_plot.py \
     ../../paper/GW231109_lc_with_band.pdf
 
 # Remake the money plots
-python money_plots/m1m2_overview.py
+python money_plots/m1m2_overview.py # FIXME: needs data from jester so cannot be done locally
 python money_plots/populations.py
 python money_plots/anna_tim_favourite_plot.py
 python money_plots/final_GW_PE_figures.py
