@@ -6,7 +6,7 @@ for H1_optimal_SNR and L1_optimal_SNR (and matched-filter equivalents) per run.
 
 import json
 import numpy as np
-import arviz as az
+import arviz
 import argparse
 
 DEFAULT_INPUT = "./data/snr_samples.json"
@@ -23,7 +23,7 @@ KEYS_OF_INTEREST = [
 def summarize(samples, hdi_prob=0.95):
     arr = np.array(samples)
     median = np.median(arr)
-    hdi = az.hdi(arr, hdi_prob=hdi_prob)
+    hdi = arviz.hdi(arr, hdi_prob=hdi_prob)
     return median, hdi[0], hdi[1]
 
 def main():
