@@ -5,6 +5,7 @@ SNR samples to a JSON file for postprocessing locally.
 """
 
 import h5py
+import numpy as np
 import os
 import glob
 import json
@@ -23,8 +24,15 @@ def load_snrs_from_posterior(hdf5_filename):
     """Extract all SNR-related keys from a posterior HDF5 file."""
     with h5py.File(hdf5_filename, 'r') as f:
         posterior = f['posterior']
-        snrs_dict = {k: posterior[k][()].tolist() for k in posterior.keys()
-                     if 'matched_filter_snr' in k or 'optimal_snr' in k}
+        snrs_dict = {}
+        for k in posterior.keys():
+            if 'matched_filter_snr' not in k and 'optimal_snr' not in k:
+                continue
+            arr = posterior[k][()]
+            # matched_filter_snr can be complex; store the absolute value
+            if np.iscomplexobj(arr):
+                arr = np.abs(arr)
+            snrs_dict[k] = arr.tolist()
     return snrs_dict
 
 def find_hdf5_file(top_level_dir):
