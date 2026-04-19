@@ -98,20 +98,6 @@ PAPER_SUBSET_RUNS = [
     "prod_BW_XP_s040_leos_default",
 ]
 
-_PAPER_RUN_COLORS = {
-    "prod_BW_XP_s005_l5000_default": ORANGE,
-    "prod_BW_XP_s040_l5000_default": BLUE,
-    "prod_BW_XP_s005_leos_default": PURPLE,
-    "prod_BW_XP_s040_leos_default": LIGHT_BLUE,
-}
-
-_PAPER_RUN_SPIN_LABELS = {
-    "prod_BW_XP_s005_l5000_default": r"low-spin ($\chi_{\rm eff} \leq 0.05$)",
-    "prod_BW_XP_s040_l5000_default": r"high-spin ($\chi_{\rm eff} \leq 0.40$)",
-    "prod_BW_XP_s005_leos_default": r"low-spin ($\chi_{\rm eff} \leq 0.05$)",
-    "prod_BW_XP_s040_leos_default": r"high-spin ($\chi_{\rm eff} \leq 0.40$)",
-}
-
 
 def plot_snr_histograms(all_results, output_path, bins=50, run_filter=None):
     """Plot overlaid per-run histograms for each SNR quantity in a 2-column layout.
@@ -222,116 +208,92 @@ def plot_snr_histograms(all_results, output_path, bins=50, run_filter=None):
 
 
 def plot_snr_histograms_paper(all_results, output_path, bins=50):
-    """Paper-quality SNR histogram figure for the four-run subset.
+    """Single-panel paper figure: network matched-filter SNR for the four paper-subset runs.
 
-    Rows: one per SNR quantity; columns: 2 panels per row.
-    Colors encode prior type (Lambda-uniform = orange/blue, EOS-informed = purple/light-blue).
-    Line style is solid for all runs; spin is distinguished by hue pair.
-    Legend uses grouped entries with bold group headers.
+    Four distinct colors (no line-style encoding):
+      Λ-uniform:    ORANGE (low-spin), BLUE (high-spin)
+      EOS-informed: #2596be (low-spin), palevioletred (high-spin)
     """
+    _EOS_BLUE = "#2596be"
+    _RED      = "palevioletred"
+
+    _RUN_COLOR = {
+        "prod_BW_XP_s005_l5000_default": ORANGE,
+        "prod_BW_XP_s040_l5000_default": BLUE,
+        "prod_BW_XP_s005_leos_default":  _EOS_BLUE,
+        "prod_BW_XP_s040_leos_default":  _RED,
+    }
+    _RUN_LABEL = {
+        "prod_BW_XP_s005_l5000_default": r"$\Lambda$-uniform, $a_i \leq 0.05$",
+        "prod_BW_XP_s040_l5000_default": r"$\Lambda$-uniform, $a_i \leq 0.40$",
+        "prod_BW_XP_s005_leos_default":  r"EOS-informed, $a_i \leq 0.05$",
+        "prod_BW_XP_s040_leos_default":  r"EOS-informed, $a_i \leq 0.40$",
+    }
+
     runs = [r for r in PAPER_SUBSET_RUNS if r in all_results]
     if not runs:
         print("No paper-subset runs found in data; skipping paper figure.")
         return
 
-    # Build panel keys (same logic as plot_snr_histograms)
-    present_keys = []
-    for key in KEYS_OF_INTEREST:
-        for run_name in runs:
-            key_map = {k.lower(): k for k in all_results[run_name]}
-            if key_map.get(key.lower()) is not None:
-                if key not in present_keys:
-                    present_keys.append(key)
-                break
-    present_keys.append("network_snr_computed")
-    present_keys.append("network_mf_snr_computed")
+    fig, ax = plt.subplots(figsize=(5.0, 3.8))
 
-    n_panels = len(present_keys)
-    ncols = 2
-    nrows = (n_panels + 1) // ncols
+    for run_name in runs:
+        snrs = all_results[run_name]
+        samples = compute_network_mf_snr_from_components(snrs)
+        if samples is None:
+            continue
+        ax.hist(
+            samples,
+            bins=bins,
+            density=True,
+            histtype="step",
+            color=_RUN_COLOR.get(run_name, "black"),
+            linewidth=1.6,
+            label=_RUN_LABEL.get(run_name, run_name),
+        )
 
-    fig_width = ncols * 4.5
-    fig_height = nrows * 3.0
-    fig, axes = plt.subplots(nrows, ncols, figsize=(fig_width, fig_height))
-    axes = np.array(axes).reshape(-1)
-
-    for panel_idx, key in enumerate(present_keys):
-        ax = axes[panel_idx]
-        for run_name in runs:
-            snrs = all_results[run_name]
-            if key == "network_snr_computed":
-                samples = compute_network_snr_from_components(snrs)
-                if samples is None:
-                    continue
-            elif key == "network_mf_snr_computed":
-                samples = compute_network_mf_snr_from_components(snrs)
-                if samples is None:
-                    continue
-            else:
-                key_map = {k.lower(): k for k in snrs}
-                actual_key = key_map.get(key.lower())
-                if actual_key is None:
-                    continue
-                samples = np.array(snrs[actual_key])
-
-            color = _PAPER_RUN_COLORS.get(run_name, "black")
-            ax.hist(
-                samples,
-                bins=bins,
-                density=True,
-                histtype="step",
-                color=color,
-                linewidth=1.4,
-            )
-
-        title = key.replace("_", " ")
-        if key == "network_snr_computed":
-            title = r"network SNR (optimal, $\sqrt{H^2+L^2}$)"
-        elif key == "network_mf_snr_computed":
-            title = r"network SNR (matched-filter, $\sqrt{H^2+L^2}$)"
-        ax.set_title(title, fontsize=10)
-        ax.set_xlabel("SNR", fontsize=9)
-        ax.set_ylabel("density", fontsize=9)
-        ax.tick_params(labelsize=8)
-
-    # Hide unused panels
-    for idx in range(n_panels, len(axes)):
-        axes[idx].set_visible(False)
-
-    # Grouped legend: two sections with bold headers
-    legend_handles = []
-    legend_labels = []
-
-    # Section: Lambda uniform
-    legend_handles.append(Line2D([], [], color="none"))
-    legend_labels.append(r"\textbf{$\Lambda$ uniform}")
-    legend_handles.append(Line2D([0], [0], color=ORANGE, linewidth=1.4))
-    legend_labels.append(_PAPER_RUN_SPIN_LABELS["prod_BW_XP_s005_l5000_default"])
-    legend_handles.append(Line2D([0], [0], color=BLUE, linewidth=1.4))
-    legend_labels.append(_PAPER_RUN_SPIN_LABELS["prod_BW_XP_s040_l5000_default"])
-
-    # Section: EOS-informed
-    legend_handles.append(Line2D([], [], color="none"))
-    legend_labels.append(r"\textbf{EOS-informed}")
-    legend_handles.append(Line2D([0], [0], color=PURPLE, linewidth=1.4))
-    legend_labels.append(_PAPER_RUN_SPIN_LABELS["prod_BW_XP_s005_leos_default"])
-    legend_handles.append(Line2D([0], [0], color=LIGHT_BLUE, linewidth=1.4))
-    legend_labels.append(_PAPER_RUN_SPIN_LABELS["prod_BW_XP_s040_leos_default"])
-
-    fig.legend(
-        legend_handles,
-        legend_labels,
-        loc="center left",
-        bbox_to_anchor=(1.0, 0.5),
-        ncol=1,
-        fontsize=9,
-        frameon=True,
-        handlelength=1.5,
-    )
+    fs_label = 16
+    ax.set_xlabel(r"Network SNR", fontsize=fs_label)
+    ax.set_ylabel("Probability density", fontsize=fs_label)
+    ax.legend(fontsize=12, frameon=True, loc="upper left")
+    ax.set_xlim(left=7.5, right=9.7)
 
     fig.tight_layout()
     fig.savefig(output_path, bbox_inches="tight", dpi=150)
     print(f"Saved paper histogram figure to {output_path}")
+
+
+def print_network_snr_table(all_results, hdi_prob=0.95):
+    """Print two sorted tables: network optimal SNR and network matched-filter SNR (median, high → low)."""
+    optimal_rows = []
+    mf_rows = []
+
+    for run_name, snrs in all_results.items():
+        net = compute_network_snr_from_components(snrs)
+        if net is not None:
+            median, lo, hi = summarize(net, hdi_prob=hdi_prob)
+            optimal_rows.append((run_name, median, lo, hi))
+
+        net_mf = compute_network_mf_snr_from_components(snrs)
+        if net_mf is not None:
+            median, lo, hi = summarize(net_mf, hdi_prob=hdi_prob)
+            mf_rows.append((run_name, median, lo, hi))
+
+    pct = int(hdi_prob * 100)
+
+    for label, rows in [("Network SNR — optimal (sorted high → low)", optimal_rows),
+                         ("Network SNR — matched-filter (sorted high → low)", mf_rows)]:
+        if not rows:
+            continue
+        rows_sorted = sorted(rows, key=lambda r: r[1], reverse=True)
+        col_width = max(len(r[0]) for r in rows_sorted) + 2
+        header = f"{'Run':<{col_width}}  median    {pct}% HDI"
+        print(f"=== {label} ===")
+        print(header)
+        print("-" * (len(header) + 10))
+        for run_name, median, lo, hi in rows_sorted:
+            print(f"{run_name:<{col_width}}  {median:.3f}     [{lo:.3f}, {hi:.3f}]")
+        print()
 
 
 def main():
@@ -379,6 +341,9 @@ def main():
         if not printed_any:
             print(f"  No matching SNR keys found. Available: {available_keys}")
         print()
+
+    # Sorted summary tables: network SNR median (optimal and matched-filter)
+    print_network_snr_table(all_results, hdi_prob=args.hdi)
 
     plot_snr_histograms(all_results, args.output, bins=args.bins)
 
