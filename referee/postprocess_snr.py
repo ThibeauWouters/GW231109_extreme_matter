@@ -263,6 +263,63 @@ def plot_snr_histograms_paper(all_results, output_path, bins=50):
     print(f"Saved paper histogram figure to {output_path}")
 
 
+PAPER_SUBSET_RUNS_DG = PAPER_SUBSET_RUNS + ["prod_BW_XP_s005_l5000_double_gaussian_niu"]
+
+
+def plot_snr_histograms_paper_dg(all_results, output_path, bins=50):
+    """Paper figure with the four base runs plus Double Gaussian (low-spin) overlaid in gray."""
+    _EOS_BLUE = "#2596be"
+    _RED      = "palevioletred"
+
+    _RUN_COLOR = {
+        "prod_BW_XP_s005_l5000_default":          ORANGE,
+        "prod_BW_XP_s040_l5000_default":          BLUE,
+        "prod_BW_XP_s005_leos_default":           _EOS_BLUE,
+        "prod_BW_XP_s040_leos_default":           _RED,
+        "prod_BW_XP_s005_l5000_double_gaussian_niu": "gray",
+    }
+    _RUN_LABEL = {
+        "prod_BW_XP_s005_l5000_default":          r"$\Lambda$-uniform, $a_i \leq 0.05$",
+        "prod_BW_XP_s040_l5000_default":          r"$\Lambda$-uniform, $a_i \leq 0.40$",
+        "prod_BW_XP_s005_leos_default":           r"EOS-informed, $a_i \leq 0.05$",
+        "prod_BW_XP_s040_leos_default":           r"EOS-informed, $a_i \leq 0.40$",
+        "prod_BW_XP_s005_l5000_double_gaussian_niu": r"DG, $\Lambda$-uniform, $a_i < 0.04$",
+    }
+
+    runs = [r for r in PAPER_SUBSET_RUNS_DG if r in all_results]
+    if not runs:
+        print("No paper-subset runs found in data; skipping paper DG figure.")
+        return
+
+    fig, ax = plt.subplots(figsize=(5.0, 3.8))
+
+    for run_name in runs:
+        snrs = all_results[run_name]
+        samples = compute_network_mf_snr_from_components(snrs)
+        if samples is None:
+            continue
+        ax.hist(
+            samples,
+            bins=bins,
+            density=True,
+            histtype="step",
+            color=_RUN_COLOR.get(run_name, "black"),
+            linewidth=1.6,
+            linestyle="-",
+            label=_RUN_LABEL.get(run_name, run_name),
+        )
+
+    fs_label = 16
+    ax.set_xlabel(r"Network SNR", fontsize=fs_label)
+    ax.set_ylabel("Probability density", fontsize=fs_label)
+    ax.legend(fontsize=12, frameon=True, loc="upper left")
+    ax.set_xlim(left=7.5, right=9.7)
+
+    fig.tight_layout()
+    fig.savefig(output_path, bbox_inches="tight", dpi=150)
+    print(f"Saved paper DG histogram figure to {output_path}")
+
+
 def print_network_snr_table(all_results, hdi_prob=0.95):
     """Print two sorted tables: network optimal SNR and network matched-filter SNR (median, high → low)."""
     optimal_rows = []
@@ -354,6 +411,10 @@ def main():
     # Paper-quality figure: low/high spin × Lambda-uniform/EOS-informed
     paper_output = args.output.replace(".pdf", "_paper.pdf")
     plot_snr_histograms_paper(all_results, paper_output, bins=args.bins)
+
+    # Paper figure with Double Gaussian (low-spin) overlaid in gray
+    paper_dg_output = args.output.replace(".pdf", "_paper_dg.pdf")
+    plot_snr_histograms_paper_dg(all_results, paper_dg_output, bins=args.bins)
 
 
 if __name__ == "__main__":
