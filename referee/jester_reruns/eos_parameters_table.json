@@ -1,4 +1,30 @@
 {
+  "radio": {
+    "label": "Heavy PSRs",
+    "parameters": {
+      "MTOV": {
+        "median": 2.3798724089790353,
+        "lower_error": 0.38533064224370994,
+        "upper_error": 0.4859209953586472,
+        "width": 0.8712516376023571,
+        "credible_interval": "2.38^{+0.49}_{-0.39}"
+      },
+      "R14": {
+        "median": 14.12718082604848,
+        "lower_error": 1.4100110545964135,
+        "upper_error": 1.1239082068364556,
+        "width": 2.533919261432869,
+        "credible_interval": "14.1^{+1.1}_{-1.4}"
+      },
+      "p3nsat": {
+        "median": 115.64057655640241,
+        "lower_error": 57.502598355413255,
+        "upper_error": 96.755824918441,
+        "width": 154.25842327385425,
+        "credible_interval": "116^{+97}_{-58}"
+      }
+    }
+  },
   "GW170817": {
     "label": "GW170817",
     "parameters": {
