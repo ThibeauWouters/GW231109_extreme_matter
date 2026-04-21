@@ -1,0 +1,30 @@
+{
+  "n_samples_total": 10942,
+  "n_samples_used": 10942,
+  "parameter_names": [
+    "mass_1_source",
+    "mass_2_source",
+    "lambda_1",
+    "lambda_2"
+  ],
+  "filepath": "/home/twouters2/projects/19_GW231109_referee_report/GW231109_extreme_matter/posteriors/data/prod_BW_XP_s005_l5000_gaussian.npz",
+  "flow_type": "masked_autoregressive_flow",
+  "num_epochs": 115,
+  "learning_rate": 0.001,
+  "max_patience": 50,
+  "val_prop": 0.2,
+  "standardize": true,
+  "standardization_method": "zscore",
+  "data_mean": [
+    1.489533844989692,
+    1.4041172829292177,
+    1921.7902158740023,
+    1914.2927105863612
+  ],
+  "data_std": [
+    0.033168443313318585,
+    0.031081148310534424,
+    1321.661987484098,
+    1362.239825260654
+  ]
+}
