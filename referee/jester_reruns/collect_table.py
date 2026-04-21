@@ -23,6 +23,7 @@ import jesterTOV.utils as jose_utils
 # ---------------------------------------------------------------------------
 
 LABELS_DICT = {
+    "prior": "Prior",
     "radio": "Heavy PSRs",
     "GW170817": "GW170817",
     "GW190425": "GW190425",
@@ -174,8 +175,8 @@ def make_full_table(json_file: str, out_file: str = "eos_parameters_table.tex"):
         results = json.load(f)
 
     group_order = [
-        # Heavy pulsars
-        ["radio"],
+        # Prior and heavy pulsars
+        ["prior", "radio"],
         # GW231109 variations
         ["GW231109", "GW231109_gaussian", "GW231109_double_gaussian",
          "GW231109_double_gaussian_niu", "GW231109_double_gaussian_niu_v2",
@@ -221,6 +222,7 @@ def make_r14_table(json_file: str, out_file: str = "eos_r14_table.tex"):
         results = json.load(f)
 
     selected = [
+        "prior",
         "radio",
         "GW170817",
         "GW190425",
@@ -261,7 +263,8 @@ def main():
     script_dir = os.path.dirname(os.path.abspath(__file__))
 
     run_dirs = [
-        # Radio timing
+        # Prior and radio timing
+        os.path.join(script_dir, "prior"),
         os.path.join(script_dir, "radio"),
         # Individual events
         os.path.join(script_dir, "GW170817"),
