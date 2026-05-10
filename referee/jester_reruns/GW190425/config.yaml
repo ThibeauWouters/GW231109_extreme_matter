@@ -4,7 +4,7 @@ validate_only: false
 
 eos:
   type: metamodel_cse
-  ndat_metamodel: 100
+  ndat_metamodel: 200
   nmax_nsat: 25.0
   nb_CSE: 8
   crust_name: DH
