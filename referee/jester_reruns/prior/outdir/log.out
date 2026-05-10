@@ -1,0 +1,202 @@
+Sun May 10 19:24:37 CEST 2026
+NVIDIA H100
+==========================================
+=== Running jester inference (SMC-RW) ===
+==========================================
+[INFO] jester: jesterTOV version 0.2.2 (git 6d3da80)
+[INFO] jester: Loading configuration from config.yaml
+[INFO] jester: JAX devices: [CudaDevice(id=0)]
+[INFO] jester: Setting up prior...
+[INFO] jester: Fixed parameters found in prior file: {'E_sat': -16.0}
+[INFO] jester: Prior has 26 dimensions
+[INFO] jester: Prior parameter names: ['K_sat', 'Q_sat', 'Z_sat', 'E_sym', 'L_sym', 'K_sym', 'Q_sym', 'Z_sym', 'nbreak', 'n_CSE_0_u', 'cs2_CSE_0', 'n_CSE_1_u', 'cs2_CSE_1', 'n_CSE_2_u', 'cs2_CSE_2', 'n_CSE_3_u', 'cs2_CSE_3', 'n_CSE_4_u', 'cs2_CSE_4', 'n_CSE_5_u', 'cs2_CSE_5', 'n_CSE_6_u', 'cs2_CSE_6', 'n_CSE_7_u', 'cs2_CSE_7', 'cs2_CSE_8']
+[INFO] jester:   [0] K_sat: Uniform(150.0, 300.0)
+[INFO] jester:   [1] Q_sat: Uniform(-500.0, 1100.0)
+[INFO] jester:   [2] Z_sat: Uniform(-2500.0, 1500.0)
+[INFO] jester:   [3] E_sym: Uniform(28.0, 45.0)
+[INFO] jester:   [4] L_sym: Uniform(10.0, 200.0)
+[INFO] jester:   [5] K_sym: Uniform(-400.0, 200.0)
+[INFO] jester:   [6] Q_sym: Uniform(-1000.0, 1500.0)
+[INFO] jester:   [7] Z_sym: Uniform(-2000.0, 1500.0)
+[INFO] jester:   [8] nbreak: Uniform(0.16, 0.32)
+[INFO] jester:   [9] n_CSE_0_u: Uniform(0.0, 1.0)
+[INFO] jester:   [10] cs2_CSE_0: Uniform(0.0, 1.0)
+[INFO] jester:   [11] n_CSE_1_u: Uniform(0.0, 1.0)
+[INFO] jester:   [12] cs2_CSE_1: Uniform(0.0, 1.0)
+[INFO] jester:   [13] n_CSE_2_u: Uniform(0.0, 1.0)
+[INFO] jester:   [14] cs2_CSE_2: Uniform(0.0, 1.0)
+[INFO] jester:   [15] n_CSE_3_u: Uniform(0.0, 1.0)
+[INFO] jester:   [16] cs2_CSE_3: Uniform(0.0, 1.0)
+[INFO] jester:   [17] n_CSE_4_u: Uniform(0.0, 1.0)
+[INFO] jester:   [18] cs2_CSE_4: Uniform(0.0, 1.0)
+[INFO] jester:   [19] n_CSE_5_u: Uniform(0.0, 1.0)
+[INFO] jester:   [20] cs2_CSE_5: Uniform(0.0, 1.0)
+[INFO] jester:   [21] n_CSE_6_u: Uniform(0.0, 1.0)
+[INFO] jester:   [22] cs2_CSE_6: Uniform(0.0, 1.0)
+[INFO] jester:   [23] n_CSE_7_u: Uniform(0.0, 1.0)
+[INFO] jester:   [24] cs2_CSE_7: Uniform(0.0, 1.0)
+[INFO] jester:   [25] cs2_CSE_8: Uniform(0.0, 1.0)
+[INFO] jester: Setting up transform...
+[INFO] jester: Derived max_nbreak from nbreak prior: 2.0000 n_sat
+[INFO] jester: Initialized JesterTransform: EOS=MetaModel_with_CSE_EOS_model, TOV=<jesterTOV.tov.gr.GRTOVSolver object at 0x14b767c1e630>
+[INFO] jester:   Fixed parameters: {'E_sat': -16.0}
+[INFO] jester: EOS type: metamodel_cse
+[INFO] jester:   nb_CSE: 8
+[INFO] jester:   ndat_metamodel: 100
+[INFO] jester:   nmax_nsat: 25.0
+[INFO] jester: TOV solver: gr
+[INFO] jester:   ndat_TOV: 100
+[INFO] jester: Checking to prepare GW normalizing flows...
+[INFO] jester: Setting up likelihood...
+[INFO] jester: Number of enabled likelihoods: 2
+[INFO] jester:   - CONSTRAINTS_EOS:
+[INFO] jester:     {
+      "type": "constraints_eos",
+      "penalty_causality": -10000000000.0,
+      "penalty_stability": -10000000000.0,
+      "penalty_pressure": -10000000000.0
+}
+[INFO] jester:   - RADIO:
+[INFO] jester:     {
+      "type": "radio",
+      "pulsars": [
+            {
+                  "name": "J1614",
+                  "mass_mean": 1.94,
+                  "mass_std": 0.01
+            },
+            {
+                  "name": "J0740",
+                  "mass_mean": 2.08,
+                  "mass_std": 0.07
+            }
+      ],
+      "penalty_value": -100000.0,
+      "nb_masses": 100
+}
+[INFO] jester: Setting up smc-rw sampler...
+[INFO] jester: Initializing BlackJAX SMC sampler with random_walk kernel
+[INFO] jester: Configuration: 5000 particles, 10 MCMC steps per tempering stage
+[INFO] jester: Target ESS: 0.9
+[INFO] jester: ============================================================
+[INFO] jester: Configuration Summary
+[INFO] jester: ============================================================
+[INFO] jester: EOS type: metamodel_cse
+[INFO] jester: TOV solver: gr
+[INFO] jester: Random seed: 43
+[INFO] jester: Sampler type: smc-rw
+[INFO] jester: Sampler Configuration:
+[INFO] jester:   Particles: 5000
+[INFO] jester:   MCMC steps: 10
+[INFO] jester:   Target ESS: 0.9
+[INFO] jester:   EOS samples to generate: 5000
+[INFO] jester:   Output directory: ./outdir/
+[INFO] jester: ============================================================
+
+[INFO] jester: Testing likelihood evaluation...
+[INFO] jester: Test log probabilities: [-301.02906525   -2.25732668 -238.42139491]
+[INFO] jester: Starting sampling with seed 43...
+[INFO] jester: Starting SMC sampling with random_walk kernel...
+[INFO] jester: Using random walk kernel
+[INFO] jester: Fixed sigma scaling: 0.05
+[INFO] jester: ======================================================================
+[INFO] jester: STARTING ADAPTIVE TEMPERING
+[INFO] jester: ======================================================================
+[INFO] jester: Kernel: RANDOM_WALK
+[INFO] jester: Particles: 5000
+[INFO] jester: MCMC steps per tempering: 10
+[INFO] jester: Target ESS: 90%
+[INFO] jester: Temperature progression: lambda = 0 (prior) -> 1 (posterior)
+[INFO] jester: Progress updates will be shown after each annealing step
+[INFO] jester: ======================================================================
+[INFO] jester: Running SMC loop (this may take several minutes)...
+[INFO] jester: Step    0 | λ=0.000000 | ESS= 98.9% | Accept= 73.6% | logZ=  -0.016 | t=00:00:56 | ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
+[INFO] jester: Step    1 | λ=0.000000 | ESS= 99.6% | Accept= 74.0% | logZ=  -0.022 | t=00:01:03 | ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
+[INFO] jester: Step    2 | λ=0.000000 | ESS= 99.8% | Accept= 73.6% | logZ=  -0.024 | t=00:01:10 | ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
+[INFO] jester: Step    3 | λ=0.000000 | ESS=100.0% | Accept= 74.0% | logZ=  -0.025 | t=00:01:18 | ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
+[INFO] jester: Step    4 | λ=0.000000 | ESS=100.0% | Accept= 74.0% | logZ=  -0.025 | t=00:01:25 | ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
+[INFO] jester: Step    5 | λ=0.000000 | ESS=100.0% | Accept= 74.1% | logZ=  -0.025 | t=00:01:33 | ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
+[INFO] jester: Step    6 | λ=0.000271 | ESS= 98.3% | Accept= 74.2% | logZ=  -0.077 | t=00:01:40 | ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
+[INFO] jester: Step    7 | λ=0.000550 | ESS= 99.0% | Accept= 74.3% | logZ=  -0.113 | t=00:01:47 | ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
+[INFO] jester: Step    8 | λ=0.000925 | ESS= 99.0% | Accept= 74.0% | logZ=  -0.147 | t=00:01:55 | ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
+[INFO] jester: Step    9 | λ=0.001418 | ESS= 99.1% | Accept= 73.3% | logZ=  -0.177 | t=00:02:01 | ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
+[INFO] jester: Step   10 | λ=0.002080 | ESS= 99.2% | Accept= 73.3% | logZ=  -0.203 | t=00:02:09 | ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
+[INFO] jester: Step   11 | λ=0.002958 | ESS= 99.3% | Accept= 73.4% | logZ=  -0.228 | t=00:02:16 | ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
+[INFO] jester: Step   12 | λ=0.004214 | ESS= 99.4% | Accept= 73.6% | logZ=  -0.251 | t=00:02:23 | ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
+[INFO] jester: Step   13 | λ=0.006114 | ESS= 99.3% | Accept= 73.2% | logZ=  -0.275 | t=00:02:31 | ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
+[INFO] jester: Step   14 | λ=0.008302 | ESS= 99.6% | Accept= 73.2% | logZ=  -0.295 | t=00:02:38 | ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
+[INFO] jester: Step   15 | λ=0.011370 | ESS= 99.5% | Accept= 72.6% | logZ=  -0.317 | t=00:02:45 | ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
+[INFO] jester: Step   16 | λ=0.015828 | ESS= 99.5% | Accept= 72.8% | logZ=  -0.340 | t=00:02:52 | ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
+[INFO] jester: Step   17 | λ=0.021668 | ESS= 99.6% | Accept= 72.7% | logZ=  -0.365 | t=00:02:59 | ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
+[INFO] jester: Step   18 | λ=0.031200 | ESS= 99.6% | Accept= 72.5% | logZ=  -0.396 | t=00:03:06 | ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
+[INFO] jester: Step   19 | λ=0.044513 | ESS= 99.7% | Accept= 72.7% | logZ=  -0.432 | t=00:03:14 | █░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
+[INFO] jester: Step   20 | λ=0.061101 | ESS= 99.7% | Accept= 72.5% | logZ=  -0.473 | t=00:03:21 | █░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
+[INFO] jester: Step   21 | λ=0.091259 | ESS= 99.6% | Accept= 72.6% | logZ=  -0.542 | t=00:03:29 | ██░░░░░░░░░░░░░░░░░░░░░░░░░░░░
+[INFO] jester: Step   22 | λ=0.140144 | ESS= 99.6% | Accept= 72.7% | logZ=  -0.646 | t=00:03:36 | ████░░░░░░░░░░░░░░░░░░░░░░░░░░
+[INFO] jester: Step   23 | λ=0.184045 | ESS= 99.8% | Accept= 72.4% | logZ=  -0.736 | t=00:03:43 | █████░░░░░░░░░░░░░░░░░░░░░░░░░
+[INFO] jester: Step   24 | λ=0.258891 | ESS= 99.7% | Accept= 72.1% | logZ=  -0.884 | t=00:03:50 | ███████░░░░░░░░░░░░░░░░░░░░░░░
+[INFO] jester: Step   25 | λ=0.383374 | ESS= 99.5% | Accept= 71.9% | logZ=  -1.124 | t=00:03:57 | ███████████░░░░░░░░░░░░░░░░░░░
+[INFO] jester: Step   26 | λ=0.546845 | ESS= 99.5% | Accept= 71.6% | logZ=  -1.430 | t=00:04:04 | ████████████████░░░░░░░░░░░░░░
+[INFO] jester: Step   27 | λ=0.896392 | ESS= 98.5% | Accept= 71.6% | logZ=  -2.070 | t=00:04:12 | ██████████████████████████░░░░
+[INFO] jester: Step   28 | λ=1.000000 | ESS= 99.9% | Accept= 71.3% | logZ=  -2.257 | t=00:04:19 | ██████████████████████████████
+[INFO] jester: Sampling complete! Runtime: 4 min 19 sec
+[INFO] jester: Generating SMC diagnostic plots...
+[INFO] jester: Saved diagnostic plot to outdir/smc_diagnostics.png
+[INFO] jester: Creating InferenceResult from sampler output...
+[INFO] jester: Extracting results from blackjax_smc_rw sampler
+[INFO] jester: Computed 5000 log probability values
+[INFO] jester: ============================================================
+[INFO] jester: Generating EOS from posterior samples
+[INFO] jester: ============================================================
+[INFO] jester: Generating EOS for all 5000 posterior samples
+[INFO] jester: Applying transform to 5000 samples...
+[INFO] jester: Using batch size: 1000
+[INFO] jester: TOV solve time: 11.70 s (5000 samples)
+[INFO] jester: Adding derived EOS quantities to posterior
+[INFO] jester: Added 8 derived EOS quantities
+[INFO] jester: EOS generation complete!
+[INFO] jester: ============================================================
+[INFO] jester: Saving inference results to outdir/results.h5
+[INFO] jester: Successfully saved results to outdir/results.h5
+[INFO] jester: Results saved to ./outdir/results.h5
+[INFO] jester: ============================================================
+[INFO] jester: Running postprocessing...
+[INFO] jester: ============================================================
+[INFO] jester: TeX rendering enabled
+[INFO] jester: Generating plots for directory: ./outdir/
+[INFO] jester: Saving plots to: ./outdir/figures
+[INFO] jester: Loading inference results from outdir/results.h5
+[INFO] jester: Successfully loaded blackjax_smc_rw results
+[INFO] jester: Found 26 parameter names in metadata: ['K_sat', 'Q_sat', 'Z_sat', 'E_sym', 'L_sym', 'K_sym', 'Q_sym', 'Z_sym', 'nbreak', 'n_CSE_0_u', 'cs2_CSE_0', 'n_CSE_1_u', 'cs2_CSE_1', 'n_CSE_2_u', 'cs2_CSE_2', 'n_CSE_3_u', 'cs2_CSE_3', 'n_CSE_4_u', 'cs2_CSE_4', 'n_CSE_5_u', 'cs2_CSE_5', 'n_CSE_6_u', 'cs2_CSE_6', 'n_CSE_7_u', 'cs2_CSE_7', 'cs2_CSE_8']
+[INFO] jester: Data loaded successfully!
+[INFO] jester: Creating cornerplot...
+[INFO] jester: Excluding 17 CSE parameters from cornerplot: ['cs2_CSE_0', 'cs2_CSE_1', 'cs2_CSE_2', 'cs2_CSE_3', 'cs2_CSE_4', 'cs2_CSE_5', 'cs2_CSE_6', 'cs2_CSE_7', 'cs2_CSE_8', 'n_CSE_0_u', 'n_CSE_1_u', 'n_CSE_2_u', 'n_CSE_3_u', 'n_CSE_4_u', 'n_CSE_5_u', 'n_CSE_6_u', 'n_CSE_7_u']
+[INFO] jester: Creating cornerplot with 9 parameters
+[INFO] jester: Cornerplot saved to ./outdir/figures/cornerplot.pdf
+[INFO] jester: Creating mass-radius plot...
+[INFO] jester: Widening mass axis to 4.08 M_sun (max MTOV: 3.83)
+[INFO] jester: Plotting 5000 M-R curves (excluded 0 invalid samples)...
+[WARNING] jester: 1/5000 (0.0%) samples had an unstable part (multi-branch) in their NS solution. These samples are not accounted for properly during inference; the plot shows each stable branch separately. If this percentage is low, the impact on the posterior is negligible.
+[INFO] jester: Mass-radius plot saved to ./outdir/figures/mass_radius_plot.pdf
+[INFO] jester: Creating mass-Lambda plot...
+[INFO] jester: Widening mass axis to 4.08 M_sun (max MTOV: 3.83)
+[INFO] jester: Plotting 5000 M-Lambda curves (excluded 0 invalid samples)...
+[WARNING] jester: 1/5000 (0.0%) samples had an unstable part (multi-branch) in their NS solution. These samples are not accounted for properly during inference; the plot shows each stable branch separately. If this percentage is low, the impact on the posterior is negligible.
+[INFO] jester: Mass-Lambda plot saved to ./outdir/figures/mass_lambda_plot.pdf
+[INFO] jester: Creating pressure-density plot...
+[INFO] jester: Plotting 5000 p-n curves (excluded 0 invalid)...
+[INFO] jester: Pressure-density plot saved to ./outdir/figures/pressure_density_plot.pdf
+[INFO] jester: Creating parameter histograms...
+[INFO] jester: MTOV histogram saved to ./outdir/figures/MTOV_histogram.pdf
+[INFO] jester: R14 histogram saved to ./outdir/figures/R14_histogram.pdf
+[INFO] jester: Lambda14 histogram saved to ./outdir/figures/Lambda14_histogram.pdf
+[INFO] jester: p3nsat histogram saved to ./outdir/figures/p3nsat_histogram.pdf
+[INFO] jester: n_TOV histogram saved to ./outdir/figures/n_TOV_histogram.pdf
+[INFO] jester: Creating cs2-density plot...
+[INFO] jester: Plotting 5000 cs2-n curves (excluded 0 invalid)...
+[INFO] jester: cs2-density plot saved to ./outdir/figures/cs2_density_plot.pdf
+[INFO] jester: All plotting scripts executed and generated plots saved to ./outdir/figures
+[INFO] jester: 
+Postprocessing complete! Plots saved to ./outdir/
+[INFO] jester: 
+Inference complete! Results saved to ./outdir/

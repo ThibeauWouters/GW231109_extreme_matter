@@ -1,8 +1,9 @@
-Tue Apr 21 11:38:26 CEST 2026
+Sun May 10 19:24:37 CEST 2026
 NVIDIA H100
 ==========================================
 === Running jester inference (SMC-RW) ===
 ==========================================
+[INFO] jester: jesterTOV version 0.2.2 (git 6d3da80)
 [INFO] jester: Loading configuration from config.yaml
 [INFO] jester: JAX devices: [CudaDevice(id=0)]
 [INFO] jester: Setting up prior...
@@ -37,7 +38,7 @@ NVIDIA H100
 [INFO] jester:   [25] cs2_CSE_8: Uniform(0.0, 1.0)
 [INFO] jester: Setting up transform...
 [INFO] jester: Derived max_nbreak from nbreak prior: 2.0000 n_sat
-[INFO] jester: Initialized JesterTransform: EOS=MetaModel_with_CSE_EOS_model, TOV=<jesterTOV.tov.gr.GRTOVSolver object at 0x149a71ba3560>
+[INFO] jester: Initialized JesterTransform: EOS=MetaModel_with_CSE_EOS_model, TOV=<jesterTOV.tov.gr.GRTOVSolver object at 0x153caa789b20>
 [INFO] jester:   Fixed parameters: {'E_sat': -16.0}
 [INFO] jester: EOS type: metamodel_cse
 [INFO] jester:   nb_CSE: 8
@@ -47,78 +48,7 @@ NVIDIA H100
 [INFO] jester:   ndat_TOV: 100
 [INFO] jester: Checking to prepare GW normalizing flows...
 [INFO] jester: Using provided NPZ posterior samples for 'GW231109' at /home/twouters2/projects/19_GW231109_referee_report/GW231109_extreme_matter/posteriors/data/prod_BW_XP_s005_l5000_gaussian.npz
-[INFO] jester: Training normalizing flow for 'GW231109'...
-[INFO] jester: ============================================================
-[INFO] jester: Normalizing Flow Training
-[INFO] jester: ============================================================
-[INFO] jester: Posterior file: /home/twouters2/projects/19_GW231109_referee_report/GW231109_extreme_matter/posteriors/data/prod_BW_XP_s005_l5000_gaussian.npz
-[INFO] jester: Output directory: outdir/gw_flow_cache/GW231109
-[INFO] jester: Parameter names: ['mass_1_source', 'mass_2_source', 'lambda_1', 'lambda_2']
-[INFO] jester: Max samples: 50000
-[INFO] jester: Flow type: masked_autoregressive_flow
-[INFO] jester: NN depth: 5
-[INFO] jester: NN block dim: 8
-[INFO] jester: NN width: 50
-[INFO] jester: Flow layers: 1
-[INFO] jester: Invert: True
-[INFO] jester: Cond dim: None
-[INFO] jester: Transformer: rational_quadratic_spline
-[INFO] jester: Transformer knots: 10
-[INFO] jester: Transformer interval: 5.0
-[INFO] jester: Standardize: True
-[INFO] jester: Standardization method: zscore
-[INFO] jester: Max epochs: 600
-[INFO] jester: Learning rate: 0.001
-[INFO] jester: Patience: 50
-[INFO] jester: Val proportion: 0.2
-[INFO] jester: Seed: 0
-[INFO] jester: ============================================================
-[INFO] jester: JAX devices: [CudaDevice(id=0)]
-[INFO] jester: [1/5] Loading posterior samples...
-[INFO] jester: Using all 10942 samples
-[INFO] jester: Data shape: (10942, 4)
-[INFO] jester: Parameters: ['mass_1_source', 'mass_2_source', 'lambda_1', 'lambda_2']
-[INFO] jester: Original data ranges:
-[INFO] jester:   mass_1_source: [1.387, 1.637]
-[INFO] jester:   mass_2_source: [1.290, 1.477]
-[INFO] jester:   lambda_1: [0.151, 4999.259]
-[INFO] jester:   lambda_2: [0.116, 4999.353]
-[INFO] jester: Standardizing data using z-score (mean=0, std=1)...
-[INFO] jester: Standardized data statistics:
-[INFO] jester:   mass_1_source: mean=-0.000, std=1.000
-[INFO] jester:   mass_2_source: mean=-0.000, std=1.000
-[INFO] jester:   lambda_1: mean=0.000, std=1.000
-[INFO] jester:   lambda_2: mean=0.000, std=1.000
-[INFO] jester: Data mean and std saved for inverse transformation
-[INFO] jester: [2/5] Creating flow architecture...
-[INFO] jester: Flow dimensionality: 4D
-[INFO] jester: [3/5] Training flow...
-[INFO] jester: Training dataset shape: (10942, 4)
-[INFO] jester: Training flow for up to 600 epochs...
-[INFO] jester: Using 20.0% of data for validation
-[INFO] jester: Batch size: 128
-  0%|          | 0/600 [00:00<?, ?it/s]  0%|          | 0/600 [00:10<?, ?it/s, train=5.55, val=5.39]  0%|          | 1/600 [00:10<1:48:59, 10.92s/it, train=5.55, val=5.39]  0%|          | 1/600 [00:11<1:48:59, 10.92s/it, train=5.14, val=5.05]  0%|          | 2/600 [00:11<45:33,  4.57s/it, train=5.14, val=5.05]    0%|          | 2/600 [00:11<45:33,  4.57s/it, train=5, val=5]        0%|          | 3/600 [00:11<25:18,  2.54s/it, train=5, val=5]  0%|          | 3/600 [00:11<25:18,  2.54s/it, train=4.98, val=4.99]  1%|          | 4/600 [00:11<15:47,  1.59s/it, train=4.98, val=4.99]  1%|          | 4/600 [00:11<15:47,  1.59s/it, train=4.96, val=4.96]  1%|          | 5/600 [00:11<10:30,  1.06s/it, train=4.96, val=4.96]  1%|          | 5/600 [00:11<10:30,  1.06s/it, train=4.94, val=4.95]  1%|          | 6/600 [00:11<07:20,  1.35it/s, train=4.94, val=4.95]  1%|          | 6/600 [00:11<07:20,  1.35it/s, train=4.94, val=4.93]  1%|          | 7/600 [00:11<05:19,  1.86it/s, train=4.94, val=4.93]  1%|          | 7/600 [00:11<05:19,  1.86it/s, train=4.92, val=4.93]  1%|▏         | 8/600 [00:11<04:01,  2.45it/s, train=4.92, val=4.93]  1%|▏         | 8/600 [00:11<04:01,  2.45it/s, train=4.92, val=4.93]  2%|▏         | 9/600 [00:11<03:07,  3.15it/s, train=4.92, val=4.93]  2%|▏         | 9/600 [00:12<03:07,  3.15it/s, train=4.92, val=4.92]  2%|▏         | 10/600 [00:12<02:31,  3.89it/s, train=4.92, val=4.92]  2%|▏         | 10/600 [00:12<02:31,  3.89it/s, train=4.91, val=4.92]  2%|▏         | 11/600 [00:12<02:06,  4.65it/s, train=4.91, val=4.92]  2%|▏         | 11/600 [00:12<02:06,  4.65it/s, train=4.91, val=4.91]  2%|▏         | 12/600 [00:12<01:49,  5.37it/s, train=4.91, val=4.91]  2%|▏         | 12/600 [00:12<01:49,  5.37it/s, train=4.92, val=4.91]  2%|▏         | 13/600 [00:12<01:54,  5.13it/s, train=4.92, val=4.91]  2%|▏         | 13/600 [00:12<01:54,  5.13it/s, train=4.9, val=4.91]   2%|▏         | 14/600 [00:12<02:00,  4.88it/s, train=4.9, val=4.91]  2%|▏         | 14/600 [00:12<02:00,  4.88it/s, train=4.89, val=4.9]  2%|▎         | 15/600 [00:12<01:46,  5.51it/s, train=4.89, val=4.9]  2%|▎         | 15/600 [00:12<01:46,  5.51it/s, train=4.89, val=4.92]  3%|▎         | 16/600 [00:13<01:53,  5.14it/s, train=4.89, val=4.92]  3%|▎         | 16/600 [00:13<01:53,  5.14it/s, train=4.89, val=4.93]  3%|▎         | 17/600 [00:13<01:57,  4.95it/s, train=4.89, val=4.93]  3%|▎         | 17/600 [00:13<01:57,  4.95it/s, train=4.89, val=4.89]  3%|▎         | 18/600 [00:13<01:44,  5.58it/s, train=4.89, val=4.89]  3%|▎         | 18/600 [00:13<01:44,  5.58it/s, train=4.88, val=4.89]  3%|▎         | 19/600 [00:13<01:51,  5.19it/s, train=4.88, val=4.89]  3%|▎         | 19/600 [00:13<01:51,  5.19it/s, train=4.88, val=4.89]  3%|▎         | 20/600 [00:13<01:40,  5.77it/s, train=4.88, val=4.89]  3%|▎         | 20/600 [00:13<01:40,  5.77it/s, train=4.87, val=4.88]  4%|▎         | 21/600 [00:13<01:32,  6.26it/s, train=4.87, val=4.88]  4%|▎         | 21/600 [00:14<01:32,  6.26it/s, train=4.88, val=4.9]   4%|▎         | 22/600 [00:14<01:42,  5.65it/s, train=4.88, val=4.9]  4%|▎         | 22/600 [00:14<01:42,  5.65it/s, train=4.87, val=4.88]  4%|▍         | 23/600 [00:14<01:32,  6.26it/s, train=4.87, val=4.88]  4%|▍         | 23/600 [00:14<01:32,  6.26it/s, train=4.87, val=4.88]  4%|▍         | 24/600 [00:14<01:25,  6.78it/s, train=4.87, val=4.88]  4%|▍         | 24/600 [00:14<01:25,  6.78it/s, train=4.86, val=4.88]  4%|▍         | 25/600 [00:14<01:37,  5.91it/s, train=4.86, val=4.88]  4%|▍         | 25/600 [00:14<01:37,  5.91it/s, train=4.86, val=4.88]  4%|▍         | 26/600 [00:14<01:46,  5.41it/s, train=4.86, val=4.88]  4%|▍         | 26/600 [00:14<01:46,  5.41it/s, train=4.86, val=4.89]  4%|▍         | 27/600 [00:15<01:52,  5.11it/s, train=4.86, val=4.89]  4%|▍         | 27/600 [00:15<01:52,  5.11it/s, train=4.87, val=4.87]  5%|▍         | 28/600 [00:15<01:38,  5.78it/s, train=4.87, val=4.87]  5%|▍         | 28/600 [00:15<01:38,  5.78it/s, train=4.86, val=4.89]  5%|▍         | 29/600 [00:15<01:47,  5.32it/s, train=4.86, val=4.89]  5%|▍         | 29/600 [00:15<01:47,  5.32it/s, train=4.86, val=4.89]  5%|▌         | 30/600 [00:15<01:53,  5.00it/s, train=4.86, val=4.89]  5%|▌         | 30/600 [00:15<01:53,  5.00it/s, train=4.86, val=4.88]  5%|▌         | 31/600 [00:15<01:59,  4.76it/s, train=4.86, val=4.88]  5%|▌         | 31/600 [00:15<01:59,  4.76it/s, train=4.85, val=4.89]  5%|▌         | 32/600 [00:16<02:01,  4.67it/s, train=4.85, val=4.89]  5%|▌         | 32/600 [00:16<02:01,  4.67it/s, train=4.85, val=4.89]  6%|▌         | 33/600 [00:16<02:02,  4.63it/s, train=4.85, val=4.89]  6%|▌         | 33/600 [00:16<02:02,  4.63it/s, train=4.85, val=4.87]  6%|▌         | 34/600 [00:16<01:46,  5.33it/s, train=4.85, val=4.87]  6%|▌         | 34/600 [00:16<01:46,  5.33it/s, train=4.86, val=4.88]  6%|▌         | 35/600 [00:16<01:52,  5.01it/s, train=4.86, val=4.88]  6%|▌         | 35/600 [00:16<01:52,  5.01it/s, train=4.86, val=4.88]  6%|▌         | 36/600 [00:16<01:55,  4.87it/s, train=4.86, val=4.88]  6%|▌         | 36/600 [00:16<01:55,  4.87it/s, train=4.85, val=4.88]  6%|▌         | 37/600 [00:17<01:59,  4.71it/s, train=4.85, val=4.88]  6%|▌         | 37/600 [00:17<01:59,  4.71it/s, train=4.86, val=4.91]  6%|▋         | 38/600 [00:17<02:01,  4.62it/s, train=4.86, val=4.91]  6%|▋         | 38/600 [00:17<02:01,  4.62it/s, train=4.86, val=4.87]  6%|▋         | 39/600 [00:17<02:02,  4.57it/s, train=4.86, val=4.87]  6%|▋         | 39/600 [00:17<02:02,  4.57it/s, train=4.85, val=4.87]  7%|▋         | 40/600 [00:17<01:45,  5.29it/s, train=4.85, val=4.87]  7%|▋         | 40/600 [00:17<01:45,  5.29it/s, train=4.85, val=4.88]  7%|▋         | 41/600 [00:17<01:52,  4.98it/s, train=4.85, val=4.88]  7%|▋         | 41/600 [00:17<01:52,  4.98it/s, train=4.85, val=4.87]  7%|▋         | 42/600 [00:18<01:56,  4.80it/s, train=4.85, val=4.87]  7%|▋         | 42/600 [00:18<01:56,  4.80it/s, train=4.85, val=4.87]  7%|▋         | 43/600 [00:18<01:58,  4.69it/s, train=4.85, val=4.87]  7%|▋         | 43/600 [00:18<01:58,  4.69it/s, train=4.85, val=4.87]  7%|▋         | 44/600 [00:18<02:00,  4.60it/s, train=4.85, val=4.87]  7%|▋         | 44/600 [00:18<02:00,  4.60it/s, train=4.85, val=4.87]  8%|▊         | 45/600 [00:18<02:01,  4.56it/s, train=4.85, val=4.87]  8%|▊         | 45/600 [00:18<02:01,  4.56it/s, train=4.85, val=4.86]  8%|▊         | 46/600 [00:18<01:46,  5.22it/s, train=4.85, val=4.86]  8%|▊         | 46/600 [00:19<01:46,  5.22it/s, train=4.84, val=4.87]  8%|▊         | 47/600 [00:19<01:52,  4.93it/s, train=4.84, val=4.87]  8%|▊         | 47/600 [00:19<01:52,  4.93it/s, train=4.85, val=4.87]  8%|▊         | 48/600 [00:19<01:54,  4.80it/s, train=4.85, val=4.87]  8%|▊         | 48/600 [00:19<01:54,  4.80it/s, train=4.84, val=4.87]  8%|▊         | 49/600 [00:19<01:57,  4.67it/s, train=4.84, val=4.87]  8%|▊         | 49/600 [00:19<01:57,  4.67it/s, train=4.84, val=4.88]  8%|▊         | 50/600 [00:19<01:58,  4.64it/s, train=4.84, val=4.88]  8%|▊         | 50/600 [00:19<01:58,  4.64it/s, train=4.85, val=4.86]  8%|▊         | 51/600 [00:20<02:00,  4.56it/s, train=4.85, val=4.86]  8%|▊         | 51/600 [00:20<02:00,  4.56it/s, train=4.84, val=4.87]  9%|▊         | 52/600 [00:20<02:00,  4.56it/s, train=4.84, val=4.87]  9%|▊         | 52/600 [00:20<02:00,  4.56it/s, train=4.84, val=4.86]  9%|▉         | 53/600 [00:20<01:44,  5.24it/s, train=4.84, val=4.86]  9%|▉         | 53/600 [00:20<01:44,  5.24it/s, train=4.84, val=4.87]  9%|▉         | 54/600 [00:20<01:49,  4.99it/s, train=4.84, val=4.87]  9%|▉         | 54/600 [00:20<01:49,  4.99it/s, train=4.85, val=4.87]  9%|▉         | 55/600 [00:20<01:53,  4.82it/s, train=4.85, val=4.87]  9%|▉         | 55/600 [00:20<01:53,  4.82it/s, train=4.85, val=4.88]  9%|▉         | 56/600 [00:21<01:55,  4.71it/s, train=4.85, val=4.88]  9%|▉         | 56/600 [00:21<01:55,  4.71it/s, train=4.84, val=4.87] 10%|▉         | 57/600 [00:21<01:56,  4.65it/s, train=4.84, val=4.87] 10%|▉         | 57/600 [00:21<01:56,  4.65it/s, train=4.84, val=4.89] 10%|▉         | 58/600 [00:21<01:59,  4.54it/s, train=4.84, val=4.89] 10%|▉         | 58/600 [00:21<01:59,  4.54it/s, train=4.84, val=4.88] 10%|▉         | 59/600 [00:21<01:59,  4.52it/s, train=4.84, val=4.88] 10%|▉         | 59/600 [00:21<01:59,  4.52it/s, train=4.85, val=4.87] 10%|█         | 60/600 [00:21<01:59,  4.51it/s, train=4.85, val=4.87] 10%|█         | 60/600 [00:22<01:59,  4.51it/s, train=4.84, val=4.87] 10%|█         | 61/600 [00:22<02:01,  4.45it/s, train=4.84, val=4.87] 10%|█         | 61/600 [00:22<02:01,  4.45it/s, train=4.84, val=4.87] 10%|█         | 62/600 [00:22<02:00,  4.47it/s, train=4.84, val=4.87] 10%|█         | 62/600 [00:22<02:00,  4.47it/s, train=4.83, val=4.87] 10%|█         | 63/600 [00:22<01:59,  4.48it/s, train=4.83, val=4.87] 10%|█         | 63/600 [00:22<01:59,  4.48it/s, train=4.84, val=4.86] 11%|█         | 64/600 [00:22<01:43,  5.18it/s, train=4.84, val=4.86] 11%|█         | 64/600 [00:22<01:43,  5.18it/s, train=4.84, val=4.87] 11%|█         | 65/600 [00:22<01:49,  4.90it/s, train=4.84, val=4.87] 11%|█         | 65/600 [00:23<01:49,  4.90it/s, train=4.84, val=4.87] 11%|█         | 66/600 [00:23<01:51,  4.77it/s, train=4.84, val=4.87] 11%|█         | 66/600 [00:23<01:51,  4.77it/s, train=4.84, val=4.88] 11%|█         | 67/600 [00:23<01:55,  4.62it/s, train=4.84, val=4.88] 11%|█         | 67/600 [00:23<01:55,  4.62it/s, train=4.84, val=4.87] 11%|█▏        | 68/600 [00:23<01:56,  4.58it/s, train=4.84, val=4.87] 11%|█▏        | 68/600 [00:23<01:56,  4.58it/s, train=4.84, val=4.89] 12%|█▏        | 69/600 [00:23<01:56,  4.55it/s, train=4.84, val=4.89] 12%|█▏        | 69/600 [00:23<01:56,  4.55it/s, train=4.84, val=4.87] 12%|█▏        | 70/600 [00:24<01:58,  4.48it/s, train=4.84, val=4.87] 12%|█▏        | 70/600 [00:24<01:58,  4.48it/s, train=4.83, val=4.87] 12%|█▏        | 71/600 [00:24<01:58,  4.45it/s, train=4.83, val=4.87] 12%|█▏        | 71/600 [00:24<01:58,  4.45it/s, train=4.84, val=4.87] 12%|█▏        | 72/600 [00:24<01:59,  4.41it/s, train=4.84, val=4.87] 12%|█▏        | 72/600 [00:24<01:59,  4.41it/s, train=4.83, val=4.88] 12%|█▏        | 73/600 [00:24<01:59,  4.43it/s, train=4.83, val=4.88] 12%|█▏        | 73/600 [00:24<01:59,  4.43it/s, train=4.83, val=4.87] 12%|█▏        | 74/600 [00:25<01:59,  4.39it/s, train=4.83, val=4.87] 12%|█▏        | 74/600 [00:25<01:59,  4.39it/s, train=4.83, val=4.87] 12%|█▎        | 75/600 [00:25<02:00,  4.36it/s, train=4.83, val=4.87] 12%|█▎        | 75/600 [00:25<02:00,  4.36it/s, train=4.83, val=4.86] 13%|█▎        | 76/600 [00:25<02:00,  4.35it/s, train=4.83, val=4.86] 13%|█▎        | 76/600 [00:25<02:00,  4.35it/s, train=4.84, val=4.88] 13%|█▎        | 77/600 [00:25<01:59,  4.38it/s, train=4.84, val=4.88] 13%|█▎        | 77/600 [00:25<01:59,  4.38it/s, train=4.83, val=4.87] 13%|█▎        | 78/600 [00:25<01:58,  4.41it/s, train=4.83, val=4.87] 13%|█▎        | 78/600 [00:26<01:58,  4.41it/s, train=4.83, val=4.88] 13%|█▎        | 79/600 [00:26<01:58,  4.38it/s, train=4.83, val=4.88] 13%|█▎        | 79/600 [00:26<01:58,  4.38it/s, train=4.83, val=4.87] 13%|█▎        | 80/600 [00:26<01:57,  4.41it/s, train=4.83, val=4.87] 13%|█▎        | 80/600 [00:26<01:57,  4.41it/s, train=4.83, val=4.87] 14%|█▎        | 81/600 [00:26<01:56,  4.44it/s, train=4.83, val=4.87] 14%|█▎        | 81/600 [00:26<01:56,  4.44it/s, train=4.84, val=4.88] 14%|█▎        | 82/600 [00:26<01:56,  4.46it/s, train=4.84, val=4.88] 14%|█▎        | 82/600 [00:26<01:56,  4.46it/s, train=4.83, val=4.87] 14%|█▍        | 83/600 [00:27<01:57,  4.41it/s, train=4.83, val=4.87] 14%|█▍        | 83/600 [00:27<01:57,  4.41it/s, train=4.83, val=4.86] 14%|█▍        | 84/600 [00:27<01:56,  4.43it/s, train=4.83, val=4.86] 14%|█▍        | 84/600 [00:27<01:56,  4.43it/s, train=4.84, val=4.86] 14%|█▍        | 85/600 [00:27<01:56,  4.40it/s, train=4.84, val=4.86] 14%|█▍        | 85/600 [00:27<01:56,  4.40it/s, train=4.84, val=4.87] 14%|█▍        | 86/600 [00:27<01:57,  4.38it/s, train=4.84, val=4.87] 14%|█▍        | 86/600 [00:27<01:57,  4.38it/s, train=4.83, val=4.88] 14%|█▍        | 87/600 [00:27<01:57,  4.37it/s, train=4.83, val=4.88] 14%|█▍        | 87/600 [00:28<01:57,  4.37it/s, train=4.83, val=4.88] 15%|█▍        | 88/600 [00:28<01:55,  4.41it/s, train=4.83, val=4.88] 15%|█▍        | 88/600 [00:28<01:55,  4.41it/s, train=4.83, val=4.87] 15%|█▍        | 89/600 [00:28<01:56,  4.40it/s, train=4.83, val=4.87] 15%|█▍        | 89/600 [00:28<01:56,  4.40it/s, train=4.83, val=4.87] 15%|█▌        | 90/600 [00:28<01:56,  4.38it/s, train=4.83, val=4.87] 15%|█▌        | 90/600 [00:28<01:56,  4.38it/s, train=4.82, val=4.87] 15%|█▌        | 91/600 [00:28<01:56,  4.36it/s, train=4.82, val=4.87] 15%|█▌        | 91/600 [00:28<01:56,  4.36it/s, train=4.83, val=4.88] 15%|█▌        | 92/600 [00:29<01:56,  4.36it/s, train=4.83, val=4.88] 15%|█▌        | 92/600 [00:29<01:56,  4.36it/s, train=4.83, val=4.87] 16%|█▌        | 93/600 [00:29<01:55,  4.39it/s, train=4.83, val=4.87] 16%|█▌        | 93/600 [00:29<01:55,  4.39it/s, train=4.83, val=4.87] 16%|█▌        | 94/600 [00:29<01:54,  4.43it/s, train=4.83, val=4.87] 16%|█▌        | 94/600 [00:29<01:54,  4.43it/s, train=4.83, val=4.87] 16%|█▌        | 95/600 [00:29<01:53,  4.45it/s, train=4.83, val=4.87] 16%|█▌        | 95/600 [00:29<01:53,  4.45it/s, train=4.83, val=4.87] 16%|█▌        | 96/600 [00:29<01:52,  4.48it/s, train=4.83, val=4.87] 16%|█▌        | 96/600 [00:30<01:52,  4.48it/s, train=4.83, val=4.89] 16%|█▌        | 97/600 [00:30<01:53,  4.43it/s, train=4.83, val=4.89] 16%|█▌        | 97/600 [00:30<01:53,  4.43it/s, train=4.83, val=4.88] 16%|█▋        | 98/600 [00:30<01:53,  4.44it/s, train=4.83, val=4.88] 16%|█▋        | 98/600 [00:30<01:53,  4.44it/s, train=4.82, val=4.88] 16%|█▋        | 99/600 [00:30<01:53,  4.40it/s, train=4.82, val=4.88] 16%|█▋        | 99/600 [00:30<01:53,  4.40it/s, train=4.83, val=4.88] 17%|█▋        | 100/600 [00:30<01:53,  4.42it/s, train=4.83, val=4.88] 17%|█▋        | 100/600 [00:31<01:53,  4.42it/s, train=4.83, val=4.87] 17%|█▋        | 101/600 [00:31<01:54,  4.38it/s, train=4.83, val=4.87] 17%|█▋        | 101/600 [00:31<01:54,  4.38it/s, train=4.83, val=4.87] 17%|█▋        | 102/600 [00:31<01:54,  4.36it/s, train=4.83, val=4.87] 17%|█▋        | 102/600 [00:31<01:54,  4.36it/s, train=4.82, val=4.88] 17%|█▋        | 103/600 [00:31<01:54,  4.33it/s, train=4.82, val=4.88] 17%|█▋        | 103/600 [00:31<01:54,  4.33it/s, train=4.82, val=4.87] 17%|█▋        | 104/600 [00:31<01:54,  4.32it/s, train=4.82, val=4.87] 17%|█▋        | 104/600 [00:31<01:54,  4.32it/s, train=4.82, val=4.88] 18%|█▊        | 105/600 [00:32<01:55,  4.30it/s, train=4.82, val=4.88] 18%|█▊        | 105/600 [00:32<01:55,  4.30it/s, train=4.83, val=4.88] 18%|█▊        | 106/600 [00:32<01:54,  4.30it/s, train=4.83, val=4.88] 18%|█▊        | 106/600 [00:32<01:54,  4.30it/s, train=4.83, val=4.88] 18%|█▊        | 107/600 [00:32<01:53,  4.34it/s, train=4.83, val=4.88] 18%|█▊        | 107/600 [00:32<01:53,  4.34it/s, train=4.82, val=4.87] 18%|█▊        | 108/600 [00:32<01:53,  4.33it/s, train=4.82, val=4.87] 18%|█▊        | 108/600 [00:32<01:53,  4.33it/s, train=4.82, val=4.88] 18%|█▊        | 109/600 [00:32<01:53,  4.32it/s, train=4.82, val=4.88] 18%|█▊        | 109/600 [00:33<01:53,  4.32it/s, train=4.82, val=4.87] 18%|█▊        | 110/600 [00:33<01:52,  4.35it/s, train=4.82, val=4.87] 18%|█▊        | 110/600 [00:33<01:52,  4.35it/s, train=4.82, val=4.87] 18%|█▊        | 111/600 [00:33<01:52,  4.33it/s, train=4.82, val=4.87] 18%|█▊        | 111/600 [00:33<01:52,  4.33it/s, train=4.83, val=4.9]  19%|█▊        | 112/600 [00:33<01:51,  4.37it/s, train=4.83, val=4.9] 19%|█▊        | 112/600 [00:33<01:51,  4.37it/s, train=4.82, val=4.88] 19%|█▉        | 113/600 [00:33<01:52,  4.34it/s, train=4.82, val=4.88] 19%|█▉        | 113/600 [00:34<01:52,  4.34it/s, train=4.83, val=4.89] 19%|█▉        | 114/600 [00:34<01:52,  4.33it/s, train=4.83, val=4.89] 19%|█▉        | 114/600 [00:34<01:52,  4.33it/s, train=4.82, val=4.87] 19%|█▉        | 114/600 [00:34<01:52,  4.33it/s, train=4.82, val=4.87 (Max patience reached)] 19%|█▉        | 114/600 [00:34<02:26,  3.32it/s, train=4.82, val=4.87 (Max patience reached)]
-[INFO] jester: Training completed after 115 epochs
-[INFO] jester: Final train loss: 4.8229
-[INFO] jester: Final val loss: 4.8698
-[INFO] jester: [4/5] Saving model...
-[INFO] jester: Saving model weights to outdir/gw_flow_cache/GW231109/flow_weights.eqx
-[INFO] jester: Saving flow kwargs to outdir/gw_flow_cache/GW231109/flow_kwargs.json
-[INFO] jester: Saving metadata to outdir/gw_flow_cache/GW231109/metadata.json
-[INFO] jester: [5/5] Generating plots...
-[INFO] jester: Saved loss plot to outdir/gw_flow_cache/GW231109/figures/losses.png
-[INFO] jester: Saved corner plot to outdir/gw_flow_cache/GW231109/figures/corner.png
-[INFO] jester: ============================================================
-[INFO] jester: Training complete!
-[INFO] jester: Model saved to: outdir/gw_flow_cache/GW231109
-[INFO] jester: Figures saved to: outdir/gw_flow_cache/GW231109/figures
-[INFO] jester: ============================================================
-[INFO] jester: To use the trained flow:
-[INFO] jester: >>> from jesterTOV.inference.flows.flow import Flow
-[INFO] jester: >>> flow = Flow.from_directory('outdir/gw_flow_cache/GW231109')
-[INFO] jester: >>> samples = flow.sample(jax.random.key(0), (1000,))
-[INFO] jester: >>> # Samples are automatically rescaled to original domain
-[INFO] jester: ============================================================
+[INFO] jester: Reusing cached flow for 'GW231109' at outdir/gw_flow_cache/GW231109
 [INFO] jester: Setting up likelihood...
 [INFO] jester: Loading NF model for GW231109 from /gpfs/home6/twouters2/projects/19_GW231109_referee_report/GW231109_extreme_matter/referee/jester_reruns/GW231109_gaussian/outdir/gw_flow_cache/GW231109
 [INFO] jester: Loaded NF model for GW231109
@@ -188,7 +118,7 @@ NVIDIA H100
 [INFO] jester: ============================================================
 
 [INFO] jester: Testing likelihood evaluation...
-[INFO] jester: Test log probabilities: [-448.87518765  -14.39096163 -347.9878223 ]
+[INFO] jester: Test log probabilities: [-312.53297195  -14.18252266 -249.65522274]
 [INFO] jester: Starting sampling with seed 43...
 [INFO] jester: Starting SMC sampling with random_walk kernel...
 [INFO] jester: Using random walk kernel
@@ -204,36 +134,36 @@ NVIDIA H100
 [INFO] jester: Progress updates will be shown after each annealing step
 [INFO] jester: ======================================================================
 [INFO] jester: Running SMC loop (this may take several minutes)...
-[INFO] jester: Step    0 | λ=0.000000 | ESS= 98.8% | Accept= 73.6% | logZ=  -0.018 | t=00:01:07 | ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
-[INFO] jester: Step    1 | λ=0.000000 | ESS= 99.6% | Accept= 74.0% | logZ=  -0.025 | t=00:01:19 | ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
-[INFO] jester: Step    2 | λ=0.000000 | ESS= 99.9% | Accept= 73.5% | logZ=  -0.026 | t=00:01:31 | ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
-[INFO] jester: Step    3 | λ=0.000000 | ESS=100.0% | Accept= 73.7% | logZ=  -0.027 | t=00:01:44 | ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
-[INFO] jester: Step    4 | λ=0.000000 | ESS=100.0% | Accept= 73.5% | logZ=  -0.027 | t=00:01:56 | ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
-[INFO] jester: Step    5 | λ=0.000278 | ESS= 97.9% | Accept= 73.6% | logZ=  -0.091 | t=00:02:08 | ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
-[INFO] jester: Step    6 | λ=0.000557 | ESS= 98.9% | Accept= 73.2% | logZ=  -0.133 | t=00:02:19 | ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
-[INFO] jester: Step    7 | λ=0.000938 | ESS= 99.0% | Accept= 73.2% | logZ=  -0.173 | t=00:02:31 | ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
-[INFO] jester: Step    8 | λ=0.001441 | ESS= 99.1% | Accept= 72.7% | logZ=  -0.211 | t=00:02:43 | ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
-[INFO] jester: Step    9 | λ=0.002055 | ESS= 99.4% | Accept= 72.9% | logZ=  -0.244 | t=00:02:54 | ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
-[INFO] jester: Step   10 | λ=0.002919 | ESS= 99.3% | Accept= 73.0% | logZ=  -0.280 | t=00:03:06 | ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
-[INFO] jester: Step   11 | λ=0.003920 | ESS= 99.5% | Accept= 72.6% | logZ=  -0.314 | t=00:03:17 | ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
-[INFO] jester: Step   12 | λ=0.005430 | ESS= 99.4% | Accept= 72.8% | logZ=  -0.354 | t=00:03:29 | ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
-[INFO] jester: Step   13 | λ=0.007342 | ESS= 99.5% | Accept= 72.2% | logZ=  -0.398 | t=00:03:40 | ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
-[INFO] jester: Step   14 | λ=0.009838 | ESS= 99.5% | Accept= 72.6% | logZ=  -0.448 | t=00:03:52 | ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
-[INFO] jester: Step   15 | λ=0.012746 | ESS= 99.7% | Accept= 72.4% | logZ=  -0.500 | t=00:04:04 | ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
-[INFO] jester: Step   16 | λ=0.017648 | ESS= 99.5% | Accept= 71.8% | logZ=  -0.581 | t=00:04:16 | ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
-[INFO] jester: Step   17 | λ=0.025221 | ESS= 99.5% | Accept= 71.6% | logZ=  -0.697 | t=00:04:27 | ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
-[INFO] jester: Step   18 | λ=0.033395 | ESS= 99.7% | Accept= 71.2% | logZ=  -0.817 | t=00:04:39 | █░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
-[INFO] jester: Step   19 | λ=0.048085 | ESS= 99.6% | Accept= 71.2% | logZ=  -1.027 | t=00:04:50 | █░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
-[INFO] jester: Step   20 | λ=0.065001 | ESS= 99.7% | Accept= 71.0% | logZ=  -1.264 | t=00:05:02 | █░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
-[INFO] jester: Step   21 | λ=0.095258 | ESS= 99.6% | Accept= 71.2% | logZ=  -1.682 | t=00:05:14 | ██░░░░░░░░░░░░░░░░░░░░░░░░░░░░
-[INFO] jester: Step   22 | λ=0.145330 | ESS= 99.5% | Accept= 71.0% | logZ=  -2.364 | t=00:05:26 | ████░░░░░░░░░░░░░░░░░░░░░░░░░░
-[INFO] jester: Step   23 | λ=0.211449 | ESS= 99.5% | Accept= 71.0% | logZ=  -3.259 | t=00:05:37 | ██████░░░░░░░░░░░░░░░░░░░░░░░░
-[INFO] jester: Step   24 | λ=0.308622 | ESS= 99.4% | Accept= 71.0% | logZ=  -4.566 | t=00:05:49 | █████████░░░░░░░░░░░░░░░░░░░░░
-[INFO] jester: Step   25 | λ=0.440302 | ESS= 99.2% | Accept= 70.9% | logZ=  -6.328 | t=00:06:00 | █████████████░░░░░░░░░░░░░░░░░
-[INFO] jester: Step   26 | λ=0.626686 | ESS= 98.8% | Accept= 70.2% | logZ=  -8.810 | t=00:06:12 | ██████████████████░░░░░░░░░░░░
-[INFO] jester: Step   27 | λ=0.887350 | ESS= 98.3% | Accept= 69.8% | logZ= -12.259 | t=00:06:24 | ██████████████████████████░░░░
-[INFO] jester: Step   28 | λ=1.000000 | ESS= 99.7% | Accept= 69.2% | logZ= -13.745 | t=00:06:35 | ██████████████████████████████
-[INFO] jester: Sampling complete! Runtime: 6 min 36 sec
+[INFO] jester: Step    0 | λ=0.000000 | ESS= 98.9% | Accept= 73.6% | logZ=  -0.016 | t=00:01:02 | ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
+[INFO] jester: Step    1 | λ=0.000000 | ESS= 99.6% | Accept= 74.0% | logZ=  -0.022 | t=00:01:11 | ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
+[INFO] jester: Step    2 | λ=0.000000 | ESS= 99.8% | Accept= 73.6% | logZ=  -0.024 | t=00:01:19 | ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
+[INFO] jester: Step    3 | λ=0.000000 | ESS=100.0% | Accept= 74.0% | logZ=  -0.025 | t=00:01:28 | ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
+[INFO] jester: Step    4 | λ=0.000000 | ESS=100.0% | Accept= 74.0% | logZ=  -0.025 | t=00:01:37 | ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
+[INFO] jester: Step    5 | λ=0.000000 | ESS=100.0% | Accept= 74.1% | logZ=  -0.025 | t=00:01:46 | ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
+[INFO] jester: Step    6 | λ=0.000271 | ESS= 98.3% | Accept= 74.2% | logZ=  -0.080 | t=00:01:54 | ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
+[INFO] jester: Step    7 | λ=0.000550 | ESS= 99.0% | Accept= 74.3% | logZ=  -0.119 | t=00:02:03 | ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
+[INFO] jester: Step    8 | λ=0.000925 | ESS= 99.0% | Accept= 74.0% | logZ=  -0.158 | t=00:02:12 | ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
+[INFO] jester: Step    9 | λ=0.001419 | ESS= 99.1% | Accept= 73.5% | logZ=  -0.193 | t=00:02:20 | ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
+[INFO] jester: Step   10 | λ=0.002022 | ESS= 99.3% | Accept= 73.7% | logZ=  -0.224 | t=00:02:29 | ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
+[INFO] jester: Step   11 | λ=0.003031 | ESS= 99.0% | Accept= 73.1% | logZ=  -0.264 | t=00:02:37 | ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
+[INFO] jester: Step   12 | λ=0.004029 | ESS= 99.5% | Accept= 73.3% | logZ=  -0.294 | t=00:02:46 | ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
+[INFO] jester: Step   13 | λ=0.005153 | ESS= 99.7% | Accept= 72.6% | logZ=  -0.322 | t=00:02:55 | ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
+[INFO] jester: Step   14 | λ=0.007736 | ESS= 99.3% | Accept= 72.8% | logZ=  -0.378 | t=00:03:03 | ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
+[INFO] jester: Step   15 | λ=0.011095 | ESS= 99.5% | Accept= 72.4% | logZ=  -0.440 | t=00:03:12 | ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
+[INFO] jester: Step   16 | λ=0.015372 | ESS= 99.6% | Accept= 72.4% | logZ=  -0.512 | t=00:03:20 | ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
+[INFO] jester: Step   17 | λ=0.021016 | ESS= 99.6% | Accept= 72.6% | logZ=  -0.600 | t=00:03:29 | ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
+[INFO] jester: Step   18 | λ=0.029609 | ESS= 99.6% | Accept= 72.3% | logZ=  -0.728 | t=00:03:37 | ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
+[INFO] jester: Step   19 | λ=0.043946 | ESS= 99.6% | Accept= 72.0% | logZ=  -0.932 | t=00:03:46 | █░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
+[INFO] jester: Step   20 | λ=0.064716 | ESS= 99.6% | Accept= 71.8% | logZ=  -1.223 | t=00:03:54 | █░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
+[INFO] jester: Step   21 | λ=0.092798 | ESS= 99.6% | Accept= 71.6% | logZ=  -1.611 | t=00:04:03 | ██░░░░░░░░░░░░░░░░░░░░░░░░░░░░
+[INFO] jester: Step   22 | λ=0.134424 | ESS= 99.6% | Accept= 71.6% | logZ=  -2.178 | t=00:04:12 | ████░░░░░░░░░░░░░░░░░░░░░░░░░░
+[INFO] jester: Step   23 | λ=0.190279 | ESS= 99.7% | Accept= 71.5% | logZ=  -2.931 | t=00:04:20 | █████░░░░░░░░░░░░░░░░░░░░░░░░░
+[INFO] jester: Step   24 | λ=0.308618 | ESS= 99.0% | Accept= 71.8% | logZ=  -4.520 | t=00:04:28 | █████████░░░░░░░░░░░░░░░░░░░░░
+[INFO] jester: Step   25 | λ=0.413556 | ESS= 99.5% | Accept= 71.6% | logZ=  -5.921 | t=00:04:37 | ████████████░░░░░░░░░░░░░░░░░░
+[INFO] jester: Step   26 | λ=0.640094 | ESS= 98.4% | Accept= 71.4% | logZ=  -8.929 | t=00:04:46 | ███████████████████░░░░░░░░░░░
+[INFO] jester: Step   27 | λ=0.983042 | ESS= 97.2% | Accept= 70.4% | logZ= -13.451 | t=00:04:54 | █████████████████████████████░
+[INFO] jester: Step   28 | λ=1.000000 | ESS=100.0% | Accept= 69.9% | logZ= -13.674 | t=00:05:03 | ██████████████████████████████
+[INFO] jester: Sampling complete! Runtime: 5 min 3 sec
 [INFO] jester: Generating SMC diagnostic plots...
 [INFO] jester: Saved diagnostic plot to outdir/smc_diagnostics.png
 [INFO] jester: Creating InferenceResult from sampler output...
@@ -245,7 +175,7 @@ NVIDIA H100
 [INFO] jester: Generating EOS for all 5000 posterior samples
 [INFO] jester: Applying transform to 5000 samples...
 [INFO] jester: Using batch size: 1000
-[INFO] jester: TOV solve time: 12.27 s (5000 samples)
+[INFO] jester: TOV solve time: 11.88 s (5000 samples)
 [INFO] jester: Adding derived EOS quantities to posterior
 [INFO] jester: Added 8 derived EOS quantities
 [INFO] jester: EOS generation complete!
@@ -268,18 +198,17 @@ NVIDIA H100
 [INFO] jester: Creating cornerplot with 9 parameters
 [INFO] jester: Cornerplot saved to ./outdir/figures/cornerplot.pdf
 [INFO] jester: Creating mass-radius plot...
-[INFO] jester: Number of samples: 5000
-[INFO] jester: Widening mass axis to 3.93 M_sun (max MTOV: 3.68)
-[INFO] jester: Plotting 5000 M-R curves (excluded 0 invalid samples)...
+[INFO] jester: Widening mass axis to 4.24 M_sun (max MTOV: 3.99)
+[INFO] jester: Plotting 4997 M-R curves (excluded 3 invalid samples)...
+[WARNING] jester: 6/4997 (0.1%) samples had an unstable part (multi-branch) in their NS solution. These samples are not accounted for properly during inference; the plot shows each stable branch separately. If this percentage is low, the impact on the posterior is negligible.
 [INFO] jester: Mass-radius plot saved to ./outdir/figures/mass_radius_plot.pdf
 [INFO] jester: Creating mass-Lambda plot...
-[INFO] jester: Number of samples: 5000
-[INFO] jester: Widening mass axis to 3.93 M_sun (max MTOV: 3.68)
-[INFO] jester: Plotting 5000 M-Lambda curves (excluded 0 invalid samples)...
+[INFO] jester: Widening mass axis to 4.24 M_sun (max MTOV: 3.99)
+[INFO] jester: Plotting 4997 M-Lambda curves (excluded 3 invalid samples)...
+[WARNING] jester: 6/4997 (0.1%) samples had an unstable part (multi-branch) in their NS solution. These samples are not accounted for properly during inference; the plot shows each stable branch separately. If this percentage is low, the impact on the posterior is negligible.
 [INFO] jester: Mass-Lambda plot saved to ./outdir/figures/mass_lambda_plot.pdf
 [INFO] jester: Creating pressure-density plot...
-[INFO] jester: Plotting 5000 p-n curves...
-[INFO] jester: Excluded 0 invalid samples
+[INFO] jester: Plotting 4997 p-n curves (excluded 3 invalid)...
 [INFO] jester: Pressure-density plot saved to ./outdir/figures/pressure_density_plot.pdf
 [INFO] jester: Creating parameter histograms...
 [INFO] jester: MTOV histogram saved to ./outdir/figures/MTOV_histogram.pdf
@@ -288,10 +217,9 @@ NVIDIA H100
 [INFO] jester: p3nsat histogram saved to ./outdir/figures/p3nsat_histogram.pdf
 [INFO] jester: n_TOV histogram saved to ./outdir/figures/n_TOV_histogram.pdf
 [INFO] jester: Creating cs2-density plot...
-[INFO] jester: Plotting 5000 cs2-n curves...
-[INFO] jester: Excluded 0 invalid samples
+[INFO] jester: Plotting 4997 cs2-n curves (excluded 3 invalid)...
 [INFO] jester: cs2-density plot saved to ./outdir/figures/cs2_density_plot.pdf
-[INFO] jester: All plots generated and saved to ./outdir/figures
+[INFO] jester: All plotting scripts executed and generated plots saved to ./outdir/figures
 [INFO] jester: 
 Postprocessing complete! Plots saved to ./outdir/
 [INFO] jester: 
