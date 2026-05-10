@@ -1,4 +1,4 @@
-Sun May 10 19:24:36 CEST 2026
+Sun May 10 19:58:40 CEST 2026
 NVIDIA H100
 ==========================================
 === Running jester inference (SMC-RW) ===
@@ -38,11 +38,11 @@ NVIDIA H100
 [INFO] jester:   [25] cs2_CSE_8: Uniform(0.0, 1.0)
 [INFO] jester: Setting up transform...
 [INFO] jester: Derived max_nbreak from nbreak prior: 2.0000 n_sat
-[INFO] jester: Initialized JesterTransform: EOS=MetaModel_with_CSE_EOS_model, TOV=<jesterTOV.tov.gr.GRTOVSolver object at 0x14577cfaef60>
+[INFO] jester: Initialized JesterTransform: EOS=MetaModel_with_CSE_EOS_model, TOV=<jesterTOV.tov.gr.GRTOVSolver object at 0x152fcd6dac90>
 [INFO] jester:   Fixed parameters: {'E_sat': -16.0}
 [INFO] jester: EOS type: metamodel_cse
 [INFO] jester:   nb_CSE: 8
-[INFO] jester:   ndat_metamodel: 100
+[INFO] jester:   ndat_metamodel: 200
 [INFO] jester:   nmax_nsat: 25.0
 [INFO] jester: TOV solver: gr
 [INFO] jester:   ndat_TOV: 100
@@ -118,7 +118,7 @@ NVIDIA H100
 [INFO] jester: ============================================================
 
 [INFO] jester: Testing likelihood evaluation...
-[INFO] jester: Test log probabilities: [-315.56684879  -16.48279154 -252.79744723]
+[INFO] jester: Test log probabilities: [-349.90466068  -16.45207654 -277.46550082]
 [INFO] jester: Starting sampling with seed 43...
 [INFO] jester: Starting SMC sampling with random_walk kernel...
 [INFO] jester: Using random walk kernel
@@ -134,36 +134,35 @@ NVIDIA H100
 [INFO] jester: Progress updates will be shown after each annealing step
 [INFO] jester: ======================================================================
 [INFO] jester: Running SMC loop (this may take several minutes)...
-[INFO] jester: Step    0 | λ=0.000000 | ESS= 98.9% | Accept= 73.6% | logZ=  -0.016 | t=00:01:02 | ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
-[INFO] jester: Step    1 | λ=0.000000 | ESS= 99.6% | Accept= 74.0% | logZ=  -0.022 | t=00:01:11 | ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
-[INFO] jester: Step    2 | λ=0.000000 | ESS= 99.8% | Accept= 73.6% | logZ=  -0.024 | t=00:01:20 | ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
-[INFO] jester: Step    3 | λ=0.000000 | ESS=100.0% | Accept= 74.0% | logZ=  -0.025 | t=00:01:29 | ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
-[INFO] jester: Step    4 | λ=0.000000 | ESS=100.0% | Accept= 74.0% | logZ=  -0.025 | t=00:01:38 | ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
-[INFO] jester: Step    5 | λ=0.000000 | ESS=100.0% | Accept= 74.1% | logZ=  -0.025 | t=00:01:47 | ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
-[INFO] jester: Step    6 | λ=0.000271 | ESS= 98.3% | Accept= 74.2% | logZ=  -0.081 | t=00:01:56 | ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
-[INFO] jester: Step    7 | λ=0.000549 | ESS= 99.0% | Accept= 74.3% | logZ=  -0.120 | t=00:02:05 | ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
-[INFO] jester: Step    8 | λ=0.000925 | ESS= 98.9% | Accept= 74.0% | logZ=  -0.160 | t=00:02:14 | ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
-[INFO] jester: Step    9 | λ=0.001417 | ESS= 99.1% | Accept= 73.4% | logZ=  -0.196 | t=00:02:23 | ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
-[INFO] jester: Step   10 | λ=0.002025 | ESS= 99.3% | Accept= 73.8% | logZ=  -0.229 | t=00:02:31 | ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
-[INFO] jester: Step   11 | λ=0.002936 | ESS= 99.2% | Accept= 73.3% | logZ=  -0.268 | t=00:02:40 | ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
-[INFO] jester: Step   12 | λ=0.004003 | ESS= 99.4% | Accept= 73.2% | logZ=  -0.305 | t=00:02:49 | ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
-[INFO] jester: Step   13 | λ=0.005483 | ESS= 99.4% | Accept= 73.2% | logZ=  -0.349 | t=00:02:58 | ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
-[INFO] jester: Step   14 | λ=0.006929 | ESS= 99.6% | Accept= 72.9% | logZ=  -0.386 | t=00:03:07 | ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
-[INFO] jester: Step   15 | λ=0.009626 | ESS= 99.5% | Accept= 72.6% | logZ=  -0.446 | t=00:03:16 | ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
-[INFO] jester: Step   16 | λ=0.013564 | ESS= 99.4% | Accept= 73.0% | logZ=  -0.526 | t=00:03:24 | ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
-[INFO] jester: Step   17 | λ=0.019059 | ESS= 99.6% | Accept= 72.8% | logZ=  -0.628 | t=00:03:33 | ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
-[INFO] jester: Step   18 | λ=0.025267 | ESS= 99.7% | Accept= 72.4% | logZ=  -0.740 | t=00:03:42 | ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
-[INFO] jester: Step   19 | λ=0.035753 | ESS= 99.6% | Accept= 72.4% | logZ=  -0.922 | t=00:03:51 | █░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
-[INFO] jester: Step   20 | λ=0.052320 | ESS= 99.5% | Accept= 72.2% | logZ=  -1.203 | t=00:04:00 | █░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
-[INFO] jester: Step   21 | λ=0.065535 | ESS= 99.9% | Accept= 71.8% | logZ=  -1.422 | t=00:04:09 | █░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
-[INFO] jester: Step   22 | λ=0.094815 | ESS= 99.7% | Accept= 71.7% | logZ=  -1.904 | t=00:04:18 | ██░░░░░░░░░░░░░░░░░░░░░░░░░░░░
-[INFO] jester: Step   23 | λ=0.151120 | ESS= 99.5% | Accept= 71.9% | logZ=  -2.822 | t=00:04:27 | ████░░░░░░░░░░░░░░░░░░░░░░░░░░
-[INFO] jester: Step   24 | λ=0.215574 | ESS= 99.7% | Accept= 71.3% | logZ=  -3.867 | t=00:04:37 | ██████░░░░░░░░░░░░░░░░░░░░░░░░
-[INFO] jester: Step   25 | λ=0.368901 | ESS= 99.1% | Accept= 71.4% | logZ=  -6.343 | t=00:04:45 | ███████████░░░░░░░░░░░░░░░░░░░
-[INFO] jester: Step   26 | λ=0.528063 | ESS= 99.4% | Accept= 71.4% | logZ=  -8.905 | t=00:04:54 | ███████████████░░░░░░░░░░░░░░░
-[INFO] jester: Step   27 | λ=0.836504 | ESS= 98.5% | Accept= 71.2% | logZ= -13.853 | t=00:05:04 | █████████████████████████░░░░░
-[INFO] jester: Step   28 | λ=1.000000 | ESS= 99.7% | Accept= 70.6% | logZ= -16.468 | t=00:05:13 | ██████████████████████████████
-[INFO] jester: Sampling complete! Runtime: 5 min 14 sec
+[INFO] jester: Step    0 | λ=0.000000 | ESS= 98.9% | Accept= 73.6% | logZ=  -0.016 | t=00:01:06 | ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
+[INFO] jester: Step    1 | λ=0.000000 | ESS= 99.6% | Accept= 73.9% | logZ=  -0.022 | t=00:01:16 | ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
+[INFO] jester: Step    2 | λ=0.000000 | ESS= 99.9% | Accept= 73.3% | logZ=  -0.024 | t=00:01:26 | ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
+[INFO] jester: Step    3 | λ=0.000000 | ESS=100.0% | Accept= 73.7% | logZ=  -0.024 | t=00:01:36 | ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
+[INFO] jester: Step    4 | λ=0.000282 | ESS= 98.0% | Accept= 74.0% | logZ=  -0.084 | t=00:01:45 | ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
+[INFO] jester: Step    5 | λ=0.000282 | ESS=100.0% | Accept= 73.3% | logZ=  -0.084 | t=00:01:55 | ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
+[INFO] jester: Step    6 | λ=0.000692 | ESS= 98.3% | Accept= 73.4% | logZ=  -0.138 | t=00:02:04 | ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
+[INFO] jester: Step    7 | λ=0.001094 | ESS= 99.2% | Accept= 73.1% | logZ=  -0.174 | t=00:02:14 | ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
+[INFO] jester: Step    8 | λ=0.001679 | ESS= 99.1% | Accept= 73.5% | logZ=  -0.214 | t=00:02:23 | ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
+[INFO] jester: Step    9 | λ=0.002355 | ESS= 99.4% | Accept= 73.1% | logZ=  -0.247 | t=00:02:32 | ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
+[INFO] jester: Step   10 | λ=0.003364 | ESS= 99.3% | Accept= 73.1% | logZ=  -0.286 | t=00:02:42 | ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
+[INFO] jester: Step   11 | λ=0.004772 | ESS= 99.3% | Accept= 73.5% | logZ=  -0.331 | t=00:02:51 | ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
+[INFO] jester: Step   12 | λ=0.006649 | ESS= 99.4% | Accept= 73.3% | logZ=  -0.380 | t=00:03:01 | ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
+[INFO] jester: Step   13 | λ=0.009402 | ESS= 99.4% | Accept= 73.2% | logZ=  -0.442 | t=00:03:10 | ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
+[INFO] jester: Step   14 | λ=0.012105 | ESS= 99.7% | Accept= 72.4% | logZ=  -0.497 | t=00:03:19 | ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
+[INFO] jester: Step   15 | λ=0.016099 | ESS= 99.7% | Accept= 72.8% | logZ=  -0.572 | t=00:03:29 | ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
+[INFO] jester: Step   16 | λ=0.022104 | ESS= 99.7% | Accept= 72.2% | logZ=  -0.680 | t=00:03:39 | ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
+[INFO] jester: Step   17 | λ=0.033961 | ESS= 99.4% | Accept= 72.5% | logZ=  -0.886 | t=00:03:48 | █░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
+[INFO] jester: Step   18 | λ=0.046583 | ESS= 99.7% | Accept= 72.7% | logZ=  -1.099 | t=00:03:58 | █░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
+[INFO] jester: Step   19 | λ=0.072853 | ESS= 99.5% | Accept= 72.5% | logZ=  -1.535 | t=00:04:07 | ██░░░░░░░░░░░░░░░░░░░░░░░░░░░░
+[INFO] jester: Step   20 | λ=0.100762 | ESS= 99.7% | Accept= 71.9% | logZ=  -1.993 | t=00:04:17 | ███░░░░░░░░░░░░░░░░░░░░░░░░░░░
+[INFO] jester: Step   21 | λ=0.146797 | ESS= 99.6% | Accept= 71.6% | logZ=  -2.744 | t=00:04:27 | ████░░░░░░░░░░░░░░░░░░░░░░░░░░
+[INFO] jester: Step   22 | λ=0.226498 | ESS= 99.5% | Accept= 71.4% | logZ=  -4.036 | t=00:04:36 | ██████░░░░░░░░░░░░░░░░░░░░░░░░
+[INFO] jester: Step   23 | λ=0.314346 | ESS= 99.6% | Accept= 70.9% | logZ=  -5.455 | t=00:04:45 | █████████░░░░░░░░░░░░░░░░░░░░░
+[INFO] jester: Step   24 | λ=0.480612 | ESS= 99.2% | Accept= 70.6% | logZ=  -8.128 | t=00:04:54 | ██████████████░░░░░░░░░░░░░░░░
+[INFO] jester: Step   25 | λ=0.695544 | ESS= 99.2% | Accept= 70.7% | logZ= -11.571 | t=00:05:04 | ████████████████████░░░░░░░░░░
+[INFO] jester: Step   26 | λ=0.996172 | ESS= 98.9% | Accept= 70.6% | logZ= -16.376 | t=00:05:13 | █████████████████████████████░
+[INFO] jester: Step   27 | λ=1.000000 | ESS=100.0% | Accept= 69.4% | logZ= -16.437 | t=00:05:22 | ██████████████████████████████
+[INFO] jester: Sampling complete! Runtime: 5 min 23 sec
 [INFO] jester: Generating SMC diagnostic plots...
 [INFO] jester: Saved diagnostic plot to outdir/smc_diagnostics.png
 [INFO] jester: Creating InferenceResult from sampler output...
@@ -175,7 +174,7 @@ NVIDIA H100
 [INFO] jester: Generating EOS for all 5000 posterior samples
 [INFO] jester: Applying transform to 5000 samples...
 [INFO] jester: Using batch size: 1000
-[INFO] jester: TOV solve time: 11.79 s (5000 samples)
+[INFO] jester: TOV solve time: 12.98 s (5000 samples)
 [INFO] jester: Adding derived EOS quantities to posterior
 [INFO] jester: Added 8 derived EOS quantities
 [INFO] jester: EOS generation complete!
@@ -198,17 +197,17 @@ NVIDIA H100
 [INFO] jester: Creating cornerplot with 9 parameters
 [INFO] jester: Cornerplot saved to ./outdir/figures/cornerplot.pdf
 [INFO] jester: Creating mass-radius plot...
-[INFO] jester: Widening mass axis to 4.07 M_sun (max MTOV: 3.82)
-[INFO] jester: Plotting 4997 M-R curves (excluded 3 invalid samples)...
-[WARNING] jester: 2/4997 (0.0%) samples had an unstable part (multi-branch) in their NS solution. These samples are not accounted for properly during inference; the plot shows each stable branch separately. If this percentage is low, the impact on the posterior is negligible.
+[INFO] jester: Widening mass axis to 4.19 M_sun (max MTOV: 3.94)
+[INFO] jester: Plotting 4994 M-R curves (excluded 6 invalid samples)...
+[WARNING] jester: 1/4994 (0.0%) samples had an unstable part (multi-branch) in their NS solution. These samples are not accounted for properly during inference; the plot shows each stable branch separately. If this percentage is low, the impact on the posterior is negligible.
 [INFO] jester: Mass-radius plot saved to ./outdir/figures/mass_radius_plot.pdf
 [INFO] jester: Creating mass-Lambda plot...
-[INFO] jester: Widening mass axis to 4.07 M_sun (max MTOV: 3.82)
-[INFO] jester: Plotting 4997 M-Lambda curves (excluded 3 invalid samples)...
-[WARNING] jester: 2/4997 (0.0%) samples had an unstable part (multi-branch) in their NS solution. These samples are not accounted for properly during inference; the plot shows each stable branch separately. If this percentage is low, the impact on the posterior is negligible.
+[INFO] jester: Widening mass axis to 4.19 M_sun (max MTOV: 3.94)
+[INFO] jester: Plotting 4994 M-Lambda curves (excluded 6 invalid samples)...
+[WARNING] jester: 1/4994 (0.0%) samples had an unstable part (multi-branch) in their NS solution. These samples are not accounted for properly during inference; the plot shows each stable branch separately. If this percentage is low, the impact on the posterior is negligible.
 [INFO] jester: Mass-Lambda plot saved to ./outdir/figures/mass_lambda_plot.pdf
 [INFO] jester: Creating pressure-density plot...
-[INFO] jester: Plotting 4997 p-n curves (excluded 3 invalid)...
+[INFO] jester: Plotting 4994 p-n curves (excluded 6 invalid)...
 [INFO] jester: Pressure-density plot saved to ./outdir/figures/pressure_density_plot.pdf
 [INFO] jester: Creating parameter histograms...
 [INFO] jester: MTOV histogram saved to ./outdir/figures/MTOV_histogram.pdf
@@ -217,7 +216,7 @@ NVIDIA H100
 [INFO] jester: p3nsat histogram saved to ./outdir/figures/p3nsat_histogram.pdf
 [INFO] jester: n_TOV histogram saved to ./outdir/figures/n_TOV_histogram.pdf
 [INFO] jester: Creating cs2-density plot...
-[INFO] jester: Plotting 4997 cs2-n curves (excluded 3 invalid)...
+[INFO] jester: Plotting 4994 cs2-n curves (excluded 6 invalid)...
 [INFO] jester: cs2-density plot saved to ./outdir/figures/cs2_density_plot.pdf
 [INFO] jester: All plotting scripts executed and generated plots saved to ./outdir/figures
 [INFO] jester: 
