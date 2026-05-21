@@ -35,9 +35,9 @@ LARGE_LAYOUT = dict(
 # ── Layout tuning — small (2-panel) figure ───────────────────────────────────
 SMALL_LAYOUT = dict(
     figsize              = (8, 4),
-    legend_top_margin    = 1.0,
-    legend_bbox_y        = 1.15,
-    legend_fontsize      = 18,
+    legend_top_margin    = 0.76,   # leave headroom for two-row legend inside the figure
+    legend_bbox_y        = 0.99,   # place legend's upper edge near top of figure
+    legend_fontsize      = 13,     # smaller font so 3 columns fit within the figure width
     ylabel_use_figtext   = False, # uses axes[0].set_ylabel() instead
     ylabel_x             = 0.01,  # unused in set_ylabel mode
     ylabel_fontsize      = 20,
@@ -169,9 +169,25 @@ FILTER_LABELS = {
     '2massks': 'K',
 }
 
+# Instrument single-visit 5σ limiting magnitudes (AB) to overplot on the LC panels.
+# Source: Chase, O'Connor, Fryer et al. 2022, ApJ 927, 163 (arXiv:2105.12268)
+LIMITING_MAGNITUDES = {
+    'ps1::g':  {'ZTF': 20.8, 'LSST': 24.7},
+    'ps1::r':  {'ZTF': 20.6, 'LSST': 24.2},
+    'ps1::i':  {'ZTF': 19.9, 'LSST': 23.8},
+    '2massj':  {'PRIME': 19.6, 'Roman': 25.5},
+}
+
+LIMIT_STYLES = {
+    'ZTF':   dict(color='#e6194b', ls='--', lw=1.5),
+    'LSST':  dict(color='#3cb44b', ls='-',  lw=1.5),
+    'Roman': dict(color='#4363d8', ls='-',  lw=1.5),
+    'PRIME': dict(color='#9c27b0', ls='--', lw=1.5),
+}
+
 # Filters shown in the compact 2-panel figure (one optical, one nIR).
 # Change these strings to switch bands without touching the rest of the code.
-SMALL_PLOT_PANELS = ['ps1::r', '2massj']
+SMALL_PLOT_PANELS = ['ps1::g', '2massj']
 
 # Per-panel colors for the compact figure.  Any matplotlib color string works.
 # Default: borrow the same rainbow hues used in the large 9-panel figure so
@@ -180,15 +196,16 @@ _LARGE_PANEL_ORDER = ['sdssu', 'ps1::g', 'ps1::r', 'ps1::i',
                       'ps1::z', 'ps1::y', '2massj', '2massh', '2massks']
 _LARGE_COLORS = sns.color_palette("rainbow", n_colors=len(_LARGE_PANEL_ORDER))
 SMALL_PLOT_COLORS = {
-    'ps1::r': _LARGE_COLORS[_LARGE_PANEL_ORDER.index('ps1::r')],   # same blue-green as large r
+    'ps1::g': _LARGE_COLORS[_LARGE_PANEL_ORDER.index('ps1::g')],   # same color as large g
     '2massj': _LARGE_COLORS[_LARGE_PANEL_ORDER.index('2massh')],   # H-band red from large figure
 }
 
 def plot_light_curves(lines_file, observations_file,
                      output_filename='light_curves.pdf',
-                     n_cols=2, xlim=(0.3, 4.9), ylim=(25, 15),
+                     n_cols=2, xlim=(0.3, 4.9), ylim=(26.5, 15),
                      n_model_lines=10, show_40mpc=True,
-                     panels=None, layout=None, panel_colors=None):
+                     panels=None, layout=None, panel_colors=None,
+                     show_limits_in_legend=True, show_limit_arrows=False):
     """
     Create multi-panel plot similar to the reference figure.
     
@@ -313,13 +330,49 @@ def plot_light_curves(lines_file, observations_file,
         # Formatting
         ax.set_xlim(xlim)
         ax.set_ylim(ylim)
+
+        # ── Instrument limiting magnitude lines ──────────────────────────────
+        if panel_name in LIMITING_MAGNITUDES:
+            # y_faint: the dim (large-magnitude) end of the axis
+            y_faint = max(ylim)
+            y_bright = min(ylim)
+            y_span = abs(y_faint - y_bright)
+            arrow_len = 0.05 * y_span   # arrow length in mag units (toward brighter)
+            label_gap = 0.02 * y_span   # gap between arrowhead and label text
+
+            for inst_name, limit in LIMITING_MAGNITUDES[panel_name].items():
+                sty = LIMIT_STYLES.get(inst_name, dict(color='gray', ls='--', lw=1.5))
+                if not (y_bright <= limit <= y_faint + 0.5):
+                    continue   # skip if well outside visible range
+                ax.axhline(limit, color=sty['color'], ls=sty['ls'],
+                           lw=sty['lw'], alpha=0.85, zorder=4)
+                if show_limit_arrows:
+                    # Arrow at right edge pointing toward brighter (smaller mag = visually up)
+                    x_arrow = xlim[1] - 0.08 * (xlim[1] - xlim[0])
+                    ax.annotate(
+                        '',
+                        xy=(x_arrow, limit - arrow_len),    # arrowhead (brighter direction)
+                        xytext=(x_arrow, limit + arrow_len),  # arrow tail (fainter side)
+                        arrowprops=dict(arrowstyle='->', color=sty['color'],
+                                       lw=sty['lw']),
+                        zorder=5,
+                    )
+                # Label below the line (fainter side), right-aligned
+                if not show_limits_in_legend:
+                    ax.text(xlim[1] - 0.02 * (xlim[1] - xlim[0]),
+                            limit + label_gap,
+                            inst_name, color=sty['color'],
+                            fontsize=lyt['panel_label_fontsize'] - 2,
+                            va='top', ha='right', zorder=5)
+        # ─────────────────────────────────────────────────────────────────────
+
         panel_label = FILTER_LABELS.get(panel_name, panel_name.replace('_', ':'))
         ax.text(0.95, 0.95, panel_label, transform=ax.transAxes,
                fontsize=lyt['panel_label_fontsize'], fontweight='bold', va='top', ha='right')
 
         # Set labels only for left column and bottom row
-        ax.set_yticks([15, 18, 21, 24])
-        ax.set_yticklabels([15, 18, 21, 24])
+        ax.set_yticks([15, 18, 21, 24, 27])
+        ax.set_yticklabels([15, 18, 21, 24, 27])
         if idx % n_cols != 0:
             ax.tick_params(labelleft=False)
 
@@ -339,22 +392,72 @@ def plot_light_curves(lines_file, observations_file,
 
     # Centered figure-level legend above the panels
     from matplotlib.lines import Line2D
-    legend_handles = [
+    legend_handles_row1 = [
         plt.scatter([], [], c='k', s=10, marker='o', label='AT2017gfo'),
         Line2D([0], [0], color='k', linewidth=2., label='Estimated lightcurves'),
     ]
     if show_40mpc:
-        legend_handles.append(
+        legend_handles_row1.append(
             Line2D([0], [0], color='k', linewidth=2., linestyle='--', label='Estimation at 40Mpc')
         )
-    fig.legend(
-        handles=legend_handles,
-        loc='upper center',
-        bbox_to_anchor=(0.5, lyt['legend_bbox_y']),
-        ncol=len(legend_handles),
-        fontsize=lyt['legend_fontsize'],
-        frameon=True,
-    )
+
+    # Collect unique instruments shown across all panels (preserving first-seen order)
+    legend_handles_row2 = []
+    if show_limits_in_legend:
+        seen = {}
+        for panel_name in all_panels:
+            if panel_name not in LIMITING_MAGNITUDES:
+                continue
+            y_faint = max(ylim)
+            y_bright = min(ylim)
+            for inst_name, limit in LIMITING_MAGNITUDES[panel_name].items():
+                if inst_name in seen:
+                    continue
+                if not (y_bright <= limit <= y_faint + 0.5):
+                    continue
+                sty = LIMIT_STYLES.get(inst_name, dict(color='gray', ls='--', lw=1.5))
+                seen[inst_name] = True
+                legend_handles_row2.append(
+                    Line2D([0], [0], color=sty['color'], linewidth=sty['lw'],
+                           linestyle=sty['ls'],
+                           label=f'{inst_name} limit')
+                )
+
+    # Single legend box with two rows: row 1 = model curves, row 2 = instrument limits.
+    # When row 2 has more entries than row 1, move the first limit up into row 1 so
+    # both rows have the same length (avoids a ragged grid).
+    # Matplotlib fills legends column-by-column, so interleave the two rows to guarantee
+    # row 1 occupies the top row and row 2 the bottom row.
+    if legend_handles_row2:
+        while len(legend_handles_row2) > len(legend_handles_row1):
+            legend_handles_row1.append(legend_handles_row2.pop(0))
+        ncol = max(len(legend_handles_row1), len(legend_handles_row2))
+        spacer = Line2D([], [], color='none', label='')
+        row1_padded = legend_handles_row1 + [spacer] * (ncol - len(legend_handles_row1))
+        row2_padded = legend_handles_row2 + [spacer] * (ncol - len(legend_handles_row2))
+        # interleave: column-major so [col0_row0, col0_row1, col1_row0, col1_row1, ...]
+        combined = []
+        for j in range(ncol):
+            combined.append(row1_padded[j])
+            combined.append(row2_padded[j])
+        fig.legend(
+            handles=combined,
+            loc='upper center',
+            bbox_to_anchor=(0.5, lyt['legend_bbox_y']),
+            ncol=ncol,
+            fontsize=lyt['legend_fontsize'],
+            frameon=True,
+            labelspacing=0.8,   # extra vertical gap between rows
+        )
+    else:
+        fig.legend(
+            handles=legend_handles_row1,
+            loc='upper center',
+            bbox_to_anchor=(0.5, lyt['legend_bbox_y']),
+            ncol=len(legend_handles_row1),
+            fontsize=lyt['legend_fontsize'],
+            frameon=True,
+        )
 
     # Y-axis label: fig.text for the large figure, set_ylabel for the small figure
     if lyt['ylabel_use_figtext']:
