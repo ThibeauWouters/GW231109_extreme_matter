@@ -277,7 +277,7 @@ def plot_snr_histograms_paper_dg(all_results, output_path, bins=50):
         "prod_BW_XP_s040_l5000_default":          r"$\Lambda$-uniform, $a_i \leq 0.40$",
         "prod_BW_XP_s005_leos_default":           r"EOS-informed, $a_i \leq 0.05$",
         "prod_BW_XP_s040_leos_default":           r"EOS-informed, $a_i \leq 0.40$",
-        "prod_BW_XP_s005_l5000_double_gaussian_niu": r"DG, $\Lambda$-uniform, $a_i < 0.04$",
+        "prod_BW_XP_s005_l5000_double_gaussian_niu": r"DG, $\Lambda$-uniform, $a_i \leq 0.05$",
     }
 
     runs = [r for r in PAPER_SUBSET_RUNS_DG if r in all_results]
