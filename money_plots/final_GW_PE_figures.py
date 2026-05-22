@@ -835,8 +835,8 @@ def main():
     ]
 
     filepaths_3 = [
-        os.path.join(base_path, "jester_eos_et_run_alignedspin.npz"),
-        os.path.join(base_path, "jester_eos_et_ce_run_alignedspin.npz"),
+        "../referee/jester_reruns/3G/et/jester_eos_et_run_alignedspin.npz",
+        "../referee/jester_reruns/3G/et_ce/jester_eos_et_ce_run_alignedspin.npz",
     ]
 
     labels_3 = [

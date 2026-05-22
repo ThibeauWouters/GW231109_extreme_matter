@@ -470,10 +470,20 @@ def plot_light_curves(lines_file, observations_file,
     print(f"Figure saved as {output_filename}")
     return fig
 
+def print_ejecta_tex(ejecta_file):
+    """Read posterior_samples_with_ejecta_mass.dat and print TeX strings for the paper."""
+    df = pd.read_csv(ejecta_file, sep=' ')
+    for col, label in [('log10_mdyn', r'M^{\rm ej}_{\rm dyn}'), ('log10_mwind', r'M^{\rm ej}_{\rm wind}')]:
+        med = np.median(df[col])
+        lo  = med - np.percentile(df[col], 5)
+        hi  = np.percentile(df[col], 95) - med
+        print(rf'$\log_{{10}}{label} / M_\odot = {med:.2f}^{{+{hi:.2f}}}_{{-{lo:.2f}}}$')
+
+
 # Example usage
 if __name__ == "__main__":
     import sys
-    
+
     print("Making plot...")
     
     if len(sys.argv) >= 2:
@@ -497,6 +507,16 @@ if __name__ == "__main__":
             layout=SMALL_LAYOUT,
             panel_colors=SMALL_PLOT_COLORS,
         )
+
+        # Print ejecta mass TeX strings for the paper
+        import os
+        ejecta_file = os.path.join(os.path.dirname(lines_file),
+                                   'posterior_samples_with_ejecta_mass.dat')
+        if os.path.exists(ejecta_file):
+            print("\nEjecta mass TeX strings (median + 90% CI):")
+            print_ejecta_tex(ejecta_file)
+        else:
+            print(f"[warn] ejecta file not found: {ejecta_file}")
     else:
         print("Usage: python script.py <lines_file> [output_file]")
         print("\nLines file format (columnar):")

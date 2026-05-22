@@ -139,7 +139,7 @@ def collect_parameters(run_dirs: list, hdi_prob: float = 0.90) -> dict:
             width = low_err + high_err
 
             if name == "R14":
-                ci = f"{med:.1f}^{{+{high_err:.1f}}}_{{-{low_err:.1f}}}"
+                ci = f"{med:.2f}^{{+{high_err:.2f}}}_{{-{low_err:.2f}}}"
             elif name == "p3nsat":
                 med_s, nd = format_to_sig_figs(med, 2)
                 ci = f"{med_s}^{{+{high_err:.{nd}f}}}_{{-{low_err:.{nd}f}}}"

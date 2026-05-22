@@ -210,18 +210,15 @@ def plot_snr_histograms(all_results, output_path, bins=50, run_filter=None):
 def plot_snr_histograms_paper(all_results, output_path, bins=50):
     """Single-panel paper figure: network matched-filter SNR for the four paper-subset runs.
 
-    Four distinct colors (no line-style encoding):
-      Λ-uniform:    ORANGE (low-spin), BLUE (high-spin)
-      EOS-informed: #2596be (low-spin), palevioletred (high-spin)
+    Four distinct colors matching final_GW_PE_figures.py (comparison_leos_spin.pdf):
+      Λ-uniform:    ORANGE (low-spin s005), BLUE (high-spin s040)
+      EOS-informed: palevioletred (low-spin s005), #2596be (high-spin s040)
     """
-    _EOS_BLUE = "#2596be"
-    _RED      = "palevioletred"
-
     _RUN_COLOR = {
         "prod_BW_XP_s005_l5000_default": ORANGE,
         "prod_BW_XP_s040_l5000_default": BLUE,
-        "prod_BW_XP_s005_leos_default":  _EOS_BLUE,
-        "prod_BW_XP_s040_leos_default":  _RED,
+        "prod_BW_XP_s005_leos_default":  "palevioletred",
+        "prod_BW_XP_s040_leos_default":  "#2596be",
     }
     _RUN_LABEL = {
         "prod_BW_XP_s005_l5000_default": r"$\Lambda$-uniform, $a_i \leq 0.05$",
@@ -268,14 +265,11 @@ PAPER_SUBSET_RUNS_DG = PAPER_SUBSET_RUNS + ["prod_BW_XP_s005_l5000_double_gaussi
 
 def plot_snr_histograms_paper_dg(all_results, output_path, bins=50):
     """Paper figure with the four base runs plus Double Gaussian (low-spin) overlaid in gray."""
-    _EOS_BLUE = "#2596be"
-    _RED      = "palevioletred"
-
     _RUN_COLOR = {
         "prod_BW_XP_s005_l5000_default":          ORANGE,
         "prod_BW_XP_s040_l5000_default":          BLUE,
-        "prod_BW_XP_s005_leos_default":           _EOS_BLUE,
-        "prod_BW_XP_s040_leos_default":           _RED,
+        "prod_BW_XP_s005_leos_default":           "palevioletred",
+        "prod_BW_XP_s040_leos_default":           "#2596be",
         "prod_BW_XP_s005_l5000_double_gaussian_niu": "gray",
     }
     _RUN_LABEL = {
