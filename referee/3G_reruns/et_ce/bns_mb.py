@@ -104,12 +104,6 @@ likelihood = bilby.gw.likelihood.MBGravitationalWaveTransient(
     reference_chirp_mass=priors["chirp_mass"].minimum,
     distance_marginalization=True,
     phase_marginalization=True,
-    time_reference="H1",
-    reference_frame="H1L1",
-    with_eos=False,
-    Neos=4145,
-    eos_path='/work/puecher/S231109/eos_sampling/MRL_sorted',
-    eos_weight_path='/work/puecher/S231109/eos_sampling/eos_pos_setA_sorted.txt'
 )
 
 if DRY_RUN:
