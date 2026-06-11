@@ -1,11 +1,12 @@
 #!/bin/bash -l
 #SBATCH -J et_xasinj_gw231109
-#SBATCH -o logs/et_xasinj_gw231109.log
+#SBATCH -o logs/et_xasinj_gw231109.out
 #SBATCH -e logs/et_xasinj_gw231109.err
 #SBATCH --nodes 1
 #SBATCH --ntasks-per-node 1
 #SBATCH --cpus-per-task 192
 #SBATCH -p cpu
+#SBATCH --chdir=./
 
 source /work/wouters/projects/19_GW231109_referee/.venv/bin/activate
 

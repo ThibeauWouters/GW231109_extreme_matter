@@ -1,6 +1,6 @@
 #!/bin/bash -l
 #SBATCH -J et_2l_ce_xasinj_gw231109
-#SBATCH -o logs/et_2l_ce_xasinj_gw231109.log
+#SBATCH -o logs/et_2l_ce_xasinj_gw231109.out
 #SBATCH -e logs/et_2l_ce_xasinj_gw231109.err
 #SBATCH --nodes 1
 #SBATCH --ntasks-per-node 1
