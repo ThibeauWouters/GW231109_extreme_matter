@@ -87,7 +87,7 @@ search_waveform_generator = bilby.gw.waveform_generator.WaveformGenerator(
     sampling_frequency=sampling_frequency,
     frequency_domain_source_model=bilby.gw.source.binary_neutron_star_frequency_sequence,
     waveform_arguments=dict(
-        waveform_approximant="IMRPhenomXP_NRTidalv3", reference_frequency=reference_frequency, minimum_frequency=minimum_frequency,
+        waveform_approximant="IMRPhenomXP_NRTidalv3", reference_frequency=reference_frequency,
     ),
     parameter_conversion=bilby.gw.conversion.convert_to_lal_binary_neutron_star_parameters
 )
