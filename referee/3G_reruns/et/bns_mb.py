@@ -1,4 +1,6 @@
 import sys
+sys.path.insert(0, '/work/wouters/projects/19_GW231109_referee/bilby')
+
 import numpy as np
 import bilby
 
