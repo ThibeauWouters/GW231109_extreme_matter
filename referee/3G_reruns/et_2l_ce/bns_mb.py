@@ -10,7 +10,7 @@ from bilby.gw.conversion import luminosity_distance_to_redshift
 DRY_RUN = False
 
 outdir = "outdir"
-label = "ET_gw231109_injection_alignedspin"
+label = "ET2LCE_gw231109_injection_alignedspin"
 
 bilby.core.utils.random.seed(13599876)
 
@@ -71,11 +71,14 @@ waveform_generator = bilby.gw.WaveformGenerator(
     parameter_conversion=bilby.gw.conversion.convert_to_lal_binary_neutron_star_parameters
 )
 
-# Triangular ET at the EMR site (Meuse-Rhine Euroregion, Belgium/Netherlands), 15 km — ET_CoBA_15km PSD
-ifos = bilby.gw.detector.InterferometerList(["ET_EMR_tri"])
+# ET 2L: ET_EMR (Meuse-Rhine) + ET_Sar (Sardinia), both 15 km + CE at LIGO-H site (CE_psd.txt)
+ifos = bilby.gw.detector.InterferometerList(["ET_EMR", "ET_Sar", "CE"])
 
 for ifo in ifos:
-    ifo.minimum_frequency = minimum_frequency
+    if ifo.name == "CE":
+        ifo.minimum_frequency = 10.
+    else:
+        ifo.minimum_frequency = minimum_frequency
 
 ifos.set_strain_data_from_power_spectral_densities(sampling_frequency=sampling_frequency,
                                                    duration=duration,

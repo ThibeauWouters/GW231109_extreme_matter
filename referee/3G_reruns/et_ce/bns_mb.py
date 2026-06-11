@@ -37,10 +37,10 @@ print(f"mass_1_source: {mass_1_source}")
 print(f"mass_2_source: {mass_2_source}")
 
 print(f"Overwriting with the jester EOS:")
-jester_eos_filename = '/home/wouters/projects/GW231109_extreme_matter/figures/EOS_data/jester_GW170817_maxL_EOS.npz'
+jester_eos_filename = '/work/wouters/projects/19_GW231109_referee/GW231109_extreme_matter/referee/jester_reruns/3G/jester_GW170817_maxL_EOS.npz'
 jester_data = np.load(jester_eos_filename)
-jester_masses = jester_data['masses']  # in solar masses
-jester_lambdas = jester_data['Lambdas']
+jester_masses = jester_data['masses_EOS']  # in solar masses
+jester_lambdas = jester_data['Lambdas_EOS']
 
 # Interpolate to find the Lambdas for the source frame masses
 lambda_1 = np.interp(mass_1_source, jester_masses, jester_lambdas)
@@ -49,7 +49,6 @@ lambda_2 = np.interp(mass_2_source, jester_masses, jester_lambdas)
 injection_parameters['lambda_1'] = lambda_1
 injection_parameters['lambda_2'] = lambda_2
 
-# Overwrite the Lambdas from the Jester EOS
 print(f"NEW Lambdas:")
 print(f"Lambda 1: {injection_parameters['lambda_1']}")
 print(f"Lambda 2: {injection_parameters['lambda_2']}")
@@ -59,7 +58,7 @@ print(f"Lambda 2: {injection_parameters['lambda_2']}")
 ####################
 
 CHIEFF = (injection_parameters['a_1'] * injection_parameters['mass_1'] + injection_parameters['a_2'] * injection_parameters['mass_2']) / (injection_parameters['mass_1'] + injection_parameters['mass_2'])
-duration = bilby.gw.utils.calculate_time_to_merger(frequency = minimum_frequency, mass_1 = injection_parameters['mass_1'], mass_2 = injection_parameters['mass_2'], chi=CHIEFF, safety=1.1)
+duration = bilby.gw.utils.calculate_time_to_merger(frequency=minimum_frequency, mass_1=injection_parameters['mass_1'], mass_2=injection_parameters['mass_2'], chi=CHIEFF, safety=1.1)
 duration = int(duration + 1.)
 
 waveform_generator = bilby.gw.WaveformGenerator(
@@ -72,29 +71,20 @@ waveform_generator = bilby.gw.WaveformGenerator(
     parameter_conversion=bilby.gw.conversion.convert_to_lal_binary_neutron_star_parameters
 )
 
-# Triangular ET at the EMR site (Meuse-Rhine Euroregion, Belgium/Netherlands), 15 km arms + CE
+# Triangular ET at EMR site (ET_CoBA_15km) + CE at LIGO-H site (CE_psd.txt)
 ifos = bilby.gw.detector.InterferometerList(["ET_EMR_tri", "CE"])
 
 for ifo in ifos:
-    ifo.minimum_frequency = minimum_frequency
-
-# CE has higher minimum frequency
-for ifo in ifos:
     if ifo.name == "CE":
         ifo.minimum_frequency = 10.
-
-# ET_EMR_tri sub-IFOs: indices 0-2; CE: index 3
-ifos[0].power_spectral_density = bilby.gw.detector.PowerSpectralDensity(psd_file='/work/puecher/S231109/ET15km_CoBA.txt')
-ifos[1].power_spectral_density = bilby.gw.detector.PowerSpectralDensity(psd_file='/work/puecher/S231109/ET15km_CoBA.txt')
-ifos[2].power_spectral_density = bilby.gw.detector.PowerSpectralDensity(psd_file='/work/puecher/S231109/ET15km_CoBA.txt')
-ifos[3].power_spectral_density = bilby.gw.detector.PowerSpectralDensity(asd_file='/work/puecher/S231109/CE_baseline_40km.txt')
+    else:
+        ifo.minimum_frequency = minimum_frequency
 
 ifos.set_strain_data_from_power_spectral_densities(sampling_frequency=sampling_frequency,
                                                    duration=duration,
-                                                   start_time=injection_parameters["geocent_time"] - duration + 2, )
+                                                   start_time=injection_parameters["geocent_time"] - duration + 2)
 ifos.inject_signal(waveform_generator=waveform_generator, parameters=injection_parameters)
 
-# make waveform generator for likelihood evaluations
 search_waveform_generator = bilby.gw.waveform_generator.WaveformGenerator(
     duration=duration,
     sampling_frequency=sampling_frequency,
@@ -107,7 +97,6 @@ search_waveform_generator = bilby.gw.waveform_generator.WaveformGenerator(
 
 priors = bilby.core.prior.PriorDict(filename='bns.prior')
 
-# make multi-banded likelihood
 likelihood = bilby.gw.likelihood.MBGravitationalWaveTransient(
     interferometers=ifos,
     waveform_generator=search_waveform_generator,
@@ -127,7 +116,6 @@ if DRY_RUN:
     print("DRY RUN complete — setup finished without errors. Exiting before sampling.")
     sys.exit(0)
 
-# sampling
 result = bilby.run_sampler(
     likelihood=likelihood,
     priors=priors,
