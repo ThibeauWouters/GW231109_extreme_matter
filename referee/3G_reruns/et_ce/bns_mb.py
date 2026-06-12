@@ -71,8 +71,8 @@ waveform_generator = bilby.gw.WaveformGenerator(
     parameter_conversion=bilby.gw.conversion.convert_to_lal_binary_neutron_star_parameters
 )
 
-# Triangular ET at EMR site (ET_CoBA_15km) + CE at LIGO-H site (CE_psd.txt)
-ifos = bilby.gw.detector.InterferometerList(["ET_EMR_tri", "CE"])
+# Triangular ET (Virgo site, ET_CoBA_10km) + CE at LIGO-H site (CE_psd.txt)
+ifos = bilby.gw.detector.InterferometerList(["ET", "CE"])
 
 for ifo in ifos:
     if ifo.name == "CE":

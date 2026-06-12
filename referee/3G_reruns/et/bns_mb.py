@@ -71,8 +71,8 @@ waveform_generator = bilby.gw.WaveformGenerator(
     parameter_conversion=bilby.gw.conversion.convert_to_lal_binary_neutron_star_parameters
 )
 
-# Triangular ET at the EMR site (Meuse-Rhine Euroregion, Belgium/Netherlands), 15 km — ET_CoBA_15km PSD
-ifos = bilby.gw.detector.InterferometerList(["ET_EMR_tri"])
+# Triangular ET (Virgo site), 10 km — ET_CoBA_10km PSD
+ifos = bilby.gw.detector.InterferometerList(["ET"])
 
 for ifo in ifos:
     ifo.minimum_frequency = minimum_frequency
