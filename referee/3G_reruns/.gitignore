@@ -1,1 +1,5 @@
 .distance_marginalization_lookup.npz
+et/outdir
+et_2l/outdir
+et_ce/outdir
+et_2l_ce/outdir
