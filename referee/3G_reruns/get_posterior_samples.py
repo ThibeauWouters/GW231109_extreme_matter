@@ -18,7 +18,7 @@ def get_posterior_samples(filename: str) -> None:
     
     # Search for and add network SNR
     posterior_keys = posterior.columns.tolist()
-    snr_keys = [key for key in posterior_keys if "snr_" in key]
+    snr_keys = [key for key in posterior_keys if "snr" in key]
     search_parameter_keys += snr_keys
     
     posterior_sliced = posterior[search_parameter_keys]
