@@ -14,6 +14,8 @@ def get_posterior_samples(filename: str) -> None:
     # Add source frame masses for jester
     search_parameter_keys += ["mass_1_source", "mass_2_source"]
     
+    search_parameter_keys += ["luminosity_distance"]
+    
     # Search for and add network SNR
     posterior_keys = posterior.columns.tolist()
     snr_keys = [key for key in posterior_keys if "snr_" in key]
