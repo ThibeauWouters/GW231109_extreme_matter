@@ -34,7 +34,7 @@ likelihoods:
   enabled: true
   events:
   - name: GW231109_ET
-    from_npz_file: jester_eos_et_run_alignedspin.npz
+    from_npz_file: /home/twouters2/projects/19_GW231109_referee_report/GW231109_extreme_matter/referee/3G_reruns/et/outdir/ET_gw231109_injection_alignedspin_result_posterior.npz
   N_masses_evaluation: 2000
   N_masses_batch_size: 1000
   seed: 42

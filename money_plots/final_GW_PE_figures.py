@@ -119,31 +119,39 @@ def ensure_directory_exists(filepath: str):
         os.makedirs(directory, exist_ok=True)
 
 
-def load_npz_data(filepath: str, parameters: list[str]) -> np.ndarray:
+def load_npz_data(filepath: str, parameters: list[str],
+                   allow_missing: list[str] = None) -> np.ndarray:
     """
     Load posterior samples from .npz file.
 
     Args:
         filepath (str): Path to .npz file
         parameters (list[str]): Parameters to extract
+        allow_missing (list[str]): Parameters allowed to be missing from the file;
+            they are filled with zeros and should be overwritten by the caller.
 
     Returns:
         np.ndarray: Samples array with shape (n_samples, n_parameters)
     """
     data = np.load(filepath)
+    allow_missing = allow_missing or []
 
-    # Check that all parameters are available
     available_params = list(data.keys())
-    missing_params = [p for p in parameters if p not in available_params]
+    truly_missing = [p for p in parameters if p not in available_params and p not in allow_missing]
 
-    if missing_params:
-        raise ValueError(f"Parameters {missing_params} not found in {filepath}. "
+    if truly_missing:
+        raise ValueError(f"Parameters {truly_missing} not found in {filepath}. "
                         f"Available: {available_params}")
 
-    # Extract samples for each parameter
+    # Use first available param to determine sample count for placeholder columns
+    n_samples = len(data[available_params[0]])
+
     samples = []
     for param in parameters:
-        samples.append(data[param])
+        if param in data:
+            samples.append(data[param])
+        else:
+            samples.append(np.zeros(n_samples))
 
     samples_array = np.column_stack(samples)
 
@@ -167,7 +175,8 @@ def create_comparison_cornerplot(
     reverse_legend: bool = True,
     show_credible_intervals: bool = True,
     credible_interval_formats: dict = None,
-    recompute_lambda_tilde: bool = False
+    recompute_lambda_tilde: bool = False,
+    recompute_chi_eff: bool = False
 ) -> bool:
     """
     Create a comparison corner plot with multiple datasets overlaid.
@@ -190,6 +199,8 @@ def create_comparison_cornerplot(
             (e.g., {"chirp_mass": ".5f"}). If not provided, format is auto-determined from parameter range (optional)
         recompute_lambda_tilde (bool): Whether to recompute lambda_tilde from lambda_1, lambda_2, and source-frame masses
             using bilby.gw.conversion.lambda_1_lambda_2_to_lambda_tilde (default False)
+        recompute_chi_eff (bool): Whether to recompute chi_eff from a_1, a_2, tilt_1, tilt_2, mass_ratio
+            (useful for aligned-spin bilby runs that don't store chi_eff directly, default False)
 
     Returns:
         bool: True if successful, False otherwise
@@ -218,13 +229,20 @@ def create_comparison_cornerplot(
         if len(colors) != len(filepaths):
             raise ValueError(f"Number of colors ({len(colors)}) must match number of filepaths ({len(filepaths)})")
 
+        # Determine which parameters may be absent and will be computed
+        derivable = []
+        if recompute_lambda_tilde:
+            derivable.append("lambda_tilde")
+        if recompute_chi_eff:
+            derivable.append("chi_eff")
+
         # Load all datasets
         all_samples = []
         for i, filepath in enumerate(filepaths):
             print(f"\nLoading dataset {i+1}/{len(filepaths)}: {filepath}")
             print(f"  Label: {labels[i]}, Color: {colors[i]}, Z-order: {zorders[i]}")
 
-            samples = load_npz_data(filepath, parameters)
+            samples = load_npz_data(filepath, parameters, allow_missing=derivable)
 
             # Recompute lambda_tilde if requested
             if recompute_lambda_tilde and "lambda_tilde" in parameters:
@@ -247,6 +265,21 @@ def create_comparison_cornerplot(
                 samples[:, lt_idx] = lambda_tilde_new
                 print(f"  Lambda_tilde recomputed: mean={np.mean(lambda_tilde_new):.2f}, "
                       f"median={np.median(lambda_tilde_new):.2f}")
+
+            # Recompute chi_eff if requested (for aligned-spin runs: chi_eff = (a1*cos(t1) + q*a2*cos(t2))/(1+q))
+            if recompute_chi_eff and "chi_eff" in parameters:
+                print(f"  Recomputing chi_eff from a_1, a_2, tilt_1, tilt_2, mass_ratio...")
+                ce_idx = parameters.index("chi_eff")
+                data = np.load(filepath)
+                a_1 = data['a_1']
+                a_2 = data['a_2']
+                tilt_1 = data['tilt_1']
+                tilt_2 = data['tilt_2']
+                q = data['mass_ratio']
+                chi_eff_new = (a_1 * np.cos(tilt_1) + q * a_2 * np.cos(tilt_2)) / (1 + q)
+                samples[:, ce_idx] = chi_eff_new
+                print(f"  chi_eff recomputed: mean={np.mean(chi_eff_new):.4f}, "
+                      f"median={np.median(chi_eff_new):.4f}")
 
             all_samples.append(samples)
 
@@ -816,46 +849,8 @@ def main():
         print("✗ Failed to create comparison 2 with zeros debug EOS")
 
 
-    # # Summary
-    # print("\n" + "=" * 60)
-    # print("SUMMARY")
-    # print("=" * 60)
-
-    # # ====== COMPARISON 3: ET vs ET+CE ======
-    # print("\n" + "=" * 60)
-    # print("COMPARISON 3: ET vs ET+CE")
-    # print("=" * 60)
-
-    # Parameters to include in comparison 3
-    parameters_3 = [
-        "chirp_mass",
-        "mass_ratio",
-        "chi_eff",
-        "lambda_tilde"
-    ]
-
-    filepaths_3 = [
-        "../referee/jester_reruns/3G/et/jester_eos_et_run_alignedspin.npz",
-        "../referee/jester_reruns/3G/et_ce/jester_eos_et_ce_run_alignedspin.npz",
-    ]
-
-    labels_3 = [
-        "ET",
-        "ET+CE",
-    ]
-
-    # Colors from money_plots_snellius.py
-    ET_COLOR = "#de8f05"
-    ET_CE_COLOR = "mediumslateblue"
-    colors_3 = [ET_COLOR, ET_CE_COLOR]
-
-    zorders_3 = [0, 1]  # ET+CE on top
-
-    # Use ET+CE dataset (index 1) for normalization on most parameters, but ET (index 0) for chi_eff
-    # Parameters order: chirp_mass, mass_ratio, chi_eff, lambda_tilde
-    dummy_indices_3 = [1, 1, 0, 1]  # Use ET (index 0) for chi_eff normalization
-
-    # Put the new injection parameters here
+    # ====== COMPARISON 3/4: ET-Triangle or ET-2L vs ET+CE ======
+    # Compute injection truth parameters (shared for both ET-Δ and ET-2L comparisons)
     injection_parameters = {"mass_1": 1.5879187040159342,
                             "mass_2": 1.4188967691574992,
                             "geocent_time": 1383609314.0505133,
@@ -874,8 +869,7 @@ def main():
                             'lambda_1': 271.02342967819004,
                             'lambda_2': 553.1640516248044
                             }
-    
-    # Add chirp mass, mass ratio and lambda_tilde
+
     chirp_mass = component_masses_to_chirp_mass(injection_parameters['mass_1'], injection_parameters['mass_2'])
     mass_ratio = component_masses_to_mass_ratio(injection_parameters['mass_1'], injection_parameters['mass_2'])
     lambda_tilde = lambda_1_lambda_2_to_lambda_tilde(injection_parameters['lambda_1'], injection_parameters['lambda_2'],
@@ -883,26 +877,15 @@ def main():
     injection_parameters['chirp_mass'] = chirp_mass
     injection_parameters['mass_ratio'] = mass_ratio
     injection_parameters['lambda_tilde'] = lambda_tilde
-
-    # This is also necessary for the spin calculation
     injection_parameters["reference_frequency"] = 5.0
     injection_parameters = generate_spin_parameters(injection_parameters)
-
-    # Compute source frame masses from detector frame masses
-    # First compute redshift from luminosity distance using bilby
     z = luminosity_distance_to_redshift(injection_parameters['luminosity_distance'])
-
-    # Convert detector frame masses to source frame
     injection_parameters['mass_1_source'] = injection_parameters['mass_1'] / (1 + z)
     injection_parameters['mass_2_source'] = injection_parameters['mass_2'] / (1 + z)
-    
-    # If jester was in the EOS, then get
+
     filename = "../figures/EOS_data/jester_GW170817_maxL_EOS.npz"
     eos_data = np.load(filename)
-    
     print(list(eos_data.keys()))
-    
-    # Interpolate Lambdas again
     lambda_1_interp = np.interp(injection_parameters['mass_1_source'], eos_data['masses'], eos_data['Lambdas'])
     lambda_2_interp = np.interp(injection_parameters['mass_2_source'], eos_data['masses'], eos_data['Lambdas'])
     injection_parameters['lambda_1'] = lambda_1_interp
@@ -910,7 +893,12 @@ def main():
     injection_parameters['lambda_tilde'] = lambda_1_lambda_2_to_lambda_tilde(lambda_1_interp, lambda_2_interp,
                                                   injection_parameters['mass_1'], injection_parameters['mass_2'])
 
+    # Colors
+    ET_COLOR = "#de8f05"
+    ET_CE_COLOR = "mediumslateblue"
 
+    # Parameters and ranges (shared)
+    parameters_3 = ["chirp_mass", "mass_ratio", "chi_eff", "lambda_tilde"]
     truths_3 = [injection_parameters[param] for param in parameters_3]
     ranges_3 = {
         "chirp_mass": (1.3063+0.1e-5, 1.3063+2.2e-5),
@@ -918,75 +906,57 @@ def main():
         "chi_eff": (0.027, 0.035),
         "lambda_tilde": (250, 450)
     }
-    
-    success_4 = create_comparison_cornerplot(
-        filepaths=filepaths_3,
-        parameters=parameters_3,
-        labels=labels_3,
-        colors=colors_3,
-        ranges=ranges_3,
-        zorders=zorders_3,
+    def make_et_comparison(et_npz: str, et_label: str, et_ce_npz: str, et_ce_label: str,
+                           save_name: str, dummy_normalization_indices: list):
+        """Run the ET vs ET+CE comparison corner plot for a given ET/ET+CE pair."""
+        print("\n" + "=" * 60)
+        print(f"COMPARISON: {et_label} vs {et_ce_label}")
+        print("=" * 60)
+        success = create_comparison_cornerplot(
+            filepaths=[et_npz, et_ce_npz],
+            parameters=parameters_3,
+            labels=[et_label, et_ce_label],
+            colors=[ET_COLOR, ET_CE_COLOR],
+            ranges=ranges_3,
+            zorders=[0, 1],
+            save_name=save_name,
+            overwrite=True,
+            dummy_normalization_indices=dummy_normalization_indices,
+            truths=truths_3,
+            reverse_legend=False,
+            show_credible_intervals=True,
+            credible_interval_formats={"chirp_mass": ".6f"},
+            recompute_lambda_tilde=True,
+            recompute_chi_eff=True,
+        )
+        if success:
+            print(f" Successfully created: {save_name}")
+        else:
+            print(f" Failed to create: {save_name}")
+        return success
+
+    # Parameters order: chirp_mass, mass_ratio, chi_eff, lambda_tilde
+    # Index 0 = ET (no CE), index 1 = ET+CE
+    # ET-Triangle vs ET-Triangle+CE:
+    #   chirp_mass → ET-Δ (0, broader), mass_ratio → ET-Δ+CE (1), chi_eff → ET-Δ (0), lambda_tilde → ET-Δ+CE (1)
+    make_et_comparison(
+        et_npz="../referee/3G_reruns/et/outdir/ET_gw231109_injection_alignedspin_result_posterior.npz",
+        et_label=r"ET-$\Delta$",
+        et_ce_npz="../referee/3G_reruns/et_ce/outdir/ETCE_gw231109_injection_alignedspin_result_posterior.npz",
+        et_ce_label=r"ET-$\Delta$+CE",
         save_name="./figures/GW_PE/comparison_new_ET_vs_ET_CE.pdf",
-        overwrite=True,
-        dummy_normalization_indices=dummy_indices_3,
-        truths=truths_3,
-        reverse_legend=False,
-        show_credible_intervals=True,
-        credible_interval_formats={"chirp_mass": ".5f"}
+        dummy_normalization_indices=[0, 1, 0, 1],
     )
-
-    if success_4:
-        print(" Successfully created comparison 4: comparison_new_ET_vs_ET_CE.pdf")
-    else:
-        print(" Failed to create comparison 4")
-
-    # ====== COMPARISON 4 DEBUG: ET vs ET+CE with component masses and Lambdas ======
-    print("\n" + "=" * 60)
-    print("COMPARISON 4 DEBUG: ET vs ET+CE with component masses and Lambdas")
-    print("=" * 60)
-
-    # Parameters to include in comparison 4 debug
-    parameters_4_debug = [
-        "mass_1_source",
-        "mass_2_source",
-        "lambda_1",
-        "lambda_2"
-    ]
-
-    # Use same filepaths and labels as comparison 4
-    filepaths_4_debug = filepaths_3
-    labels_4_debug = labels_3
-    colors_4_debug = colors_3
-    zorders_4_debug = zorders_3
-
-    # Use None for all ranges
-    ranges_4_debug = None
-
-    # Extract truths for the new parameters
-    truths_4_debug = [injection_parameters[param] for param in parameters_4_debug]
-
-    # Use ET+CE dataset (index 1) for normalization on all parameters
-    dummy_indices_4_debug = [1] * len(parameters_4_debug)
-
-    success_4_debug = create_comparison_cornerplot(
-        filepaths=filepaths_4_debug,
-        parameters=parameters_4_debug,
-        labels=labels_4_debug,
-        colors=colors_4_debug,
-        ranges=ranges_4_debug,
-        zorders=zorders_4_debug,
-        save_name="./figures/GW_PE/comparison_new_ET_vs_ET_CE_DEBUG.pdf",
-        overwrite=True,
-        dummy_normalization_indices=dummy_indices_4_debug,
-        truths=truths_4_debug,
-        reverse_legend=False,
-        show_credible_intervals=False
+    # ET-2L vs ET-2L+CE:
+    #   chirp_mass → ET-2L (0), mass_ratio → ET-2L+CE (1), chi_eff → ET-2L (0), lambda_tilde → ET-2L+CE (1)
+    make_et_comparison(
+        et_npz="../referee/3G_reruns/et_2l/outdir/ET2L_gw231109_injection_alignedspin_result_posterior.npz",
+        et_label="ET-2L",
+        et_ce_npz="../referee/3G_reruns/et_2l_ce/outdir/ET2LCE_gw231109_injection_alignedspin_result_posterior.npz",
+        et_ce_label="ET-2L+CE",
+        save_name="./figures/GW_PE/comparison_new_ET2L_vs_ET2L_CE.pdf",
+        dummy_normalization_indices=[0, 1, 0, 1],
     )
-
-    if success_4_debug:
-        print(" Successfully created comparison 4 debug: comparison_new_ET_vs_ET_CE_DEBUG.pdf")
-    else:
-        print(" Failed to create comparison 4 debug")
 
     # ====== COMPARISON 5: Low spin prior with default vs Gaussian chirp mass prior ======
     print("\n" + "=" * 60)

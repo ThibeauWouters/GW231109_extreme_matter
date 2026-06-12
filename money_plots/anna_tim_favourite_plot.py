@@ -285,38 +285,45 @@ def load_GW170817_posterior():
     return chirp_mass_source, lambda_tilde, luminosity_distance
 
 
-def load_GW231109_ET_posterior():
+def load_GW231109_ET_posterior(filename: str = None):
     """
     Load the GW231109 ET injection posterior samples.
 
+    Supports both old-style npz files (with lambda_tilde/luminosity_distance stored
+    directly) and new bilby rerun npz files (which store lambda_1/lambda_2/mass_1_source/
+    mass_2_source; lambda_tilde is derived and luminosity_distance may be absent).
+
+    Args:
+        filename (str): Path to the npz file. Defaults to the new bilby ET-Triangle rerun.
+
     Returns:
         tuple: (chirp_mass_source, lambda_tilde, luminosity_distance) arrays
+               luminosity_distance is None if not present in the file.
     """
-    filename = "../posteriors/data/jester_eos_et_run_alignedspin.npz"
+    if filename is None:
+        filename = "../referee/3G_reruns/et/outdir/ET_gw231109_injection_alignedspin_result_posterior.npz"
 
     if not os.path.exists(filename):
         raise FileNotFoundError(
             f"GW231109 ET posterior file not found: {filename}\n"
-            "Please ensure the file exists in ../posteriors/data/"
+            "Please ensure the file exists at the given path."
         )
 
     data = np.load(filename)
-
-    # Check what parameters are available
     print(f"Available parameters in ET file: {list(data.keys())}")
 
-    # Load source frame masses (already computed in the file)
     mass_1_source = data['mass_1_source']
     mass_2_source = data['mass_2_source']
-
-    # Lambda tilde is already computed in the file
-    lambda_tilde = data['lambda_tilde']
-
-    # Load luminosity distance
-    luminosity_distance = data['luminosity_distance']
-
-    # Compute chirp mass from source frame masses
     chirp_mass_source = component_masses_to_chirp_mass(mass_1_source, mass_2_source)
+
+    if 'lambda_tilde' in data:
+        lambda_tilde = data['lambda_tilde']
+    else:
+        lambda_tilde = lambda_1_lambda_2_to_lambda_tilde(
+            data['lambda_1'], data['lambda_2'], mass_1_source, mass_2_source
+        )
+
+    luminosity_distance = data['luminosity_distance'] if 'luminosity_distance' in data else None
 
     print(f"Loaded {len(chirp_mass_source)} GW231109 ET samples")
     return chirp_mass_source, lambda_tilde, luminosity_distance
@@ -328,32 +335,31 @@ def load_GW231109_ET_CE_posterior():
 
     Returns:
         tuple: (chirp_mass_source, lambda_tilde, luminosity_distance) arrays
+               luminosity_distance is None if not present in the file.
     """
-    filename = "../posteriors/data/jester_eos_et_ce_run_alignedspin.npz"
+    filename = "../referee/3G_reruns/et_ce/outdir/ETCE_gw231109_injection_alignedspin_result_posterior.npz"
 
     if not os.path.exists(filename):
         raise FileNotFoundError(
             f"GW231109 ET+CE posterior file not found: {filename}\n"
-            "Please ensure the file exists in ../posteriors/data/"
+            "Please ensure the file exists at the given path."
         )
 
     data = np.load(filename)
-
-    # Check what parameters are available
     print(f"Available parameters in ET+CE file: {list(data.keys())}")
 
-    # Load source frame masses (already computed in the file)
     mass_1_source = data['mass_1_source']
     mass_2_source = data['mass_2_source']
-
-    # Lambda tilde is already computed in the file
-    lambda_tilde = data['lambda_tilde']
-
-    # Load luminosity distance
-    luminosity_distance = data['luminosity_distance']
-
-    # Compute chirp mass from source frame masses
     chirp_mass_source = component_masses_to_chirp_mass(mass_1_source, mass_2_source)
+
+    if 'lambda_tilde' in data:
+        lambda_tilde = data['lambda_tilde']
+    else:
+        lambda_tilde = lambda_1_lambda_2_to_lambda_tilde(
+            data['lambda_1'], data['lambda_2'], mass_1_source, mass_2_source
+        )
+
+    luminosity_distance = data['luminosity_distance'] if 'luminosity_distance' in data else None
 
     print(f"Loaded {len(chirp_mass_source)} GW231109 ET+CE samples")
     return chirp_mass_source, lambda_tilde, luminosity_distance
@@ -487,7 +493,9 @@ def make_anna_tim_favourite_plot(
     mass_max: float = 2.0,
     Lambda_min: float = 0.0,
     Lambda_max: float = 15000.0,
-    figsize: tuple = (8, 8)
+    figsize: tuple = (8, 8),
+    et_filepath: str = None,
+    et_label: str = "GW231109 (ET)",
 ):
     """
     Create Anna and Tim's favourite plot: GW170817 posterior with GW231109 ET blob.
@@ -505,6 +513,8 @@ def make_anna_tim_favourite_plot(
         Lambda_min (float): Minimum Lambda for EOS curves
         Lambda_max (float): Maximum Lambda for EOS curves
         figsize (tuple): Figure size (width, height) in inches. Default (8, 8) for paper.
+        et_filepath (str): Path to the ET posterior npz file. Defaults to the ET-Triangle bilby rerun.
+        et_label (str): Legend label for the ET posterior (default "GW231109 (ET)").
 
     Returns:
         bool: True if successful, False otherwise
@@ -526,7 +536,7 @@ def make_anna_tim_favourite_plot(
         chirp_mass_ET, lambda_tilde_ET, dL_ET = None, None, None
         if PLOT_GW231109_ET:
             print("\nLoading GW231109 ET posterior...")
-            chirp_mass_ET, lambda_tilde_ET, dL_ET = load_GW231109_ET_posterior()
+            chirp_mass_ET, lambda_tilde_ET, dL_ET = load_GW231109_ET_posterior(et_filepath)
 
         # Conditionally load ET+CE posterior
         chirp_mass_ET_CE, lambda_tilde_ET_CE, dL_ET_CE = None, None, None
@@ -547,7 +557,7 @@ def make_anna_tim_favourite_plot(
                 debug_datasets['ET'] = {
                     'luminosity_distance': dL_ET,
                     'color': GW231109_ET_COLOR,
-                    'label': 'GW231109 (ET)'
+                    'label': et_label
                 }
             if PLOT_GW231109_ET_CE and dL_ET_CE is not None:
                 debug_datasets['ET+CE'] = {
@@ -570,7 +580,7 @@ def make_anna_tim_favourite_plot(
                 debug_datasets['ET'] = {
                     'luminosity_distance': dL_ET,
                     'color': GW231109_ET_COLOR,
-                    'label': 'GW231109 (ET)'
+                    'label': et_label
                 }
             if PLOT_GW231109_ET_CE and dL_ET_CE is not None:
                 debug_datasets['ET+CE'] = {
@@ -817,7 +827,7 @@ def make_anna_tim_favourite_plot(
 
         if PLOT_GW231109_ET and chirp_mass_ET is not None:
             legend_elements.append(
-                mpatches.Patch(facecolor=GW231109_ET_COLOR, edgecolor='k', label='GW231109 (ET)')
+                mpatches.Patch(facecolor=GW231109_ET_COLOR, edgecolor='k', label=et_label)
             )
 
         if PLOT_GW231109_ET_CE and chirp_mass_ET_CE is not None:
@@ -872,9 +882,8 @@ def make_anna_tim_favourite_plot(
 def main():
     """
     Main function to create the favourite plot.
-    Creates both paper version (square) and presentation version (wide).
+    Creates paper + presentation versions for both ET-Triangle and ET-2L.
     """
-    # Shared parameters
     common_params = {
         'overwrite': True,
         'show_injection_truth': True,
@@ -882,38 +891,58 @@ def main():
         'ylim': (0, 1300)
     }
 
-    # Create the paper version (optimized for 2-column paper)
+    configurations = [
+        {
+            'et_filepath': "../referee/3G_reruns/et/outdir/ET_gw231109_injection_alignedspin_result_posterior.npz",
+            'et_label': r"GW231109 (ET-$\Delta$)",
+            'paper_save': "./figures/GW_PE/anna_tim_favourite_plot.pdf",
+            'presentation_save': "./figures/GW_PE/anna_tim_favourite_plot_presentation.pdf",
+            'tag': "ET-Triangle",
+        },
+        {
+            'et_filepath': "../referee/3G_reruns/et_2l/outdir/ET2L_gw231109_injection_alignedspin_result_posterior.npz",
+            'et_label': "GW231109 (ET-2L)",
+            'paper_save': "./figures/GW_PE/anna_tim_favourite_plot_ET2L.pdf",
+            'presentation_save': "./figures/GW_PE/anna_tim_favourite_plot_ET2L_presentation.pdf",
+            'tag': "ET-2L",
+        },
+    ]
+
+    for cfg in configurations:
+        print("\n" + "=" * 60)
+        print(f"Creating PAPER version for {cfg['tag']} (square format)")
+        print("=" * 60)
+        success_paper = make_anna_tim_favourite_plot(
+            save_name=cfg['paper_save'],
+            figsize=(8, 8),
+            et_filepath=cfg['et_filepath'],
+            et_label=cfg['et_label'],
+            **common_params
+        )
+        if not success_paper:
+            print(f"Failed to create paper version for {cfg['tag']}.")
+            return 1
+
+        print("\n" + "=" * 60)
+        print(f"Creating PRESENTATION version for {cfg['tag']} (wide format)")
+        print("=" * 60)
+        success_presentation = make_anna_tim_favourite_plot(
+            save_name=cfg['presentation_save'],
+            figsize=(14, 6),
+            et_filepath=cfg['et_filepath'],
+            et_label=cfg['et_label'],
+            **common_params
+        )
+        if not success_presentation:
+            print(f"Failed to create presentation version for {cfg['tag']}.")
+            return 1
+
     print("\n" + "=" * 60)
-    print("Creating PAPER version (square format)")
-    print("=" * 60)
-    success_paper = make_anna_tim_favourite_plot(
-        save_name="./figures/GW_PE/anna_tim_favourite_plot.pdf",
-        figsize=(8, 8),
-        **common_params
-    )
-
-    if not success_paper:
-        print("Failed to create the paper version. Please check the error messages above.")
-        return 1
-
-    # Create the presentation version (wide format for slides)
-    print("\n" + "=" * 60)
-    print("Creating PRESENTATION version (wide format)")
-    print("=" * 60)
-    success_presentation = make_anna_tim_favourite_plot(
-        save_name="./figures/GW_PE/anna_tim_favourite_plot_presentation.pdf",
-        figsize=(14, 6),
-        **common_params
-    )
-
-    if not success_presentation:
-        print("Failed to create the presentation version. Please check the error messages above.")
-        return 1
-
-    print("\n" + "=" * 60)
-    print("✓ Successfully created both versions!")
-    print("  - Paper version: ./figures/GW_PE/anna_tim_favourite_plot.pdf")
-    print("  - Presentation version: ./figures/GW_PE/anna_tim_favourite_plot_presentation.pdf")
+    print("✓ Successfully created all versions!")
+    print("  - ET-Triangle paper:        ./figures/GW_PE/anna_tim_favourite_plot.pdf")
+    print("  - ET-Triangle presentation: ./figures/GW_PE/anna_tim_favourite_plot_presentation.pdf")
+    print("  - ET-2L paper:              ./figures/GW_PE/anna_tim_favourite_plot_ET2L.pdf")
+    print("  - ET-2L presentation:       ./figures/GW_PE/anna_tim_favourite_plot_ET2L_presentation.pdf")
     print("=" * 60)
 
     return 0
