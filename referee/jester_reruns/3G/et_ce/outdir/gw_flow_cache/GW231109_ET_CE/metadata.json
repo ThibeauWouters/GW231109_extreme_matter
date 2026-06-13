@@ -1,30 +1,30 @@
 {
-  "n_samples_total": 10392,
-  "n_samples_used": 10392,
+  "n_samples_total": 12905,
+  "n_samples_used": 12905,
   "parameter_names": [
     "mass_1_source",
     "mass_2_source",
     "lambda_1",
     "lambda_2"
   ],
-  "filepath": "jester_eos_et_ce_run_alignedspin.npz",
+  "filepath": "/home/twouters2/projects/19_GW231109_referee_report/GW231109_extreme_matter/referee/3G_reruns/et_ce/outdir/ETCE_gw231109_injection_alignedspin_result_posterior.npz",
   "flow_type": "masked_autoregressive_flow",
-  "num_epochs": 103,
+  "num_epochs": 120,
   "learning_rate": 0.001,
   "max_patience": 50,
   "val_prop": 0.2,
   "standardize": true,
   "standardization_method": "zscore",
   "data_mean": [
-    1.5459870097516537,
-    1.3499938107500076,
-    245.0356798000467,
-    409.5153405253725
+    1.5453712303430414,
+    1.3656890455769874,
+    339.29209491528576,
+    285.31296858958456
   ],
   "data_std": [
-    0.03370302691459006,
-    0.02895235347689254,
-    142.75101245734965,
-    216.54895560403236
+    0.035082528774276506,
+    0.029035266199361136,
+    104.11887386513564,
+    149.49400952750833
   ]
 }
