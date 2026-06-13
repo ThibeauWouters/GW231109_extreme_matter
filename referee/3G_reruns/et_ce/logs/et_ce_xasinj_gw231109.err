@@ -1,291 +1,294 @@
-11:05 bilby INFO    : Waveform generator instantiated: WaveformGenerator(duration=6300, sampling_frequency=4096, start_time=0, frequency_domain_source_model=bilby.gw.source.lal_binary_neutron_star, time_domain_source_model=None, parameter_conversion=bilby.gw.conversion.convert_to_lal_binary_neutron_star_parameters, waveform_arguments={'waveform_approximant': 'IMRPhenomXAS_NRTidalv3', 'reference_frequency': 5.0, 'minimum_frequency': 5.0})
-11:05 bilby INFO    : Injected signal in ET_EMR_tri1:
-11:05 bilby INFO    :   optimal SNR = 89.16
-11:05 bilby INFO    :   matched filter SNR = 91.38+2.09j
-11:05 bilby INFO    :   mass_1 = 1.5879187040159342
-11:05 bilby INFO    :   mass_2 = 1.4188967691574992
-11:05 bilby INFO    :   geocent_time = 1383609314.0505133
-11:05 bilby INFO    :   a_1 = 0.0305182034770227
-11:05 bilby INFO    :   a_2 = 0.028570123024914268
-11:05 bilby INFO    :   phi_12 = 0.0
-11:05 bilby INFO    :   phi_jl = 0.0
-11:05 bilby INFO    :   psi = 1.5591681494817768
-11:05 bilby INFO    :   theta_jn = 2.5287713998365304
-11:05 bilby INFO    :   ra = 0.1778415509774547
-11:05 bilby INFO    :   dec = -0.602827165369817
-11:05 bilby INFO    :   tilt_1 = 0.0
-11:05 bilby INFO    :   tilt_2 = 0.0
-11:05 bilby INFO    :   phase = 3.139490467696903
-11:05 bilby INFO    :   luminosity_distance = 168.3222418883087
-11:05 bilby INFO    :   lambda_1 = 218.1030772913739
-11:05 bilby INFO    :   lambda_2 = 463.5935338315368
-11:05 bilby INFO    : Injected signal in ET_EMR_tri2:
-11:05 bilby INFO    :   optimal SNR = 87.08
-11:05 bilby INFO    :   matched filter SNR = 86.55-0.38j
-11:05 bilby INFO    :   mass_1 = 1.5879187040159342
-11:05 bilby INFO    :   mass_2 = 1.4188967691574992
-11:05 bilby INFO    :   geocent_time = 1383609314.0505133
-11:05 bilby INFO    :   a_1 = 0.0305182034770227
-11:05 bilby INFO    :   a_2 = 0.028570123024914268
-11:05 bilby INFO    :   phi_12 = 0.0
-11:05 bilby INFO    :   phi_jl = 0.0
-11:05 bilby INFO    :   psi = 1.5591681494817768
-11:05 bilby INFO    :   theta_jn = 2.5287713998365304
-11:05 bilby INFO    :   ra = 0.1778415509774547
-11:05 bilby INFO    :   dec = -0.602827165369817
-11:05 bilby INFO    :   tilt_1 = 0.0
-11:05 bilby INFO    :   tilt_2 = 0.0
-11:05 bilby INFO    :   phase = 3.139490467696903
-11:05 bilby INFO    :   luminosity_distance = 168.3222418883087
-11:05 bilby INFO    :   lambda_1 = 218.1030772913739
-11:05 bilby INFO    :   lambda_2 = 463.5935338315368
-11:05 bilby INFO    : Injected signal in ET_EMR_tri3:
-11:05 bilby INFO    :   optimal SNR = 173.21
-11:05 bilby INFO    :   matched filter SNR = 173.13+1.02j
-11:05 bilby INFO    :   mass_1 = 1.5879187040159342
-11:05 bilby INFO    :   mass_2 = 1.4188967691574992
-11:05 bilby INFO    :   geocent_time = 1383609314.0505133
-11:05 bilby INFO    :   a_1 = 0.0305182034770227
-11:05 bilby INFO    :   a_2 = 0.028570123024914268
-11:05 bilby INFO    :   phi_12 = 0.0
-11:05 bilby INFO    :   phi_jl = 0.0
-11:05 bilby INFO    :   psi = 1.5591681494817768
-11:05 bilby INFO    :   theta_jn = 2.5287713998365304
-11:05 bilby INFO    :   ra = 0.1778415509774547
-11:05 bilby INFO    :   dec = -0.602827165369817
-11:05 bilby INFO    :   tilt_1 = 0.0
-11:05 bilby INFO    :   tilt_2 = 0.0
-11:05 bilby INFO    :   phase = 3.139490467696903
-11:05 bilby INFO    :   luminosity_distance = 168.3222418883087
-11:05 bilby INFO    :   lambda_1 = 218.1030772913739
-11:05 bilby INFO    :   lambda_2 = 463.5935338315368
-11:05 bilby INFO    : Injected signal in CE:
-11:05 bilby INFO    :   optimal SNR = 342.29
-11:05 bilby INFO    :   matched filter SNR = 340.36-0.35j
-11:05 bilby INFO    :   mass_1 = 1.5879187040159342
-11:05 bilby INFO    :   mass_2 = 1.4188967691574992
-11:05 bilby INFO    :   geocent_time = 1383609314.0505133
-11:05 bilby INFO    :   a_1 = 0.0305182034770227
-11:05 bilby INFO    :   a_2 = 0.028570123024914268
-11:05 bilby INFO    :   phi_12 = 0.0
-11:05 bilby INFO    :   phi_jl = 0.0
-11:05 bilby INFO    :   psi = 1.5591681494817768
-11:05 bilby INFO    :   theta_jn = 2.5287713998365304
-11:05 bilby INFO    :   ra = 0.1778415509774547
-11:05 bilby INFO    :   dec = -0.602827165369817
-11:05 bilby INFO    :   tilt_1 = 0.0
-11:05 bilby INFO    :   tilt_2 = 0.0
-11:05 bilby INFO    :   phase = 3.139490467696903
-11:05 bilby INFO    :   luminosity_distance = 168.3222418883087
-11:05 bilby INFO    :   lambda_1 = 218.1030772913739
-11:05 bilby INFO    :   lambda_2 = 463.5935338315368
-11:05 bilby INFO    : Waveform generator instantiated: WaveformGenerator(duration=6300, sampling_frequency=4096, start_time=0, frequency_domain_source_model=bilby.gw.source.binary_neutron_star_frequency_sequence, time_domain_source_model=None, parameter_conversion=bilby.gw.conversion.convert_to_lal_binary_neutron_star_parameters, waveform_arguments={'waveform_approximant': 'IMRPhenomXP_NRTidalv3', 'reference_frequency': 5.0})
-11:05 bilby INFO    : Distance marginalisation file .distance_marginalization_lookup.npz does not exist
-11:05 bilby INFO    : Building lookup table for distance marginalisation.
-  0%|          | 0/400 [00:00<?, ?it/s]  0%|          | 1/400 [00:00<00:46,  8.67it/s]  0%|          | 2/400 [00:00<00:45,  8.69it/s]  1%|          | 3/400 [00:00<00:45,  8.70it/s]  1%|          | 4/400 [00:00<00:45,  8.71it/s]  1%|▏         | 5/400 [00:00<00:45,  8.71it/s]  2%|▏         | 6/400 [00:00<00:45,  8.70it/s]  2%|▏         | 7/400 [00:00<00:45,  8.68it/s]  2%|▏         | 8/400 [00:00<00:45,  8.69it/s]  2%|▏         | 9/400 [00:01<00:45,  8.69it/s]  2%|▎         | 10/400 [00:01<00:44,  8.70it/s]  3%|▎         | 11/400 [00:01<00:44,  8.70it/s]  3%|▎         | 12/400 [00:01<00:44,  8.69it/s]  3%|▎         | 13/400 [00:01<00:44,  8.69it/s]  4%|▎         | 14/400 [00:01<00:44,  8.69it/s]  4%|▍         | 15/400 [00:01<00:44,  8.69it/s]  4%|▍         | 16/400 [00:01<00:44,  8.69it/s]  4%|▍         | 17/400 [00:01<00:44,  8.70it/s]  4%|▍         | 18/400 [00:02<00:43,  8.70it/s]  5%|▍         | 19/400 [00:02<00:43,  8.70it/s]  5%|▌         | 20/400 [00:02<00:43,  8.70it/s]  5%|▌         | 21/400 [00:02<00:43,  8.70it/s]  6%|▌         | 22/400 [00:02<00:43,  8.70it/s]  6%|▌         | 23/400 [00:02<00:43,  8.70it/s]  6%|▌         | 24/400 [00:02<00:43,  8.70it/s]  6%|▋         | 25/400 [00:02<00:43,  8.70it/s]  6%|▋         | 26/400 [00:02<00:42,  8.70it/s]  7%|▋         | 27/400 [00:03<00:42,  8.69it/s]  7%|▋         | 28/400 [00:03<00:42,  8.68it/s]  7%|▋         | 29/400 [00:03<00:42,  8.68it/s]  8%|▊         | 30/400 [00:03<00:42,  8.69it/s]  8%|▊         | 31/400 [00:03<00:42,  8.70it/s]  8%|▊         | 32/400 [00:03<00:42,  8.70it/s]  8%|▊         | 33/400 [00:03<00:42,  8.70it/s]  8%|▊         | 34/400 [00:03<00:42,  8.71it/s]  9%|▉         | 35/400 [00:04<00:41,  8.71it/s]  9%|▉         | 36/400 [00:04<00:41,  8.70it/s]  9%|▉         | 37/400 [00:04<00:41,  8.69it/s] 10%|▉         | 38/400 [00:04<00:41,  8.69it/s] 10%|▉         | 39/400 [00:04<00:41,  8.70it/s] 10%|█         | 40/400 [00:04<00:41,  8.70it/s] 10%|█         | 41/400 [00:04<00:41,  8.70it/s] 10%|█         | 42/400 [00:04<00:41,  8.69it/s] 11%|█         | 43/400 [00:04<00:41,  8.70it/s] 11%|█         | 44/400 [00:05<00:40,  8.70it/s] 11%|█▏        | 45/400 [00:05<00:40,  8.70it/s] 12%|█▏        | 46/400 [00:05<00:40,  8.70it/s] 12%|█▏        | 47/400 [00:05<00:40,  8.70it/s] 12%|█▏        | 48/400 [00:05<00:40,  8.69it/s] 12%|█▏        | 49/400 [00:05<00:40,  8.70it/s] 12%|█▎        | 50/400 [00:05<00:40,  8.70it/s] 13%|█▎        | 51/400 [00:05<00:40,  8.71it/s] 13%|█▎        | 52/400 [00:05<00:39,  8.72it/s] 13%|█▎        | 53/400 [00:06<00:40,  8.67it/s] 14%|█▎        | 54/400 [00:06<00:39,  8.69it/s] 14%|█▍        | 55/400 [00:06<00:39,  8.70it/s] 14%|█▍        | 56/400 [00:06<00:39,  8.71it/s] 14%|█▍        | 57/400 [00:06<00:39,  8.71it/s] 14%|█▍        | 58/400 [00:06<00:39,  8.72it/s] 15%|█▍        | 59/400 [00:06<00:39,  8.72it/s] 15%|█▌        | 60/400 [00:06<00:38,  8.72it/s] 15%|█▌        | 61/400 [00:07<00:38,  8.72it/s] 16%|█▌        | 62/400 [00:07<00:38,  8.72it/s] 16%|█▌        | 63/400 [00:07<00:38,  8.74it/s] 16%|█▌        | 64/400 [00:07<00:38,  8.75it/s] 16%|█▋        | 65/400 [00:07<00:38,  8.75it/s] 16%|█▋        | 66/400 [00:07<00:38,  8.76it/s] 17%|█▋        | 67/400 [00:07<00:38,  8.76it/s] 17%|█▋        | 68/400 [00:07<00:37,  8.76it/s] 17%|█▋        | 69/400 [00:07<00:37,  8.77it/s] 18%|█▊        | 70/400 [00:08<00:37,  8.77it/s] 18%|█▊        | 71/400 [00:08<00:37,  8.78it/s] 18%|█▊        | 72/400 [00:08<00:37,  8.79it/s] 18%|█▊        | 73/400 [00:08<00:37,  8.79it/s] 18%|█▊        | 74/400 [00:08<00:37,  8.79it/s] 19%|█▉        | 75/400 [00:08<00:36,  8.79it/s] 19%|█▉        | 76/400 [00:08<00:36,  8.79it/s] 19%|█▉        | 77/400 [00:08<00:36,  8.79it/s] 20%|█▉        | 78/400 [00:08<00:36,  8.76it/s] 20%|█▉        | 79/400 [00:09<00:36,  8.78it/s] 20%|██        | 80/400 [00:09<00:36,  8.79it/s] 20%|██        | 81/400 [00:09<00:36,  8.80it/s] 20%|██        | 82/400 [00:09<00:36,  8.81it/s] 21%|██        | 83/400 [00:09<00:35,  8.82it/s] 21%|██        | 84/400 [00:09<00:35,  8.82it/s] 21%|██▏       | 85/400 [00:09<00:35,  8.82it/s] 22%|██▏       | 86/400 [00:09<00:35,  8.82it/s] 22%|██▏       | 87/400 [00:09<00:35,  8.82it/s] 22%|██▏       | 88/400 [00:10<00:35,  8.82it/s] 22%|██▏       | 89/400 [00:10<00:35,  8.82it/s] 22%|██▎       | 90/400 [00:10<00:35,  8.83it/s] 23%|██▎       | 91/400 [00:10<00:34,  8.83it/s] 23%|██▎       | 92/400 [00:10<00:34,  8.84it/s] 23%|██▎       | 93/400 [00:10<00:34,  8.84it/s] 24%|██▎       | 94/400 [00:10<00:34,  8.84it/s] 24%|██▍       | 95/400 [00:10<00:34,  8.84it/s] 24%|██▍       | 96/400 [00:10<00:34,  8.85it/s] 24%|██▍       | 97/400 [00:11<00:34,  8.85it/s] 24%|██▍       | 98/400 [00:11<00:34,  8.85it/s] 25%|██▍       | 99/400 [00:11<00:33,  8.86it/s] 25%|██▌       | 100/400 [00:11<00:33,  8.87it/s] 25%|██▌       | 101/400 [00:11<00:33,  8.86it/s] 26%|██▌       | 102/400 [00:11<00:33,  8.86it/s] 26%|██▌       | 103/400 [00:11<00:33,  8.86it/s] 26%|██▌       | 104/400 [00:11<00:33,  8.87it/s] 26%|██▋       | 105/400 [00:12<00:33,  8.87it/s] 26%|██▋       | 106/400 [00:12<00:33,  8.88it/s] 27%|██▋       | 107/400 [00:12<00:32,  8.88it/s] 27%|██▋       | 108/400 [00:12<00:32,  8.89it/s] 27%|██▋       | 109/400 [00:12<00:32,  8.88it/s] 28%|██▊       | 110/400 [00:12<00:32,  8.88it/s] 28%|██▊       | 111/400 [00:12<00:32,  8.89it/s] 28%|██▊       | 112/400 [00:12<00:32,  8.90it/s] 28%|██▊       | 113/400 [00:12<00:32,  8.90it/s] 28%|██▊       | 114/400 [00:13<00:32,  8.91it/s] 29%|██▉       | 115/400 [00:13<00:31,  8.91it/s] 29%|██▉       | 116/400 [00:13<00:31,  8.90it/s] 29%|██▉       | 117/400 [00:13<00:31,  8.90it/s] 30%|██▉       | 118/400 [00:13<00:31,  8.90it/s] 30%|██▉       | 119/400 [00:13<00:31,  8.91it/s] 30%|███       | 120/400 [00:13<00:31,  8.91it/s] 30%|███       | 121/400 [00:13<00:31,  8.92it/s] 30%|███       | 122/400 [00:13<00:31,  8.92it/s] 31%|███       | 123/400 [00:14<00:31,  8.92it/s] 31%|███       | 124/400 [00:14<00:30,  8.92it/s] 31%|███▏      | 125/400 [00:14<00:30,  8.92it/s] 32%|███▏      | 126/400 [00:14<00:30,  8.93it/s] 32%|███▏      | 127/400 [00:14<00:30,  8.93it/s] 32%|███▏      | 128/400 [00:14<00:30,  8.93it/s] 32%|███▏      | 129/400 [00:14<00:30,  8.94it/s] 32%|███▎      | 130/400 [00:14<00:30,  8.93it/s] 33%|███▎      | 131/400 [00:14<00:30,  8.94it/s] 33%|███▎      | 132/400 [00:15<00:29,  8.93it/s] 33%|███▎      | 133/400 [00:15<00:29,  8.94it/s] 34%|███▎      | 134/400 [00:15<00:29,  8.94it/s] 34%|███▍      | 135/400 [00:15<00:29,  8.94it/s] 34%|███▍      | 136/400 [00:15<00:29,  8.94it/s] 34%|███▍      | 137/400 [00:15<00:29,  8.95it/s] 34%|███▍      | 138/400 [00:15<00:29,  8.95it/s] 35%|███▍      | 139/400 [00:15<00:29,  8.95it/s] 35%|███▌      | 140/400 [00:15<00:29,  8.95it/s] 35%|███▌      | 141/400 [00:16<00:28,  8.95it/s] 36%|███▌      | 142/400 [00:16<00:28,  8.95it/s] 36%|███▌      | 143/400 [00:16<00:28,  8.96it/s] 36%|███▌      | 144/400 [00:16<00:28,  8.96it/s] 36%|███▋      | 145/400 [00:16<00:28,  8.96it/s] 36%|███▋      | 146/400 [00:16<00:28,  8.96it/s] 37%|███▋      | 147/400 [00:16<00:28,  8.96it/s] 37%|███▋      | 148/400 [00:16<00:28,  8.95it/s] 37%|███▋      | 149/400 [00:16<00:28,  8.95it/s] 38%|███▊      | 150/400 [00:17<00:27,  8.95it/s] 38%|███▊      | 151/400 [00:17<00:27,  8.95it/s] 38%|███▊      | 152/400 [00:17<00:27,  8.95it/s] 38%|███▊      | 153/400 [00:17<00:27,  8.95it/s] 38%|███▊      | 154/400 [00:17<00:27,  8.95it/s] 39%|███▉      | 155/400 [00:17<00:27,  8.95it/s] 39%|███▉      | 156/400 [00:17<00:27,  8.95it/s] 39%|███▉      | 157/400 [00:17<00:27,  8.95it/s] 40%|███▉      | 158/400 [00:17<00:27,  8.94it/s] 40%|███▉      | 159/400 [00:18<00:26,  8.94it/s] 40%|████      | 160/400 [00:18<00:26,  8.94it/s] 40%|████      | 161/400 [00:18<00:26,  8.94it/s] 40%|████      | 162/400 [00:18<00:26,  8.93it/s] 41%|████      | 163/400 [00:18<00:26,  8.93it/s] 41%|████      | 164/400 [00:18<00:26,  8.91it/s] 41%|████▏     | 165/400 [00:18<00:26,  8.90it/s] 42%|████▏     | 166/400 [00:18<00:26,  8.89it/s] 42%|████▏     | 167/400 [00:18<00:26,  8.89it/s] 42%|████▏     | 168/400 [00:19<00:26,  8.89it/s] 42%|████▏     | 169/400 [00:19<00:26,  8.87it/s] 42%|████▎     | 170/400 [00:19<00:25,  8.87it/s] 43%|████▎     | 171/400 [00:19<00:25,  8.85it/s] 43%|████▎     | 172/400 [00:19<00:25,  8.84it/s] 43%|████▎     | 173/400 [00:19<00:25,  8.83it/s] 44%|████▎     | 174/400 [00:19<00:25,  8.82it/s] 44%|████▍     | 175/400 [00:19<00:25,  8.81it/s] 44%|████▍     | 176/400 [00:19<00:25,  8.80it/s] 44%|████▍     | 177/400 [00:20<00:25,  8.78it/s] 44%|████▍     | 178/400 [00:20<00:25,  8.77it/s] 45%|████▍     | 179/400 [00:20<00:25,  8.76it/s] 45%|████▌     | 180/400 [00:20<00:25,  8.73it/s] 45%|████▌     | 181/400 [00:20<00:25,  8.71it/s] 46%|████▌     | 182/400 [00:20<00:25,  8.68it/s] 46%|████▌     | 183/400 [00:20<00:25,  8.66it/s] 46%|████▌     | 184/400 [00:20<00:25,  8.63it/s] 46%|████▋     | 185/400 [00:21<00:24,  8.62it/s] 46%|████▋     | 186/400 [00:21<00:24,  8.59it/s] 47%|████▋     | 187/400 [00:21<00:24,  8.58it/s] 47%|████▋     | 188/400 [00:21<00:24,  8.55it/s] 47%|████▋     | 189/400 [00:21<00:24,  8.52it/s] 48%|████▊     | 190/400 [00:21<00:24,  8.49it/s] 48%|████▊     | 191/400 [00:21<00:24,  8.47it/s] 48%|████▊     | 192/400 [00:21<00:24,  8.44it/s] 48%|████▊     | 193/400 [00:21<00:24,  8.41it/s] 48%|████▊     | 194/400 [00:22<00:24,  8.37it/s] 49%|████▉     | 195/400 [00:22<00:24,  8.35it/s] 49%|████▉     | 196/400 [00:22<00:24,  8.32it/s] 49%|████▉     | 197/400 [00:22<00:24,  8.29it/s] 50%|████▉     | 198/400 [00:22<00:24,  8.26it/s] 50%|████▉     | 199/400 [00:22<00:24,  8.23it/s] 50%|█████     | 200/400 [00:22<00:24,  8.19it/s] 50%|█████     | 201/400 [00:22<00:24,  8.15it/s] 50%|█████     | 202/400 [00:23<00:24,  8.12it/s] 51%|█████     | 203/400 [00:23<00:24,  8.09it/s] 51%|█████     | 204/400 [00:23<00:24,  8.03it/s] 51%|█████▏    | 205/400 [00:23<00:24,  7.99it/s] 52%|█████▏    | 206/400 [00:23<00:24,  7.95it/s] 52%|█████▏    | 207/400 [00:23<00:24,  7.91it/s] 52%|█████▏    | 208/400 [00:23<00:24,  7.86it/s] 52%|█████▏    | 209/400 [00:23<00:24,  7.82it/s] 52%|█████▎    | 210/400 [00:24<00:24,  7.77it/s] 53%|█████▎    | 211/400 [00:24<00:24,  7.72it/s] 53%|█████▎    | 212/400 [00:24<00:24,  7.67it/s] 53%|█████▎    | 213/400 [00:24<00:24,  7.62it/s] 54%|█████▎    | 214/400 [00:24<00:24,  7.57it/s] 54%|█████▍    | 215/400 [00:24<00:24,  7.52it/s] 54%|█████▍    | 216/400 [00:24<00:24,  7.47it/s] 54%|█████▍    | 217/400 [00:25<00:24,  7.42it/s] 55%|█████▍    | 218/400 [00:25<00:24,  7.35it/s] 55%|█████▍    | 219/400 [00:25<00:24,  7.30it/s] 55%|█████▌    | 220/400 [00:25<00:24,  7.24it/s] 55%|█████▌    | 221/400 [00:25<00:24,  7.17it/s] 56%|█████▌    | 222/400 [00:25<00:25,  7.12it/s] 56%|█████▌    | 223/400 [00:25<00:25,  7.06it/s] 56%|█████▌    | 224/400 [00:26<00:25,  6.99it/s] 56%|█████▋    | 225/400 [00:26<00:25,  6.97it/s] 56%|█████▋    | 226/400 [00:26<00:24,  6.97it/s] 57%|█████▋    | 227/400 [00:26<00:24,  6.97it/s] 57%|█████▋    | 228/400 [00:26<00:24,  6.96it/s] 57%|█████▋    | 229/400 [00:26<00:24,  6.95it/s] 57%|█████▊    | 230/400 [00:26<00:24,  6.94it/s] 58%|█████▊    | 231/400 [00:27<00:24,  6.93it/s] 58%|█████▊    | 232/400 [00:27<00:24,  6.92it/s] 58%|█████▊    | 233/400 [00:27<00:24,  6.91it/s] 58%|█████▊    | 234/400 [00:27<00:24,  6.90it/s] 59%|█████▉    | 235/400 [00:27<00:23,  6.88it/s] 59%|█████▉    | 236/400 [00:27<00:23,  6.88it/s] 59%|█████▉    | 237/400 [00:27<00:23,  6.86it/s] 60%|█████▉    | 238/400 [00:28<00:23,  6.85it/s] 60%|█████▉    | 239/400 [00:28<00:23,  6.84it/s] 60%|██████    | 240/400 [00:28<00:23,  6.83it/s] 60%|██████    | 241/400 [00:28<00:23,  6.80it/s] 60%|██████    | 242/400 [00:28<00:23,  6.80it/s] 61%|██████    | 243/400 [00:28<00:23,  6.80it/s] 61%|██████    | 244/400 [00:28<00:22,  6.79it/s] 61%|██████▏   | 245/400 [00:29<00:22,  6.78it/s] 62%|██████▏   | 246/400 [00:29<00:22,  6.77it/s] 62%|██████▏   | 247/400 [00:29<00:22,  6.76it/s] 62%|██████▏   | 248/400 [00:29<00:22,  6.75it/s] 62%|██████▏   | 249/400 [00:29<00:22,  6.75it/s] 62%|██████▎   | 250/400 [00:29<00:22,  6.74it/s] 63%|██████▎   | 251/400 [00:29<00:22,  6.74it/s] 63%|██████▎   | 252/400 [00:30<00:22,  6.72it/s] 63%|██████▎   | 253/400 [00:30<00:21,  6.72it/s] 64%|██████▎   | 254/400 [00:30<00:21,  6.72it/s] 64%|██████▍   | 255/400 [00:30<00:21,  6.72it/s] 64%|██████▍   | 256/400 [00:30<00:21,  6.71it/s] 64%|██████▍   | 257/400 [00:30<00:21,  6.71it/s] 64%|██████▍   | 258/400 [00:31<00:21,  6.71it/s] 65%|██████▍   | 259/400 [00:31<00:21,  6.70it/s] 65%|██████▌   | 260/400 [00:31<00:20,  6.70it/s] 65%|██████▌   | 261/400 [00:31<00:20,  6.70it/s] 66%|██████▌   | 262/400 [00:31<00:20,  6.70it/s] 66%|██████▌   | 263/400 [00:31<00:20,  6.69it/s] 66%|██████▌   | 264/400 [00:31<00:20,  6.69it/s] 66%|██████▋   | 265/400 [00:32<00:20,  6.66it/s] 66%|██████▋   | 266/400 [00:32<00:20,  6.67it/s] 67%|██████▋   | 267/400 [00:32<00:19,  6.67it/s] 67%|██████▋   | 268/400 [00:32<00:19,  6.67it/s] 67%|██████▋   | 269/400 [00:32<00:19,  6.66it/s] 68%|██████▊   | 270/400 [00:32<00:19,  6.66it/s] 68%|██████▊   | 271/400 [00:32<00:19,  6.66it/s] 68%|██████▊   | 272/400 [00:33<00:19,  6.63it/s] 68%|██████▊   | 273/400 [00:33<00:19,  6.64it/s] 68%|██████▊   | 274/400 [00:33<00:18,  6.64it/s] 69%|██████▉   | 275/400 [00:33<00:18,  6.63it/s] 69%|██████▉   | 276/400 [00:33<00:18,  6.62it/s] 69%|██████▉   | 277/400 [00:33<00:18,  6.61it/s] 70%|██████▉   | 278/400 [00:34<00:18,  6.59it/s] 70%|██████▉   | 279/400 [00:34<00:18,  6.60it/s] 70%|███████   | 280/400 [00:34<00:18,  6.62it/s] 70%|███████   | 281/400 [00:34<00:17,  6.62it/s] 70%|███████   | 282/400 [00:34<00:17,  6.62it/s] 71%|███████   | 283/400 [00:34<00:17,  6.62it/s] 71%|███████   | 284/400 [00:34<00:17,  6.62it/s] 71%|███████▏  | 285/400 [00:35<00:17,  6.62it/s] 72%|███████▏  | 286/400 [00:35<00:17,  6.60it/s] 72%|███████▏  | 287/400 [00:35<00:17,  6.60it/s] 72%|███████▏  | 288/400 [00:35<00:16,  6.60it/s] 72%|███████▏  | 289/400 [00:35<00:16,  6.60it/s] 72%|███████▎  | 290/400 [00:35<00:16,  6.60it/s] 73%|███████▎  | 291/400 [00:35<00:16,  6.58it/s] 73%|███████▎  | 292/400 [00:36<00:16,  6.59it/s] 73%|███████▎  | 293/400 [00:36<00:16,  6.59it/s] 74%|███████▎  | 294/400 [00:36<00:16,  6.60it/s] 74%|███████▍  | 295/400 [00:36<00:15,  6.60it/s] 74%|███████▍  | 296/400 [00:36<00:15,  6.60it/s] 74%|███████▍  | 297/400 [00:36<00:15,  6.60it/s] 74%|███████▍  | 298/400 [00:37<00:15,  6.59it/s] 75%|███████▍  | 299/400 [00:37<00:15,  6.59it/s] 75%|███████▌  | 300/400 [00:37<00:15,  6.56it/s] 75%|███████▌  | 301/400 [00:37<00:15,  6.55it/s] 76%|███████▌  | 302/400 [00:37<00:14,  6.56it/s] 76%|███████▌  | 303/400 [00:37<00:14,  6.57it/s] 76%|███████▌  | 304/400 [00:37<00:14,  6.57it/s] 76%|███████▋  | 305/400 [00:38<00:14,  6.57it/s] 76%|███████▋  | 306/400 [00:38<00:14,  6.57it/s] 77%|███████▋  | 307/400 [00:38<00:14,  6.57it/s] 77%|███████▋  | 308/400 [00:38<00:14,  6.57it/s] 77%|███████▋  | 309/400 [00:38<00:13,  6.57it/s] 78%|███████▊  | 310/400 [00:38<00:13,  6.56it/s] 78%|███████▊  | 311/400 [00:39<00:13,  6.56it/s] 78%|███████▊  | 312/400 [00:39<00:13,  6.56it/s] 78%|███████▊  | 313/400 [00:39<00:13,  6.56it/s] 78%|███████▊  | 314/400 [00:39<00:13,  6.56it/s] 79%|███████▉  | 315/400 [00:39<00:12,  6.56it/s] 79%|███████▉  | 316/400 [00:39<00:12,  6.56it/s] 79%|███████▉  | 317/400 [00:39<00:12,  6.56it/s] 80%|███████▉  | 318/400 [00:40<00:12,  6.55it/s] 80%|███████▉  | 319/400 [00:40<00:12,  6.55it/s] 80%|████████  | 320/400 [00:40<00:12,  6.55it/s] 80%|████████  | 321/400 [00:40<00:12,  6.54it/s] 80%|████████  | 322/400 [00:40<00:11,  6.53it/s] 81%|████████  | 323/400 [00:40<00:11,  6.51it/s] 81%|████████  | 324/400 [00:41<00:11,  6.48it/s] 81%|████████▏ | 325/400 [00:41<00:11,  6.48it/s] 82%|████████▏ | 326/400 [00:41<00:11,  6.46it/s] 82%|████████▏ | 327/400 [00:41<00:11,  6.48it/s] 82%|████████▏ | 328/400 [00:41<00:11,  6.46it/s] 82%|████████▏ | 329/400 [00:41<00:10,  6.48it/s] 82%|████████▎ | 330/400 [00:41<00:10,  6.46it/s] 83%|████████▎ | 331/400 [00:42<00:10,  6.47it/s] 83%|████████▎ | 332/400 [00:42<00:10,  6.46it/s] 83%|████████▎ | 333/400 [00:42<00:10,  6.44it/s] 84%|████████▎ | 334/400 [00:42<00:10,  6.43it/s] 84%|████████▍ | 335/400 [00:42<00:10,  6.43it/s] 84%|████████▍ | 336/400 [00:42<00:09,  6.42it/s] 84%|████████▍ | 337/400 [00:43<00:09,  6.41it/s] 84%|████████▍ | 338/400 [00:43<00:09,  6.41it/s] 85%|████████▍ | 339/400 [00:43<00:09,  6.41it/s] 85%|████████▌ | 340/400 [00:43<00:09,  6.40it/s] 85%|████████▌ | 341/400 [00:43<00:09,  6.40it/s] 86%|████████▌ | 342/400 [00:43<00:09,  6.39it/s] 86%|████████▌ | 343/400 [00:43<00:08,  6.42it/s] 86%|████████▌ | 344/400 [00:44<00:08,  6.41it/s] 86%|████████▋ | 345/400 [00:44<00:08,  6.40it/s] 86%|████████▋ | 346/400 [00:44<00:08,  6.39it/s] 87%|████████▋ | 347/400 [00:44<00:08,  6.42it/s] 87%|████████▋ | 348/400 [00:44<00:08,  6.40it/s] 87%|████████▋ | 349/400 [00:44<00:07,  6.38it/s] 88%|████████▊ | 350/400 [00:45<00:07,  6.40it/s] 88%|████████▊ | 351/400 [00:45<00:07,  6.42it/s] 88%|████████▊ | 352/400 [00:45<00:07,  6.40it/s] 88%|████████▊ | 353/400 [00:45<00:07,  6.43it/s] 88%|████████▊ | 354/400 [00:45<00:07,  6.41it/s] 89%|████████▉ | 355/400 [00:45<00:07,  6.39it/s] 89%|████████▉ | 356/400 [00:46<00:06,  6.41it/s] 89%|████████▉ | 357/400 [00:46<00:06,  6.39it/s] 90%|████████▉ | 358/400 [00:46<00:06,  6.38it/s] 90%|████████▉ | 359/400 [00:46<00:06,  6.40it/s] 90%|█████████ | 360/400 [00:46<00:06,  6.42it/s] 90%|█████████ | 361/400 [00:46<00:06,  6.40it/s] 90%|█████████ | 362/400 [00:46<00:05,  6.41it/s] 91%|█████████ | 363/400 [00:47<00:05,  6.42it/s] 91%|█████████ | 364/400 [00:47<00:05,  6.40it/s] 91%|█████████▏| 365/400 [00:47<00:05,  6.37it/s] 92%|█████████▏| 366/400 [00:47<00:05,  6.39it/s] 92%|█████████▏| 367/400 [00:47<00:05,  6.41it/s] 92%|█████████▏| 368/400 [00:47<00:05,  6.39it/s] 92%|█████████▏| 369/400 [00:48<00:04,  6.40it/s] 92%|█████████▎| 370/400 [00:48<00:04,  6.37it/s] 93%|█████████▎| 371/400 [00:48<00:04,  6.36it/s] 93%|█████████▎| 372/400 [00:48<00:04,  6.34it/s] 93%|█████████▎| 373/400 [00:48<00:04,  6.33it/s] 94%|█████████▎| 374/400 [00:48<00:04,  6.33it/s] 94%|█████████▍| 375/400 [00:48<00:03,  6.32it/s] 94%|█████████▍| 376/400 [00:49<00:03,  6.32it/s] 94%|█████████▍| 377/400 [00:49<00:03,  6.35it/s] 94%|█████████▍| 378/400 [00:49<00:03,  6.36it/s] 95%|█████████▍| 379/400 [00:49<00:03,  6.38it/s] 95%|█████████▌| 380/400 [00:49<00:03,  6.38it/s] 95%|█████████▌| 381/400 [00:49<00:02,  6.36it/s] 96%|█████████▌| 382/400 [00:50<00:02,  6.37it/s] 96%|█████████▌| 383/400 [00:50<00:02,  6.35it/s] 96%|█████████▌| 384/400 [00:50<00:02,  6.34it/s] 96%|█████████▋| 385/400 [00:50<00:02,  6.32it/s] 96%|█████████▋| 386/400 [00:50<00:02,  6.32it/s] 97%|█████████▋| 387/400 [00:50<00:02,  6.31it/s] 97%|█████████▋| 388/400 [00:51<00:01,  6.34it/s] 97%|█████████▋| 389/400 [00:51<00:01,  6.36it/s] 98%|█████████▊| 390/400 [00:51<00:01,  6.37it/s] 98%|█████████▊| 391/400 [00:51<00:01,  6.38it/s] 98%|█████████▊| 392/400 [00:51<00:01,  6.38it/s] 98%|█████████▊| 393/400 [00:51<00:01,  6.34it/s] 98%|█████████▊| 394/400 [00:51<00:00,  6.32it/s] 99%|█████████▉| 395/400 [00:52<00:00,  6.30it/s] 99%|█████████▉| 396/400 [00:52<00:00,  6.29it/s] 99%|█████████▉| 397/400 [00:52<00:00,  6.28it/s]100%|█████████▉| 398/400 [00:52<00:00,  6.31it/s]100%|█████████▉| 399/400 [00:52<00:00,  6.32it/s]100%|██████████| 400/400 [00:52<00:00,  6.34it/s]100%|██████████| 400/400 [00:52<00:00,  7.56it/s]
-11:06 bilby INFO    : The total frequency range is divided into 12 bands with frequency intervals of 1/6300.0 Hz, 1/3150.0 Hz, 1/1575.0 Hz, 1/787.5 Hz, 1/393.75 Hz, 1/196.875 Hz, 1/98.4375 Hz, 1/49.21875 Hz, 1/24.609375 Hz, 1/12.3046875 Hz, 1/6.15234375 Hz, 1/3.076171875 Hz.
-11:06 bilby INFO    : The number of frequency points where waveforms are evaluated is 33258.
-11:06 bilby INFO    : The speed-up gain of multi-banding is 387.00162366949303.
-11:06 bilby INFO    : Pre-computing linear coefficients for ET_EMR_tri1
-11:06 bilby INFO    : Pre-computing linear coefficients for ET_EMR_tri2
-11:06 bilby INFO    : Pre-computing linear coefficients for ET_EMR_tri3
-11:06 bilby INFO    : Pre-computing linear coefficients for CE
-11:06 bilby INFO    : Linear-interpolation algorithm is used for (h, h).
-11:06 bilby INFO    : Pre-computing quadratic coefficients for the 0-th band
-11:06 bilby INFO    : Pre-computing quadratic coefficients for the 1-th band
-11:06 bilby INFO    : Pre-computing quadratic coefficients for the 2-th band
-11:06 bilby INFO    : Pre-computing quadratic coefficients for the 3-th band
-11:06 bilby INFO    : Pre-computing quadratic coefficients for the 4-th band
-11:06 bilby INFO    : Pre-computing quadratic coefficients for the 5-th band
-11:06 bilby INFO    : Pre-computing quadratic coefficients for the 6-th band
-11:06 bilby INFO    : Pre-computing quadratic coefficients for the 7-th band
-11:06 bilby INFO    : Pre-computing quadratic coefficients for the 8-th band
-11:06 bilby INFO    : Pre-computing quadratic coefficients for the 9-th band
-11:06 bilby INFO    : Pre-computing quadratic coefficients for the 10-th band
-11:06 bilby INFO    : Pre-computing quadratic coefficients for the 11-th band
-11:06 bilby INFO    : Running for label 'ETCE_gw231109_injection_alignedspin', output will be saved to 'outdir'
-11:06 bilby INFO    : Using lal version 7.7.1
-11:06 bilby INFO    : Using lal git version Branch: None;Tag: lalsuite-v7.26.14;Id: 69ed1ab069f0d3b9ea9e1bcf9113585077688d47;;Builder: Unknown User <>;Repository status: UNCLEAN: Modified working tree
-11:06 bilby INFO    : Using lalsimulation version 6.2.1
-11:06 bilby INFO    : Using lalsimulation git version Branch: None;Tag: lalsuite-v7.26.14;Id: 69ed1ab069f0d3b9ea9e1bcf9113585077688d47;;Builder: Unknown User <>;Repository status: UNCLEAN: Modified working tree
-11:06 bilby INFO    : Analysis priors:
-11:06 bilby INFO    : chirp_mass=bilby.gw.prior.UniformInComponentsChirpMass(minimum=1.29, maximum=1.32, name='chirp_mass', latex_label='$\\mathcal{M}$', unit='$M_{\\odot}$', boundary=None)
-11:06 bilby INFO    : mass_ratio=bilby.gw.prior.UniformInComponentsMassRatio(minimum=0.125, maximum=1, name='mass_ratio', latex_label='$q$', unit=None, boundary=None, equal_mass=False)
-11:06 bilby INFO    : a_1=Uniform(minimum=0, maximum=0.05, name='a_1', latex_label='$a_1$', unit=None, boundary=None)
-11:06 bilby INFO    : a_2=Uniform(minimum=0, maximum=0.05, name='a_2', latex_label='$a_2$', unit=None, boundary=None)
-11:06 bilby INFO    : tilt_1=Sine(minimum=0, maximum=3.141592653589793, name='tilt_1', latex_label='$\\theta_1$', unit=None, boundary=None)
-11:06 bilby INFO    : tilt_2=Sine(minimum=0, maximum=3.141592653589793, name='tilt_2', latex_label='$\\theta_2$', unit=None, boundary=None)
-11:06 bilby INFO    : phi_12=Uniform(minimum=0, maximum=6.283185307179586, name='phi_12', latex_label='$\\Delta\\phi$', unit=None, boundary='periodic')
-11:06 bilby INFO    : phi_jl=Uniform(minimum=0, maximum=6.283185307179586, name='phi_jl', latex_label='$\\phi_{JL}$', unit=None, boundary='periodic')
-11:06 bilby INFO    : lambda_1=Uniform(minimum=0, maximum=5000.0, name='lambda_1', latex_label='$\\Lambda_1$', unit=None, boundary=None)
-11:06 bilby INFO    : lambda_2=Uniform(minimum=0, maximum=5000.0, name='lambda_2', latex_label='$\\Lambda_2$', unit=None, boundary=None)
-11:06 bilby INFO    : geocent_time=Uniform(minimum=1383609313.956813, maximum=1383609314.156813, name='geocent_time', latex_label='$t_c$', unit='s', boundary=None)
-11:06 bilby INFO    : dec=Cosine(minimum=-1.5707963267948966, maximum=1.5707963267948966, name='dec', latex_label='$\\mathrm{DEC}$', unit=None, boundary=None)
-11:06 bilby INFO    : ra=Uniform(minimum=0, maximum=6.283185307179586, name='ra', latex_label='$\\mathrm{RA}$', unit=None, boundary='periodic')
-11:06 bilby INFO    : theta_jn=Sine(minimum=0, maximum=3.141592653589793, name='theta_jn', latex_label='$\\theta_{JN}$', unit=None, boundary=None)
-11:06 bilby INFO    : psi=Uniform(minimum=0, maximum=3.141592653589793, name='psi', latex_label='$\\psi$', unit=None, boundary='periodic')
-11:06 bilby INFO    : luminosity_distance=757.3617876306158
-11:06 bilby INFO    : phase=0.0
-11:06 bilby INFO    : Analysis likelihood class: <class 'bilby.gw.likelihood.multiband.MBGravitationalWaveTransient'>
-11:06 bilby INFO    : Analysis likelihood noise evidence: -51532462.75133768
-11:06 bilby INFO    : Single likelihood evaluation took 2.749e-02 s
-11:06 bilby INFO    : Using sampler Dynesty with kwargs {'nlive': 2000, 'bound': 'live', 'sample': 'acceptance-walk', 'periodic': None, 'reflective': None, 'update_interval': 600, 'first_update': None, 'rstate': None, 'queue_size': 192, 'pool': None, 'use_pool': None, 'live_points': None, 'logl_args': None, 'logl_kwargs': None, 'ptform_args': None, 'ptform_kwargs': None, 'enlarge': None, 'bootstrap': None, 'walks': 100, 'facc': 0.2, 'slices': None, 'ncdim': None, 'blob': False, 'save_evaluation_history': False, 'history_filename': None, 'maxiter': None, 'maxcall': None, 'dlogz': 0.1, 'logl_max': inf, 'add_live': True, 'print_progress': True, 'print_func': <bound method Dynesty._print_func of <bilby.core.sampler.dynesty.Dynesty object at 0x7f7c5169a660>>, 'save_bounds': False, 'checkpoint_file': None, 'checkpoint_every': 60, 'resume': False, 'seed': None}
-11:06 bilby INFO    : Global meta data was removed from the result object for compatibility. Use the `BILBY_INCLUDE_GLOBAL_METADATA` environment variable to include it. This behaviour will be removed in a future release. For more details see: https://bilby-dev.github.io/bilby/faq.html#global-meta-data
-11:06 bilby INFO    : Checkpoint every check_point_delta_t = 1800s
-11:06 bilby INFO    : Using dynesty version 3.0.0
-11:06 bilby INFO    : Setting up multiproccesing pool with 192 processes
-11:06 bilby INFO    : Resume file outdir/ETCE_gw231109_injection_alignedspin_resume.pickle does not exist.
-11:06 bilby INFO    : Generating initial points from the prior
-11:07 bilby INFO    : Using the bilby-implemented ensemble rwalk sampling method with an average of 60 accepted steps up to chain length 5000.
-11:38 bilby INFO    : Written checkpoint file outdir/ETCE_gw231109_injection_alignedspin_resume.pickle
+10:28 bilby INFO    : Waveform generator instantiated: WaveformGenerator(duration=6300, sampling_frequency=4096, start_time=0, frequency_domain_source_model=bilby.gw.source.lal_binary_neutron_star, time_domain_source_model=None, parameter_conversion=bilby.gw.conversion.convert_to_lal_binary_neutron_star_parameters, waveform_arguments={'waveform_approximant': 'IMRPhenomXAS_NRTidalv3', 'reference_frequency': 5.0, 'minimum_frequency': 5.0})
+10:28 bilby INFO    : Injected signal in ET1:
+10:28 bilby INFO    :   optimal SNR = 106.94
+10:28 bilby INFO    :   matched filter SNR = 109.17-0.03j
+10:28 bilby INFO    :   mass_1 = 1.5879187040159342
+10:28 bilby INFO    :   mass_2 = 1.4188967691574992
+10:28 bilby INFO    :   geocent_time = 1383609314.0505133
+10:28 bilby INFO    :   a_1 = 0.0305182034770227
+10:28 bilby INFO    :   a_2 = 0.028570123024914268
+10:28 bilby INFO    :   phi_12 = 0.0
+10:28 bilby INFO    :   phi_jl = 0.0
+10:28 bilby INFO    :   psi = 1.5591681494817768
+10:28 bilby INFO    :   theta_jn = 2.5287713998365304
+10:28 bilby INFO    :   ra = 0.1778415509774547
+10:28 bilby INFO    :   dec = -0.602827165369817
+10:28 bilby INFO    :   tilt_1 = 0.0
+10:28 bilby INFO    :   tilt_2 = 0.0
+10:28 bilby INFO    :   phase = 3.139490467696903
+10:28 bilby INFO    :   luminosity_distance = 168.3222418883087
+10:28 bilby INFO    :   lambda_1 = 218.1030772913739
+10:28 bilby INFO    :   lambda_2 = 463.5935338315368
+10:28 bilby INFO    : Injected signal in ET2:
+10:28 bilby INFO    :   optimal SNR = 64.18
+10:28 bilby INFO    :   matched filter SNR = 64.98-0.39j
+10:28 bilby INFO    :   mass_1 = 1.5879187040159342
+10:28 bilby INFO    :   mass_2 = 1.4188967691574992
+10:28 bilby INFO    :   geocent_time = 1383609314.0505133
+10:28 bilby INFO    :   a_1 = 0.0305182034770227
+10:28 bilby INFO    :   a_2 = 0.028570123024914268
+10:28 bilby INFO    :   phi_12 = 0.0
+10:28 bilby INFO    :   phi_jl = 0.0
+10:28 bilby INFO    :   psi = 1.5591681494817768
+10:28 bilby INFO    :   theta_jn = 2.5287713998365304
+10:28 bilby INFO    :   ra = 0.1778415509774547
+10:28 bilby INFO    :   dec = -0.602827165369817
+10:28 bilby INFO    :   tilt_1 = 0.0
+10:28 bilby INFO    :   tilt_2 = 0.0
+10:28 bilby INFO    :   phase = 3.139490467696903
+10:28 bilby INFO    :   luminosity_distance = 168.3222418883087
+10:28 bilby INFO    :   lambda_1 = 218.1030772913739
+10:28 bilby INFO    :   lambda_2 = 463.5935338315368
+10:28 bilby INFO    : Injected signal in ET3:
+10:28 bilby INFO    :   optimal SNR = 43.08
+10:28 bilby INFO    :   matched filter SNR = 43.96-0.29j
+10:28 bilby INFO    :   mass_1 = 1.5879187040159342
+10:28 bilby INFO    :   mass_2 = 1.4188967691574992
+10:28 bilby INFO    :   geocent_time = 1383609314.0505133
+10:28 bilby INFO    :   a_1 = 0.0305182034770227
+10:28 bilby INFO    :   a_2 = 0.028570123024914268
+10:28 bilby INFO    :   phi_12 = 0.0
+10:28 bilby INFO    :   phi_jl = 0.0
+10:28 bilby INFO    :   psi = 1.5591681494817768
+10:28 bilby INFO    :   theta_jn = 2.5287713998365304
+10:28 bilby INFO    :   ra = 0.1778415509774547
+10:28 bilby INFO    :   dec = -0.602827165369817
+10:28 bilby INFO    :   tilt_1 = 0.0
+10:28 bilby INFO    :   tilt_2 = 0.0
+10:28 bilby INFO    :   phase = 3.139490467696903
+10:28 bilby INFO    :   luminosity_distance = 168.3222418883087
+10:28 bilby INFO    :   lambda_1 = 218.1030772913739
+10:28 bilby INFO    :   lambda_2 = 463.5935338315368
+10:28 bilby INFO    : Injected signal in CE:
+10:28 bilby INFO    :   optimal SNR = 342.29
+10:28 bilby INFO    :   matched filter SNR = 340.36-0.35j
+10:28 bilby INFO    :   mass_1 = 1.5879187040159342
+10:28 bilby INFO    :   mass_2 = 1.4188967691574992
+10:28 bilby INFO    :   geocent_time = 1383609314.0505133
+10:28 bilby INFO    :   a_1 = 0.0305182034770227
+10:28 bilby INFO    :   a_2 = 0.028570123024914268
+10:28 bilby INFO    :   phi_12 = 0.0
+10:28 bilby INFO    :   phi_jl = 0.0
+10:28 bilby INFO    :   psi = 1.5591681494817768
+10:28 bilby INFO    :   theta_jn = 2.5287713998365304
+10:28 bilby INFO    :   ra = 0.1778415509774547
+10:28 bilby INFO    :   dec = -0.602827165369817
+10:28 bilby INFO    :   tilt_1 = 0.0
+10:28 bilby INFO    :   tilt_2 = 0.0
+10:28 bilby INFO    :   phase = 3.139490467696903
+10:28 bilby INFO    :   luminosity_distance = 168.3222418883087
+10:28 bilby INFO    :   lambda_1 = 218.1030772913739
+10:28 bilby INFO    :   lambda_2 = 463.5935338315368
+10:28 bilby INFO    : Waveform generator instantiated: WaveformGenerator(duration=6300, sampling_frequency=4096, start_time=0, frequency_domain_source_model=bilby.gw.source.binary_neutron_star_frequency_sequence, time_domain_source_model=None, parameter_conversion=bilby.gw.conversion.convert_to_lal_binary_neutron_star_parameters, waveform_arguments={'waveform_approximant': 'IMRPhenomXP_NRTidalv3', 'reference_frequency': 5.0})
+10:28 bilby INFO    : Loaded distance marginalisation lookup table from .distance_marginalization_lookup.npz.
+10:28 bilby INFO    : The total frequency range is divided into 12 bands with frequency intervals of 1/6300.0 Hz, 1/3150.0 Hz, 1/1575.0 Hz, 1/787.5 Hz, 1/393.75 Hz, 1/196.875 Hz, 1/98.4375 Hz, 1/49.21875 Hz, 1/24.609375 Hz, 1/12.3046875 Hz, 1/6.15234375 Hz, 1/3.076171875 Hz.
+10:28 bilby INFO    : The number of frequency points where waveforms are evaluated is 33258.
+10:28 bilby INFO    : The speed-up gain of multi-banding is 387.00162366949303.
+10:28 bilby INFO    : Pre-computing linear coefficients for ET1
+10:28 bilby INFO    : Pre-computing linear coefficients for ET2
+10:28 bilby INFO    : Pre-computing linear coefficients for ET3
+10:28 bilby INFO    : Pre-computing linear coefficients for CE
+10:28 bilby INFO    : Linear-interpolation algorithm is used for (h, h).
+10:28 bilby INFO    : Pre-computing quadratic coefficients for the 0-th band
+10:28 bilby INFO    : Pre-computing quadratic coefficients for the 1-th band
+10:28 bilby INFO    : Pre-computing quadratic coefficients for the 2-th band
+10:28 bilby INFO    : Pre-computing quadratic coefficients for the 3-th band
+10:28 bilby INFO    : Pre-computing quadratic coefficients for the 4-th band
+10:28 bilby INFO    : Pre-computing quadratic coefficients for the 5-th band
+10:28 bilby INFO    : Pre-computing quadratic coefficients for the 6-th band
+10:28 bilby INFO    : Pre-computing quadratic coefficients for the 7-th band
+10:28 bilby INFO    : Pre-computing quadratic coefficients for the 8-th band
+10:28 bilby INFO    : Pre-computing quadratic coefficients for the 9-th band
+10:28 bilby INFO    : Pre-computing quadratic coefficients for the 10-th band
+10:28 bilby INFO    : Pre-computing quadratic coefficients for the 11-th band
+10:28 bilby INFO    : Running for label 'ETCE_gw231109_injection_alignedspin', output will be saved to 'outdir'
+10:28 bilby INFO    : Using lal version 7.7.1
+10:28 bilby INFO    : Using lal git version Branch: None;Tag: lalsuite-v7.26.14;Id: 69ed1ab069f0d3b9ea9e1bcf9113585077688d47;;Builder: Unknown User <>;Repository status: UNCLEAN: Modified working tree
+10:28 bilby INFO    : Using lalsimulation version 6.2.1
+10:28 bilby INFO    : Using lalsimulation git version Branch: None;Tag: lalsuite-v7.26.14;Id: 69ed1ab069f0d3b9ea9e1bcf9113585077688d47;;Builder: Unknown User <>;Repository status: UNCLEAN: Modified working tree
+10:28 bilby INFO    : Analysis priors:
+10:28 bilby INFO    : chirp_mass=bilby.gw.prior.UniformInComponentsChirpMass(minimum=1.29, maximum=1.32, name='chirp_mass', latex_label='$\\mathcal{M}$', unit='$M_{\\odot}$', boundary=None)
+10:28 bilby INFO    : mass_ratio=bilby.gw.prior.UniformInComponentsMassRatio(minimum=0.125, maximum=1, name='mass_ratio', latex_label='$q$', unit=None, boundary=None, equal_mass=False)
+10:28 bilby INFO    : a_1=Uniform(minimum=0, maximum=0.05, name='a_1', latex_label='$a_1$', unit=None, boundary=None)
+10:28 bilby INFO    : a_2=Uniform(minimum=0, maximum=0.05, name='a_2', latex_label='$a_2$', unit=None, boundary=None)
+10:28 bilby INFO    : tilt_1=Sine(minimum=0, maximum=3.141592653589793, name='tilt_1', latex_label='$\\theta_1$', unit=None, boundary=None)
+10:28 bilby INFO    : tilt_2=Sine(minimum=0, maximum=3.141592653589793, name='tilt_2', latex_label='$\\theta_2$', unit=None, boundary=None)
+10:28 bilby INFO    : phi_12=Uniform(minimum=0, maximum=6.283185307179586, name='phi_12', latex_label='$\\Delta\\phi$', unit=None, boundary='periodic')
+10:28 bilby INFO    : phi_jl=Uniform(minimum=0, maximum=6.283185307179586, name='phi_jl', latex_label='$\\phi_{JL}$', unit=None, boundary='periodic')
+10:28 bilby INFO    : lambda_1=Uniform(minimum=0, maximum=5000.0, name='lambda_1', latex_label='$\\Lambda_1$', unit=None, boundary=None)
+10:28 bilby INFO    : lambda_2=Uniform(minimum=0, maximum=5000.0, name='lambda_2', latex_label='$\\Lambda_2$', unit=None, boundary=None)
+10:28 bilby INFO    : geocent_time=Uniform(minimum=1383609313.956813, maximum=1383609314.156813, name='geocent_time', latex_label='$t_c$', unit='s', boundary=None)
+10:28 bilby INFO    : dec=Cosine(minimum=-1.5707963267948966, maximum=1.5707963267948966, name='dec', latex_label='$\\mathrm{DEC}$', unit=None, boundary=None)
+10:28 bilby INFO    : ra=Uniform(minimum=0, maximum=6.283185307179586, name='ra', latex_label='$\\mathrm{RA}$', unit=None, boundary='periodic')
+10:28 bilby INFO    : theta_jn=Sine(minimum=0, maximum=3.141592653589793, name='theta_jn', latex_label='$\\theta_{JN}$', unit=None, boundary=None)
+10:28 bilby INFO    : psi=Uniform(minimum=0, maximum=3.141592653589793, name='psi', latex_label='$\\psi$', unit=None, boundary='periodic')
+10:28 bilby INFO    : luminosity_distance=757.3617876306158
+10:28 bilby INFO    : phase=0.0
+10:28 bilby INFO    : Analysis likelihood class: <class 'bilby.gw.likelihood.multiband.MBGravitationalWaveTransient'>
+10:28 bilby INFO    : Analysis likelihood noise evidence: -51518590.04087538
+10:28 bilby INFO    : Single likelihood evaluation took 2.745e-02 s
+10:28 bilby INFO    : Using sampler Dynesty with kwargs {'nlive': 2000, 'bound': 'live', 'sample': 'acceptance-walk', 'periodic': None, 'reflective': None, 'update_interval': 600, 'first_update': None, 'rstate': None, 'queue_size': 192, 'pool': None, 'use_pool': None, 'live_points': None, 'logl_args': None, 'logl_kwargs': None, 'ptform_args': None, 'ptform_kwargs': None, 'enlarge': None, 'bootstrap': None, 'walks': 100, 'facc': 0.2, 'slices': None, 'ncdim': None, 'blob': False, 'save_evaluation_history': False, 'history_filename': None, 'maxiter': None, 'maxcall': None, 'dlogz': 0.1, 'logl_max': inf, 'add_live': True, 'print_progress': True, 'print_func': <bound method Dynesty._print_func of <bilby.core.sampler.dynesty.Dynesty object at 0x7f654eff4da0>>, 'save_bounds': False, 'checkpoint_file': None, 'checkpoint_every': 60, 'resume': False, 'seed': None}
+10:28 bilby INFO    : Global meta data was removed from the result object for compatibility. Use the `BILBY_INCLUDE_GLOBAL_METADATA` environment variable to include it. This behaviour will be removed in a future release. For more details see: https://bilby-dev.github.io/bilby/faq.html#global-meta-data
+10:28 bilby INFO    : Checkpoint every check_point_delta_t = 1800s
+10:28 bilby INFO    : Using dynesty version 3.0.0
+10:28 bilby INFO    : Setting up multiproccesing pool with 192 processes
+10:28 bilby INFO    : Resume file outdir/ETCE_gw231109_injection_alignedspin_resume.pickle does not exist.
+10:28 bilby INFO    : Generating initial points from the prior
+10:29 bilby INFO    : Using the bilby-implemented ensemble rwalk sampling method with an average of 60 accepted steps up to chain length 5000.
+11:01 bilby INFO    : Written checkpoint file outdir/ETCE_gw231109_injection_alignedspin_resume.pickle
 /work/wouters/projects/19_GW231109_referee/.venv/lib/python3.12/site-packages/dynesty/plotting.py:786: UserWarning: Attempting to set identical low and high ylims makes transformation singular; automatically expanding.
   ax.set_ylim([0., max(y0) * 1.05])
-11:38 bilby WARNING : Too many bins for data range. Cannot create 500 finite-sized bins.
-11:38 bilby WARNING : Failed to create dynesty state plot at checkpoint
-/work/wouters/projects/19_GW231109_referee/.venv/lib/python3.12/site-packages/dynesty/plotting.py:786: UserWarning: Attempting to set identical low and high ylims makes transformation singular; automatically expanding.
-  ax.set_ylim([0., max(y0) * 1.05])
-/work/wouters/projects/19_GW231109_referee/.venv/lib/python3.12/site-packages/dynesty/plotting.py:252: RuntimeWarning: overflow encountered in exp
-  np.exp(logwt), logz if logplot else np.exp(logz)
-/work/wouters/projects/19_GW231109_referee/.venv/lib/python3.12/site-packages/dynesty/plotting.py:282: RuntimeWarning: overflow encountered in exp
-  zspan = (0., 1.05 * np.exp(logz[-1] + 3. * logzerr[-1]))
-11:38 bilby WARNING : Axis limits cannot be NaN or Inf
-11:38 bilby WARNING : Failed to create dynesty run plot at checkpoint
-12:10 bilby INFO    : Written checkpoint file outdir/ETCE_gw231109_injection_alignedspin_resume.pickle
-12:10 bilby WARNING : The data appears to lie in a lower-dimensional subspace of the space in which it is expressed. This has resulted in a singular data covariance matrix, which cannot be treated using the algorithms implemented in `gaussian_kde`. Consider performing principal component analysis / dimensionality reduction and using `gaussian_kde` with the transformed data.
-12:10 bilby WARNING : Failed to create dynesty state plot at checkpoint
-12:10 bilby WARNING : The data appears to lie in a lower-dimensional subspace of the space in which it is expressed. This has resulted in a singular data covariance matrix, which cannot be treated using the algorithms implemented in `gaussian_kde`. Consider performing principal component analysis / dimensionality reduction and using `gaussian_kde` with the transformed data.
-12:10 bilby WARNING : Failed to create dynesty unit state plot at checkpoint
-/work/wouters/projects/19_GW231109_referee/.venv/lib/python3.12/site-packages/dynesty/plotting.py:252: RuntimeWarning: overflow encountered in exp
-  np.exp(logwt), logz if logplot else np.exp(logz)
-12:10 bilby WARNING : The data appears to lie in a lower-dimensional subspace of the space in which it is expressed. This has resulted in a singular data covariance matrix, which cannot be treated using the algorithms implemented in `gaussian_kde`. Consider performing principal component analysis / dimensionality reduction and using `gaussian_kde` with the transformed data.
-12:10 bilby WARNING : Failed to create dynesty run plot at checkpoint
-12:42 bilby INFO    : Written checkpoint file outdir/ETCE_gw231109_injection_alignedspin_resume.pickle
-/work/wouters/projects/19_GW231109_referee/.venv/lib/python3.12/site-packages/dynesty/plotting.py:786: UserWarning: Attempting to set identical low and high ylims makes transformation singular; automatically expanding.
-  ax.set_ylim([0., max(y0) * 1.05])
-12:42 bilby WARNING : Too many bins for data range. Cannot create 500 finite-sized bins.
-12:42 bilby WARNING : Failed to create dynesty state plot at checkpoint
+11:01 bilby WARNING : Too many bins for data range. Cannot create 500 finite-sized bins.
+11:01 bilby WARNING : Failed to create dynesty state plot at checkpoint
 /work/wouters/projects/19_GW231109_referee/.venv/lib/python3.12/site-packages/dynesty/plotting.py:786: UserWarning: Attempting to set identical low and high ylims makes transformation singular; automatically expanding.
   ax.set_ylim([0., max(y0) * 1.05])
 /work/wouters/projects/19_GW231109_referee/.venv/lib/python3.12/site-packages/dynesty/plotting.py:252: RuntimeWarning: overflow encountered in exp
   np.exp(logwt), logz if logplot else np.exp(logz)
 /work/wouters/projects/19_GW231109_referee/.venv/lib/python3.12/site-packages/dynesty/plotting.py:282: RuntimeWarning: overflow encountered in exp
   zspan = (0., 1.05 * np.exp(logz[-1] + 3. * logzerr[-1]))
-12:42 bilby WARNING : Axis limits cannot be NaN or Inf
-12:42 bilby WARNING : Failed to create dynesty run plot at checkpoint
-13:14 bilby INFO    : Written checkpoint file outdir/ETCE_gw231109_injection_alignedspin_resume.pickle
-/work/wouters/projects/19_GW231109_referee/.venv/lib/python3.12/site-packages/dynesty/plotting.py:786: UserWarning: Attempting to set identical low and high ylims makes transformation singular; automatically expanding.
-  ax.set_ylim([0., max(y0) * 1.05])
-13:14 bilby WARNING : Too many bins for data range. Cannot create 500 finite-sized bins.
-13:14 bilby WARNING : Failed to create dynesty state plot at checkpoint
-/work/wouters/projects/19_GW231109_referee/.venv/lib/python3.12/site-packages/dynesty/plotting.py:786: UserWarning: Attempting to set identical low and high ylims makes transformation singular; automatically expanding.
-  ax.set_ylim([0., max(y0) * 1.05])
+11:01 bilby WARNING : Axis limits cannot be NaN or Inf
+11:01 bilby WARNING : Failed to create dynesty run plot at checkpoint
+11:33 bilby INFO    : Written checkpoint file outdir/ETCE_gw231109_injection_alignedspin_resume.pickle
+11:33 bilby WARNING : The data appears to lie in a lower-dimensional subspace of the space in which it is expressed. This has resulted in a singular data covariance matrix, which cannot be treated using the algorithms implemented in `gaussian_kde`. Consider performing principal component analysis / dimensionality reduction and using `gaussian_kde` with the transformed data.
+11:33 bilby WARNING : Failed to create dynesty state plot at checkpoint
+11:33 bilby WARNING : The data appears to lie in a lower-dimensional subspace of the space in which it is expressed. This has resulted in a singular data covariance matrix, which cannot be treated using the algorithms implemented in `gaussian_kde`. Consider performing principal component analysis / dimensionality reduction and using `gaussian_kde` with the transformed data.
+11:33 bilby WARNING : Failed to create dynesty unit state plot at checkpoint
 /work/wouters/projects/19_GW231109_referee/.venv/lib/python3.12/site-packages/dynesty/plotting.py:252: RuntimeWarning: overflow encountered in exp
   np.exp(logwt), logz if logplot else np.exp(logz)
-/work/wouters/projects/19_GW231109_referee/.venv/lib/python3.12/site-packages/dynesty/plotting.py:282: RuntimeWarning: overflow encountered in exp
-  zspan = (0., 1.05 * np.exp(logz[-1] + 3. * logzerr[-1]))
-13:14 bilby WARNING : Axis limits cannot be NaN or Inf
-13:14 bilby WARNING : Failed to create dynesty run plot at checkpoint
-13:46 bilby INFO    : Written checkpoint file outdir/ETCE_gw231109_injection_alignedspin_resume.pickle
-13:46 bilby WARNING : The data appears to lie in a lower-dimensional subspace of the space in which it is expressed. This has resulted in a singular data covariance matrix, which cannot be treated using the algorithms implemented in `gaussian_kde`. Consider performing principal component analysis / dimensionality reduction and using `gaussian_kde` with the transformed data.
-13:46 bilby WARNING : Failed to create dynesty state plot at checkpoint
-13:46 bilby WARNING : The data appears to lie in a lower-dimensional subspace of the space in which it is expressed. This has resulted in a singular data covariance matrix, which cannot be treated using the algorithms implemented in `gaussian_kde`. Consider performing principal component analysis / dimensionality reduction and using `gaussian_kde` with the transformed data.
-13:46 bilby WARNING : Failed to create dynesty unit state plot at checkpoint
-/work/wouters/projects/19_GW231109_referee/.venv/lib/python3.12/site-packages/dynesty/plotting.py:252: RuntimeWarning: overflow encountered in exp
-  np.exp(logwt), logz if logplot else np.exp(logz)
-13:46 bilby WARNING : The data appears to lie in a lower-dimensional subspace of the space in which it is expressed. This has resulted in a singular data covariance matrix, which cannot be treated using the algorithms implemented in `gaussian_kde`. Consider performing principal component analysis / dimensionality reduction and using `gaussian_kde` with the transformed data.
-13:46 bilby WARNING : Failed to create dynesty run plot at checkpoint
-14:18 bilby INFO    : Written checkpoint file outdir/ETCE_gw231109_injection_alignedspin_resume.pickle
+11:33 bilby WARNING : The data appears to lie in a lower-dimensional subspace of the space in which it is expressed. This has resulted in a singular data covariance matrix, which cannot be treated using the algorithms implemented in `gaussian_kde`. Consider performing principal component analysis / dimensionality reduction and using `gaussian_kde` with the transformed data.
+11:33 bilby WARNING : Failed to create dynesty run plot at checkpoint
+12:06 bilby INFO    : Written checkpoint file outdir/ETCE_gw231109_injection_alignedspin_resume.pickle
 /work/wouters/projects/19_GW231109_referee/.venv/lib/python3.12/site-packages/dynesty/plotting.py:786: UserWarning: Attempting to set identical low and high ylims makes transformation singular; automatically expanding.
   ax.set_ylim([0., max(y0) * 1.05])
-/work/wouters/projects/19_GW231109_referee/.venv/lib/python3.12/site-packages/dynesty/plotting.py:749: UserWarning: Attempting to set identical low and high xlims makes transformation singular; automatically expanding.
-  ax.set_xlim(span[i])
+12:06 bilby WARNING : Too many bins for data range. Cannot create 500 finite-sized bins.
+12:06 bilby WARNING : Failed to create dynesty state plot at checkpoint
 /work/wouters/projects/19_GW231109_referee/.venv/lib/python3.12/site-packages/dynesty/plotting.py:786: UserWarning: Attempting to set identical low and high ylims makes transformation singular; automatically expanding.
   ax.set_ylim([0., max(y0) * 1.05])
 /work/wouters/projects/19_GW231109_referee/.venv/lib/python3.12/site-packages/dynesty/plotting.py:252: RuntimeWarning: overflow encountered in exp
   np.exp(logwt), logz if logplot else np.exp(logz)
 /work/wouters/projects/19_GW231109_referee/.venv/lib/python3.12/site-packages/dynesty/plotting.py:282: RuntimeWarning: overflow encountered in exp
   zspan = (0., 1.05 * np.exp(logz[-1] + 3. * logzerr[-1]))
-14:18 bilby WARNING : Axis limits cannot be NaN or Inf
-14:18 bilby WARNING : Failed to create dynesty run plot at checkpoint
-14:50 bilby INFO    : Written checkpoint file outdir/ETCE_gw231109_injection_alignedspin_resume.pickle
+12:06 bilby WARNING : Axis limits cannot be NaN or Inf
+12:06 bilby WARNING : Failed to create dynesty run plot at checkpoint
+12:37 bilby INFO    : Written checkpoint file outdir/ETCE_gw231109_injection_alignedspin_resume.pickle
 /work/wouters/projects/19_GW231109_referee/.venv/lib/python3.12/site-packages/dynesty/plotting.py:786: UserWarning: Attempting to set identical low and high ylims makes transformation singular; automatically expanding.
   ax.set_ylim([0., max(y0) * 1.05])
-14:50 bilby WARNING : Too many bins for data range. Cannot create 500 finite-sized bins.
-14:50 bilby WARNING : Failed to create dynesty state plot at checkpoint
-/work/wouters/projects/19_GW231109_referee/.venv/lib/python3.12/site-packages/dynesty/plotting.py:786: UserWarning: Attempting to set identical low and high ylims makes transformation singular; automatically expanding.
-  ax.set_ylim([0., max(y0) * 1.05])
-/work/wouters/projects/19_GW231109_referee/.venv/lib/python3.12/site-packages/dynesty/plotting.py:252: RuntimeWarning: overflow encountered in exp
-  np.exp(logwt), logz if logplot else np.exp(logz)
-/work/wouters/projects/19_GW231109_referee/.venv/lib/python3.12/site-packages/dynesty/plotting.py:282: RuntimeWarning: overflow encountered in exp
-  zspan = (0., 1.05 * np.exp(logz[-1] + 3. * logzerr[-1]))
-14:50 bilby WARNING : Axis limits cannot be NaN or Inf
-14:50 bilby WARNING : Failed to create dynesty run plot at checkpoint
-15:22 bilby INFO    : Written checkpoint file outdir/ETCE_gw231109_injection_alignedspin_resume.pickle
-15:22 bilby WARNING : Too many bins for data range. Cannot create 500 finite-sized bins.
-15:22 bilby WARNING : Failed to create dynesty state plot at checkpoint
-/work/wouters/projects/19_GW231109_referee/.venv/lib/python3.12/site-packages/dynesty/plotting.py:252: RuntimeWarning: overflow encountered in exp
-  np.exp(logwt), logz if logplot else np.exp(logz)
-/work/wouters/projects/19_GW231109_referee/.venv/lib/python3.12/site-packages/dynesty/plotting.py:282: RuntimeWarning: overflow encountered in exp
-  zspan = (0., 1.05 * np.exp(logz[-1] + 3. * logzerr[-1]))
-15:23 bilby WARNING : Axis limits cannot be NaN or Inf
-15:23 bilby WARNING : Failed to create dynesty run plot at checkpoint
-15:55 bilby INFO    : Written checkpoint file outdir/ETCE_gw231109_injection_alignedspin_resume.pickle
-15:55 bilby WARNING : The data appears to lie in a lower-dimensional subspace of the space in which it is expressed. This has resulted in a singular data covariance matrix, which cannot be treated using the algorithms implemented in `gaussian_kde`. Consider performing principal component analysis / dimensionality reduction and using `gaussian_kde` with the transformed data.
-15:55 bilby WARNING : Failed to create dynesty state plot at checkpoint
-15:55 bilby WARNING : The data appears to lie in a lower-dimensional subspace of the space in which it is expressed. This has resulted in a singular data covariance matrix, which cannot be treated using the algorithms implemented in `gaussian_kde`. Consider performing principal component analysis / dimensionality reduction and using `gaussian_kde` with the transformed data.
-15:55 bilby WARNING : Failed to create dynesty unit state plot at checkpoint
-/work/wouters/projects/19_GW231109_referee/.venv/lib/python3.12/site-packages/dynesty/plotting.py:252: RuntimeWarning: overflow encountered in exp
-  np.exp(logwt), logz if logplot else np.exp(logz)
-15:55 bilby WARNING : The data appears to lie in a lower-dimensional subspace of the space in which it is expressed. This has resulted in a singular data covariance matrix, which cannot be treated using the algorithms implemented in `gaussian_kde`. Consider performing principal component analysis / dimensionality reduction and using `gaussian_kde` with the transformed data.
-15:55 bilby WARNING : Failed to create dynesty run plot at checkpoint
-16:29 bilby INFO    : Written checkpoint file outdir/ETCE_gw231109_injection_alignedspin_resume.pickle
-/work/wouters/projects/19_GW231109_referee/.venv/lib/python3.12/site-packages/dynesty/plotting.py:786: UserWarning: Attempting to set identical low and high ylims makes transformation singular; automatically expanding.
-  ax.set_ylim([0., max(y0) * 1.05])
-16:29 bilby WARNING : Too many bins for data range. Cannot create 500 finite-sized bins.
-16:29 bilby WARNING : Failed to create dynesty state plot at checkpoint
+12:37 bilby WARNING : Too many bins for data range. Cannot create 500 finite-sized bins.
+12:37 bilby WARNING : Failed to create dynesty state plot at checkpoint
 /work/wouters/projects/19_GW231109_referee/.venv/lib/python3.12/site-packages/dynesty/plotting.py:786: UserWarning: Attempting to set identical low and high ylims makes transformation singular; automatically expanding.
   ax.set_ylim([0., max(y0) * 1.05])
 /work/wouters/projects/19_GW231109_referee/.venv/lib/python3.12/site-packages/dynesty/plotting.py:252: RuntimeWarning: overflow encountered in exp
   np.exp(logwt), logz if logplot else np.exp(logz)
 /work/wouters/projects/19_GW231109_referee/.venv/lib/python3.12/site-packages/dynesty/plotting.py:282: RuntimeWarning: overflow encountered in exp
   zspan = (0., 1.05 * np.exp(logz[-1] + 3. * logzerr[-1]))
-16:29 bilby WARNING : Axis limits cannot be NaN or Inf
-16:29 bilby WARNING : Failed to create dynesty run plot at checkpoint
-17:01 bilby INFO    : Written checkpoint file outdir/ETCE_gw231109_injection_alignedspin_resume.pickle
+12:37 bilby WARNING : Axis limits cannot be NaN or Inf
+12:37 bilby WARNING : Failed to create dynesty run plot at checkpoint
+13:10 bilby INFO    : Written checkpoint file outdir/ETCE_gw231109_injection_alignedspin_resume.pickle
+/work/wouters/projects/19_GW231109_referee/.venv/lib/python3.12/site-packages/dynesty/plotting.py:786: UserWarning: Attempting to set identical low and high ylims makes transformation singular; automatically expanding.
+  ax.set_ylim([0., max(y0) * 1.05])
+13:10 bilby WARNING : Too many bins for data range. Cannot create 500 finite-sized bins.
+13:10 bilby WARNING : Failed to create dynesty state plot at checkpoint
+/work/wouters/projects/19_GW231109_referee/.venv/lib/python3.12/site-packages/dynesty/plotting.py:786: UserWarning: Attempting to set identical low and high ylims makes transformation singular; automatically expanding.
+  ax.set_ylim([0., max(y0) * 1.05])
 /work/wouters/projects/19_GW231109_referee/.venv/lib/python3.12/site-packages/dynesty/plotting.py:252: RuntimeWarning: overflow encountered in exp
   np.exp(logwt), logz if logplot else np.exp(logz)
 /work/wouters/projects/19_GW231109_referee/.venv/lib/python3.12/site-packages/dynesty/plotting.py:282: RuntimeWarning: overflow encountered in exp
   zspan = (0., 1.05 * np.exp(logz[-1] + 3. * logzerr[-1]))
-17:02 bilby WARNING : Axis limits cannot be NaN or Inf
-17:02 bilby WARNING : Failed to create dynesty run plot at checkpoint
-17:34 bilby INFO    : Written checkpoint file outdir/ETCE_gw231109_injection_alignedspin_resume.pickle
+13:10 bilby WARNING : Axis limits cannot be NaN or Inf
+13:10 bilby WARNING : Failed to create dynesty run plot at checkpoint
+13:42 bilby INFO    : Written checkpoint file outdir/ETCE_gw231109_injection_alignedspin_resume.pickle
+/work/wouters/projects/19_GW231109_referee/.venv/lib/python3.12/site-packages/dynesty/plotting.py:786: UserWarning: Attempting to set identical low and high ylims makes transformation singular; automatically expanding.
+  ax.set_ylim([0., max(y0) * 1.05])
+13:42 bilby WARNING : Too many bins for data range. Cannot create 500 finite-sized bins.
+13:42 bilby WARNING : Failed to create dynesty state plot at checkpoint
+/work/wouters/projects/19_GW231109_referee/.venv/lib/python3.12/site-packages/dynesty/plotting.py:786: UserWarning: Attempting to set identical low and high ylims makes transformation singular; automatically expanding.
+  ax.set_ylim([0., max(y0) * 1.05])
 /work/wouters/projects/19_GW231109_referee/.venv/lib/python3.12/site-packages/dynesty/plotting.py:252: RuntimeWarning: overflow encountered in exp
   np.exp(logwt), logz if logplot else np.exp(logz)
 /work/wouters/projects/19_GW231109_referee/.venv/lib/python3.12/site-packages/dynesty/plotting.py:282: RuntimeWarning: overflow encountered in exp
   zspan = (0., 1.05 * np.exp(logz[-1] + 3. * logzerr[-1]))
-17:34 bilby WARNING : Axis limits cannot be NaN or Inf
-17:34 bilby WARNING : Failed to create dynesty run plot at checkpoint
-18:07 bilby INFO    : Written checkpoint file outdir/ETCE_gw231109_injection_alignedspin_resume.pickle
+13:42 bilby WARNING : Axis limits cannot be NaN or Inf
+13:42 bilby WARNING : Failed to create dynesty run plot at checkpoint
+14:14 bilby INFO    : Written checkpoint file outdir/ETCE_gw231109_injection_alignedspin_resume.pickle
+/work/wouters/projects/19_GW231109_referee/.venv/lib/python3.12/site-packages/dynesty/plotting.py:786: UserWarning: Attempting to set identical low and high ylims makes transformation singular; automatically expanding.
+  ax.set_ylim([0., max(y0) * 1.05])
+14:14 bilby WARNING : Too many bins for data range. Cannot create 500 finite-sized bins.
+14:14 bilby WARNING : Failed to create dynesty state plot at checkpoint
+/work/wouters/projects/19_GW231109_referee/.venv/lib/python3.12/site-packages/dynesty/plotting.py:786: UserWarning: Attempting to set identical low and high ylims makes transformation singular; automatically expanding.
+  ax.set_ylim([0., max(y0) * 1.05])
 /work/wouters/projects/19_GW231109_referee/.venv/lib/python3.12/site-packages/dynesty/plotting.py:252: RuntimeWarning: overflow encountered in exp
   np.exp(logwt), logz if logplot else np.exp(logz)
 /work/wouters/projects/19_GW231109_referee/.venv/lib/python3.12/site-packages/dynesty/plotting.py:282: RuntimeWarning: overflow encountered in exp
   zspan = (0., 1.05 * np.exp(logz[-1] + 3. * logzerr[-1]))
-18:07 bilby WARNING : Axis limits cannot be NaN or Inf
-18:07 bilby WARNING : Failed to create dynesty run plot at checkpoint
-18:41 bilby INFO    : Written checkpoint file outdir/ETCE_gw231109_injection_alignedspin_resume.pickle
+14:14 bilby WARNING : Axis limits cannot be NaN or Inf
+14:14 bilby WARNING : Failed to create dynesty run plot at checkpoint
+14:46 bilby INFO    : Written checkpoint file outdir/ETCE_gw231109_injection_alignedspin_resume.pickle
 /work/wouters/projects/19_GW231109_referee/.venv/lib/python3.12/site-packages/dynesty/plotting.py:252: RuntimeWarning: overflow encountered in exp
   np.exp(logwt), logz if logplot else np.exp(logz)
 /work/wouters/projects/19_GW231109_referee/.venv/lib/python3.12/site-packages/dynesty/plotting.py:282: RuntimeWarning: overflow encountered in exp
   zspan = (0., 1.05 * np.exp(logz[-1] + 3. * logzerr[-1]))
-18:42 bilby WARNING : Axis limits cannot be NaN or Inf
-18:42 bilby WARNING : Failed to create dynesty run plot at checkpoint
-19:14 bilby INFO    : Written checkpoint file outdir/ETCE_gw231109_injection_alignedspin_resume.pickle
+14:47 bilby WARNING : Axis limits cannot be NaN or Inf
+14:47 bilby WARNING : Failed to create dynesty run plot at checkpoint
+15:18 bilby INFO    : Written checkpoint file outdir/ETCE_gw231109_injection_alignedspin_resume.pickle
 /work/wouters/projects/19_GW231109_referee/.venv/lib/python3.12/site-packages/dynesty/plotting.py:252: RuntimeWarning: overflow encountered in exp
   np.exp(logwt), logz if logplot else np.exp(logz)
 /work/wouters/projects/19_GW231109_referee/.venv/lib/python3.12/site-packages/dynesty/plotting.py:282: RuntimeWarning: overflow encountered in exp
   zspan = (0., 1.05 * np.exp(logz[-1] + 3. * logzerr[-1]))
-19:15 bilby WARNING : Axis limits cannot be NaN or Inf
-19:15 bilby WARNING : Failed to create dynesty run plot at checkpoint
+15:18 bilby WARNING : Axis limits cannot be NaN or Inf
+15:18 bilby WARNING : Failed to create dynesty run plot at checkpoint
+15:51 bilby INFO    : Written checkpoint file outdir/ETCE_gw231109_injection_alignedspin_resume.pickle
+/work/wouters/projects/19_GW231109_referee/.venv/lib/python3.12/site-packages/dynesty/plotting.py:786: UserWarning: Attempting to set identical low and high ylims makes transformation singular; automatically expanding.
+  ax.set_ylim([0., max(y0) * 1.05])
+/work/wouters/projects/19_GW231109_referee/.venv/lib/python3.12/site-packages/dynesty/plotting.py:786: UserWarning: Attempting to set identical low and high ylims makes transformation singular; automatically expanding.
+  ax.set_ylim([0., max(y0) * 1.05])
+/work/wouters/projects/19_GW231109_referee/.venv/lib/python3.12/site-packages/dynesty/plotting.py:252: RuntimeWarning: overflow encountered in exp
+  np.exp(logwt), logz if logplot else np.exp(logz)
+/work/wouters/projects/19_GW231109_referee/.venv/lib/python3.12/site-packages/dynesty/plotting.py:282: RuntimeWarning: overflow encountered in exp
+  zspan = (0., 1.05 * np.exp(logz[-1] + 3. * logzerr[-1]))
+15:51 bilby WARNING : Axis limits cannot be NaN or Inf
+15:51 bilby WARNING : Failed to create dynesty run plot at checkpoint
+16:23 bilby INFO    : Written checkpoint file outdir/ETCE_gw231109_injection_alignedspin_resume.pickle
+/work/wouters/projects/19_GW231109_referee/.venv/lib/python3.12/site-packages/dynesty/plotting.py:252: RuntimeWarning: overflow encountered in exp
+  np.exp(logwt), logz if logplot else np.exp(logz)
+/work/wouters/projects/19_GW231109_referee/.venv/lib/python3.12/site-packages/dynesty/plotting.py:282: RuntimeWarning: overflow encountered in exp
+  zspan = (0., 1.05 * np.exp(logz[-1] + 3. * logzerr[-1]))
+16:24 bilby WARNING : Axis limits cannot be NaN or Inf
+16:24 bilby WARNING : Failed to create dynesty run plot at checkpoint
+16:57 bilby INFO    : Written checkpoint file outdir/ETCE_gw231109_injection_alignedspin_resume.pickle
+/work/wouters/projects/19_GW231109_referee/.venv/lib/python3.12/site-packages/dynesty/plotting.py:252: RuntimeWarning: overflow encountered in exp
+  np.exp(logwt), logz if logplot else np.exp(logz)
+/work/wouters/projects/19_GW231109_referee/.venv/lib/python3.12/site-packages/dynesty/plotting.py:282: RuntimeWarning: overflow encountered in exp
+  zspan = (0., 1.05 * np.exp(logz[-1] + 3. * logzerr[-1]))
+16:58 bilby WARNING : Axis limits cannot be NaN or Inf
+16:58 bilby WARNING : Failed to create dynesty run plot at checkpoint
+17:31 bilby INFO    : Written checkpoint file outdir/ETCE_gw231109_injection_alignedspin_resume.pickle
+/work/wouters/projects/19_GW231109_referee/.venv/lib/python3.12/site-packages/dynesty/plotting.py:252: RuntimeWarning: overflow encountered in exp
+  np.exp(logwt), logz if logplot else np.exp(logz)
+/work/wouters/projects/19_GW231109_referee/.venv/lib/python3.12/site-packages/dynesty/plotting.py:282: RuntimeWarning: overflow encountered in exp
+  zspan = (0., 1.05 * np.exp(logz[-1] + 3. * logzerr[-1]))
+17:32 bilby WARNING : Axis limits cannot be NaN or Inf
+17:32 bilby WARNING : Failed to create dynesty run plot at checkpoint
+18:05 bilby INFO    : Written checkpoint file outdir/ETCE_gw231109_injection_alignedspin_resume.pickle
+/work/wouters/projects/19_GW231109_referee/.venv/lib/python3.12/site-packages/dynesty/plotting.py:252: RuntimeWarning: overflow encountered in exp
+  np.exp(logwt), logz if logplot else np.exp(logz)
+/work/wouters/projects/19_GW231109_referee/.venv/lib/python3.12/site-packages/dynesty/plotting.py:282: RuntimeWarning: overflow encountered in exp
+  zspan = (0., 1.05 * np.exp(logz[-1] + 3. * logzerr[-1]))
+18:05 bilby WARNING : Axis limits cannot be NaN or Inf
+18:05 bilby WARNING : Failed to create dynesty run plot at checkpoint
+18:38 bilby INFO    : Written checkpoint file outdir/ETCE_gw231109_injection_alignedspin_resume.pickle
+/work/wouters/projects/19_GW231109_referee/.venv/lib/python3.12/site-packages/dynesty/plotting.py:252: RuntimeWarning: overflow encountered in exp
+  np.exp(logwt), logz if logplot else np.exp(logz)
+/work/wouters/projects/19_GW231109_referee/.venv/lib/python3.12/site-packages/dynesty/plotting.py:282: RuntimeWarning: overflow encountered in exp
+  zspan = (0., 1.05 * np.exp(logz[-1] + 3. * logzerr[-1]))
+18:39 bilby WARNING : Axis limits cannot be NaN or Inf
+18:39 bilby WARNING : Failed to create dynesty run plot at checkpoint
+19:13 bilby INFO    : Written checkpoint file outdir/ETCE_gw231109_injection_alignedspin_resume.pickle
+/work/wouters/projects/19_GW231109_referee/.venv/lib/python3.12/site-packages/dynesty/plotting.py:252: RuntimeWarning: overflow encountered in exp
+  np.exp(logwt), logz if logplot else np.exp(logz)
+/work/wouters/projects/19_GW231109_referee/.venv/lib/python3.12/site-packages/dynesty/plotting.py:282: RuntimeWarning: overflow encountered in exp
+  zspan = (0., 1.05 * np.exp(logz[-1] + 3. * logzerr[-1]))
+19:13 bilby WARNING : Axis limits cannot be NaN or Inf
+19:13 bilby WARNING : Failed to create dynesty run plot at checkpoint
 19:48 bilby INFO    : Written checkpoint file outdir/ETCE_gw231109_injection_alignedspin_resume.pickle
 /work/wouters/projects/19_GW231109_referee/.venv/lib/python3.12/site-packages/dynesty/plotting.py:252: RuntimeWarning: overflow encountered in exp
   np.exp(logwt), logz if logplot else np.exp(logz)
@@ -293,91 +296,106 @@
   zspan = (0., 1.05 * np.exp(logz[-1] + 3. * logzerr[-1]))
 19:48 bilby WARNING : Axis limits cannot be NaN or Inf
 19:48 bilby WARNING : Failed to create dynesty run plot at checkpoint
-20:21 bilby INFO    : Written checkpoint file outdir/ETCE_gw231109_injection_alignedspin_resume.pickle
+20:23 bilby INFO    : Written checkpoint file outdir/ETCE_gw231109_injection_alignedspin_resume.pickle
 /work/wouters/projects/19_GW231109_referee/.venv/lib/python3.12/site-packages/dynesty/plotting.py:252: RuntimeWarning: overflow encountered in exp
   np.exp(logwt), logz if logplot else np.exp(logz)
 /work/wouters/projects/19_GW231109_referee/.venv/lib/python3.12/site-packages/dynesty/plotting.py:282: RuntimeWarning: overflow encountered in exp
   zspan = (0., 1.05 * np.exp(logz[-1] + 3. * logzerr[-1]))
-20:22 bilby WARNING : Axis limits cannot be NaN or Inf
-20:22 bilby WARNING : Failed to create dynesty run plot at checkpoint
-20:56 bilby INFO    : Written checkpoint file outdir/ETCE_gw231109_injection_alignedspin_resume.pickle
+20:23 bilby WARNING : Axis limits cannot be NaN or Inf
+20:23 bilby WARNING : Failed to create dynesty run plot at checkpoint
+20:58 bilby INFO    : Written checkpoint file outdir/ETCE_gw231109_injection_alignedspin_resume.pickle
 /work/wouters/projects/19_GW231109_referee/.venv/lib/python3.12/site-packages/dynesty/plotting.py:252: RuntimeWarning: overflow encountered in exp
   np.exp(logwt), logz if logplot else np.exp(logz)
 /work/wouters/projects/19_GW231109_referee/.venv/lib/python3.12/site-packages/dynesty/plotting.py:282: RuntimeWarning: overflow encountered in exp
   zspan = (0., 1.05 * np.exp(logz[-1] + 3. * logzerr[-1]))
-20:57 bilby WARNING : Axis limits cannot be NaN or Inf
-20:57 bilby WARNING : Failed to create dynesty run plot at checkpoint
-21:31 bilby INFO    : Written checkpoint file outdir/ETCE_gw231109_injection_alignedspin_resume.pickle
+20:58 bilby WARNING : Axis limits cannot be NaN or Inf
+20:58 bilby WARNING : Failed to create dynesty run plot at checkpoint
+21:32 bilby INFO    : Written checkpoint file outdir/ETCE_gw231109_injection_alignedspin_resume.pickle
 /work/wouters/projects/19_GW231109_referee/.venv/lib/python3.12/site-packages/dynesty/plotting.py:252: RuntimeWarning: overflow encountered in exp
   np.exp(logwt), logz if logplot else np.exp(logz)
 /work/wouters/projects/19_GW231109_referee/.venv/lib/python3.12/site-packages/dynesty/plotting.py:282: RuntimeWarning: overflow encountered in exp
   zspan = (0., 1.05 * np.exp(logz[-1] + 3. * logzerr[-1]))
-21:31 bilby WARNING : Axis limits cannot be NaN or Inf
-21:31 bilby WARNING : Failed to create dynesty run plot at checkpoint
-22:06 bilby INFO    : Written checkpoint file outdir/ETCE_gw231109_injection_alignedspin_resume.pickle
+21:33 bilby WARNING : Axis limits cannot be NaN or Inf
+21:33 bilby WARNING : Failed to create dynesty run plot at checkpoint
+22:09 bilby INFO    : Written checkpoint file outdir/ETCE_gw231109_injection_alignedspin_resume.pickle
 /work/wouters/projects/19_GW231109_referee/.venv/lib/python3.12/site-packages/dynesty/plotting.py:252: RuntimeWarning: overflow encountered in exp
   np.exp(logwt), logz if logplot else np.exp(logz)
 /work/wouters/projects/19_GW231109_referee/.venv/lib/python3.12/site-packages/dynesty/plotting.py:282: RuntimeWarning: overflow encountered in exp
   zspan = (0., 1.05 * np.exp(logz[-1] + 3. * logzerr[-1]))
-22:07 bilby WARNING : Axis limits cannot be NaN or Inf
-22:07 bilby WARNING : Failed to create dynesty run plot at checkpoint
-22:41 bilby INFO    : Written checkpoint file outdir/ETCE_gw231109_injection_alignedspin_resume.pickle
+22:09 bilby WARNING : Axis limits cannot be NaN or Inf
+22:09 bilby WARNING : Failed to create dynesty run plot at checkpoint
+22:46 bilby INFO    : Written checkpoint file outdir/ETCE_gw231109_injection_alignedspin_resume.pickle
 /work/wouters/projects/19_GW231109_referee/.venv/lib/python3.12/site-packages/dynesty/plotting.py:252: RuntimeWarning: overflow encountered in exp
   np.exp(logwt), logz if logplot else np.exp(logz)
 /work/wouters/projects/19_GW231109_referee/.venv/lib/python3.12/site-packages/dynesty/plotting.py:282: RuntimeWarning: overflow encountered in exp
   zspan = (0., 1.05 * np.exp(logz[-1] + 3. * logzerr[-1]))
-22:41 bilby WARNING : Axis limits cannot be NaN or Inf
-22:41 bilby WARNING : Failed to create dynesty run plot at checkpoint
-23:15 bilby INFO    : Written checkpoint file outdir/ETCE_gw231109_injection_alignedspin_resume.pickle
+22:46 bilby WARNING : Axis limits cannot be NaN or Inf
+22:46 bilby WARNING : Failed to create dynesty run plot at checkpoint
+23:22 bilby INFO    : Written checkpoint file outdir/ETCE_gw231109_injection_alignedspin_resume.pickle
 /work/wouters/projects/19_GW231109_referee/.venv/lib/python3.12/site-packages/dynesty/plotting.py:252: RuntimeWarning: overflow encountered in exp
   np.exp(logwt), logz if logplot else np.exp(logz)
 /work/wouters/projects/19_GW231109_referee/.venv/lib/python3.12/site-packages/dynesty/plotting.py:282: RuntimeWarning: overflow encountered in exp
   zspan = (0., 1.05 * np.exp(logz[-1] + 3. * logzerr[-1]))
-23:15 bilby WARNING : Axis limits cannot be NaN or Inf
-23:15 bilby WARNING : Failed to create dynesty run plot at checkpoint
-23:51 bilby INFO    : Written checkpoint file outdir/ETCE_gw231109_injection_alignedspin_resume.pickle
+23:23 bilby WARNING : Axis limits cannot be NaN or Inf
+23:23 bilby WARNING : Failed to create dynesty run plot at checkpoint
+23:57 bilby INFO    : Written checkpoint file outdir/ETCE_gw231109_injection_alignedspin_resume.pickle
 /work/wouters/projects/19_GW231109_referee/.venv/lib/python3.12/site-packages/dynesty/plotting.py:252: RuntimeWarning: overflow encountered in exp
   np.exp(logwt), logz if logplot else np.exp(logz)
 /work/wouters/projects/19_GW231109_referee/.venv/lib/python3.12/site-packages/dynesty/plotting.py:282: RuntimeWarning: overflow encountered in exp
   zspan = (0., 1.05 * np.exp(logz[-1] + 3. * logzerr[-1]))
-23:51 bilby WARNING : Axis limits cannot be NaN or Inf
-23:51 bilby WARNING : Failed to create dynesty run plot at checkpoint
-00:26 bilby INFO    : Written checkpoint file outdir/ETCE_gw231109_injection_alignedspin_resume.pickle
+23:58 bilby WARNING : Axis limits cannot be NaN or Inf
+23:58 bilby WARNING : Failed to create dynesty run plot at checkpoint
+00:33 bilby INFO    : Written checkpoint file outdir/ETCE_gw231109_injection_alignedspin_resume.pickle
 /work/wouters/projects/19_GW231109_referee/.venv/lib/python3.12/site-packages/dynesty/plotting.py:252: RuntimeWarning: overflow encountered in exp
   np.exp(logwt), logz if logplot else np.exp(logz)
 /work/wouters/projects/19_GW231109_referee/.venv/lib/python3.12/site-packages/dynesty/plotting.py:282: RuntimeWarning: overflow encountered in exp
   zspan = (0., 1.05 * np.exp(logz[-1] + 3. * logzerr[-1]))
-00:27 bilby WARNING : Axis limits cannot be NaN or Inf
-00:27 bilby WARNING : Failed to create dynesty run plot at checkpoint
-01:01 bilby INFO    : Written checkpoint file outdir/ETCE_gw231109_injection_alignedspin_resume.pickle
+00:33 bilby WARNING : Axis limits cannot be NaN or Inf
+00:33 bilby WARNING : Failed to create dynesty run plot at checkpoint
+01:09 bilby INFO    : Written checkpoint file outdir/ETCE_gw231109_injection_alignedspin_resume.pickle
 /work/wouters/projects/19_GW231109_referee/.venv/lib/python3.12/site-packages/dynesty/plotting.py:252: RuntimeWarning: overflow encountered in exp
   np.exp(logwt), logz if logplot else np.exp(logz)
 /work/wouters/projects/19_GW231109_referee/.venv/lib/python3.12/site-packages/dynesty/plotting.py:282: RuntimeWarning: overflow encountered in exp
   zspan = (0., 1.05 * np.exp(logz[-1] + 3. * logzerr[-1]))
-01:02 bilby WARNING : Axis limits cannot be NaN or Inf
-01:02 bilby WARNING : Failed to create dynesty run plot at checkpoint
-01:29 bilby INFO    : Written checkpoint file outdir/ETCE_gw231109_injection_alignedspin_resume.pickle
+01:10 bilby WARNING : Axis limits cannot be NaN or Inf
+01:10 bilby WARNING : Failed to create dynesty run plot at checkpoint
+01:47 bilby INFO    : Written checkpoint file outdir/ETCE_gw231109_injection_alignedspin_resume.pickle
 /work/wouters/projects/19_GW231109_referee/.venv/lib/python3.12/site-packages/dynesty/plotting.py:252: RuntimeWarning: overflow encountered in exp
   np.exp(logwt), logz if logplot else np.exp(logz)
 /work/wouters/projects/19_GW231109_referee/.venv/lib/python3.12/site-packages/dynesty/plotting.py:282: RuntimeWarning: overflow encountered in exp
   zspan = (0., 1.05 * np.exp(logz[-1] + 3. * logzerr[-1]))
-01:30 bilby WARNING : Axis limits cannot be NaN or Inf
-01:30 bilby WARNING : Failed to create dynesty run plot at checkpoint
-01:30 bilby INFO    : Starting to close worker pool.
-01:30 bilby INFO    : Finished closing worker pool.
-01:30 bilby INFO    : Rejection sampling nested samples to obtain 10724 posterior samples
-01:30 bilby INFO    : Sampling time: 14:22:33.044911
-01:30 bilby WARNING : Result.save_to_file called with extension=True. This will default to json, and ignore the extension from the filename. This behaviour is deprecated and will be removed. 
-01:30 bilby INFO    : Computing per-detector log likelihoods.
-01:30 bilby INFO    : Using a pool with size 192 for nsamples=10724
-01:30 bilby INFO    : Reconstructing marginalised parameters.
-01:30 bilby INFO    : Using a pool with size 192 for nsamples=10724
-01:31 bilby INFO    : Computing SNRs for every sample.
-01:31 bilby INFO    : Using a pool with size 192 for nsamples=10724
-01:32 bilby WARNING : Result.save_to_file called with extension=True. This will default to json, and ignore the extension from the filename. This behaviour is deprecated and will be removed. 
-01:32 bilby INFO    : Summary of results:
-nsamples: 10724
-ln_noise_evidence: -51532462.751
-ln_evidence: -51451699.320 +/-  0.187
-ln_bayes_factor: 80763.431 +/-  0.187
+01:48 bilby WARNING : Axis limits cannot be NaN or Inf
+01:48 bilby WARNING : Failed to create dynesty run plot at checkpoint
+02:24 bilby INFO    : Written checkpoint file outdir/ETCE_gw231109_injection_alignedspin_resume.pickle
+/work/wouters/projects/19_GW231109_referee/.venv/lib/python3.12/site-packages/dynesty/plotting.py:252: RuntimeWarning: overflow encountered in exp
+  np.exp(logwt), logz if logplot else np.exp(logz)
+/work/wouters/projects/19_GW231109_referee/.venv/lib/python3.12/site-packages/dynesty/plotting.py:282: RuntimeWarning: overflow encountered in exp
+  zspan = (0., 1.05 * np.exp(logz[-1] + 3. * logzerr[-1]))
+02:24 bilby WARNING : Axis limits cannot be NaN or Inf
+02:24 bilby WARNING : Failed to create dynesty run plot at checkpoint
+02:36 bilby INFO    : Written checkpoint file outdir/ETCE_gw231109_injection_alignedspin_resume.pickle
+/work/wouters/projects/19_GW231109_referee/.venv/lib/python3.12/site-packages/dynesty/plotting.py:252: RuntimeWarning: overflow encountered in exp
+  np.exp(logwt), logz if logplot else np.exp(logz)
+/work/wouters/projects/19_GW231109_referee/.venv/lib/python3.12/site-packages/dynesty/plotting.py:282: RuntimeWarning: overflow encountered in exp
+  zspan = (0., 1.05 * np.exp(logz[-1] + 3. * logzerr[-1]))
+02:37 bilby WARNING : Axis limits cannot be NaN or Inf
+02:37 bilby WARNING : Failed to create dynesty run plot at checkpoint
+02:37 bilby INFO    : Starting to close worker pool.
+02:37 bilby INFO    : Finished closing worker pool.
+02:37 bilby INFO    : Rejection sampling nested samples to obtain 12905 posterior samples
+02:37 bilby INFO    : Sampling time: 16:07:35.014110
+02:37 bilby WARNING : Result.save_to_file called with extension=True. This will default to json, and ignore the extension from the filename. This behaviour is deprecated and will be removed. 
+02:37 bilby INFO    : Computing per-detector log likelihoods.
+02:37 bilby INFO    : Using a pool with size 192 for nsamples=12905
+02:38 bilby INFO    : Reconstructing marginalised parameters.
+02:38 bilby INFO    : Cached samples dict out of date, ignoring
+02:38 bilby INFO    : Using a pool with size 192 for nsamples=12905
+02:39 bilby INFO    : Computing SNRs for every sample.
+02:39 bilby INFO    : Using a pool with size 192 for nsamples=12905
+02:40 bilby WARNING : Result.save_to_file called with extension=True. This will default to json, and ignore the extension from the filename. This behaviour is deprecated and will be removed. 
+02:40 bilby INFO    : Summary of results:
+nsamples: 12905
+ln_noise_evidence: -51518590.041
+ln_evidence: -51451699.762 +/-  0.191
+ln_bayes_factor: 66890.279 +/-  0.191
 
