@@ -29,6 +29,10 @@ np.random.seed(42)
 
 # Toggle to use Niu et al. hyperparameters for double Gaussian posterior
 USE_NIU = True  # If True, uses double_gaussian_niu posterior; if False, uses double_gaussian posterior
+USE_NIU_V2 = False # If False, this is the original arXiv v1 version hyperparameters, if True, then the recent v2 version
+
+if USE_NIU and USE_NIU_V2:
+    raise ValueError("Cannot use both Niu v1 and v2 parameters at the same time. Please set either USE_NIU or USE_NIU_V2 to False.")
 
 # Ranges used for the plotting (zoom in on the posterior to make it a bit nicer)
 M1_XLIM = (1.2, 1.8)
@@ -124,7 +128,7 @@ def compute_js(p1, p2):
     return np.array([jsd, jsd_spy*jsd_spy])
 
 
-def generate_jsd_latex_table_separate(m_jsds, mass_label, output_file):
+def generate_jsd_latex_table_separate(m_jsds, mass_label, output_file, dist_labels=None):
     """
     Generate a LaTeX table of Jensen-Shannon divergences for a single mass component.
 
@@ -136,14 +140,17 @@ def generate_jsd_latex_table_separate(m_jsds, mass_label, output_file):
         Label for the mass component (e.g., 'm_1' or 'm_2')
     output_file : str
         Path to output LaTeX file
+    dist_labels : dict, optional
+        Custom labels for distributions. If None, uses defaults.
     """
-    dist_labels = {
-        'default': 'Default',
-        'double_gaussian': 'Double Gaussian',
-        'double_gaussian_niu': 'Double Gaussian (Niu)',
-        'gaussian': 'Gaussian',
-        'uniform': 'Uniform'
-    }
+    if dist_labels is None:
+        dist_labels = {
+            'default': 'Default',
+            'double_gaussian': 'Double Gaussian',
+            'double_gaussian_niu': 'Double Gaussian (Niu)',
+            'gaussian': 'Gaussian',
+            'uniform': 'Uniform'
+        }
 
     dist_order = ['default', 'double_gaussian', 'double_gaussian_niu', 'gaussian', 'uniform']
 
@@ -330,6 +337,12 @@ def generate_prior_samples(prior_config, nsamp=OUTPUT_SAMPLE_SIZE, prior_pts_siz
         m2_prior = DoubleGaussian(mu1=1.372, mu2=1.534, sigma1=0.05768, sigma2=0.09102, w=0.7137)
         m1_pts = np.array(m1_prior.sample(prior_pts_size))
         m2_pts = np.array(m2_prior.sample(prior_pts_size))
+    
+    elif prior_type == 'double_gaussian_niu_v2':
+        m1_prior = DoubleGaussian(mu1=1.314, mu2=1.397, sigma1=0.0461, sigma2=0.126, w=0.589)
+        m2_prior = DoubleGaussian(mu1=1.314, mu2=1.397, sigma1=0.0461, sigma2=0.126, w=0.589)
+        m1_pts = np.array(m1_prior.sample(prior_pts_size))
+        m2_pts = np.array(m2_prior.sample(prior_pts_size))
 
     elif prior_type == 'default':
         
@@ -510,10 +523,11 @@ def main():
     print("Generating prior samples...")
 
     # If USE_NIU is True, use Niu parameters for 'double_gaussian', otherwise use original
+    NIU_TYPE = 'double_gaussian_niu_v2' if USE_NIU_V2 else 'double_gaussian_niu'
     prior_configs = {
         'uniform': {'type': 'uniform'},
         'gaussian': {'type': 'gaussian'},
-        'double_gaussian': {'type': 'double_gaussian_niu' if USE_NIU else 'double_gaussian'},
+        'double_gaussian': {'type': NIU_TYPE if (USE_NIU or USE_NIU_V2) else 'double_gaussian'},
         'double_gaussian_niu': {'type': 'double_gaussian_niu'},
         'default': {'type': 'default'},
     }
@@ -529,12 +543,20 @@ def main():
     # Load posterior data
     # =============================================================================
     print("\nLoading posterior data...")
-    posterior_data = load_posterior_data()
+    NIU_PATH = 'prod_BW_XP_s005_l5000_double_gaussian_niu_v2' if USE_NIU_V2 else 'prod_BW_XP_s005_l5000_double_gaussian_niu'
+    dg_run = NIU_PATH if (USE_NIU or USE_NIU_V2) else 'prod_BW_XP_s005_l5000_double_gaussian'
+    run_names = [
+        dg_run,
+        'prod_BW_XP_s005_l5000_double_gaussian_niu',
+        'prod_BW_XP_s005_l5000_gaussian',
+        'prod_BW_XP_s005_l5000_uniform',
+        'prod_BW_XP_s005_l5000_default'
+    ]
+    posterior_data = load_posterior_data(run_names=run_names)
 
     # Map posterior data to prior names for easier handling
-    # If USE_NIU is True, map 'double_gaussian' to the Niu posterior, otherwise use the original
     posterior_mapping = {
-        'double_gaussian': 'prod_BW_XP_s005_l5000_double_gaussian_niu' if USE_NIU else 'prod_BW_XP_s005_l5000_double_gaussian',
+        'double_gaussian': NIU_PATH if (USE_NIU or USE_NIU_V2) else 'prod_BW_XP_s005_l5000_double_gaussian',
         'double_gaussian_niu': 'prod_BW_XP_s005_l5000_double_gaussian_niu',
         'gaussian': 'prod_BW_XP_s005_l5000_gaussian',
         'uniform': 'prod_BW_XP_s005_l5000_uniform',
@@ -831,8 +853,21 @@ def main():
     generate_jsd_latex_table(m1_jsds, m2_jsds, output_file='./JSD_tabular.tex')
 
     # Generate separate tables for m1 and m2
-    generate_jsd_latex_table_separate(m1_jsds, 'm_1', output_file='./JSD_tabular_m1.tex')
-    generate_jsd_latex_table_separate(m2_jsds, 'm_2', output_file='./JSD_tabular_m2.tex')
+    if USE_NIU_V2:
+        dg_label = 'Double Gaussian (Niu v2)'
+    elif USE_NIU:
+        dg_label = 'Double Gaussian (Niu)'
+    else:
+        dg_label = 'Double Gaussian'
+    table_dist_labels = {
+        'default': 'Default',
+        'double_gaussian': dg_label,
+        'double_gaussian_niu': 'Double Gaussian (Niu)',
+        'gaussian': 'Gaussian',
+        'uniform': 'Uniform'
+    }
+    generate_jsd_latex_table_separate(m1_jsds, 'm_1', output_file='./JSD_tabular_m1.tex', dist_labels=table_dist_labels)
+    generate_jsd_latex_table_separate(m2_jsds, 'm_2', output_file='./JSD_tabular_m2.tex', dist_labels=table_dist_labels)
 
     print("\nDone!")
 

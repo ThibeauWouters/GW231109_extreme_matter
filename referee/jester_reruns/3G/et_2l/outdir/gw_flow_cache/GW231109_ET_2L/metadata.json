@@ -1,0 +1,30 @@
+{
+  "n_samples_total": 10275,
+  "n_samples_used": 10275,
+  "parameter_names": [
+    "mass_1_source",
+    "mass_2_source",
+    "lambda_1",
+    "lambda_2"
+  ],
+  "filepath": "/home/twouters2/projects/19_GW231109_referee_report/GW231109_extreme_matter/referee/3G_reruns/et_2l/outdir/ET2L_gw231109_injection_alignedspin_result_posterior.npz",
+  "flow_type": "masked_autoregressive_flow",
+  "num_epochs": 278,
+  "learning_rate": 0.001,
+  "max_patience": 50,
+  "val_prop": 0.2,
+  "standardize": true,
+  "standardization_method": "zscore",
+  "data_mean": [
+    1.4963677645480349,
+    1.3986282434105644,
+    350.6382306009075,
+    314.7854762500512
+  ],
+  "data_std": [
+    0.03334931385184727,
+    0.030204466257703032,
+    116.91294388148283,
+    144.17304153089242
+  ]
+}

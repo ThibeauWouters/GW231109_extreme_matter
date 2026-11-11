@@ -1,0 +1,16 @@
+{
+  "prod_BW_XP_s040_l5000_default": 13.797041018389795,
+  "prod_BW_XP_s005_l10000_default": 10.96717441866486,
+  "prod_BW_XAS_s005_l5000_default": 12.019338061352578,
+  "prod_BW_XP_s005_lquniv_default": 13.1487819069179,
+  "prod_BW_XP_s040_lquniv_default": 14.085499905900342,
+  "prod_BW_XP_s040_l5000_gaussian": 13.581676990468427,
+  "prod_BW_XP_s005_leos_default": 13.866937426795987,
+  "prod_BW_XP_s005_l5000_gaussian": 12.918972110562894,
+  "prod_BW_XP_s005_l5000_uniform": 9.385251636979358,
+  "prod_BW_XP_s005_l5000_double_gaussian_niu": 11.781615405056096,
+  "prod_BW_XP_s040_l5000_uniform": 10.907184333888901,
+  "prod_BW_XP_s005_l5000_default": 12.114282214859285,
+  "prod_BW_XP_s005_l5000_double_gaussian": 12.199057239992193,
+  "prod_BW_XP_s040_leos_default": 14.067457762131411
+}

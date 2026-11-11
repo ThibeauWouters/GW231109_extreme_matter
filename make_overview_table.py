@@ -1,4 +1,6 @@
 """
+# FIXME: This is deprecated
+
 Automate creating an overview of the runs performed
 """
 
