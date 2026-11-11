@@ -496,6 +496,7 @@ def make_anna_tim_favourite_plot(
     figsize: tuple = (8, 8),
     et_filepath: str = None,
     et_label: str = "GW231109 (ET)",
+    et_color: str = GW231109_ET_COLOR,
 ):
     """
     Create Anna and Tim's favourite plot: GW170817 posterior with GW231109 ET blob.
@@ -515,6 +516,7 @@ def make_anna_tim_favourite_plot(
         figsize (tuple): Figure size (width, height) in inches. Default (8, 8) for paper.
         et_filepath (str): Path to the ET posterior npz file. Defaults to the ET-Triangle bilby rerun.
         et_label (str): Legend label for the ET posterior (default "GW231109 (ET)").
+        et_color (str): Colour for the ET posterior contours and legend patch.
 
     Returns:
         bool: True if successful, False otherwise
@@ -556,7 +558,7 @@ def make_anna_tim_favourite_plot(
             if PLOT_GW231109_ET and dL_ET is not None:
                 debug_datasets['ET'] = {
                     'luminosity_distance': dL_ET,
-                    'color': GW231109_ET_COLOR,
+                    'color': et_color,
                     'label': et_label
                 }
             if PLOT_GW231109_ET_CE and dL_ET_CE is not None:
@@ -579,7 +581,7 @@ def make_anna_tim_favourite_plot(
             if PLOT_GW231109_ET and dL_ET is not None:
                 debug_datasets['ET'] = {
                     'luminosity_distance': dL_ET,
-                    'color': GW231109_ET_COLOR,
+                    'color': et_color,
                     'label': et_label
                 }
             if PLOT_GW231109_ET_CE and dL_ET_CE is not None:
@@ -737,7 +739,7 @@ def make_anna_tim_favourite_plot(
             if PLOT_GW231109_ET and chirp_mass_ET is not None:
                 print("Plotting GW231109 ET posterior samples...")
                 ax.scatter(chirp_mass_ET, lambda_tilde_ET,
-                          color=GW231109_ET_COLOR, alpha=0.3, s=1,
+                          color=et_color, alpha=0.3, s=1,
                           zorder=6000, rasterized=True)
 
             # Plot GW231109 ET+CE posterior on top (highest z-order)
@@ -776,7 +778,7 @@ def make_anna_tim_favourite_plot(
                 print("Plotting GW231109 ET posterior...")
                 corner_kwargs_et = default_corner_kwargs.copy()
                 corner_kwargs_et.update(mode_kwargs)
-                corner_kwargs_et['color'] = GW231109_ET_COLOR
+                corner_kwargs_et['color'] = et_color
                 corner_kwargs_et['zorder'] = 6000
                 corner.hist2d(
                     chirp_mass_ET,
@@ -827,7 +829,7 @@ def make_anna_tim_favourite_plot(
 
         if PLOT_GW231109_ET and chirp_mass_ET is not None:
             legend_elements.append(
-                mpatches.Patch(facecolor=GW231109_ET_COLOR, edgecolor='k', label=et_label)
+                mpatches.Patch(facecolor=et_color, edgecolor='k', label=et_label)
             )
 
         if PLOT_GW231109_ET_CE and chirp_mass_ET_CE is not None:
@@ -882,7 +884,7 @@ def make_anna_tim_favourite_plot(
 def main():
     """
     Main function to create the favourite plot.
-    Creates paper + presentation versions for both ET-Triangle and ET-2L.
+    Creates paper + presentation versions for ET-Triangle, ET-2L, ET-Triangle+CE and ET-2L+CE.
     """
     common_params = {
         'overwrite': True,
@@ -891,22 +893,40 @@ def main():
         'ylim': (0, 1300)
     }
 
+    fig_dir = "./figures/GW_PE"
     configurations = [
         {
             'et_filepath': "../referee/3G_reruns/et/outdir/ET_gw231109_injection_alignedspin_result_posterior.npz",
             'et_label': r"GW231109 (ET-$\Delta$)",
-            'paper_save': "./figures/GW_PE/anna_tim_favourite_plot.pdf",
-            'presentation_save': "./figures/GW_PE/anna_tim_favourite_plot_presentation.pdf",
+            'et_color': GW231109_ET_COLOR,
+            'name': "ETDelta",
             'tag': "ET-Triangle",
         },
         {
             'et_filepath': "../referee/3G_reruns/et_2l/outdir/ET2L_gw231109_injection_alignedspin_result_posterior.npz",
             'et_label': "GW231109 (ET-2L)",
-            'paper_save': "./figures/GW_PE/anna_tim_favourite_plot_ET2L.pdf",
-            'presentation_save': "./figures/GW_PE/anna_tim_favourite_plot_ET2L_presentation.pdf",
+            'et_color': GW231109_ET_COLOR,
+            'name': "ET2L",
             'tag': "ET-2L",
         },
+        {
+            'et_filepath': "../referee/3G_reruns/et_ce/outdir/ETCE_gw231109_injection_alignedspin_result_posterior.npz",
+            'et_label': r"GW231109 (ET-$\Delta$+CE)",
+            'et_color': GW231109_ET_CE_COLOR,
+            'name': "ETDelta_CE",
+            'tag': "ET-Triangle + CE",
+        },
+        {
+            'et_filepath': "../referee/3G_reruns/et_2l_ce/outdir/ET2LCE_gw231109_injection_alignedspin_result_posterior.npz",
+            'et_label': "GW231109 (ET-2L+CE)",
+            'et_color': GW231109_ET_CE_COLOR,
+            'name': "ET2L_CE",
+            'tag': "ET-2L + CE",
+        },
     ]
+    for cfg in configurations:
+        cfg['paper_save'] = f"{fig_dir}/anna_tim_favourite_plot_{cfg['name']}.pdf"
+        cfg['presentation_save'] = f"{fig_dir}/anna_tim_favourite_plot_{cfg['name']}_presentation.pdf"
 
     for cfg in configurations:
         print("\n" + "=" * 60)
@@ -917,6 +937,7 @@ def main():
             figsize=(8, 8),
             et_filepath=cfg['et_filepath'],
             et_label=cfg['et_label'],
+            et_color=cfg['et_color'],
             **common_params
         )
         if not success_paper:
@@ -931,6 +952,7 @@ def main():
             figsize=(14, 6),
             et_filepath=cfg['et_filepath'],
             et_label=cfg['et_label'],
+            et_color=cfg['et_color'],
             **common_params
         )
         if not success_presentation:
@@ -939,10 +961,9 @@ def main():
 
     print("\n" + "=" * 60)
     print("✓ Successfully created all versions!")
-    print("  - ET-Triangle paper:        ./figures/GW_PE/anna_tim_favourite_plot.pdf")
-    print("  - ET-Triangle presentation: ./figures/GW_PE/anna_tim_favourite_plot_presentation.pdf")
-    print("  - ET-2L paper:              ./figures/GW_PE/anna_tim_favourite_plot_ET2L.pdf")
-    print("  - ET-2L presentation:       ./figures/GW_PE/anna_tim_favourite_plot_ET2L_presentation.pdf")
+    for cfg in configurations:
+        print(f"  - {cfg['tag']:<17} paper:        {cfg['paper_save']}")
+        print(f"  - {cfg['tag']:<17} presentation: {cfg['presentation_save']}")
     print("=" * 60)
 
     return 0

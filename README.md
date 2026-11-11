@@ -32,7 +32,7 @@ These are the figures that appear in the paper, together with the scripts that p
 | `populations_component_masses_comparison.pdf` | `money_plots/figures/populations/` | `money_plots/populations.py` |
 | `GW231109_lc_with_band_referee_small.pdf` | `paper/` (copied from `figures/`) | `figures/Fig3_plot.py` + `em_lightcurves/peter_estimate/lightcurve_estimation_fullpos.py` |
 | `comparison_new_ET_vs_ET_CE.pdf` | `money_plots/figures/GW_PE/` | `money_plots/final_GW_PE_figures.py` |
-| `anna_tim_favourite_plot.pdf` | `money_plots/figures/GW_PE/` | `money_plots/anna_tim_favourite_plot.py` |
+| `anna_tim_favourite_plot_{ETDelta,ET2L,ETDelta_CE,ET2L_CE}[_presentation].pdf` | `money_plots/figures/GW_PE/` | `money_plots/anna_tim_favourite_plot.py` |
 | `ET_full_injection_R14_histogram.pdf` | `money_plots/figures/EOS_comparison/` | `money_plots/money_plots_snellius.py` / `money_plots_jarvis.py` |
 
 Paper table:
